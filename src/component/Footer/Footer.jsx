@@ -1,5 +1,6 @@
-import logo from "../assets/Logo_01.jpg"
-import vnpay from "../assets/VNPAY.jpg"
+import logo from "../../assets/Logo_01.jpg"
+import vnpay from "../../assets/VNPAY.jpg"
+import "../Footer/Footer.css"
 
 function Footer() {
     const b = new Date().getFullYear()

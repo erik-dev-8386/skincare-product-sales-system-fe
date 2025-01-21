@@ -1,5 +1,6 @@
 import Logo from '../../../assets/Logo_01.jpg';
 import { login } from '../../../auth';
+import "../login/Login.css"
 
 function Login() {
     return (
