@@ -135,11 +135,23 @@
   font-family: arial, sans-serif;
   margin: 20px;
   width: 200px;
+  
 
 }
 
-.footer .logo {
+.footer a{
+  color: white;
+}
+
+.footer-logo{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
   margin-left: 80px;
+  
+}
+
+.footer .logo {
   text-align: center;
   width: 300px;
   height: 300px;
