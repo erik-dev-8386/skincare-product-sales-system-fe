@@ -1,0 +1,158 @@
+.Header {
+    position: fixed;
+    top: 0;
+    background-color: #900001;
+    left: 0;
+    right: 0;
+    height: 85px;
+    z-index: 1;
+    /* z-index: để cho thanh  hiện không bị trôi; */
+    display: flex;
+    /* padding: 10px 20px; */
+    z-index: 1000;
+}
+
+/* common */
+.clear {
+    clear: both;
+}
+
+.logo {
+    height: 85px;
+}
+
+.nav {
+    display: inline-block;
+    /* text-decoration: none; */
+}
+
+.nav>li {
+    display: inline-block;
+}
+
+.nav li {
+    position: relative;
+}
+
+.nav>li>a {
+    color: #fff;
+}
+
+.nav li a {
+    padding: 0 24px;
+    line-height: 85px;
+    display: inline-block;
+    text-decoration: none;
+    color: aliceblue;
+}
+
+.nav>li:hover>a {
+    background-color: #900001;
+    color: #fff;
+}
+
+.nav ul {
+    list-style-type: none;
+    display: flex;
+}
+
+.nav .subnav a {
+    color: white;
+    padding: 0 50px;
+    line-height: 38px;
+}
+
+.nav li:hover .subnav {
+    display: block;
+
+}
+
+.nav .subnav li a {
+    color: white;
+    text-decoration: none;
+    padding: 18px 22px;
+    display: block;
+    width: 100%;
+}
+
+.nav,
+.subnav {
+    list-style-type: none;
+}
+
+.nav .suvnav:hover {
+    position: absolute;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    /*  bóng đổ cho màu đen mờ */
+    min-width: 160px;
+    background-color: #900001;
+}
+
+.nav .subnav {
+    position: absolute;
+    background-color: #900001;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    display: none;
+    min-width: 160px;
+}
+
+.av .subnav li:hover a {
+    background-color: #900001;
+    color: #fff;
+}
+
+.search {
+    position: relative;
+    display: inline-block;
+    margin-left: 30px;
+}
+
+.searchtt {
+    background-color: aliceblue;
+    color: black;
+}
+
+.search input[type="text"] {
+    /* padding-left: 30px;
+       
+        outline: none;
+         */
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    height: 30px;
+}
+
+.search .search-icon {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: black;
+    pointer-events: none;
+    /* Đảm bảo không thể click vào icon */
+}
+
+.icon {
+    display: flex;
+    line-height: 85px;
+    padding: 0 24px;
+
+}
+
+.icon .cart {
+    margin-right: 60px;
+    margin-left: 50px;
+    color: aliceblue;
+}
+
+.user i {
+    color: aliceblue;
+    background-color: none;
+    height: 25px;
+    width: 25px;
+    border-radius: 40px;
+    border: 1px solid white;
+    text-align: center;
+    padding: 10px;
+
+}
