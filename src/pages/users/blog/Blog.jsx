@@ -4,6 +4,7 @@ import axios from "axios";
 import "./Blog.css"
 import BlogCard from "../../../component/BlogCard/BlogCard.jsx";
 import Footer from "../../../component/Footer/Footer.jsx";
+import Header from "../../../component/Header/Header.jsx";
 
 const Blog = () => {
     const [blogs, setBlogs] = useState([]);
@@ -42,18 +43,20 @@ const Blog = () => {
 
     return (
         <>
-        <div className="container ">
-            <h2 className="text-center">Blog của chúng tôi</h2>
-            <Row gutter={[16, 16]}>
-                {blogs.map((blog) => (
-                    <Col key={blog.id} xs={24} sm={12} md={8} lg={6}>
-                        <BlogCard title={blog.title} description={blog.description} image={blog.image} />
-                    </Col>
-                ))}
-            </Row>
-        </div>
-        
-        <Footer/>
+            <Header />
+
+            <div className="container ">
+                <h2 className="text-center-blog">Blog của chúng tôi</h2>
+                <Row gutter={[16, 16]}>
+                    {blogs.map((blog) => (
+                        <Col key={blog.id} xs={24} sm={12} md={8} lg={6}>
+                            <BlogCard title={blog.title} description={blog.description} image={blog.image} />
+                        </Col>
+                    ))}
+                </Row>
+            </div>
+
+            <Footer />
         </>
     );
 };
