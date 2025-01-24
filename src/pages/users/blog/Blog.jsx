@@ -5,7 +5,7 @@ import "./Blog.css"
 import BlogCard from "../../../component/BlogCard/BlogCard.jsx";
 import Footer from "../../../component/Footer/Footer.jsx";
 
-const BlogPage = () => {
+const Blog = () => {
     const [blogs, setBlogs] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -58,4 +58,4 @@ const BlogPage = () => {
     );
 };
 
-export default BlogPage;
+export default Blog;
