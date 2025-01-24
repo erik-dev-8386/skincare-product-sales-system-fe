@@ -9,7 +9,7 @@ import Callback from '../src/pages/users/callBack/Callback';
 import PrivacyPolicy from '../src/pages/users/privacyPolicy/PrivacyPolicy';
 import TermsOfUse from '../src/pages/users/termsOfUse/TermsOfUse';
 import Blog from "../src/pages/users/blog/Blog.jsx"
-
+import Register from "../src/pages/users/register/Register.jsx"
 
 function App() {
   return (
@@ -20,6 +20,7 @@ function App() {
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="/terms-of-use" element={<TermsOfUse />} />
       <Route path="/blog" element={<Blog />} />
+      <Route path="/register" element={<Register />} />
     </Routes>
   );
 }

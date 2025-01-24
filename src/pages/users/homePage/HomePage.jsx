@@ -1,8 +1,8 @@
 
 import Footer from "../../../component/Footer/Footer";
 import { logout } from '../../../auth';
-
-
+import Header from '../../../component/Header/Header'
+import Body from "./Body";
 function HomePage(){
     return(
         <>
@@ -12,7 +12,8 @@ function HomePage(){
 
       <button onClick={logout}>Đăng xuất</button>
     </div> */}
-        
+        <Header />
+        <Body />
         <Footer/>
         </>
     );
