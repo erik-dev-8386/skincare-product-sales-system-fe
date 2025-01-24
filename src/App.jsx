@@ -8,6 +8,7 @@ import Login from '../src/pages/users/login/Login';
 import Callback from '../src/pages/users/callBack/Callback';
 import PrivacyPolicy from '../src/pages/users/privacyPolicy/PrivacyPolicy';
 import TermsOfUse from '../src/pages/users/termsOfUse/TermsOfUse';
+import Blog from "../src/pages/users/blog/Blog.jsx"
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
       <Route path="/auth/callback" element={<Callback />} />
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="/terms-of-use" element={<TermsOfUse />} />
+      <Route path="/blog" element={<Blog />} />
     </Routes>
   );
 }
