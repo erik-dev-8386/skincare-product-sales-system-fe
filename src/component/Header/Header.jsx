@@ -7,10 +7,10 @@ export default function Header() {
             <img src={logo} alt=" Haven SkinLogo" className='logo' />
             <div className='nav'>
                 <ul>
-                    <li><a href='#'>Trang chủ</a></li>
+                    <li><a href='/'>Trang chủ</a></li>
                     <li><a href='#'>Sản phẩm</a></li>
                     <li><a href='#'>Giảm giá</a></li>
-                    <li><a href='#'>Blog</a></li>
+                    <li><a href='/blog'>Blog</a></li>
                     <li><a href='#'>Xác định da</a></li>
                     <li>
                         <a href='#'>
