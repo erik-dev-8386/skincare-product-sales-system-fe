@@ -1,0 +1,77 @@
+import Logo from '../../../assets/Logo_01.jpg';
+import { login } from '../../../auth';
+import "../login/Login.css"
+
+function Login() {
+    return (
+        <>
+            <form>
+                <div className="login">
+                    <div className='login-logo'>
+                        <a href="/"><img src={Logo} alt="" /></a>
+                        <h1>Đăng nhập</h1>
+
+                    </div>
+                    <div className='input'>
+                        <div className="form-outline mb-4">
+                            <label className="form-label" htmlFor="form2Example1">Tên người dùng:</label>
+                            <input type="email" id="form2Example1" className="form-control" />
+                        </div>
+
+                        <div className="form-outline mb-4">
+                            <label className="form-label" htmlFor="form2Example2">Mật khẩu:</label>
+                            <input type="password" id="form2Example2" className="form-control" />
+                        </div>
+                    </div>
+
+                    {/* <!-- 2 column grid layout for inline styling --> */}
+                    <div className="row mb-4">
+                    
+
+                        <div className="text-loss col">
+                            {/* <!-- Simple link --> */}
+
+                            <a href="#!">Quên mật khẩu</a>
+                        </div>
+                    </div>
+
+                    {/* <!-- Submit button --> */}
+                    <button type="button" data-mdb-button-init data-mdb-ripple-init className="btn-login btn-light btn-block mb-4">Đăng nhập</button>
+
+                    {/* <!-- Register buttons --> */}
+                    <div className="text-center">
+                        <p>Bạn không có tài khoản? <a href="#!">Đăng ký</a></p>
+                        <p>Hoặc đăng nhập với:</p>
+                        <a href="#">
+                            <button type="button" data-mdb-button-init data-mdb-ripple-init className="btn btn-link btn-floating mx-1">
+                                <i className="fab fa-facebook-f"></i>
+                            </button>
+                        </a>
+
+                        <a href="#">
+                            <button type="button" onClick={login} data-mdb-button-init data-mdb-ripple-init className="btn btn-link btn-floating mx-1">
+                                <i className="fab fa-google"></i>
+                            </button>
+                        </a>
+
+                        <a href="#">
+                            <button type="button" data-mdb-button-init data-mdb-ripple-init className="btn btn-link btn-floating mx-1">
+                                <i className="fab fa-twitter"></i>
+                            </button>
+                        </a>
+
+                        <a href="#">
+                            <button type="button" data-mdb-button-init data-mdb-ripple-init className="btn btn-link btn-floating mx-1">
+                                <i className="fab fa-github"></i>
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            </form>
+
+        </>
+    );
+}
+
+
+export default Login
