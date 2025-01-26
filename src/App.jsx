@@ -10,6 +10,8 @@ import PrivacyPolicy from '../src/pages/users/privacyPolicy/PrivacyPolicy';
 import TermsOfUse from '../src/pages/users/termsOfUse/TermsOfUse';
 import Blog from "../src/pages/users/blog/Blog.jsx"
 import Register from "../src/pages/users/register/Register.jsx"
+import Discount from './pages/users/discount/Discount.jsx';
+import Discount30 from './pages/users/discount/Discount_30.jsx';
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
       <Route path="/terms-of-use" element={<TermsOfUse />} />
       <Route path="/blog" element={<Blog />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/discount" element={<Discount />} />
+      <Route path='/discount/30' element={<Discount30 />} />
     </Routes>
   );
 }

@@ -96,7 +96,7 @@
     min-width: 160px;
 }
 
-.av .subnav li:hover a {
+.nav .subnav li:hover a {
     background-color: #900001;
     color: #fff;
 }
