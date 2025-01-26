@@ -34,51 +34,63 @@ export default function Register() {
             />
             <h1>Đăng ký</h1>
             <form onSubmit={handleSubmit}>
-                <label htmlFor="name">Họ và tên</label>
-                <input
-                    id="name"
-                    name="name"
-                    type="text"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                />
-                <label htmlFor="email">Email</label>
-                <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                />
-                <label htmlFor="phone">Số điện thoại</label>
-                <input
-                    id="phone"
-                    name="phone"
-                    type="text"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    required
-                />
-                <label htmlFor="password">Mật khẩu</label>
-                <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    required
-                />
-                <label htmlFor="password">Xác nhận lại mật khẩu</label>
-                <input
-                    id="passworddd"
-                    name="passworddd"
-                    type="password"
-                    value={formData.password}
-                    onChange={handleChange}
-                    required
-                />
+                <div className='input-register'>
+                    <label htmlFor="name">Họ và tên</label>
+                    <input
+                        id="name"
+                        name="name"
+                        type="text"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+                <div className='input-register'>
+
+                    <label htmlFor="email">Email</label>
+                    <input
+                        id="email"
+                        name="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        required
+                    />
+
+                </div>
+                <div className='input-register'>
+                    <label htmlFor="phone">Số điện thoại</label>
+                    <input
+                        id="phone"
+                        name="phone"
+                        type="text"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+                <div className="input-register">
+                    <label htmlFor="password">Mật khẩu</label>
+                    <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
+                <div className="input-register">
+                    <label htmlFor="password">Xác nhận lại mật khẩu</label>
+                    <input
+                        id="passworddd"
+                        name="passworddd"
+                        type="password"
+                        value={formData.password}
+                        onChange={handleChange}
+                        required
+                    />
+                </div>
                 <button type="submit">Đăng ký</button>
             </form>
         </div>
