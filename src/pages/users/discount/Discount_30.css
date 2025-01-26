@@ -1,0 +1,15 @@
+.container{
+    padding-top: 100px;
+    background-color: white;
+    color: #900001;
+    font-family: 'Agbalumo', sans-serif;
+}
+.btn-discount{
+    background-color: #900001;
+    color: white;
+}
+
+.btn-discount:hover{
+    background-color: white;
+    color: #900001;
+}

@@ -36,11 +36,11 @@ function Login() {
                     </div>
 
                     {/* <!-- Submit button --> */}
-                    <button type="button" data-mdb-button-init data-mdb-ripple-init className="btn-login btn-light btn-block mb-4">Đăng nhập</button>
+                    <button type="submit" data-mdb-button-init data-mdb-ripple-init className="btn-login btn-light btn-block mb-4">Đăng nhập</button>
 
                     {/* <!-- Register buttons --> */}
                     <div className="text-center">
-                        <p>Bạn không có tài khoản? <a href="#!">Đăng ký</a></p>
+                        <p>Bạn không có tài khoản? <a href="/register">Đăng ký</a></p>
                         <p>Hoặc đăng nhập với:</p>
                         <a href="#">
                             <button type="button" data-mdb-button-init data-mdb-ripple-init className="btn btn-link btn-floating mx-1">

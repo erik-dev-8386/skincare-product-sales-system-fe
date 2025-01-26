@@ -7,24 +7,24 @@ export default function Header() {
             <img src={logo} alt=" Haven SkinLogo" className='logo' />
             <div className='nav'>
                 <ul>
-                    <li><a href='#'>Trang chủ</a></li>
-                    <li><a href='#'>Sản phẩm</a></li>
-                    <li><a href='#'>Giảm giá</a></li>
-                    <li><a href='#'>Blog</a></li>
-                    <li><a href='#'>Xác định da</a></li>
+                    <li><a href='/' class="active">Trang chủ</a></li>
+                    <li><a href='#' class="active">Sản phẩm</a></li>
+                    <li><a href='/discount'class="active" >Giảm giá</a></li>
+                    <li><a href='/blog' class="active">Blog</a></li>
+                    <li><a href='#' class="active">Xác định da</a></li>
                     <li>
-                        <a href='#'>
+                        <a href='#'class="active">
                             Lộ trình chăm sóc da
                         </a>
                         <ul class="subnav">
-                        <li><a href="">Da thường</a></li>
-                        <li><a href="">Da nhạy cảm</a></li>
-                        <li><a href="">Da hỗn hợp</a></li>
-                        <li><a href="">Da khô</a></li>
+                            <li><a href="" >Da thường</a></li>
+                            <li><a href="" >Da nhạy cảm</a></li>
+                            <li><a href="" >Da hỗn hợp</a></li>
+                            <li><a href="" >Da khô</a></li>
                         </ul>
                     </li>
-                    <li><a href='#'>Giới thiệu & Liên hệ</a></li>
-                </ul>
+                    <li><a href='#' >Giới thiệu & Liên hệ</a></li>
+                </ul>   
             </div>
 
             <div className='icon'>
@@ -36,8 +36,7 @@ export default function Header() {
                 <a href="#" className="cart">
                     <i className="fas fa-shopping-cart"></i>
                 </a>
-
-                <a href="#" className="user">
+                <a href="/login" className="user">
                     <i className="fas fa-user"></i>
                 </a>
             </div>
