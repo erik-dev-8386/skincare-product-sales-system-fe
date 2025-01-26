@@ -5,6 +5,7 @@
   background-color: #900001;
   margin: 0;
   height: min-content;
+  width: 100%;
 }
 
 .footer .address {
