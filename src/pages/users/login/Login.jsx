@@ -1,5 +1,6 @@
 import Logo from '../../../assets/Logo_01.jpg';
 import { login } from '../../../auth';
+// import { GOOGLE_AUTH_URL } from '../../../constant';
 import "../login/Login.css"
 
 function Login() {
@@ -49,7 +50,8 @@ function Login() {
                         </a>
 
                         <a href="#">
-                            <button type="button" onClick={login} data-mdb-button-init data-mdb-ripple-init className="btn btn-link btn-floating mx-1">
+                            <button type="button" onClick={login}  data-mdb-button-init data-mdb-ripple-init className="btn btn-link btn-floating mx-1">
+                                {/* <a href={GOOGLE_AUTH_URL}></a> */}
                                 <i className="fab fa-google"></i>
                             </button>
                         </a>

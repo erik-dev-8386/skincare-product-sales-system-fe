@@ -12,6 +12,7 @@ import Blog from "../src/pages/users/blog/Blog.jsx"
 import Register from "../src/pages/users/register/Register.jsx"
 import Discount from './pages/users/discount/Discount.jsx';
 import Discount30 from './pages/users/discount/Discount_30.jsx';
+// import OAuth2RedirectHandler from './component/OAuth2 RedirectHandler/OAuth2RedirectHandler.jsx';
 
 function App() {
   return (
@@ -25,6 +26,8 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/discount" element={<Discount />} />
       <Route path='/discount/30' element={<Discount30 />} />
+      {/* <Route path='/oauth2/redirect' element={<OAuth2RedirectHandler />} /> */}
+
     </Routes>
   );
 }
