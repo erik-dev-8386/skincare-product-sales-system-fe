@@ -7,13 +7,13 @@ export default function Header() {
             <img src={logo} alt=" Haven SkinLogo" className='logo' />
             <div className='nav'>
                 <ul>
-                    <li><a href='/' >Trang chủ</a></li>
-                    <li><a href='#' >Sản phẩm</a></li>
-                    <li><a href='/discount' >Giảm giá</a></li>
-                    <li><a href='/blog' >Blog</a></li>
-                    <li><a href='#' >Xác định da</a></li>
+                    <li><a href='/' class="active">Trang chủ</a></li>
+                    <li><a href='#' class="active">Sản phẩm</a></li>
+                    <li><a href='/discount'class="active" >Giảm giá</a></li>
+                    <li><a href='/blog' class="active">Blog</a></li>
+                    <li><a href='#' class="active">Xác định da</a></li>
                     <li>
-                        <a href='#'>
+                        <a href='#'class="active">
                             Lộ trình chăm sóc da
                         </a>
                         <ul class="subnav">
@@ -24,7 +24,7 @@ export default function Header() {
                         </ul>
                     </li>
                     <li><a href='#' >Giới thiệu & Liên hệ</a></li>
-                </ul>
+                </ul>   
             </div>
 
             <div className='icon'>

@@ -55,6 +55,14 @@
     list-style-type: none;
     display: flex;
 }
+.nav li a:focus,.nav li a:active {
+    background-color: #fff; /* Màu nền trắng khi nhấn */
+    color: #900001; /* Màu chữ đổi sang đỏ đậm */
+    border-radius: 5px; /* Bo góc cho hiệu ứng */
+    outline: none; /* Xóa viền mặc định của trình duyệt */
+}
+
+
 
 .nav .subnav a {
     color: white;
