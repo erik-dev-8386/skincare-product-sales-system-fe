@@ -4,7 +4,7 @@ import logo from "../../assets/Logo_01.jpg"
 export default function Header() {
     return (
         <div className='Header'>
-            <img src={logo} alt=" Haven SkinLogo" className='logo' />
+            <a href="/"><img src={logo} alt=" Haven SkinLogo" className='logo' /></a>
             <div className='nav'>
                 <ul>
                     <li><a href='/' class="active">Trang chủ</a></li>
@@ -23,7 +23,7 @@ export default function Header() {
                             <li><a href="" >Da khô</a></li>
                         </ul>
                     </li>
-                    <li><a href='#' >Giới thiệu & Liên hệ</a></li>
+                    <li><a href='/aboutus' >Giới thiệu & Liên hệ</a></li>
                 </ul>   
             </div>
 
