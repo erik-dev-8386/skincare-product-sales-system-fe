@@ -1,0 +1,13 @@
+.container1 {
+    max-width: 800px;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.container1 p a{
+    color: #900001;
+    text-decoration: none;
+}
+

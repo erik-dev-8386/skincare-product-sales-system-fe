@@ -12,7 +12,9 @@ import Blog from "../src/pages/users/blog/Blog.jsx"
 import Register from "../src/pages/users/register/Register.jsx"
 import Discount from './pages/users/discount/Discount.jsx';
 import Discount30 from './pages/users/discount/Discount_30.jsx';
-// import OAuth2RedirectHandler from './component/OAuth2 RedirectHandler/OAuth2RedirectHandler.jsx';
+import AboutUs from './pages/users/aboutUs/AboutUs.jsx';
+import BlogDetail from "./pages/users/blog/BlogDetail.jsx"
+
 
 function App() {
   return (
@@ -23,10 +25,12 @@ function App() {
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="/terms-of-use" element={<TermsOfUse />} />
       <Route path="/blog" element={<Blog />} />
+      <Route path="/blog/:id" element={<BlogDetail />} />
       <Route path="/register" element={<Register />} />
       <Route path="/discount" element={<Discount />} />
       <Route path='/discount/30' element={<Discount30 />} />
-      {/* <Route path='/oauth2/redirect' element={<OAuth2RedirectHandler />} /> */}
+      <Route path='/aboutus' element={<AboutUs />} />
+   
 
     </Routes>
   );

@@ -1,3 +1,4 @@
+// Blog.jsx
 import React, { useState, useEffect } from "react";
 import { Row, Col, Spin } from "antd";
 import axios from "axios";
@@ -19,7 +20,10 @@ const Blog = () => {
                 const blogData = response.data.slice(0, 10).map((blog, index) => ({
                     id: blog.id,
                     title: blog.title,
+                    // Cắt mô tả nếu muốn
                     description: blog.body.substring(0, 100) + "...",
+                    // Đảm bảo có đủ ảnh 1.jpg, 2.jpg... 10.jpg
+                    // Hoặc dùng ảnh online tạm: `https://picsum.photos/300/200?random=${index}`
                     image: `src/assets/img_blog/${index + 1}.jpg`,
                 }));
                 setBlogs(blogData);
@@ -45,12 +49,17 @@ const Blog = () => {
         <>
             <Header />
 
-            <div className="container ">
+            <div className="container">
                 <h2 className="text-center-blog">Blog của chúng tôi</h2>
                 <Row gutter={[16, 16]}>
                     {blogs.map((blog) => (
                         <Col key={blog.id} xs={24} sm={12} md={8} lg={6}>
-                            <BlogCard title={blog.title} description={blog.description} image={blog.image} />
+                            <BlogCard
+                                id={blog.id}
+                                title={blog.title}
+                                description={blog.description}
+                                image={blog.image}
+                            />
                         </Col>
                     ))}
                 </Row>
