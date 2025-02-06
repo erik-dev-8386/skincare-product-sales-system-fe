@@ -5,11 +5,11 @@
     background-color: #900001;
     left: 0;
     right: 0;
-    height: 85px;
+    /* height: 85px; */
+    min-height: 85px;
     z-index: 1;
     /* z-index: để cho thanh  hiện không bị trôi; */
     display: flex;
-    /* padding: 10px 20px; */
     z-index: 1000;
     font-size: medium;
 }
@@ -23,18 +23,24 @@
     height: 85px;
 }
 
-.nav {
+/* .nav {
     display: inline-block;
     /* text-decoration: none; */
+/* } */ */
+
+.nav {
+    display: flex;
+    align-items: center;
 }
+
 
 .nav>li {
     display: inline-block;
 }
 
-.nav li {
+/* .nav li {
     position: relative;
-}
+} */
 
 .nav>li>a {
     color: #fff;
@@ -56,6 +62,12 @@
 .nav ul {
     list-style-type: none;
     display: flex;
+    /* them 3 cai moi  */
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    margin: 0;
+    padding: 0;
 }
 .nav li a:focus,.nav li a:active {
     background-color: #fff; /* Màu nền trắng khi nhấn */
