@@ -13,7 +13,7 @@
 }
 
 .footer p {
-  font-family: arial, sans-serif;
+  font-family: 'Playfair Display', 'Times New Roman', serif;
   margin: 20px;
   width: 200px;
   display: flex;
@@ -26,7 +26,7 @@
 }
 
 .footer a {
-  color: white;
+  
   text-decoration: none;
   color: white;
   font-size: 16px;

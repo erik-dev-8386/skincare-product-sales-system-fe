@@ -6,8 +6,8 @@ const getUserManager = () => {
   if (!userManager) {
     const config = {
       authority: "https://accounts.google.com",
-      client_id: "842938867571-dj4ipdv0c2tgvdn83t0e9441u18b33m9.apps.googleusercontent.com",
-      redirect_uri: "http://localhost:5173/auth/callback",
+      client_id: "525168437786-6gp97ecr9iuminm11fv9fkuteggdjcd8.apps.googleusercontent.com",
+      redirect_uri: "http://localhost:8080/login/oauth2/code/google",
       response_type: "token",
       scope: "openid profile email",
       userStore: new WebStorageStateStore({ store: window.localStorage }),
