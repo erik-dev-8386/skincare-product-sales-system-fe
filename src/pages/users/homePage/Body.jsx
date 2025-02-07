@@ -50,7 +50,7 @@ export default function Body() {
           </div>
           
           <div className="col-12">
-            <h3 className="san">Best Seller</h3>
+            <h3 className="san">Top sản phẩm bán chạy</h3>
           </div>
 
           <div className="row" style={{ justifyContent: "center", marginBottom: "50px" }}>

@@ -7,14 +7,14 @@ function Footer() {
     return (
         <div className="footer ">
             <div className="address col-4">
-                <p>Liên hệ với chúng tôi</p>
+                <p>Liên hệ với chúng tôi:</p>
                 <p>
                     <i className="fa-brands fa-facebook"></i>
                     <a href="https://www.facebook.com/profile.php?id=100084565232953&locale=vi_VN"> Haven Skin</a>
                 </p>
                 <p>
                     <i className="fa-solid fa-phone"></i>
-                    0966340303
+                    0966.340.303
                 </p>
                 <p>
                     <i className="fa-solid fa-envelope"></i>
@@ -33,9 +33,9 @@ function Footer() {
                 <small>&copy; {b} Copyright by HavenSkin. All rights reserved.</small>
             </div>
             <div className="payment col-4">
-                <p>Phương thức thanh toán</p>
+                <p>Phương thức thanh toán:</p>
                 <div className="icon">
-                    <div className="cod">COD</div>
+                    {/* <div className="cod">COD</div> */}
                     <img className="vnpay" src={vnpay} alt="" />
                 </div>
 
