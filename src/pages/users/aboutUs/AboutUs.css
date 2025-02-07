@@ -1,13 +1,44 @@
 .container1 {
-    max-width: 800px;
+    max-width: 1200px;
     background: #fff;
     padding: 2rem;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 0 auto;
+    padding-top: 80px;
 }
-
 .container1 p a{
-    color: #900001;
+    color: black;
     text-decoration: none;
 }
+.hh{
+    margin-top: 15px;
+    display: flex;
+    justify-content: center;
+    font-family: 'Agbalumo', sans-serif;
+    color: #900001;
+}
+.h{
+    display: flex;
+    justify-content: center;
+    font-family: 'Agbalumo', sans-serif;
+    color: #900001;
+}
+.phone-number{
+    color:black;
+}
 
+.contact-container {
+    display: flex;
+    justify-content: space-between; 
+    align-items: center; 
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.contact-container p {
+    display: flex;
+    align-items: center; 
+    gap: 8px; 
+    white-space: nowrap; 
+}

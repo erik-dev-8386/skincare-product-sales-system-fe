@@ -2,43 +2,48 @@ import React from 'react'
 
 export default function body() {
     return (
-        <div class="container1">
-            <h1>Chào mừng đến với Haven Skin</h1>
-            <br />
-            <h2>Giới thiệu về chúng tôi</h2>
-            <br />
-            <p>
-                Tại Haven Skin, chúng tôi tin rằng làn da của bạn xứng đáng được chăm sóc và quan tâm tối đa. Được thành lập dựa trên các nguyên tắc về chất lượng, tính minh bạch và tính bền vững, cửa hàng chăm sóc da trực tuyến của chúng tôi chuyên cung cấp các sản phẩm vừa hiệu quả vừa nhẹ nhàng.
-            </p>
-            <p>
-                Hành trình của chúng tôi bắt đầu với niềm đam mê với các thành phần tự nhiên và cam kết tạo ra các giải pháp chăm sóc da giúp nuôi dưỡng và phục hồi làn da của bạn. Mỗi sản phẩm trong bộ sưu tập của chúng tôi đều được pha chế cẩn thận để cung cấp dưỡng chất mà làn da của bạn cần để trông và cảm nhận tốt nhất.
-            </p>
-            <p>
-                Chúng tôi tự hào là đối tác đáng tin cậy trong quy trình chăm sóc da của bạn, không chỉ cung cấp các sản phẩm chất lượng cao mà còn tư vấn riêng để giúp bạn có được làn da rạng rỡ và khỏe mạnh.
-            </p>
-            <p>
-                Cảm ơn bạn đã lựa chọn Haven Skin. Chúng tôi mong muốn được đồng hành cùng bạn trên hành trình tìm kiếm làn da sáng khỏe.
-            </p>
-            <br />
-            <h2>Liên hệ với chúng tôi</h2>
+        <div className="container1">
+            <h1 className='hh'>Chào mừng đến với Haven Skin</h1>
+            <br /> <br />
+            <h2 className='h'>Giới thiệu về chúng tôi</h2>
             <br />
             <p>
-                <i className="fa-brands fa-facebook"></i>
-                <a href="https://www.facebook.com/profile.php?id=100084565232953&locale=vi_VN"> Haven Skin</a>
+                Tại Haven Skin, chúng tôi tin rằng làn da của bạn không chỉ xứng đáng được chăm sóc mà còn cần một chế độ nuôi dưỡng chuyên sâu để luôn duy trì sự rạng rỡ. Được xây dựng trên ba giá trị cốt lõi: chất lượng, minh bạch và bền vững, chúng tôi mang đến những sản phẩm chăm sóc da được nghiên cứu kỹ lưỡng, đảm bảo vừa an toàn, vừa hiệu quả, giúp bạn tự tin với vẻ đẹp tự nhiên của chính mình.
             </p>
+            <br />
             <p>
-                <i className="fa-solid fa-phone"></i> 0966340303
+                Hành trình của Haven Skin bắt đầu từ niềm đam mê với những tinh túy từ thiên nhiên và mong muốn mang đến các giải pháp chăm sóc da thực sự phù hợp với mọi loại da. Chúng tôi không chỉ chọn lọc các thành phần tinh khiết và lành tính nhất, mà còn kết hợp công nghệ tiên tiến để tạo ra những sản phẩm vừa có khả năng phục hồi, vừa bảo vệ làn da khỏi các tác nhân gây hại từ môi trường. Mỗi sản phẩm trong bộ sưu tập đều được phát triển dựa trên sự thấu hiểu sâu sắc về nhu cầu của từng làn da.
             </p>
+           <br />
             <p>
-                <i className="fa-solid fa-envelope"></i>
-                <a href="mailto: havenskin032025@gmail.com"> havenskin032025@gmail.com</a>
+                Với sứ mệnh trở thành người bạn đồng hành đáng tin cậy trong hành trình làm đẹp của bạn, Haven Skin cam kết không chỉ cung cấp các sản phẩm chất lượng cao mà còn mang đến những lời khuyên chuyên sâu, giúp bạn xây dựng một chu trình dưỡng da phù hợp và khoa học. Chúng tôi tin rằng, chăm sóc da không chỉ đơn thuần là một thói quen, mà còn là một hành trình yêu thương và trân trọng chính bản thân mình.
             </p>
+            <br />
             <p>
-                <i className="fa-solid fa-location-dot"></i>
-                <a href="https://www.google.com/maps/place/Nh%C3%A0+V%C4%83n+h%C3%B3a+Sinh+vi%C3%AAn+TP.HCM
-                // /@10.8751312,106.8007233,17z/data=!3m1!4b1!4m6!3m5!1s0x3174d8a6b19d6763:0x143c54525028b2e
-                // !8m2!3d10.8751312!4d106.8007233!16s%2Fg%2F11hd1pf9gj?entry=ttu&g_ep=EgoyMDI1MDExNS4wIKXMDSoASAFQAw%3D%3D"> Nhà Văn hóa Sinh viên TP.HCM</a>
+                Cảm ơn bạn đã lựa chọn Haven Skin! Hãy để chúng tôi đồng hành cùng bạn trên con đường chinh phục làn da khỏe mạnh, rạng rỡ và tràn đầy sức sống. Chúng tôi mong rằng mỗi sản phẩm bạn sử dụng sẽ không chỉ là một bước dưỡng da, mà còn là một khoảnh khắc thư giãn, giúp bạn kết nối với bản thân và tận hưởng sự chăm sóc tinh tế mà Haven Skin mang đến.
             </p>
+            <br />
+            <br />
+            <h2 className='h'>Liên hệ với chúng tôi</h2>
+            <br /><br />
+            <div className="contact-container">
+                <p>
+                    <i className="fa-brands fa-facebook"></i>
+                    <a href="https://www.facebook.com/profile.php?id=100084565232953&locale=vi_VN"> Haven Skin</a>
+                </p>
+                <p>
+                    <i className="fa-solid fa-phone ph"></i><span className="phone-number">0966340303</span>
+                </p>
+                <p>
+                    <i className="fa-solid fa-envelope"></i>
+                    <a href="mailto: havenskin032025@gmail.com"> havenskin032025@gmail.com</a>
+                </p>
+                <p>
+                    <i className="fa-solid fa-location-dot"></i>
+                    <a href="https://www.google.com/maps/place/Nh%C3%A0+V%C4%83n+h%C3%B3a+Sinh+vi%C3%AAn+TP.HCM"> Nhà Văn hóa Sinh viên TP.HCM</a>
+                </p>
+            </div>
+
         </div>
     )
 }
