@@ -17,10 +17,10 @@ export default function Header() {
                             Lộ trình chăm sóc da
                         </a>
                         <ul class="subnav">
-                            <li><a href="" >Da thường</a></li>
-                            <li><a href="" >Da nhạy cảm</a></li>
-                            <li><a href="" >Da hỗn hợp</a></li>
-                            <li><a href="" >Da khô</a></li>
+                            <li><a href="/listskincare/Thuong" >Da thường</a></li>
+                            <li><a href="/listskincare/Nhaycam" >Da nhạy cảm</a></li>
+                            <li><a href="/listskincare/Honhop" >Da hỗn hợp</a></li>
+                            <li><a href="/listskincare/Kho" >Da khô</a></li>
                         </ul>
                     </li>
                     <li><a href='/aboutus' >Giới thiệu & Liên hệ</a></li>
@@ -33,7 +33,7 @@ export default function Header() {
                     <i class="fas fa-search search-icon"></i>
                 </div>
 
-                <a href="#" className="cart">
+                <a href="/shoppingCart" className="cart">
                     <i className="fas fa-shopping-cart"></i>
                 </a>
                 <a href="/login" className="user">

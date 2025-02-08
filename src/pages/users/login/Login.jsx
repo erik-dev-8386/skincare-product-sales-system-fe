@@ -1,7 +1,7 @@
 import Logo from '../../../assets/Logo_01.jpg';
 import { login } from '../../../auth';
-// import { GOOGLE_AUTH_URL } from '../../../constant';
 import "../login/Login.css"
+import Google from '../../../assets/google.png';
 
 function Login() {
     return (
@@ -27,7 +27,7 @@ function Login() {
 
                     {/* <!-- 2 column grid layout for inline styling --> */}
                     <div className="row mb-4">
-                    
+
 
                         <div className="text-loss col">
                             {/* <!-- Simple link --> */}
@@ -43,30 +43,23 @@ function Login() {
                     <div className="text-center">
                         <p>Bạn không có tài khoản? <a href="/register">Đăng ký</a></p>
                         <p>Hoặc đăng nhập với:</p>
-                        <a href="#">
-                            <button type="button" data-mdb-button-init data-mdb-ripple-init className="btn btn-link btn-floating mx-1">
-                                <i className="fab fa-facebook-f"></i>
-                            </button>
-                        </a>
 
-                        <a href="#">
-                            <button type="button" onClick={login}  data-mdb-button-init data-mdb-ripple-init className="btn btn-link btn-floating mx-1">
-                                {/* <a href={GOOGLE_AUTH_URL}></a> */}
-                                <i className="fab fa-google"></i>
-                            </button>
-                        </a>
 
-                        <a href="#">
-                            <button type="button" data-mdb-button-init data-mdb-ripple-init className="btn btn-link btn-floating mx-1">
-                                <i className="fab fa-twitter"></i>
-                            </button>
-                        </a>
+                        <div>
+                            <a href="#">
+                                <button type="button" onClick={login} data-mdb-button-init data-mdb-ripple-init className="btn btn-link btn-floating mx-1">
 
-                        <a href="#">
-                            <button type="button" data-mdb-button-init data-mdb-ripple-init className="btn btn-link btn-floating mx-1">
-                                <i className="fab fa-github"></i>
-                            </button>
-                        </a>
+                                    {/* <i className="fab fa-google"></i> */}
+
+                                    <img className='google' src={Google} alt="login-with-google" />
+                                    Đăng nhập với google
+                                </button>
+                            </a>
+
+                        </div>
+
+
+
                     </div>
                 </div>
             </form>
