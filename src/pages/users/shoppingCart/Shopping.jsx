@@ -32,7 +32,7 @@ export default function CartPage() {
     };
 
     const handleCheckout = () => {
-        window.location.href = "/cartt"; // Điều hướng sang trang mới
+        window.location.href = "/cart"; // Điều hướng sang trang mới
     };
     return (
         <>
