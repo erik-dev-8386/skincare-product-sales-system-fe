@@ -32,7 +32,7 @@ function App() {
       <Route path="/discount/:discountPercentage" element={<DiscountDetail />} /> 
       <Route path='/aboutus' element={<AboutUs />} />
       <Route path='/shoppingCart' element={<Shopping />} />
-      <Route path='/cartt' element={<Cart />} />
+      <Route path='/cart' element={<Cart />} />
       <Route path='/listskincare' element={<Kho />} />
     </Routes>
   );
