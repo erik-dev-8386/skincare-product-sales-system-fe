@@ -26,12 +26,12 @@ export default function Register() {
 
     return (
         <div className="register-form">
-            <img
+            <a href="/"><img
                 alt="Haven Skin logo with a leaf design"
                 height="100"
                 src={logo}
                 width="100"
-            />
+            /></a>
             <h1>Đăng ký</h1>
             <form onSubmit={handleSubmit}>
                 <div className='input-register'>
