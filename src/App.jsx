@@ -14,8 +14,9 @@ import Discount from './pages/users/discount/Discount.jsx';
 import DiscountDetail from './pages/users/discount/DiscountDetail.jsx';
 import AboutUs from './pages/users/aboutUs/AboutUs.jsx';
 import BlogDetail from "./pages/users/blog/BlogDetail.jsx";
-
-
+import Shopping from './pages/users/shoppingCart/Shopping.jsx'
+import Cart from './pages/users/cartt/Cart.jsx'
+import Kho from './pages/users/listskincare/Kho.jsx'
 function App() {
   return (
     <Routes>
@@ -30,8 +31,9 @@ function App() {
       <Route path="/discount" element={<Discount />} />
       <Route path="/discount/:discountPercentage" element={<DiscountDetail />} /> 
       <Route path='/aboutus' element={<AboutUs />} />
-   
-
+      <Route path='/shoppingCart' element={<Shopping />} />
+      <Route path='/cartt' element={<Cart />} />
+      <Route path='/listskincare' element={<Kho />} />
     </Routes>
   );
 }
