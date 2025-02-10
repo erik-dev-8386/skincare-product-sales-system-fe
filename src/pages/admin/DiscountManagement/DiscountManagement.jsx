@@ -70,6 +70,7 @@ const DiscountManagement = () => {
             render: (text, record) => (
                 <div className="button">
                     <Button onClick={() => handleEditDiscount(record)} style={{ marginRight: 8 }}>
+                    <i class="fa-solid fa-pen-to-square"></i>
                         Cập nhật
                     </Button>
                     <Popconfirm
@@ -78,7 +79,10 @@ const DiscountManagement = () => {
                         okText="Có"
                         cancelText="Không"
                     >
-                        <Button danger>Xóa</Button>
+                        <Button danger>
+                        <i class="fa-solid fa-trash"></i>
+                            Xóa
+                        </Button>
                     </Popconfirm>
                 </div>
             ),
@@ -154,7 +158,7 @@ const DiscountManagement = () => {
             <ToastContainer />
             <h1>Quản lý Discount</h1>
             <Button type="primary" onClick={handleOpenModal}>
-            <i class="fa-solid fa-tag"></i>
+                <box-icon name='discount' type='solid' color='#fffdfd' ></box-icon>
                 Thêm Discount mới
             </Button>
             <Table dataSource={discountList} columns={columns} rowKey="discountId" style={{ marginTop: 16 }} />
@@ -165,7 +169,7 @@ const DiscountManagement = () => {
                 onOk={() => form.submit()}
             >
                 <Form form={form} labelCol={{ span: 24 }} onFinish={handleSubmitForm}>
-                {/* <FormItem
+                    {/* <FormItem
                         label="Discount ID"
                         name="discountId"
                         rules={[{ required: false, message: "Code can't be empty!" }]}
@@ -235,7 +239,7 @@ const DiscountManagement = () => {
                     >
                         <Input />
                     </FormItem>
-                    
+
                 </Form>
             </Modal>
         </div>
