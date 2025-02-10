@@ -28,8 +28,8 @@ function Footer() {
                     // EgoyMDI1MDExNS4wIKXMDSoASAFQAw%3D%3D">Nhà Văn hóa Sinh viên TP.HCM</a>
                 </p>
             </div>
-            <div className="footer-logo">
-                <a href="/"> <img className="logo col-4" src={logo} alt="" /></a>
+            <div className="footer-logo  col-4">
+                <a href="/"> <img className="logo" src={logo} alt="" /></a>
                 <small>&copy; {b} Copyright by HavenSkin. All rights reserved.</small>
             </div>
             <div className="payment col-4">
