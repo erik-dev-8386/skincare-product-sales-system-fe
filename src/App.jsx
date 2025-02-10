@@ -17,6 +17,7 @@ import BlogDetail from "./pages/users/blog/BlogDetail.jsx";
 import Shopping from './pages/users/shoppingCart/Shopping.jsx'
 import Cart from './pages/users/cart/Cart.jsx'
 import Kho from './pages/users/listskincare/Kho.jsx'
+import DiscountManagement from './pages/admin/DiscountManagement/DiscountManagement.jsx'
 
 function App() {
 
@@ -37,6 +38,7 @@ function App() {
       <Route path='/shoppingCart' element={<Shopping />} />
       <Route path='/cart' element={<Cart />} />
       <Route path='/listskincare' element={<Kho />} />
+      <Route path='/DiscountManagement' element={<DiscountManagement/>} />
     </Routes>
   );
 }
