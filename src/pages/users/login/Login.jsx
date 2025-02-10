@@ -9,6 +9,7 @@ import { GoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import { Button, Card } from "antd";
+import { toast, ToastContainer } from "react-toastify";
 
 const CLIENT_ID = "525168437786-6gp97ecr9iuminm11fv9fkuteggdjcd8.apps.googleusercontent.com";
 
@@ -22,16 +23,18 @@ function Login() {
       const res = await axios.post("http://localhost:8080/login/oauth2/code/google", { token: credential });
 
       alert("Đăng nhập thành công!"); // Thông báo thành công
+      toast.success("Đăng nhập thành công!");
       navigate("/"); // Chuyển hướng về trang chủ
     } catch (error) {
       console.error("Đăng nhập thất bại", error);
-
+      toast.error("Đăng nhập thất bại!");
     }
   };
 
 
   return (
     <>
+    <ToastContainer />
       <form>
         <div className="login">
           <div className='login-logo'>
@@ -72,7 +75,7 @@ function Login() {
 
 
             <div>
-              <a href="#">
+              {/* <a href="#"> */}
                 {/*<button type="button" onClick={login} data-mdb-button-init data-mdb-ripple-init className="btn btn-link btn-floating mx-1">
                  <img className='google' src={Google} alt="login-with-google" />
                  Đăng nhập với google
@@ -86,8 +89,9 @@ function Login() {
                   onError={() => console.log("Đăng nhập thất bại")}
                   cookiePolicy={"single_host_origin"}
                 />
+                
 
-              </a>
+              {/* </a> */}
 
             </div>
 
