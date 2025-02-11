@@ -4,8 +4,8 @@ import logo from "../../assets/Logo_01.jpg"
 export default function Header() {
     return (
         <div className='Header'>
-            <a href="/"><img src={logo} alt=" Haven SkinLogo" className='logo' /></a>
-            <div className='nav'>
+            <div className='col-1'><a href="/"><img src={logo} alt=" Haven SkinLogo" className='logo' /></a></div>
+            <div className='nav col-8'>
                 <ul>
                     <li><a href='/' class="active">Trang chủ</a></li>
                     <li><a href='#' class="active">Sản phẩm</a></li>
@@ -27,7 +27,7 @@ export default function Header() {
                 </ul>   
             </div>
 
-            <div className='icon'>
+            <div className='icon col-3'>
                 <div class="search">
                     <input type="text" placeholder="       " className='searchtt' />
                     <i class="fas fa-search search-icon"></i>

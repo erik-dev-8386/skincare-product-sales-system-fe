@@ -8,16 +8,16 @@ const discountBanners = [
   {
     id: 30,
     imgSrc:
-      "https://api.watsons.com.sg/medias/P1-B1G1-Skincare-Header-Banner-GIF.gif?context=bWFzdGVyfGltYWdlc3wzMjcwNzd8aW1hZ2UvZ2lmfGFERTBMMmhsWXk4eU9UY3lNVEkyT0RneE16ZzFOQzlRTVNCQ01VY3hJRk5yYVc1allYSmxJRWhsWVdSbGNpQkNZVzV1WlhJZ1IwbEdMbWRwWmd8ZjVmNWFhZjgzNDNjYmExOGFjMzcyZjM1MTBlOWRkMTc2MTI4YmMwNmE5NmVmNDIyYjRjNzAxN2E0MDMzOWM2NQ",
+      "src/assets/img_discount/30.webp",
     alt: "30% Discount",
-    style: { width: 1425 },
+    style: { width: 600 },
   },
   {
     id: 50,
     imgSrc:
-      "https://img.freepik.com/free-vector/hand-drawn-beauty-sale-banner-design_23-2149667222.jpg",
+      "src/assets/img_discount/50.webp",
     alt: "50% Discount",
-    style: { width: 1425 },
+    style: { width: 600 },
   },
 ];
 
