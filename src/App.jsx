@@ -19,7 +19,7 @@ import Cart from './pages/users/cart/Cart.jsx'
 import Kho from './pages/users/listskincare/Kho.jsx'
 import DiscountManagement from './pages/admin/DiscountManagement/DiscountManagement.jsx'
 import CategoryManagement from './pages/admin/CategotyManagement/CategotyManagement.jsx'
-
+import BrandManagement from './pages/admin/BrandManagement/BrandManagement.jsx';
 function App() {
 
 
@@ -41,6 +41,7 @@ function App() {
       <Route path='/listskincare' element={<Kho />} />
       <Route path='/discount-management' element={<DiscountManagement/>} />
       <Route path='/category-management' element={<CategoryManagement/>} />
+      <Route path='/brand-management' element={<BrandManagement/>} />
     </Routes>
   );
 }
