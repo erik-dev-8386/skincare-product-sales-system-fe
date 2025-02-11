@@ -20,7 +20,7 @@ function Login() {
   const handleSuccess = async (response) => {
     try {
       const { credential } = response; // Dùng "credential" thay vì "tokenId"
-      const res = await axios.post("http://localhost:8080/login/oauth2/code/google", { token: credential });
+      const res = await axios.post("http://localhost:8080/users/login/google", { token: credential });
 
       alert("Đăng nhập thành công!"); // Thông báo thành công
       toast.success("Đăng nhập thành công!");
