@@ -29,7 +29,7 @@ const EmployeeList = () => {
             <h7 style={{ fontWeight: 'bold' ,color:'white'}}>Avatar</h7>
             <h5 style={{ fontWeight: 'bold' ,color:'white', paddingTop:'15px'}}>Chào mừng bạn đã trở lại!</h5>
           </div>
-         <Menu mode="vertical" defaultSelectedKeys={['2']} style={{ borderRight: 0 ,borderRadius: '10px' }} items={menuItems} />
+         <Menu mode="vertical" defaultSelectedKeys={['4']} style={{ borderRight: 0 ,borderRadius: '10px' }} items={menuItems} />
         </Sider>
         <Content style={{ padding: '50px', background: '#f5e1c6', minHeight: '100vh' }}>
            <a href='/create-staff'>Thêm sản phẩm</a>
