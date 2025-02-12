@@ -1,6 +1,6 @@
 import { Button, Form, Input, Modal, Table, Popconfirm } from "antd";
 import { useForm } from "antd/es/form/Form";
-import FormItem from "antd/es/form/FormItem";
+
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
@@ -71,7 +71,7 @@ const DiscountManagement = () => {
                 <div className="button">
                     <Button onClick={() => handleEditDiscount(record)} style={{ marginRight: 8 }}>
                     <i class="fa-solid fa-pen-to-square"></i>
-                        Cập nhật
+                        Sửa
                     </Button>
                     <Popconfirm
                         title="Bạn có chắt muốn xóa Discount này không?"
@@ -118,11 +118,11 @@ const DiscountManagement = () => {
             values.discountId = editingDiscount.discountId;
             try {
                 await axios.put(`http://localhost:8080/haven-skin/discounts/${editingDiscount.discountId}`, values);
-                toast.success("Discount đã cập nhật thành công");
+                toast.success("Discount đã sửa thành công");
                 fetchDiscount();
                 handleCloseModal();
             } catch (error) {
-                toast.error("Cập nhật discount không thành công!");
+                toast.error("Sửa discount không thành công!");
             }
         } else {
             // Add new Discount
@@ -169,76 +169,76 @@ const DiscountManagement = () => {
                 onOk={() => form.submit()}
             >
                 <Form form={form} labelCol={{ span: 24 }} onFinish={handleSubmitForm}>
-                    {/* <FormItem
+                    {/* <Form.Item
                         label="Discount ID"
                         name="discountId"
                         rules={[{ required: false, message: "Code can't be empty!" }]}
                     >
                         <Input />
-                    </FormItem> */}
-                    <FormItem
+                    </Form.Item> */}
+                    <Form.Item
                         label="Discount Name"
                         name="discountName"
                         rules={[{ required: true, message: "Discount name can't be empty!" }]}
                     >
                         <Input />
-                    </FormItem>
-                    <FormItem
+                    </Form.Item>
+                    <Form.Item
                         label="Discount Code"
                         name="discountCode"
                         rules={[{ required: true, message: "Discount Code can't be empty!" }]}
                     >
                         <Input />
-                    </FormItem>
-                    <FormItem
+                    </Form.Item>
+                    <Form.Item
                         label="Description"
                         name="description"
                         rules={[{ required: true, message: "Description can't be empty!" }]}
                     >
                         <Input />
-                    </FormItem>
-                    <FormItem
+                    </Form.Item>
+                    <Form.Item
                         label="Created Time"
                         name="createdTime"
                         rules={[{ required: false, message: "Code can't be empty!" }]}
                     >
                         <Input />
-                    </FormItem>
-                    <FormItem
+                    </Form.Item>
+                    <Form.Item
                         label="Deleted Time"
                         name="deletedTime"
                         rules={[{ required: false, message: "Code can't be empty!" }]}
                     >
                         <Input />
-                    </FormItem>
-                    <FormItem
+                    </Form.Item>
+                    <Form.Item
                         label="Actual Start Time"
                         name="actualStartTime"
                         rules={[{ required: false, message: "Code can't be empty!" }]}
                     >
                         <Input />
-                    </FormItem>
-                    <FormItem
+                    </Form.Item>
+                    <Form.Item
                         label="Actual End Time"
                         name="actualEndTime"
                         rules={[{ required: false, message: "Code can't be empty!" }]}
                     >
                         <Input />
-                    </FormItem>
-                    <FormItem
+                    </Form.Item>
+                    <Form.Item
                         label="Discount Percent"
                         name="discountPercent"
                         rules={[{ required: true, message: "Discount Percent can't be empty!" }]}
                     >
                         <Input />
-                    </FormItem>
-                    <FormItem
+                    </Form.Item>
+                    <Form.Item
                         label="Status"
                         name="status"
                         rules={[{ required: false, message: "Code can't be empty!" }]}
                     >
                         <Input />
-                    </FormItem>
+                    </Form.Item>
 
                 </Form>
             </Modal>
