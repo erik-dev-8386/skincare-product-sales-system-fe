@@ -1,6 +1,5 @@
 import { Button, Form, Input, Modal, Table, Popconfirm } from "antd";
 import { useForm } from "antd/es/form/Form";
-
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
@@ -70,7 +69,7 @@ const DiscountManagement = () => {
             render: (text, record) => (
                 <div className="button">
                     <Button onClick={() => handleEditDiscount(record)} style={{ marginRight: 8 }}>
-                    <i class="fa-solid fa-pen-to-square"></i>
+                        <i class="fa-solid fa-pen-to-square"></i>
                         Sửa
                     </Button>
                     <Popconfirm
@@ -80,7 +79,7 @@ const DiscountManagement = () => {
                         cancelText="Không"
                     >
                         <Button danger>
-                        <i class="fa-solid fa-trash"></i>
+                            <i class="fa-solid fa-trash"></i>
                             Xóa
                         </Button>
                     </Popconfirm>
@@ -232,13 +231,15 @@ const DiscountManagement = () => {
                     >
                         <Input />
                     </Form.Item>
-                    <Form.Item
-                        label="Status"
-                        name="status"
-                        rules={[{ required: false, message: "Code can't be empty!" }]}
-                    >
-                        <Input />
-                    </Form.Item>
+                    {editingDiscount && (
+                        <Form.Item
+                            label="Status"
+                            name="status"
+                            rules={[{ required: false, message: "Status can't be empty!" }]}
+                        >
+                            <Input />
+                        </Form.Item>
+                    )}
 
                 </Form>
             </Modal>
