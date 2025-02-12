@@ -15,11 +15,16 @@ import DiscountDetail from './pages/users/discount/DiscountDetail.jsx';
 import AboutUs from './pages/users/aboutUs/AboutUs.jsx';
 import BlogDetail from "./pages/users/blog/BlogDetail.jsx";
 import Shopping from './pages/users/shoppingCart/Shopping.jsx'
-import Cart from './pages/users/cart/Cart.jsx'
-import Kho from './pages/users/listskincare/Kho.jsx'
-import DiscountManagement from './pages/admin/DiscountManagement/DiscountManagement.jsx'
-import CategoryManagement from './pages/admin/CategotyManagement/CategotyManagement.jsx'
+import Cart from './pages/users/cart/Cart.jsx';
+import Kho from './pages/users/listskincare/Kho.jsx';
+import DiscountManagement from './pages/admin/DiscountManagement/DiscountManagement.jsx';
+import CategoryManagement from './pages/admin/CategoryManagement/CategoryManagement.jsx';
 import BrandManagement from './pages/admin/BrandManagement/BrandManagement.jsx';
+import SkinTypeManagement from './pages/admin/SkinTypesManagement/SkinTypeManagement.jsx';
+import CreateStaff from './pages/admin/StaffManagement/CreateStaff.jsx';
+import ListStaff from './pages/admin/StaffManagement/ListStaff.jsx';
+import ListProduct from './pages/admin/ProductManagement/ListProduct.jsx';
+import UserManagement from './pages/admin/UserManagement/UserManagement.jsx';
 function App() {
 
 
@@ -42,6 +47,11 @@ function App() {
       <Route path='/discount-management' element={<DiscountManagement/>} />
       <Route path='/category-management' element={<CategoryManagement/>} />
       <Route path='/brand-management' element={<BrandManagement/>} />
+      <Route path='/skin-type-management' element={<SkinTypeManagement/>} />
+      <Route path='/create-staff' element={<CreateStaff/>} />
+      <Route path='/list-staff' element={<ListStaff/>} />
+      <Route path='/list-product' element={<ListProduct/>} />
+      <Route path='/list-user' element={<UserManagement/>} />
     </Routes>
   );
 }

@@ -2,6 +2,7 @@ import { Button, Form, Input, Modal, Table, Popconfirm } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
 import axios from "axios";
+
 import { toast, ToastContainer } from "react-toastify";
 
 const CategoryManagement = () => {
@@ -11,6 +12,11 @@ const CategoryManagement = () => {
     const [editingCategory, setEditingCategory] = useState(null);
 
     const columns = [
+        {
+            title: 'Category ID',
+            dataIndex: 'categoryId',
+            key: 'categoryId',
+        },
         {
             title: 'Category Name',
             dataIndex: 'categoryName',
@@ -27,20 +33,29 @@ const CategoryManagement = () => {
             key: 'usageInstruction',
         },
         {
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'status',
+        },
+        {
             title: 'Actions',
             key: 'actions',
-            render: (_, record) => (
+            render: (text, record) => (
                 <div>
                     <Button onClick={() => handleEditCategory(record)} style={{ marginRight: 8 }}>
-                        Edit
+                    <i class="fa-solid fa-pen-to-square"></i>
+                        Sửa
                     </Button>
                     <Popconfirm
-                        title="Are you sure you want to delete this category?"
-                        onConfirm={() => handleDeleteCategory(record.categoryName)}
-                        okText="Yes"
-                        cancelText="No"
+                        title="Bạn có chắt muốn xóa category này không?"
+                        onConfirm={() => handleDeleteCategory(record.categoryId)}
+                        okText="Có"
+                        cancelText="Không"
                     >
-                        <Button danger>Delete</Button>
+                        <Button danger>
+                            <i class="fa-solid fa-trash"></i>
+                            Xóa
+                        </Button>
                     </Popconfirm>
                 </div>
             ),
@@ -49,7 +64,7 @@ const CategoryManagement = () => {
 
     const fetchCategories = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/haven-skin/categories');
+            const response = await axios.get('http://localhost:8080/haven-skin/category');
             setCategoryList(response.data);
         } catch (error) {
             console.error("Error fetching categories:", error);
@@ -73,21 +88,22 @@ const CategoryManagement = () => {
     const handleSubmitForm = async (values) => {
         if (editingCategory) {
             try {
-                await axios.put(`http://localhost:8080/haven-skin/categories/${editingCategory.categoryName}`, values);
-                toast.success("Category updated successfully");
+                await axios.put(`http://localhost:8080/haven-skin/category/${editingCategory.categoryId}`, values);
+                toast.success("Cập nhật category thành công!");
                 fetchCategories();
                 handleCloseModal();
             } catch (error) {
-                toast.error("Failed to update category!");
+                toast.error("Cập nhật category không thành công!");
             }
         } else {
             try {
-                await axios.post('http://localhost:8080/haven-skin/categories', values);
-                toast.success("Category added successfully");
+                const { status, ...newCategory } = values; // Loại bỏ status khi tạo mới
+                await axios.post('http://localhost:8080/haven-skin/category', newCategory);
+                toast.success("Thêm category thành công");
                 fetchCategories();
                 handleCloseModal();
             } catch (error) {
-                toast.error("Failed to add category!");
+                toast.error("Thêm category không thành công!");
             }
         }
     };
@@ -98,13 +114,13 @@ const CategoryManagement = () => {
         handleOpenModal();
     };
 
-    const handleDeleteCategory = async (name) => {
+    const handleDeleteCategory = async (categoryId) => {
         try {
-            await axios.delete(`http://localhost:8080/haven-skin/categories/${name}`);
-            toast.success("Category deleted successfully!");
+            await axios.delete(`http://localhost:8080/haven-skin/category/${categoryId}`);
+            toast.success("Xóa category thành công!");
             fetchCategories();
         } catch (error) {
-            toast.error("Failed to delete category!");
+            toast.error("Xóa category không thành công!");
         }
     };
 
@@ -112,8 +128,11 @@ const CategoryManagement = () => {
         <div>
             <ToastContainer />
             <h1>Category Management</h1>
-            <Button type="primary" onClick={handleOpenModal}>Add New Category</Button>
-            <Table dataSource={categoryList} columns={columns} rowKey="categoryName" style={{ marginTop: 16 }} />
+            <Button type="primary" onClick={handleOpenModal}>
+                <box-icon name='category' type='solid' color='#ffffff' ></box-icon>
+                Thêm category mới
+            </Button>
+            <Table dataSource={categoryList} columns={columns} rowKey="categoryId" style={{ marginTop: 16 }} />
             <Modal
                 title={editingCategory ? "Edit Category" : "Create New Category"}
                 open={isModalOpen}
@@ -126,8 +145,9 @@ const CategoryManagement = () => {
                         name="categoryName"
                         rules={[{ required: true, message: "Category name can't be empty!" }]}
                     >
-                        <Input disabled={!!editingCategory} />
+                        <Input />
                     </Form.Item>
+
                     <Form.Item
                         label="Description"
                         name="description"
@@ -142,6 +162,15 @@ const CategoryManagement = () => {
                     >
                         <Input />
                     </Form.Item>
+                    {editingCategory && (
+                        <Form.Item
+                            label="Status"
+                            name="status"
+                            rules={[{ required: false, message: "Status can't be empty!" }]}
+                        >
+                            <Input />
+                        </Form.Item>
+                    )}
                 </Form>
             </Modal>
         </div>
