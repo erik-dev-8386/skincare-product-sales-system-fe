@@ -1,11 +1,4 @@
-<<<<<<< HEAD
-const UserManagement = () => {
-    return <h1>User Management Page</h1>;
-  };
-  
-  export default UserManagement;
-  
-=======
+
 import React from 'react';
 import { Layout, Menu, Button, Typography, Pagination } from 'antd';
 import { UserOutlined, TeamOutlined, ShoppingOutlined, FileTextOutlined, BarChartOutlined, MessageOutlined, LaptopOutlined } from '@ant-design/icons';
@@ -59,4 +52,4 @@ const EmployeeList = () => {
 };
 
 export default EmployeeList;
->>>>>>> 5950a3018ecc27400d0f8f34dfc623b2e46d15ba
+
