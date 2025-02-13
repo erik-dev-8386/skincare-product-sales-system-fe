@@ -21,6 +21,7 @@ import DiscountManagement from './pages/admin/DiscountManagement/DiscountManagem
 import CategoryManagement from './pages/admin/CategoryManagement/CategoryManagement.jsx'
 import BrandManagement from './pages/admin/BrandManagement/BrandManagement.jsx';
 import SkinTypeManagement from './pages/admin/SkinTypesManagement/SkinTypeManagement.jsx'
+import AdminDashboard from './component/AdminDashboard/AdminDashboard.jsx'
 
 function App() {
 
@@ -45,6 +46,9 @@ function App() {
       <Route path='/category-management' element={<CategoryManagement/>} />
       <Route path='/brand-management' element={<BrandManagement/>} />
       <Route path='/skin-type-management' element={<SkinTypeManagement/>} />
+      <Route path='/admin-dashboard' element={<AdminDashboard/>} />
+      {/* <Route path="/admin/*" element={<AdminDashboard />} /> */}
+      
     </Routes>
   );
 }
