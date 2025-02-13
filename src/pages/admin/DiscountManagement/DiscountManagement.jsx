@@ -155,7 +155,7 @@ const DiscountManagement = () => {
     return (
         <div>
             <ToastContainer />
-            <h1>Quản lý Discount</h1>
+            <h1>Quản lý giảm giá</h1>
             <Button type="primary" onClick={handleOpenModal}>
                 <box-icon name='discount' type='solid' color='#fffdfd' ></box-icon>
                 Thêm Discount mới

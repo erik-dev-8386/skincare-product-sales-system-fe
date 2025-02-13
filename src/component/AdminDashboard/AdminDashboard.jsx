@@ -3,9 +3,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Layout, Menu, Table, Card, Statistic, Button, Form, Input, Modal, Popconfirm } from "antd";
-import { UserOutlined, DashboardOutlined, AppstoreOutlined , PercentageOutlined} from "@ant-design/icons";
+import { UserOutlined, DashboardOutlined, AppstoreOutlined, PercentageOutlined } from "@ant-design/icons";
 import CategoryManagement from '../../pages/admin/CategoryManagement/CategoryManagement'
 import DiscountManagement from "../../pages/admin/DiscountManagement/DiscountManagement";
+import '../AdminDashboard/AdminDashboard.css'
+import { Row, Col } from "antd";
 
 const { Header, Content, Sider } = Layout;
 
@@ -125,12 +127,16 @@ const AdminDashboard = () => {
     return (
         <Layout style={{ minHeight: "100vh" }}>
             <Sider collapsible>
+                <div className="avarta">
+                    <img className="img-avarta" src="./src/assets/Logo_01.jpg" style={{ width: 'fit-content' }} alt="Avarta" />
+
+                </div>
                 <div className="logo text-center text-white py-3">Admin PRO</div>
-                <Menu  theme="dark" defaultSelectedKeys={["1"]} mode="inline" onClick={(e) => setSelectedMenu(e.key)}>
+                <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline" onClick={(e) => setSelectedMenu(e.key)}>
                     <Menu.Item key="dashboard" icon={<DashboardOutlined />}>Dashboard</Menu.Item>
                     <Menu.Item key="users" icon={<UserOutlined />}>Users</Menu.Item>
                     <Menu.Item key="categories" icon={<AppstoreOutlined />}>Category Management</Menu.Item>
-                    <Menu.Item key="discounts" icon={ <PercentageOutlined />}>Discount Management</Menu.Item>
+                    <Menu.Item key="discounts" icon={<PercentageOutlined />}>Discount Management</Menu.Item>
                 </Menu>
             </Sider>
             <Layout>
@@ -156,11 +162,7 @@ const AdminDashboard = () => {
                     <div className="mt-4">
                         {selectedMenu === "users" && <Table columns={userColumns} dataSource={users} loading={loading} rowKey="id" />}
                         {selectedMenu === "categories" && (
-                            <div>
-                                {/* <Button type="primary" onClick={handleOpenModal} style={{ marginBottom: 16 }}>Add Category</Button> */}
-                                {/* <Table columns={categoryColumns} dataSource={categories} loading={loading} rowKey="categoryId" /> */}
-                                <CategoryManagement />
-                            </div>
+                            <div><CategoryManagement /></div>
                         )}
                         {selectedMenu === "discounts" && (
                             <div><DiscountManagement /></div>

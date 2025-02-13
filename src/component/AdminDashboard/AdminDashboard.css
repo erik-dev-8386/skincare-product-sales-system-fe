@@ -1,0 +1,17 @@
+.avarta{
+    display: flex;
+    background-color: aqua;
+    width: 150px;
+    height: 150px;
+    text-align: center;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    margin: 25px;
+}
+
+.avarta .img-avarta{
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+}
