@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-const UserManagement = () => {
-    return <h1>User Management Page</h1>;
-  };
-  
-  export default UserManagement;
-  
-=======
 import React from 'react';
 import { Layout, Menu, Button, Typography, Pagination } from 'antd';
 import { UserOutlined, TeamOutlined, ShoppingOutlined, FileTextOutlined, BarChartOutlined, MessageOutlined, LaptopOutlined } from '@ant-design/icons';
@@ -37,15 +29,15 @@ const EmployeeList = () => {
             <h7 style={{ fontWeight: 'bold' ,color:'white'}}>Avatar</h7>
             <h5 style={{ fontWeight: 'bold' ,color:'white', paddingTop:'15px'}}>Chào mừng bạn đã trở lại!</h5>
           </div>
-         <Menu mode="vertical" defaultSelectedKeys={['3']} style={{ borderRight: 0 ,borderRadius: '10px' }} items={menuItems} />
+         <Menu mode="vertical" defaultSelectedKeys={['4']} style={{ borderRight: 0 ,borderRadius: '10px' }} items={menuItems} />
         </Sider>
-        <Content style={{ padding: '80px', background: '#f5e1c6', minHeight: '100vh' }}>
-           {/* <a href='/create-staff'>Thêm sản phẩm</a> */}
-          <Title level={3}>Danh sách khách hàng {'>'} Quản lý khách hàng</Title>
+        <Content style={{ padding: '50px', background: '#f5e1c6', minHeight: '100vh' }}>
+           <a href='/create-staff'>Thêm sản phẩm</a>
+          <Title level={3}>Danh sách sản phẩm {'>'} Quản lý sản phẩm</Title>
           <div style={{ background: 'white', padding: '20px', borderRadius: '8px' }}>
             {[1, 2, 3, 4, 5].map((id) => (
               <div key={id} style={{ marginBottom: '15px', padding: '15px', background: '#fff', display: 'flex', justifyContent: 'space-between', alignItems: 'center', border: '1px solid #ddd', borderRadius: '5px' }}>
-                <span>Khách hàng {id}:</span>
+                <span>Sản phẩm {id}:</span>
                 <Button style={{ background: 'yellow', borderColor: 'yellow' }}>Xóa</Button>
               </div>
             ))}
@@ -59,4 +51,3 @@ const EmployeeList = () => {
 };
 
 export default EmployeeList;
->>>>>>> 5950a3018ecc27400d0f8f34dfc623b2e46d15ba
