@@ -7,6 +7,8 @@ import { UserOutlined, DashboardOutlined, AppstoreOutlined, PercentageOutlined }
 import CategoryManagement from '../../pages/admin/CategoryManagement/CategoryManagement';
 import DiscountManagement from "../../pages/admin/DiscountManagement/DiscountManagement";
 import SkinTypeManagement from "../../pages/admin/SkinTypesManagement/SkinTypeManagement";
+import ListStaff from "../../pages/admin/StaffManagement/ListStaff";
+import ListProduct from "../../pages/admin/ProductManagement/ListProduct"
 import '../AdminDashboard/AdminDashboard.css'
 
 
@@ -14,6 +16,8 @@ const { Header, Content, Sider } = Layout;
 
 const AdminDashboard = () => {
     const [users, setUsers] = useState([]);
+    const [staff, setStaff] = useState ([]);
+    const [products, setProduct] = useState ([]);
     const [categories, setCategories] = useState([]);
     const [discounts, setDiscounts] = useState([]);
     const [skinTypes, setSkinTypes] = useState([]);
@@ -30,6 +34,24 @@ const AdminDashboard = () => {
                 setLoading(false);
             })
             .catch(error => console.error("Error fetching user data:", error));
+    }, []);
+
+    useEffect(() => {
+        axios.get("https://jsonplaceholder.typicode.com/staff")
+            .then(response => {
+                setStaff(response.data);
+                setLoading(false);
+            })
+            .catch(error => console.error("Error fetching discount data:", error));
+    }, []);
+    
+    useEffect(() => {
+        axios.get("http://localhost:8080/haven-skin/products")
+            .then(response => {
+                setProduct(response.data);
+                setLoading(false);
+            })
+            .catch(error => console.error("Error fetching discount data:", error));
     }, []);
 
     useEffect(() => {
@@ -145,6 +167,8 @@ const AdminDashboard = () => {
                 <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline" onClick={(e) => setSelectedMenu(e.key)}>
                     <Menu.Item key="dashboard" icon={<DashboardOutlined />}>Dashboard</Menu.Item>
                     <Menu.Item key="users" icon={<UserOutlined />}>Users</Menu.Item>
+                    <Menu.Item key="staff" icon={<UserOutlined />}>Staff</Menu.Item>
+                    <Menu.Item key="products" icon={<AppstoreOutlined />}>Products</Menu.Item>
                     <Menu.Item key="categories" icon={<AppstoreOutlined />}>Categories</Menu.Item>
                     <Menu.Item key="discounts" icon={<PercentageOutlined />}>Discounts</Menu.Item>
                     <Menu.Item key="skinTypes" icon={<i className="fa-solid fa-hand-dots"></i>}>Skin Types</Menu.Item>
@@ -160,6 +184,16 @@ const AdminDashboard = () => {
                                 <div className="col-md-3">
                                     <Card>
                                         <Statistic title="Total Users" value={users.length} />
+                                    </Card>
+                                </div>
+                                <div className="col-md-3">
+                                    <Card>
+                                        <Statistic title="Total Staff" value={staff.length} />
+                                    </Card>
+                                </div>
+                                <div className="col-md-3">
+                                    <Card>
+                                        <Statistic title="Total Products" value={products.length} />
                                     </Card>
                                 </div>
                                 <div className="col-md-3">
@@ -180,6 +214,12 @@ const AdminDashboard = () => {
                             </div>
                         )}
                         {selectedMenu === "users" && <Table columns={userColumns} dataSource={users} loading={loading} rowKey="id" />}
+                        {selectedMenu === "staff" && (
+                            <div><ListStaff /></div>
+                        )}
+                         {selectedMenu === "products" && (
+                            <div><ListProduct /></div>
+                        )}
                         {selectedMenu === "categories" && (
                             <div><CategoryManagement /></div>
                         )}

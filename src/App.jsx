@@ -22,7 +22,9 @@ import CategoryManagement from './pages/admin/CategoryManagement/CategoryManagem
 import BrandManagement from './pages/admin/BrandManagement/BrandManagement.jsx';
 import SkinTypeManagement from './pages/admin/SkinTypesManagement/SkinTypeManagement.jsx'
 import AdminDashboard from './component/AdminDashboard/AdminDashboard.jsx'
-
+import ListStaff from './pages/admin/StaffManagement/ListStaff.jsx';
+import CreateStaff from './pages/admin/StaffManagement/CreateStaff.jsx';
+import UserManagement from './pages/admin/UserManagement/UserManagement.jsx'
 function App() {
 
 
@@ -47,6 +49,10 @@ function App() {
       <Route path='/brand-management' element={<BrandManagement/>} />
       <Route path='/skin-type-management' element={<SkinTypeManagement/>} />
       <Route path='/admin-dashboard' element={<AdminDashboard/>} />
+      <Route path='/list-staff' element={<ListStaff/>} />
+      <Route path='/create-staff' element={<CreateStaff/>} />
+      <Route path='/list-user' element={<UserManagement/>} />
+
     </Routes>
   );
 }
