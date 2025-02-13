@@ -15,12 +15,13 @@ import DiscountDetail from './pages/users/discount/DiscountDetail.jsx';
 import AboutUs from './pages/users/aboutUs/AboutUs.jsx';
 import BlogDetail from "./pages/users/blog/BlogDetail.jsx";
 import Shopping from './pages/users/shoppingCart/Shopping.jsx'
-import Cart from './pages/users/cart/Cart.jsx'
-import Kho from './pages/users/listskincare/Kho.jsx'
-import DiscountManagement from './pages/admin/DiscountManagement/DiscountManagement.jsx'
-import CategoryManagement from './pages/admin/CategoryManagement/CategoryManagement.jsx'
+import Cart from './pages/users/cart/Cart.jsx';
+import Kho from './pages/users/listskincare/Kho.jsx';
+import DiscountManagement from './pages/admin/DiscountManagement/DiscountManagement.jsx';
+import CategoryManagement from './pages/admin/CategoryManagement/CategoryManagement.jsx';
 import BrandManagement from './pages/admin/BrandManagement/BrandManagement.jsx';
 import SkinTypeManagement from './pages/admin/SkinTypesManagement/SkinTypeManagement.jsx'
+import AdminDashboard from './component/AdminDashboard/AdminDashboard.jsx'
 
 function App() {
 
@@ -45,6 +46,7 @@ function App() {
       <Route path='/category-management' element={<CategoryManagement/>} />
       <Route path='/brand-management' element={<BrandManagement/>} />
       <Route path='/skin-type-management' element={<SkinTypeManagement/>} />
+      <Route path='/admin-dashboard' element={<AdminDashboard/>} />
     </Routes>
   );
 }
