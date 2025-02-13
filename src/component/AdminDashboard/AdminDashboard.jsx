@@ -4,10 +4,11 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Layout, Menu, Table, Card, Statistic, Button, Form, Input, Modal, Popconfirm } from "antd";
 import { UserOutlined, DashboardOutlined, AppstoreOutlined, PercentageOutlined } from "@ant-design/icons";
-import CategoryManagement from '../../pages/admin/CategoryManagement/CategoryManagement'
+import CategoryManagement from '../../pages/admin/CategoryManagement/CategoryManagement';
 import DiscountManagement from "../../pages/admin/DiscountManagement/DiscountManagement";
+import SkinTypeManagement from "../../pages/admin/SkinTypesManagement/SkinTypeManagement";
 import '../AdminDashboard/AdminDashboard.css'
-import { Row, Col } from "antd";
+
 
 const { Header, Content, Sider } = Layout;
 
@@ -15,6 +16,7 @@ const AdminDashboard = () => {
     const [users, setUsers] = useState([]);
     const [categories, setCategories] = useState([]);
     const [discounts, setDiscounts] = useState([]);
+    const [skinTypes, setSkinTypes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedMenu, setSelectedMenu] = useState("users");
     // const [isModalOpen, setModalOpen] = useState(false);
@@ -43,6 +45,15 @@ const AdminDashboard = () => {
         axios.get("http://localhost:8080/haven-skin/discounts")
             .then(response => {
                 setDiscounts(response.data);
+                setLoading(false);
+            })
+            .catch(error => console.error("Error fetching discount data:", error));
+    }, []);
+
+    useEffect(() => {
+        axios.get("http://localhost:8080/haven-skin/skin-types")
+            .then(response => {
+                setSkinTypes(response.data);
                 setLoading(false);
             })
             .catch(error => console.error("Error fetching discount data:", error));
@@ -137,6 +148,7 @@ const AdminDashboard = () => {
                     <Menu.Item key="users" icon={<UserOutlined />}>Users</Menu.Item>
                     <Menu.Item key="categories" icon={<AppstoreOutlined />}>Category Management</Menu.Item>
                     <Menu.Item key="discounts" icon={<PercentageOutlined />}>Discount Management</Menu.Item>
+                    <Menu.Item key="skinTypes" icon={<i className="fa-solid fa-hand-dots"></i>}>Skin Type Management</Menu.Item>
                 </Menu>
             </Sider>
             <Layout>
@@ -166,6 +178,9 @@ const AdminDashboard = () => {
                         )}
                         {selectedMenu === "discounts" && (
                             <div><DiscountManagement /></div>
+                        )}
+                        {selectedMenu === "skinTypes" && (
+                            <div><SkinTypeManagement /></div>
                         )}
                     </div>
                 </Content>

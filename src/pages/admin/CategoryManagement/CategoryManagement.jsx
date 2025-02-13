@@ -127,7 +127,7 @@ const CategoryManagement = () => {
     return (
         <div>
             <ToastContainer />
-            <h1>Quản lý Category</h1>
+            <h1>Quản lý loại sản phẩm</h1>
             <Button type="primary" onClick={handleOpenModal}>
                 <box-icon name='category' type='solid' color='#ffffff' ></box-icon>
                 Thêm category mới

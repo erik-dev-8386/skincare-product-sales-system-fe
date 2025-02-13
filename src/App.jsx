@@ -38,10 +38,10 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/discount" element={<Discount />} />
       <Route path="/discount/:discountPercentage" element={<DiscountDetail />} /> 
-      <Route path='/aboutus' element={<AboutUs />} />
-      <Route path='/shoppingCart' element={<Shopping />} />
+      <Route path='/about-us' element={<AboutUs />} />
+      <Route path='/shopping-cart' element={<Shopping />} />
       <Route path='/cart' element={<Cart />} />
-      <Route path='/listskincare' element={<Kho />} />
+      <Route path='/list-skin-care' element={<Kho />} />
       <Route path='/discount-management' element={<DiscountManagement/>} />
       <Route path='/category-management' element={<CategoryManagement/>} />
       <Route path='/brand-management' element={<BrandManagement/>} />
