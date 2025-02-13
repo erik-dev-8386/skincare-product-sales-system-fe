@@ -20,11 +20,11 @@ import Kho from './pages/users/listskincare/Kho.jsx';
 import DiscountManagement from './pages/admin/DiscountManagement/DiscountManagement.jsx';
 import CategoryManagement from './pages/admin/CategoryManagement/CategoryManagement.jsx';
 import BrandManagement from './pages/admin/BrandManagement/BrandManagement.jsx';
-import SkinTypeManagement from './pages/admin/SkinTypesManagement/SkinTypeManagement.jsx';
-import CreateStaff from './pages/admin/StaffManagement/CreateStaff.jsx';
+import SkinTypeManagement from './pages/admin/SkinTypesManagement/SkinTypeManagement.jsx'
+import AdminDashboard from './component/AdminDashboard/AdminDashboard.jsx'
 import ListStaff from './pages/admin/StaffManagement/ListStaff.jsx';
-import ListProduct from './pages/admin/ProductManagement/ListProduct.jsx';
-import UserManagement from './pages/admin/UserManagement/UserManagement.jsx';
+import CreateStaff from './pages/admin/StaffManagement/CreateStaff.jsx';
+import UserManagement from './pages/admin/UserManagement/UserManagement.jsx'
 function App() {
 
 
@@ -40,18 +40,19 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/discount" element={<Discount />} />
       <Route path="/discount/:discountPercentage" element={<DiscountDetail />} /> 
-      <Route path='/aboutus' element={<AboutUs />} />
-      <Route path='/shoppingCart' element={<Shopping />} />
+      <Route path='/about-us' element={<AboutUs />} />
+      <Route path='/shopping-cart' element={<Shopping />} />
       <Route path='/cart' element={<Cart />} />
-      <Route path='/listskincare' element={<Kho />} />
+      <Route path='/list-skin-care' element={<Kho />} />
       <Route path='/discount-management' element={<DiscountManagement/>} />
       <Route path='/category-management' element={<CategoryManagement/>} />
       <Route path='/brand-management' element={<BrandManagement/>} />
       <Route path='/skin-type-management' element={<SkinTypeManagement/>} />
-      <Route path='/create-staff' element={<CreateStaff/>} />
+      <Route path='/admin-dashboard' element={<AdminDashboard/>} />
       <Route path='/list-staff' element={<ListStaff/>} />
-      <Route path='/list-product' element={<ListProduct/>} />
+      <Route path='/create-staff' element={<CreateStaff/>} />
       <Route path='/list-user' element={<UserManagement/>} />
+
     </Routes>
   );
 }

@@ -23,7 +23,7 @@ export default function Header() {
                             <li><a href="/listskincare/Kho" >Da khô</a></li>
                         </ul>
                     </li>
-                    <li><a href='/aboutus' >Giới thiệu & Liên hệ</a></li>
+                    <li><a href='/about-us' >Giới thiệu & Liên hệ</a></li>
                 </ul>   
             </div>
 
