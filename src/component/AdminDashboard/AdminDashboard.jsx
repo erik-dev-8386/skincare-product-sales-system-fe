@@ -139,10 +139,9 @@ const AdminDashboard = () => {
         <Layout style={{ minHeight: "100vh" }}>
             <Sider collapsible>
                 <div className="avarta">
-                    <img className="img-avarta" src="./src/assets/Logo_01.jpg" style={{ width: 'fit-content' }} alt="Avarta" />
-
+                    <img className="img-avarta" src="./src/assets/Logo_01.jpg"  alt="Avarta" />
                 </div>
-                <div className="logo text-center text-white py-3">Admin PRO</div>
+                <div className="logo text-center text-white py-3">Chào mừng Admin PRO đã quay trở lại!</div>
                 <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline" onClick={(e) => setSelectedMenu(e.key)}>
                     <Menu.Item key="dashboard" icon={<DashboardOutlined />}>Dashboard</Menu.Item>
                     <Menu.Item key="users" icon={<UserOutlined />}>Users</Menu.Item>
@@ -154,30 +153,38 @@ const AdminDashboard = () => {
             <Layout>
                 <Header className="bg-primary text-white text-center">Admin Dashboard</Header>
                 <Content className="p-4">
-                    <div className="row">
-                        <div className="col-md-4">
-                            <Card>
-                                <Statistic title="Total Users" value={users.length} />
-                            </Card>
-                        </div>
-                        <div className="col-md-4">
-                            <Card>
-                                <Statistic title="Total Categories" value={categories.length} />
-                            </Card>
-                        </div>
-                        <div className="col-md-4">
-                            <Card>
-                                <Statistic title="Total Discounts" value={discounts.length} />
-                            </Card>
-                        </div>
-                    </div>
-                    <div className="mt-4">
+
+                    <div className="mt-4" >
+                        {selectedMenu === "dashboard" && (
+                            <div className="row">
+                                <div className="col-md-3">
+                                    <Card>
+                                        <Statistic title="Total Users" value={users.length} />
+                                    </Card>
+                                </div>
+                                <div className="col-md-3">
+                                    <Card>
+                                        <Statistic title="Total Categories" value={categories.length} />
+                                    </Card>
+                                </div>
+                                <div className="col-md-3">
+                                    <Card>
+                                        <Statistic title="Total Discounts" value={discounts.length} />
+                                    </Card>
+                                </div>
+                                <div className="col-md-3">
+                                    <Card>
+                                        <Statistic title="Total Skin Types" value={skinTypes.length} />
+                                    </Card>
+                                </div>
+                            </div>
+                        )}
                         {selectedMenu === "users" && <Table columns={userColumns} dataSource={users} loading={loading} rowKey="id" />}
                         {selectedMenu === "categories" && (
                             <div><CategoryManagement /></div>
                         )}
                         {selectedMenu === "discounts" && (
-                            <div><DiscountManagement /></div>
+                            <div ><DiscountManagement /></div>
                         )}
                         {selectedMenu === "skinTypes" && (
                             <div><SkinTypeManagement /></div>

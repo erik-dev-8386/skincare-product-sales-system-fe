@@ -153,14 +153,14 @@ const DiscountManagement = () => {
     };
 
     return (
-        <div>
+        <div >
             <ToastContainer />
             <h1>Quản lý giảm giá</h1>
             <Button type="primary" onClick={handleOpenModal}>
                 <box-icon name='discount' type='solid' color='#fffdfd' ></box-icon>
                 Thêm Discount mới
             </Button>
-            <Table dataSource={discountList} columns={columns} rowKey="discountId" style={{ marginTop: 16 }} />
+            <Table dataSource={discountList} columns={columns} rowKey="discountId" style={{ marginTop: 16}} />
             <Modal
                 title={editingDiscount ? "Edit Discount" : "Create New Discount"}
                 open={isModalOpen}
