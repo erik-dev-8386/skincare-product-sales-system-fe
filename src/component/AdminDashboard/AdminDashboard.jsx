@@ -146,9 +146,9 @@ const AdminDashboard = () => {
                 <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline" onClick={(e) => setSelectedMenu(e.key)}>
                     <Menu.Item key="dashboard" icon={<DashboardOutlined />}>Dashboard</Menu.Item>
                     <Menu.Item key="users" icon={<UserOutlined />}>Users</Menu.Item>
-                    <Menu.Item key="categories" icon={<AppstoreOutlined />}>Category Management</Menu.Item>
-                    <Menu.Item key="discounts" icon={<PercentageOutlined />}>Discount Management</Menu.Item>
-                    <Menu.Item key="skinTypes" icon={<i className="fa-solid fa-hand-dots"></i>}>Skin Type Management</Menu.Item>
+                    <Menu.Item key="categories" icon={<AppstoreOutlined />}>Categories</Menu.Item>
+                    <Menu.Item key="discounts" icon={<PercentageOutlined />}>Discounts</Menu.Item>
+                    <Menu.Item key="skinTypes" icon={<i className="fa-solid fa-hand-dots"></i>}>Skin Types</Menu.Item>
                 </Menu>
             </Sider>
             <Layout>
