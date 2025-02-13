@@ -43,7 +43,7 @@ function App() {
       <Route path='/about-us' element={<AboutUs />} />
       <Route path='/shopping-cart' element={<Shopping />} />
       <Route path='/cart' element={<Cart />} />
-      <Route path='/list-skin-care' element={<Kho />} />
+      <Route path='/kho' element={<Kho />} />
       <Route path='/discount-management' element={<DiscountManagement/>} />
       <Route path='/category-management' element={<CategoryManagement/>} />
       <Route path='/brand-management' element={<BrandManagement/>} />
