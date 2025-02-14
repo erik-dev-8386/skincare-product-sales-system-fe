@@ -33,7 +33,7 @@ export default function Header() {
                     <i class="fas fa-search search-icon"></i>
                 </div>
 
-                <a href="/shoppingCart" className="cart">
+                <a href="/shopping-cart" className="cart">
                     <i className="fas fa-shopping-cart"></i>
                 </a>
                 <a href="/login" className="user">

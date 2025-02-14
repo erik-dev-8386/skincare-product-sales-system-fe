@@ -2,9 +2,25 @@
 
 .login {
   
-  font-family: 'Agbalumo', sans-serif;
+  /* font-family: "Fira Sans Extra Condensed", serif;
   color: white;
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #900001;
+  margin: 50px;
+  margin-left: 500px;
+  margin-right: 500px;
+
+  border-radius: 40px;
+  text-align: center;
+  resize: both;
+  height: 700px; */
+  overflow: hidden;
+  font-family: "Fira Sans Extra Condensed", serif;
+  color: white;
+  display: flex;
+  justify-content: center;
   flex-direction: column;
   align-items: center;
   background-color: #900001;
