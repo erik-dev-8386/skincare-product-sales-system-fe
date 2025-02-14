@@ -44,17 +44,17 @@ const CategoryManagement = () => {
                 <div>
                     <Button onClick={() => handleEditCategory(record)} style={{ marginRight: 8 }}>
                     <i class="fa-solid fa-pen-to-square"></i>
-                        Sửa
+                        Edit
                     </Button>
                     <Popconfirm
-                        title="Bạn có chắt muốn xóa category này không?"
+                        title="Do you want to delete this category?"
                         onConfirm={() => handleDeleteCategory(record.categoryId)}
-                        okText="Có"
-                        cancelText="Không"
+                        okText="Yes"
+                        cancelText="No"
                     >
                         <Button danger>
                             <i class="fa-solid fa-trash"></i>
-                            Xóa
+                           Delete
                         </Button>
                     </Popconfirm>
                 </div>
@@ -89,21 +89,21 @@ const CategoryManagement = () => {
         if (editingCategory) {
             try {
                 await axios.put(`http://localhost:8080/haven-skin/category/${editingCategory.categoryId}`, values);
-                toast.success("Cập nhật category thành công!");
+                toast.success("Category updated successfully!");
                 fetchCategories();
                 handleCloseModal();
             } catch (error) {
-                toast.error("Cập nhật category không thành công!");
+                toast.error("Failed to update category!");
             }
         } else {
             try {
                 const { status, ...newCategory } = values; // Loại bỏ status khi tạo mới
                 await axios.post('http://localhost:8080/haven-skin/category', newCategory);
-                toast.success("Thêm category thành công");
+                toast.success("Category added successfully!");
                 fetchCategories();
                 handleCloseModal();
             } catch (error) {
-                toast.error("Thêm category không thành công!");
+                toast.error("Failed to add category!");
             }
         }
     };
@@ -117,20 +117,20 @@ const CategoryManagement = () => {
     const handleDeleteCategory = async (categoryId) => {
         try {
             await axios.delete(`http://localhost:8080/haven-skin/category/${categoryId}`);
-            toast.success("Xóa category thành công!");
+            toast.success("Discount deleted successfully!");
             fetchCategories();
         } catch (error) {
-            toast.error("Xóa category không thành công!");
+            toast.error("Failed to delete discount!");
         }
     };
 
     return (
         <div>
             <ToastContainer />
-            <h1>Quản lý loại sản phẩm</h1>
+            <h1>Category Management</h1>
             <Button type="primary" onClick={handleOpenModal}>
                 <box-icon name='category' type='solid' color='#ffffff' ></box-icon>
-                Thêm category mới
+                Add new category
             </Button>
             <Table dataSource={categoryList} columns={columns} rowKey="categoryId" style={{ marginTop: 16 }} />
             <Modal

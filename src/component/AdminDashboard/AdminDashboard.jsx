@@ -163,7 +163,7 @@ const AdminDashboard = () => {
                 <div className="avarta">
                     <img className="img-avarta" src="./src/assets/Logo_01.jpg"  alt="Avarta" />
                 </div>
-                <div className="logo text-center text-white py-3">Chào mừng Admin PRO đã quay trở lại!</div>
+                <div className="logo text-center text-white py-3">Chào mừng Admin PRO đã trở lại!</div>
                 <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline" onClick={(e) => setSelectedMenu(e.key)}>
                     <Menu.Item key="dashboard" icon={<DashboardOutlined />}>Dashboard</Menu.Item>
                     <Menu.Item key="users" icon={<UserOutlined />}>Users</Menu.Item>
@@ -175,7 +175,7 @@ const AdminDashboard = () => {
                 </Menu>
             </Sider>
             <Layout>
-                <Header className="bg-primary text-white text-center">Admin Dashboard</Header>
+                <Header className="bg-primary text-white text-center">Bảng quản lý Admin</Header>
                 <Content className="p-4">
 
                     <div className="mt-4" >
