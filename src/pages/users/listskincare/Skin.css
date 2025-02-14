@@ -1,13 +1,13 @@
-ul {
+.buoctaytrang {
     list-style: none;
     padding: 0;
     margin: 0;
   }
   
-  ul li {
+ .buoctaytrang .buoc {
     display: flex;
     align-items: center;
-    gap: 10px; /* Khoảng cách giữa "Bước" và nội dung */
+    gap: 10px;
   }
   
   .step {
@@ -20,5 +20,11 @@ ul {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .da{
+    height: 300px;
+    width: 300px;
+    border-radius: 6px;
   }
   

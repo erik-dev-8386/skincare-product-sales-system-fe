@@ -9,6 +9,7 @@
   /* height: min-content; */
   width: 100%;
   justify-content: center;
+  font-family: "Fira Sans Extra Condensed", serif;
   
 }
 
@@ -21,7 +22,7 @@
 }
 
 .footer p {
-  font-family: Arial, Helvetica, sans-serif;
+ 
   /* margin: 20px; */
   /* width: 200px; */
   display: flex;

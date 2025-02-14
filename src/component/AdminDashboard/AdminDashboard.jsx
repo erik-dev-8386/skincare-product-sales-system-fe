@@ -16,8 +16,8 @@ const { Header, Content, Sider } = Layout;
 
 const AdminDashboard = () => {
     const [users, setUsers] = useState([]);
-    const [staff, setStaff] = useState ([]);
-    const [products, setProduct] = useState ([]);
+    const [staff, setStaff] = useState([]);
+    const [products, setProduct] = useState([]);
     const [categories, setCategories] = useState([]);
     const [discounts, setDiscounts] = useState([]);
     const [skinTypes, setSkinTypes] = useState([]);
@@ -44,7 +44,7 @@ const AdminDashboard = () => {
             })
             .catch(error => console.error("Error fetching discount data:", error));
     }, []);
-    
+
     useEffect(() => {
         axios.get("http://localhost:8080/haven-skin/products")
             .then(response => {
@@ -161,9 +161,11 @@ const AdminDashboard = () => {
         <Layout style={{ minHeight: "100vh" }}>
             <Sider collapsible>
                 <div className="avarta">
-                    <img className="img-avarta" src="./src/assets/Logo_01.jpg"  alt="Avarta" />
+                    <img className="img-avarta" src="./src/assets/Logo_01.jpg" alt="Avarta" />
                 </div>
-                <div className="logo text-center text-white py-3">Chào mừng Admin PRO đã quay trở lại!</div>
+                <div className="logo text-center text-white py-3">
+                    Chào mừng Admin PRO đã trở lại!
+                </div>
                 <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline" onClick={(e) => setSelectedMenu(e.key)}>
                     <Menu.Item key="dashboard" icon={<DashboardOutlined />}>Dashboard</Menu.Item>
                     <Menu.Item key="users" icon={<UserOutlined />}>Users</Menu.Item>
@@ -175,7 +177,7 @@ const AdminDashboard = () => {
                 </Menu>
             </Sider>
             <Layout>
-                <Header className="bg-primary text-white text-center">Admin Dashboard</Header>
+                <h2 className="bg-primary text-white text-center">Bảng quản lý</h2>
                 <Content className="p-4">
 
                     <div className="mt-4" >
@@ -217,7 +219,7 @@ const AdminDashboard = () => {
                         {selectedMenu === "staff" && (
                             <div><ListStaff /></div>
                         )}
-                         {selectedMenu === "products" && (
+                        {selectedMenu === "products" && (
                             <div><ListProduct /></div>
                         )}
                         {selectedMenu === "categories" && (
