@@ -35,7 +35,7 @@ const DiscountManagement = () => {
             title: 'Created Time',
             dataIndex: 'createdTime',
             key: 'createdTime',
-            // render: (text) => text ? dayjs(text).format('DD-MM-YYYY ss:mm:HH') : 'N/A',
+      
         },
         {
             title: 'Deleted Time',
@@ -46,7 +46,7 @@ const DiscountManagement = () => {
             title: 'ActualStart Time',
             dataIndex: 'actualStartTime',
             key: 'actualStartTime',
-            // render: (text) => text ? dayjs(text).format('DD-MM-YYYY ss:mm:HH') : 'N/A',
+            
         },
         {
             title: 'Actual End Time',
@@ -168,13 +168,7 @@ const DiscountManagement = () => {
                 onOk={() => form.submit()}
             >
                 <Form form={form} labelCol={{ span: 24 }} onFinish={handleSubmitForm}>
-                    {/* <Form.Item
-                        label="Discount ID"
-                        name="discountId"
-                        rules={[{ required: false, message: "Code can't be empty!" }]}
-                    >
-                        <Input />
-                    </Form.Item> */}
+                   
                     <Form.Item
                         label="Discount Name"
                         name="discountName"

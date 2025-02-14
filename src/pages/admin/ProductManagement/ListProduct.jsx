@@ -25,6 +25,7 @@ const ListProduct = () => {
         { title: "Category", dataIndex: "categoryId", key: "categoryId" },
         { title: "Brand", dataIndex: "brandId", key: "brandId" },
         { title: "Skin Type", dataIndex: "skinTypeId", key: "skinTypeId" },
+        { title: "Status", dataIndex: "status", key: "status" },
         {
             title: "Actions",
             key: "actions",
@@ -185,11 +186,26 @@ const ListProduct = () => {
                         <Select> <Select.Option value="1">Danh mục 1</Select.Option>
                             <Select.Option value="2">Danh mục 2</Select.Option>
                         </Select> </Form.Item>
-                    <Form.Item label="Thương hiệu" name="brandId">
+                    <Form.Item
+                        label="Thương hiệu"
+                        name="brandId">
                         <Select> <Select.Option value="1">Thương hiệu A</Select.Option>
                             <Select.Option value="2">Thương hiệu B</Select.Option>
                         </Select> </Form.Item>
-                    <Form.Item label="Loại da" name="skinTypeId"> <Input /> </Form.Item>
+                    <Form.Item
+                        label="Loại da"
+                        name="skinTypeId">
+                        <Input />
+                    </Form.Item>
+                    {editingProduct && (
+                        <Form.Item
+                            label="Status"
+                            name="status"
+                            rules={[{ required: false, message: "Status can't be empty!" }]}
+                        >
+                            <Input />
+                        </Form.Item>
+                    )}
                 </Form>
             </Modal>
         </div>
