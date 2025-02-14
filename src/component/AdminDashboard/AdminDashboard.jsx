@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Layout, Menu, Table, Card, Statistic, Button, Form, Input, Modal, Popconfirm } from "antd";
-import { UserOutlined, DashboardOutlined, AppstoreOutlined, PercentageOutlined } from "@ant-design/icons";
+import { UserOutlined, DashboardOutlined, AppstoreOutlined, PercentageOutlined, InboxOutlined } from "@ant-design/icons";
 import CategoryManagement from '../../pages/admin/CategoryManagement/CategoryManagement';
 import DiscountManagement from "../../pages/admin/DiscountManagement/DiscountManagement";
 import SkinTypeManagement from "../../pages/admin/SkinTypesManagement/SkinTypeManagement";
@@ -168,7 +168,7 @@ const AdminDashboard = () => {
                     <Menu.Item key="dashboard" icon={<DashboardOutlined />}>Dashboard</Menu.Item>
                     <Menu.Item key="users" icon={<UserOutlined />}>Users</Menu.Item>
                     <Menu.Item key="staff" icon={<UserOutlined />}>Staff</Menu.Item>
-                    <Menu.Item key="products" icon={<AppstoreOutlined />}>Products</Menu.Item>
+                    <Menu.Item key="products" icon={<InboxOutlined />}>Products</Menu.Item>
                     <Menu.Item key="categories" icon={<AppstoreOutlined />}>Categories</Menu.Item>
                     <Menu.Item key="discounts" icon={<PercentageOutlined />}>Discounts</Menu.Item>
                     <Menu.Item key="skinTypes" icon={<i className="fa-solid fa-hand-dots"></i>}>Skin Types</Menu.Item>

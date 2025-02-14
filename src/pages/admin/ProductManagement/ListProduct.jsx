@@ -25,6 +25,7 @@ const ListProduct = () => {
         { title: "Category", dataIndex: "categoryId", key: "categoryId" },
         { title: "Brand", dataIndex: "brandId", key: "brandId" },
         { title: "Skin Type", dataIndex: "skinTypeId", key: "skinTypeId" },
+        { title: "Status", dataIndex: "status", key: "status" },
         {
             title: "Actions",
             key: "actions",
@@ -124,19 +125,87 @@ const ListProduct = () => {
                 onOk={() => form.submit()}
             >
                 <Form form={form} labelCol={{ span: 24 }} onFinish={handleSubmitForm}>
-                    <Form.Item label="Tên sản phẩm" name="productName" rules={[{ required: true, message: "Tên sản phẩm không được để trống!" }]}> <Input /> </Form.Item>
-                    <Form.Item label="Mô tả" name="description"> <Input /> </Form.Item>
-                    <Form.Item label="Thành phần" name="ingredients"> <Input /> </Form.Item>
-                    <Form.Item label="Giá gốc" name="unitPrice"> <Input type="number" /> </Form.Item>
-                    <Form.Item label="Giá giảm" name="discountPrice"> <Input type="number" /> </Form.Item>
-                    <Form.Item label="Tồn kho" name="quantity"> <Input type="number" /> </Form.Item>
-                    <Form.Item label="Ngày sản xuất" name="mfg"> <DatePicker style={{ width: "100%" }} /> </Form.Item>
-                    <Form.Item label="Hạn sử dụng" name="exp"> <DatePicker style={{ width: "100%" }} /> </Form.Item>
-                    <Form.Item label="Trọng lượng (g)" name="netWeight"> <Input type="number" /> </Form.Item>
-                    <Form.Item label="Mã giảm giá" name="discountId"> <Input /> </Form.Item>
-                    <Form.Item label="Danh mục" name="categoryId"> <Select> <Select.Option value="1">Danh mục 1</Select.Option> <Select.Option value="2">Danh mục 2</Select.Option> </Select> </Form.Item>
-                    <Form.Item label="Thương hiệu" name="brandId"> <Select> <Select.Option value="1">Thương hiệu A</Select.Option> <Select.Option value="2">Thương hiệu B</Select.Option> </Select> </Form.Item>
-                    <Form.Item label="Loại da" name="skinTypeId"> <Input /> </Form.Item>
+                    <Form.Item
+                        label="Tên sản phẩm"
+                        name="productName"
+                        rules={[{ required: true, message: "Tên sản phẩm không được để trống!" }]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        label="Mô tả"
+                        name="description"
+                        rules={[{ required: false, message: "Mô tả phẩm không được để trống!" }]}
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        label="Thành phần"
+                        name="ingredients"
+                    >
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        label="Giá gốc"
+                        name="unitPrice">
+                        <Input type="number" />
+                    </Form.Item>
+                    <Form.Item
+                        label="Giá giảm"
+                        name="discountPrice">
+                        <Input type="number" />
+                    </Form.Item>
+                    <Form.Item
+                        label="Tồn kho"
+                        name="quantity">
+                        <Input type="number" />
+                    </Form.Item>
+                    <Form.Item
+                        label="Ngày sản xuất"
+                        name="mfg">
+                        <DatePicker style={{ width: "100%" }} />
+                    </Form.Item>
+                    <Form.Item
+                        label="Hạn sử dụng"
+                        name="exp">
+                        <DatePicker style={{ width: "100%" }} />
+                    </Form.Item>
+                    <Form.Item
+                        label="Trọng lượng (g)"
+                        name="netWeight">
+                        <Input type="number" />
+                    </Form.Item>
+                    <Form.Item
+                        label="Mã giảm giá"
+                        name="discountId">
+                        <Input />
+                    </Form.Item>
+                    <Form.Item
+                        label="Danh mục"
+                        name="categoryId">
+                        <Select> <Select.Option value="1">Danh mục 1</Select.Option>
+                            <Select.Option value="2">Danh mục 2</Select.Option>
+                        </Select> </Form.Item>
+                    <Form.Item
+                        label="Thương hiệu"
+                        name="brandId">
+                        <Select> <Select.Option value="1">Thương hiệu A</Select.Option>
+                            <Select.Option value="2">Thương hiệu B</Select.Option>
+                        </Select> </Form.Item>
+                    <Form.Item
+                        label="Loại da"
+                        name="skinTypeId">
+                        <Input />
+                    </Form.Item>
+                    {editingProduct && (
+                        <Form.Item
+                            label="Status"
+                            name="status"
+                            rules={[{ required: false, message: "Status can't be empty!" }]}
+                        >
+                            <Input />
+                        </Form.Item>
+                    )}
                 </Form>
             </Modal>
         </div>
