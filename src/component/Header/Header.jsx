@@ -1,6 +1,7 @@
 import React from 'react'
 import './Header.css'
 import logo from "../../assets/Logo_01.jpg"
+
 export default function Header() {
     return (
         <div className='Header'>
@@ -36,7 +37,7 @@ export default function Header() {
                 <a href="/shopping-cart" className="cart">
                     <i className="fas fa-shopping-cart"></i>
                 </a>
-                <a href="/login" className="user">
+                <a href='/login-and-signup' className="user">
                     <i className="fas fa-user"></i>
                 </a>
             </div>

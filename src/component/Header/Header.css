@@ -159,7 +159,7 @@
     /* Đảm bảo không thể click vào icon */
 }
 
-.icon {
+.Header .icon {
     display: flex;
     line-height: 85px;
     padding: 0 24px;
@@ -168,7 +168,7 @@
 
 }
 
-.icon .cart {
+.Header .icon .cart {
     width: 30px;
     align-items: center;
     display: flex;
