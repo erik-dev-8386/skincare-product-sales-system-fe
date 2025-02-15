@@ -4,6 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginAndSignup() {
   
@@ -20,6 +21,7 @@ export default function LoginAndSignup() {
 
   const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const toggleForm = () => setIsRegister(!isRegister);
 
@@ -37,6 +39,7 @@ export default function LoginAndSignup() {
         }
         await axios.post("http://localhost:5000/api/register", formData);
         toast.success("Đăng ký thành công!");
+        setTimeout(() => navigate("/"), 1500); 
       } else {
         const response = await axios.post(" http://localhost:8080/haven-skin/users/login", {
           email: formData.email,
@@ -47,6 +50,7 @@ export default function LoginAndSignup() {
         const decodedToken = jwtDecode(token);
         setRole(decodedToken.role);
         toast.success("Đăng nhập thành công!");
+        setTimeout(() => navigate("/"), 1500);
       }
     } catch (error) {
       toast.error(error.response?.data?.message || "Có lỗi xảy ra!");
