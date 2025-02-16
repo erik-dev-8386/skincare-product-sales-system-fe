@@ -51,7 +51,7 @@
     color: #333;
     font-size: 20px;
     text-decoration: none;
-    margin: 10px;
+    margin: 5px;
 }
 
 .login-page .forgot {
@@ -151,7 +151,7 @@
 }
 
 .login-page .icons {
-    margin: 20px 0;
+    margin: 0;
 }
 
 .login-page .icons a {

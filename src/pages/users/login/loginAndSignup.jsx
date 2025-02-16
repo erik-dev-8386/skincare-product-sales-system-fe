@@ -9,8 +9,6 @@ import { useNavigate } from "react-router-dom";
 export default function LoginAndSignup() {
 
   const [isRegister, setIsRegister] = useState(false);
-
-
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -31,10 +29,12 @@ export default function LoginAndSignup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       if (isRegister) {
         if (formData.password !== formData.confirmPassword) {
           toast.error("Mật khẩu không khớp!");
+          setLoading(false);
           return;
         }
         await axios.post("http://localhost:5000/api/register", formData);
@@ -55,6 +55,7 @@ export default function LoginAndSignup() {
     } catch (error) {
       toast.error(error.response?.data?.message || "Có lỗi xảy ra!");
     }
+    setLoading(false);
   };
 
   // useEffect(() => {
