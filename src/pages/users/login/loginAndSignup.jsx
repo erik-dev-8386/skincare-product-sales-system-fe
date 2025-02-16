@@ -147,15 +147,19 @@ export default function LoginAndSignup() {
         <div className="toogle-container">
           <div className="toogle">
             <div className="toogle-panel toogle-left">
+
               <h1>Chào mừng!</h1>
               <p>Nếu bạn đã có tài khoản</p>
               <button className="hidden" id="login" onClick={toggleForm}>Đăng nhập</button>
+              <div className="back-to-home"><a href="/"><i class="fa-solid fa-arrow-left"></i> Quay lại trang chủ</a></div>
             </div>
 
             <div className="toogle-panel toogle-right">
+
               <h1>Xin chào!</h1>
               <p>Nếu bạn chưa có tài khoản</p>
               <button className="hidden" id="register" onClick={toggleForm}>Đăng ký</button>
+              <div className="back-to-home"><a href="/"><i class="fa-solid fa-arrow-left"></i> Quay lại trang chủ</a></div>
             </div>
           </div>
         </div>

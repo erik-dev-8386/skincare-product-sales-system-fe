@@ -12,7 +12,7 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    height: 100vh;
+    min-height: 100vh;
     background-size: cover;
     background-position: center;
 
@@ -26,6 +26,7 @@
     position: relative;
     overflow: hidden;
     width: 800px;
+    /* max-width: 90%; */
     max-width: 100%;
     min-height: 560px;
 
@@ -92,7 +93,7 @@
 
 .login-page input {
     background-color: #eee;
-    border: none;
+    border: 2px solid #4c4c4c;
     margin: 8px 0;
     padding: 10px 15px;
     font-size: 16px;
@@ -228,4 +229,13 @@
 
 .login-page.active .toogle-right {
     transform: translateX(200%);
+}
+.back-to-home{
+    margin-top: 50px;
+}
+
+ .back-to-home a{
+    color: #fff;
+    text-decoration: none;
+   
 }
