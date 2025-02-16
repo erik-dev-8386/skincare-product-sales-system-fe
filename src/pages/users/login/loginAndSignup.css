@@ -18,7 +18,7 @@
 
 }
 
-.login-page {
+  .login-page {
     font-family: "Fira Sans Extra Condensed", serif;
     background-color: #fff;
     border-radius: 50px;
@@ -28,7 +28,8 @@
     width: 800px;
     /* max-width: 90%; */
     max-width: 100%;
-    min-height: 560px;
+    min-height: 590px;
+    color: #333;
 
     /* border: 2px solid rgba(255, 255, 255, 0.2); */
     /* background: transparent;
