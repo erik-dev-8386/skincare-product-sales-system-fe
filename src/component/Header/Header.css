@@ -161,23 +161,23 @@
 
 .Header .icon {
     display: flex;
-    line-height: 85px;
-    padding: 0 24px;
+    align-items: center; /* Căn giữa theo chiều dọc */
     justify-content: flex-end;
-    margin-right: 0;
-
+    gap: 50px; /* Tạo khoảng cách giữa các icon */
+    padding-right: 10px;
 }
 
-.Header .icon .cart {
-    width: 30px;
-    align-items: center;
+/* Cố định kích thước và căn giữa các icon */
+.cart, .user {
     display: flex;
-    margin: 10px;
-    justify-content: flex-end;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
 }
 
-.cart i {
-
+/* Căn chỉnh icon user và cart */
+.cart i, .user i {
     color: aliceblue;
     display: flex;
     justify-content: center;
@@ -186,33 +186,59 @@
     width: 30px;
     border-radius: 50%;
     border: 1px solid white;
-    background-color: none;
-
+    background-color: transparent;
 }
 
+/* Đảm bảo dropdown user không bị lệch */
+/* Đảm bảo vùng chứa user chỉ bọc icon */
 
-.user {
-
-    width: 30px;
-    align-items: center;
-    display: flex;
-    margin: 10px;
-    justify-content: end;
-
+.user-container {
+    position: relative;
+    display: inline-block;
 }
 
+.user-container .subnav {
+    position: absolute;
+    top: 100%;
+    right: 0; /* Hiển thị dropdown ở bên phải icon */
+    background-color: #900001;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    min-width: 120px;
+    display: none;
+    text-align: left;
+    border-radius: 5px;
+    z-index: 9999; /* Đảm bảo nó hiển thị trên cùng */
+}
+
+.user-container .subnav li {
+    width: 100%;
+}
+
+.user-container .subnav li a {
+    display: block;
+    padding: 10px;
+    color: white;
+    text-decoration: none;
+    width: 100%;
+}
+
+.user-container:hover .subnav {
+    display: block;
+}
+
+/* Căn chỉnh icon user */
 .user i {
     color: aliceblue;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 30px;
-    width: 30px;
+    height: 40px;
+    width: 40px;
     border-radius: 50%;
     border: 1px solid white;
-    background-color: none;
+    background-color: transparent;
+    cursor: pointer;
 }
 
-/* .col-8{
-    padding-left: 50px;
-} */
+/* Hiệu ứng hover */
+
