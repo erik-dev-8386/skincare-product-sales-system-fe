@@ -7,10 +7,10 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export default function LoginAndSignup() {
-  
+
   const [isRegister, setIsRegister] = useState(false);
 
-  
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -39,9 +39,9 @@ export default function LoginAndSignup() {
         }
         await axios.post("http://localhost:5000/api/register", formData);
         toast.success("Đăng ký thành công!");
-        setTimeout(() => navigate("/"), 1500); 
+        setTimeout(() => navigate("/"), 1500);
       } else {
-        const response = await axios.post(" http://localhost:8080/haven-skin/users/login", {
+        const response = await axios.post("http://localhost:8080/haven-skin/users/login", {
           email: formData.email,
           password: formData.password
         });
@@ -57,92 +57,92 @@ export default function LoginAndSignup() {
     }
   };
 
-  useEffect(() => {
-    
-    const container = document.getElementById("container");
-    const registerBtn = document.getElementById("register");
-    const loginBtn = document.getElementById("login");
+  // useEffect(() => {
 
- 
+  //   const container = document.getElementById("container");
+  //   const registerBtn = document.getElementById("register");
+  //   const loginBtn = document.getElementById("login");
 
-    if (!container || !registerBtn || !loginBtn) return;
 
-    const handleRegisterClick = () => {
-      container.classList.add("active");
-    };
 
-    const handleLoginClick = () => {
-      container.classList.remove("active");
-    };
+  //   if (!container || !registerBtn || !loginBtn) return;
 
-    registerBtn.addEventListener("click", handleRegisterClick);
-    loginBtn.addEventListener("click", handleLoginClick);
+  //   const handleRegisterClick = () => {
+  //     container.classList.add("active");
+  //   };
 
-    // Cleanup event listeners when component unmounts
-    return () => {
-      registerBtn.removeEventListener("click", handleRegisterClick);
-      loginBtn.removeEventListener("click", handleLoginClick);
-    };
-  }, []);
+  //   const handleLoginClick = () => {
+  //     container.classList.remove("active");
+  //   };
+
+  //   registerBtn.addEventListener("click", handleRegisterClick);
+  //   loginBtn.addEventListener("click", handleLoginClick);
+
+  //   // Cleanup event listeners when component unmounts
+  //   return () => {
+  //     registerBtn.removeEventListener("click", handleRegisterClick);
+  //     loginBtn.removeEventListener("click", handleLoginClick);
+  //   };
+  // }, []);
 
   return (
     <div className="body">
-        <ToastContainer />
+      <ToastContainer />
       <div className={`container login-page ${isRegister ? "active" : ""}`} id="container">
-      {isRegister ? (
-        <div className="sign-up">
-          <form  onSubmit={handleSubmit}>
-            <h1>Đăng ký tài khoản</h1>
-            <div className="icons">
-              <a href="#" className="icon">
-                <i className="fa-brands fa-facebook"></i>
-              </a>
-              <a href="#" className="icon">
-                <i className="fa-brands fa-google"></i>
-              </a>
-              <a href="#" className="icon">
-                <i className="fa-brands fa-github"></i>
-              </a>
-              <a href="#" className="icon">
-                <i className="fa-brands fa-linkedin"></i>
-              </a>
-            </div>
-            <span>hoặc dùng email để tạo tài khoản</span>
-            <input type="text" name="name" placeholder="Họ và Tên" onChange={handleChange}/>
-            <input type="email" name="email" placeholder="Email" onChange={handleChange}/>
-            <input type="text" name="phone" placeholder="Số điện thoại" onChange={handleChange}/>
-            <input type="password" name="password" placeholder="Mật khẩu" onChange={handleChange}/>
-            <input type="password" name="confirmPassword" placeholder="Xác nhận lại mật khẩu" onChange={handleChange}/>
-            <button type="submit" disabled={loading}>{loading ? "Đang xử lý..." : "Đăng ký"}</button>
-          </form>
-        </div>
-     ) : (
-        <div className="sign-in">
-          <form onSubmit={handleSubmit}>
-            <h1>Đăng nhập</h1>
-            <div className="icons">
-              <a href="#" className="icon">
-                <i className="fa-brands fa-facebook"></i>
-              </a>
-              <a href="#" className="icon">
-                <i className="fa-brands fa-google"></i>
-              </a>
-              <a href="#" className="icon">
-                <i className="fa-brands fa-github"></i>
-              </a>
-              <a href="#" className="icon">
-                <i className="fa-brands fa-linkedin"></i>
-              </a>
-            </div>
-            <span>hoặc dùng email và mật khẩu</span>
-            <input type="email" name="email" placeholder="Email" onChange={handleChange} />
-            <input type="password" name="password" placeholder="Mật khẩu" onChange={handleChange} />
-            <a href="#" className="forgot">Quên mật khẩu</a>
-            <button type="submit" disabled={loading}>{loading ? "Đang xử lý..." : "Đăng nhập"}</button>
-          </form>
-          {role !== null && <p>Vai trò của bạn: {role === 1 ? "Admin" : role === 2 ? "User" : "Customer"}</p>}
-        </div>
-     )}
+        {isRegister ? (
+          <div className="sign-up">
+            <form onSubmit={handleSubmit}>
+              <h1>Đăng ký tài khoản</h1>
+              <div className="icons">
+                <a href="#" className="icon">
+                  <i className="fa-brands fa-facebook"></i>
+                </a>
+                <a href="#" className="icon">
+                  <i className="fa-brands fa-google"></i>
+                </a>
+                <a href="#" className="icon">
+                  <i className="fa-brands fa-github"></i>
+                </a>
+                <a href="#" className="icon">
+                  <i className="fa-brands fa-linkedin"></i>
+                </a>
+              </div>
+              <span>hoặc dùng email để tạo tài khoản</span>
+              <input type="text" name="name" placeholder="Họ và Tên" onChange={handleChange} />
+              <input type="email" name="email" placeholder="Email" onChange={handleChange} />
+              <input type="text" name="phone" placeholder="Số điện thoại" onChange={handleChange} />
+              <input type="password" name="password" placeholder="Mật khẩu" onChange={handleChange} />
+              <input type="password" name="confirmPassword" placeholder="Xác nhận lại mật khẩu" onChange={handleChange} />
+              <button type="submit" disabled={loading}>{loading ? "Đang xử lý..." : "Đăng ký"}</button>
+            </form>
+          </div>
+        ) : (
+          <div className="sign-in">
+            <form onSubmit={handleSubmit}>
+              <h1>Đăng nhập</h1>
+              <div className="icons">
+                <a href="#" className="icon">
+                  <i className="fa-brands fa-facebook"></i>
+                </a>
+                <a href="#" className="icon">
+                  <i className="fa-brands fa-google"></i>
+                </a>
+                <a href="#" className="icon">
+                  <i className="fa-brands fa-github"></i>
+                </a>
+                <a href="#" className="icon">
+                  <i className="fa-brands fa-linkedin"></i>
+                </a>
+              </div>
+              <span>hoặc dùng email và mật khẩu</span>
+              <input type="email" name="email" placeholder="Email" onChange={handleChange} />
+              <input type="password" name="password" placeholder="Mật khẩu" onChange={handleChange} />
+              <a href="#" className="forgot">Quên mật khẩu</a>
+              <button type="submit" disabled={loading}>{loading ? "Đang xử lý..." : "Đăng nhập"}</button>
+            </form>
+            {role !== null && <p>Vai trò của bạn: {role === 1 ? "ADMIN" : role === 2 ? "STAFF" : "CUSTOMER"}</p>}
+          </div>
+        )}
         <div className="toogle-container">
           <div className="toogle">
             <div className="toogle-panel toogle-left">
