@@ -28,6 +28,8 @@ import AdminDashboard from './component/AdminDashboard/AdminDashboard.jsx'
 import ListStaff from './pages/admin/StaffManagement/ListStaff.jsx';
 import CreateStaff from './pages/admin/StaffManagement/CreateStaff.jsx';
 import UserManagement from './pages/admin/UserManagement/UserManagement.jsx'
+import LoginAndSignup from './pages/users/login/loginAndSignup.jsx';
+
 function App() {
 
 
@@ -35,6 +37,7 @@ function App() {
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/login" element={<Login />} />
+      <Route path='/login-and-signup' element={<LoginAndSignup/>} />
       {/* <Route path="/auth/callback" element={<Callback />} /> */}
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="/terms-of-use" element={<TermsOfUse />} />
@@ -58,6 +61,7 @@ function App() {
       <Route path='/list-staff' element={<ListStaff/>} />
       <Route path='/create-staff' element={<CreateStaff/>} />
       <Route path='/list-user' element={<UserManagement/>} />
+      
 
     </Routes>
   );

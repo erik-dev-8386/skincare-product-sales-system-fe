@@ -35,7 +35,7 @@
 
 
 
-.container {
+.home-page {
     text-align: center;
     margin-left: auto; /* Canh giữa nội dung */
     margin-right: auto;
@@ -45,8 +45,8 @@
     top: 140px; */
 }
 
-.container {
-    margin-top: 50px; /* Tăng khoảng cách giữa phần container và header */
+.home-page {
+    margin-top: 50px; /* Tăng khoảng cách giữa phần home-page và header */
 
     padding-bottom: 50px;
 }

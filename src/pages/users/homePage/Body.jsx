@@ -18,7 +18,7 @@ export default function Body() {
   return (
     <>
      
-      <div className='container'>
+      <div className='container home-page'>
         <div className="row">
         <h5 className='trang'>Trang chủ</h5>
         </div>

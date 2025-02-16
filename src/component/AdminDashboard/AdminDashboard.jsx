@@ -160,6 +160,7 @@ const AdminDashboard = () => {
     return (
         <Layout style={{ minHeight: "100vh" }}>
             <Sider collapsible>
+                <div className="back-to-home" style={{marginTop: 5, marginLeft: 10}}><a href="/"><i className="fa-solid fa-arrow-left"></i> Quay lại trang chủ</a></div>
                 <div className="avarta">
                     <img className="img-avarta" src="./src/assets/Logo_01.jpg" alt="Avarta" />
                 </div>
@@ -177,7 +178,7 @@ const AdminDashboard = () => {
                 </Menu>
             </Sider>
             <Layout>
-                <h2 className="bg-primary text-white text-center">Bảng quản lý</h2>
+                <Header className="bg-primary text-white text-center" style={{fontSize: 35}}>Bảng quản lý</Header>
                 <Content className="p-4">
 
                     <div className="mt-4" >

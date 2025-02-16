@@ -3,12 +3,21 @@ import { useForm } from "antd/es/form/Form";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
+import { Select } from "antd";
 
 const DiscountManagement = () => {
+    const { Option } = Select;
     const [discountList, setDiscountList] = useState([]);
     const [isModalOpen, setModalOpen] = useState(false);
     const [form] = useForm();
     const [editingDiscount, setEditingDiscount] = useState(null);
+
+    const statusMapping = {
+        0: "EXPIRED",
+        1: "UPCOMING",
+        2: "ACTIVE",
+        3: "DISABLED"
+    };
 
     const columns = [
         {
@@ -35,7 +44,7 @@ const DiscountManagement = () => {
             title: 'Created Time',
             dataIndex: 'createdTime',
             key: 'createdTime',
-      
+
         },
         {
             title: 'Deleted Time',
@@ -46,7 +55,7 @@ const DiscountManagement = () => {
             title: 'ActualStart Time',
             dataIndex: 'actualStartTime',
             key: 'actualStartTime',
-            
+
         },
         {
             title: 'Actual End Time',
@@ -62,6 +71,7 @@ const DiscountManagement = () => {
             title: 'Status',
             dataIndex: 'status',
             key: 'status',
+            render: (status) => statusMapping[status] || "UNKNOWN",
         },
         {
             title: 'Actions',
@@ -157,10 +167,10 @@ const DiscountManagement = () => {
             <ToastContainer />
             <h1>Discount Management</h1>
             <Button type="primary" onClick={handleOpenModal}>
-                <box-icon name='discount' type='solid' color='#fffdfd' ></box-icon>
+            <i class="fa-solid fa-plus"></i>
                 Add new discount
             </Button>
-            <Table dataSource={discountList} columns={columns} rowKey="discountId" style={{ marginTop: 16}} />
+            <Table dataSource={discountList} columns={columns} rowKey="discountId" style={{ marginTop: 16 }} />
             <Modal
                 title={editingDiscount ? "Edit Discount" : "Create New Discount"}
                 open={isModalOpen}
@@ -168,7 +178,7 @@ const DiscountManagement = () => {
                 onOk={() => form.submit()}
             >
                 <Form form={form} labelCol={{ span: 24 }} onFinish={handleSubmitForm}>
-                   
+
                     <Form.Item
                         label="Discount Name"
                         name="discountName"
@@ -225,13 +235,20 @@ const DiscountManagement = () => {
                     >
                         <Input type="number" />
                     </Form.Item>
+                   
+
                     {editingDiscount && (
                         <Form.Item
                             label="Status"
                             name="status"
                             rules={[{ required: false, message: "Status can't be empty!" }]}
                         >
-                            <Input />
+                            <Select>
+                                <Option value={0}>EXPIRED</Option>
+                                <Option value={1}>UPCOMING</Option>
+                                <Option value={2}>ACTIVE</Option>
+                                <Option value={3}>DISABLED</Option>
+                            </Select>
                         </Form.Item>
                     )}
 
