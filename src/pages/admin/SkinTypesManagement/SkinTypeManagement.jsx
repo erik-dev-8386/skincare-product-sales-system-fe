@@ -120,7 +120,7 @@ const SkinTypeManagement = () => {
             <ToastContainer />
             <h1>Skin Type Management</h1>
             <Button type="primary" onClick={handleOpenModal}>
-                <i className="fa-solid fa-hand-dots"></i>
+            <i class="fa-solid fa-plus"></i>
                 Add New Skin Type
             </Button>
             <Table loading={loading} dataSource={skinTypeList} columns={columns} rowKey="skinTypeId" style={{ marginTop: 16 }} />

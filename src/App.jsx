@@ -29,6 +29,7 @@ import ListStaff from './pages/admin/StaffManagement/ListStaff.jsx';
 import CreateStaff from './pages/admin/StaffManagement/CreateStaff.jsx';
 import UserManagement from './pages/admin/UserManagement/UserManagement.jsx'
 import LoginAndSignup from './pages/users/login/loginAndSignup.jsx';
+
 function App() {
 
 
@@ -60,6 +61,7 @@ function App() {
       <Route path='/list-staff' element={<ListStaff/>} />
       <Route path='/create-staff' element={<CreateStaff/>} />
       <Route path='/list-user' element={<UserManagement/>} />
+      
 
     </Routes>
   );
