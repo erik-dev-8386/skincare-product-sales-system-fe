@@ -18,6 +18,7 @@
 
 .trang, .hot, .san {
     color: #900001;
+    font-family: "Fira Sans Extra Condensed", serif;
 }
 .hot, .san{
     margin-left: 20px;
@@ -25,7 +26,7 @@
 
 .trang {
     margin-left: 10px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: "Fira Sans Extra Condensed", serif;
     position: relative;
     z-index: 10; /* Đảm bảo nằm trên các thành phần khác */
     font-size: 18px; /* Tăng kích thước chữ nếu cần */
@@ -34,17 +35,18 @@
 
 
 
-.container {
+.home-page {
     text-align: center;
     margin-left: auto; /* Canh giữa nội dung */
     margin-right: auto;
+    font-family: "Fira Sans Extra Condensed", serif;
     /* padding-bottom: 50px; 
     position: relative;
     top: 140px; */
 }
 
-.container {
-    margin-top: 50px; /* Tăng khoảng cách giữa phần container và header */
+.home-page {
+    margin-top: 50px; /* Tăng khoảng cách giữa phần home-page và header */
 
     padding-bottom: 50px;
 }

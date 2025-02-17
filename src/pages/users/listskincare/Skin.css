@@ -1,67 +1,30 @@
+.buoctaytrang {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+ .buoctaytrang .buoc {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .step {
+    display: inline-block;
+    width: 100px; /* Đảm bảo tất cả "Bước X:" có chiều rộng bằng nhau */
+    font-weight: bold;
+  }
+  
+  .list-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-
-
-
-.san {
-    margin-top: 20px;
-    margin-bottom: 20px;
-}
-
-.trang, .hot, .san {
-    color: #900001;
-}
-.hot, .san{
-    margin-left: 20px;
-}
-
-.trang {
-    margin-left: 10px;
-    font-family: Arial, Helvetica, sans-serif;
-    position: relative;
-    z-index: 10; /* Đảm bảo nằm trên các thành phần khác */
-    font-size: 18px; /* Tăng kích thước chữ nếu cần */
-    text-align: left;
-}
-
-
-
-.container {
-    text-align: center;
-    margin-left: auto; /* Canh giữa nội dung */
-    margin-right: auto;
-    /* padding-bottom: 50px; 
-    position: relative;
-    top: 140px; */
-}
-
-.container {
-    margin-top: 50px; /* Tăng khoảng cách giữa phần container và header */
-
-    padding-bottom: 50px;
-}
-
-
-.s1 {
-    height: 200px;
-    margin-left: 10px;
-}
-
-.row:last-child {
-    margin-bottom: 50px; /* Tạo khoảng cách cuối cùng trước khi đến footer */
-}
-footer {
-    margin-top: 50px; /* Khoảng cách với nội dung trước đó */
-    text-align: center;
-    background-color: #f8f9fa; /* Màu nền */
-    padding: 20px 0;
-}
-
-.ss{
-    height: 350px;
-    width: 400px;
-}
-
-.sv{
-    height: 250px;
-    width: 400px;
-}
+  .da{
+    height: 300px;
+    width: 300px;
+    border-radius: 6px;
+  }
+  

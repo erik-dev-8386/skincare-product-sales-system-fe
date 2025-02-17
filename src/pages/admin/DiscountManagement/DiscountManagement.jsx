@@ -3,12 +3,21 @@ import { useForm } from "antd/es/form/Form";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
+import { Select } from "antd";
 
 const DiscountManagement = () => {
+    const { Option } = Select;
     const [discountList, setDiscountList] = useState([]);
     const [isModalOpen, setModalOpen] = useState(false);
     const [form] = useForm();
     const [editingDiscount, setEditingDiscount] = useState(null);
+
+    const statusMapping = {
+        0: "EXPIRED",
+        1: "UPCOMING",
+        2: "ACTIVE",
+        3: "DISABLED"
+    };
 
     const columns = [
         {
@@ -35,7 +44,7 @@ const DiscountManagement = () => {
             title: 'Created Time',
             dataIndex: 'createdTime',
             key: 'createdTime',
-            // render: (text) => text ? dayjs(text).format('DD-MM-YYYY ss:mm:HH') : 'N/A',
+
         },
         {
             title: 'Deleted Time',
@@ -46,7 +55,7 @@ const DiscountManagement = () => {
             title: 'ActualStart Time',
             dataIndex: 'actualStartTime',
             key: 'actualStartTime',
-            // render: (text) => text ? dayjs(text).format('DD-MM-YYYY ss:mm:HH') : 'N/A',
+
         },
         {
             title: 'Actual End Time',
@@ -62,6 +71,7 @@ const DiscountManagement = () => {
             title: 'Status',
             dataIndex: 'status',
             key: 'status',
+            render: (status) => statusMapping[status] || "UNKNOWN",
         },
         {
             title: 'Actions',
@@ -70,17 +80,17 @@ const DiscountManagement = () => {
                 <div className="button">
                     <Button onClick={() => handleEditDiscount(record)} style={{ marginRight: 8 }}>
                         <i class="fa-solid fa-pen-to-square"></i>
-                        Sửa
+                        Edit
                     </Button>
                     <Popconfirm
-                        title="Bạn có chắt muốn xóa Discount này không?"
+                        title="Do you want to delete this discount?"
                         onConfirm={() => handleDeleteDiscount(record.discountId)}
-                        okText="Có"
-                        cancelText="Không"
+                        okText="Yes"
+                        cancelText="No"
                     >
                         <Button danger>
                             <i class="fa-solid fa-trash"></i>
-                            Xóa
+                            Delete
                         </Button>
                     </Popconfirm>
                 </div>
@@ -117,21 +127,21 @@ const DiscountManagement = () => {
             values.discountId = editingDiscount.discountId;
             try {
                 await axios.put(`http://localhost:8080/haven-skin/discounts/${editingDiscount.discountId}`, values);
-                toast.success("Discount đã sửa thành công");
+                toast.success("Discount updated successfully!");
                 fetchDiscount();
                 handleCloseModal();
             } catch (error) {
-                toast.error("Sửa discount không thành công!");
+                toast.error("Failed to update discount!");
             }
         } else {
             // Add new Discount
             try {
                 await axios.post('http://localhost:8080/haven-skin/discounts', values);
-                toast.success("Discount đã thêm thành công");
+                toast.success("Discount added successfully!");
                 fetchDiscount();
                 handleCloseModal();
             } catch (error) {
-                toast.error("Thêm discount không thành công!");
+                toast.error("Failed to add discount!");
             }
         }
     };
@@ -145,20 +155,20 @@ const DiscountManagement = () => {
     const handleDeleteDiscount = async (id) => {
         try {
             await axios.delete(`http://localhost:8080/haven-skin/discounts/${id}`);
-            toast.success("Discount đã xóa thành công!");
+            toast.success("Discount deleted successfully!");
             fetchDiscount();
         } catch (error) {
-            toast.error("Xóa discount không thành công!");
+            toast.error("Failed to delete discount!");
         }
     };
 
     return (
-        <div>
+        <div >
             <ToastContainer />
-            <h1>Quản lý Discount</h1>
+            <h1>Discount Management</h1>
             <Button type="primary" onClick={handleOpenModal}>
-                <box-icon name='discount' type='solid' color='#fffdfd' ></box-icon>
-                Thêm Discount mới
+            <i class="fa-solid fa-plus"></i>
+                Add new discount
             </Button>
             <Table dataSource={discountList} columns={columns} rowKey="discountId" style={{ marginTop: 16 }} />
             <Modal
@@ -168,17 +178,11 @@ const DiscountManagement = () => {
                 onOk={() => form.submit()}
             >
                 <Form form={form} labelCol={{ span: 24 }} onFinish={handleSubmitForm}>
-                    {/* <Form.Item
-                        label="Discount ID"
-                        name="discountId"
-                        rules={[{ required: false, message: "Code can't be empty!" }]}
-                    >
-                        <Input />
-                    </Form.Item> */}
+
                     <Form.Item
                         label="Discount Name"
                         name="discountName"
-                        rules={[{ required: true, message: "Discount name can't be empty!" }]}
+                        rules={[{ required: true, message: "Discount Name can't be empty!" }]}
                     >
                         <Input />
                     </Form.Item>
@@ -199,28 +203,28 @@ const DiscountManagement = () => {
                     <Form.Item
                         label="Created Time"
                         name="createdTime"
-                        rules={[{ required: false, message: "Code can't be empty!" }]}
+                        rules={[{ required: false, message: "Created Time can't be empty!" }]}
                     >
                         <Input />
                     </Form.Item>
                     <Form.Item
                         label="Deleted Time"
                         name="deletedTime"
-                        rules={[{ required: false, message: "Code can't be empty!" }]}
+                        rules={[{ required: false, message: "Deleted Time can't be empty!" }]}
                     >
                         <Input />
                     </Form.Item>
                     <Form.Item
                         label="Actual Start Time"
                         name="actualStartTime"
-                        rules={[{ required: false, message: "Code can't be empty!" }]}
+                        rules={[{ required: false, message: "Actual Start Time can't be empty!" }]}
                     >
                         <Input />
                     </Form.Item>
                     <Form.Item
                         label="Actual End Time"
                         name="actualEndTime"
-                        rules={[{ required: false, message: "Code can't be empty!" }]}
+                        rules={[{ required: false, message: "Actual End Time can't be empty!" }]}
                     >
                         <Input />
                     </Form.Item>
@@ -229,15 +233,22 @@ const DiscountManagement = () => {
                         name="discountPercent"
                         rules={[{ required: true, message: "Discount Percent can't be empty!" }]}
                     >
-                        <Input />
+                        <Input type="number" />
                     </Form.Item>
+                   
+
                     {editingDiscount && (
                         <Form.Item
                             label="Status"
                             name="status"
                             rules={[{ required: false, message: "Status can't be empty!" }]}
                         >
-                            <Input />
+                            <Select>
+                                <Option value={0}>EXPIRED</Option>
+                                <Option value={1}>UPCOMING</Option>
+                                <Option value={2}>ACTIVE</Option>
+                                <Option value={3}>DISABLED</Option>
+                            </Select>
                         </Form.Item>
                     )}
 

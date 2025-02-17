@@ -3,16 +3,24 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Layout, Menu, Table, Card, Statistic, Button, Form, Input, Modal, Popconfirm } from "antd";
-import { UserOutlined, DashboardOutlined, AppstoreOutlined , PercentageOutlined} from "@ant-design/icons";
-import CategoryManagement from '../../pages/admin/CategoryManagement/CategoryManagement'
+import { UserOutlined, DashboardOutlined, AppstoreOutlined, PercentageOutlined, InboxOutlined } from "@ant-design/icons";
+import CategoryManagement from '../../pages/admin/CategoryManagement/CategoryManagement';
 import DiscountManagement from "../../pages/admin/DiscountManagement/DiscountManagement";
+import SkinTypeManagement from "../../pages/admin/SkinTypesManagement/SkinTypeManagement";
+import ListStaff from "../../pages/admin/StaffManagement/ListStaff";
+import ListProduct from "../../pages/admin/ProductManagement/ListProduct"
+import '../AdminDashboard/AdminDashboard.css'
+
 
 const { Header, Content, Sider } = Layout;
 
 const AdminDashboard = () => {
     const [users, setUsers] = useState([]);
+    const [staff, setStaff] = useState([]);
+    const [products, setProduct] = useState([]);
     const [categories, setCategories] = useState([]);
     const [discounts, setDiscounts] = useState([]);
+    const [skinTypes, setSkinTypes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedMenu, setSelectedMenu] = useState("users");
     // const [isModalOpen, setModalOpen] = useState(false);
@@ -29,6 +37,24 @@ const AdminDashboard = () => {
     }, []);
 
     useEffect(() => {
+        axios.get("https://jsonplaceholder.typicode.com/staff")
+            .then(response => {
+                setStaff(response.data);
+                setLoading(false);
+            })
+            .catch(error => console.error("Error fetching discount data:", error));
+    }, []);
+
+    useEffect(() => {
+        axios.get("http://localhost:8080/haven-skin/products")
+            .then(response => {
+                setProduct(response.data);
+                setLoading(false);
+            })
+            .catch(error => console.error("Error fetching discount data:", error));
+    }, []);
+
+    useEffect(() => {
         axios.get("http://localhost:8080/haven-skin/category")
             .then(response => {
                 setCategories(response.data);
@@ -41,6 +67,15 @@ const AdminDashboard = () => {
         axios.get("http://localhost:8080/haven-skin/discounts")
             .then(response => {
                 setDiscounts(response.data);
+                setLoading(false);
+            })
+            .catch(error => console.error("Error fetching discount data:", error));
+    }, []);
+
+    useEffect(() => {
+        axios.get("http://localhost:8080/haven-skin/skin-types")
+            .then(response => {
+                setSkinTypes(response.data);
                 setLoading(false);
             })
             .catch(error => console.error("Error fetching discount data:", error));
@@ -125,45 +160,77 @@ const AdminDashboard = () => {
     return (
         <Layout style={{ minHeight: "100vh" }}>
             <Sider collapsible>
-                <div className="logo text-center text-white py-3">Admin PRO</div>
-                <Menu  theme="dark" defaultSelectedKeys={["1"]} mode="inline" onClick={(e) => setSelectedMenu(e.key)}>
+                <div className="back-to-home" style={{marginTop: 5, marginLeft: 10}}><a href="/"><i className="fa-solid fa-arrow-left"></i> Quay lại trang chủ</a></div>
+                <div className="avarta">
+                    <img className="img-avarta" src="./src/assets/Logo_01.jpg" alt="Avarta" />
+                </div>
+                <div className="logo text-center text-white py-3">
+                    Chào mừng Admin PRO đã trở lại!
+                </div>
+                <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline" onClick={(e) => setSelectedMenu(e.key)}>
                     <Menu.Item key="dashboard" icon={<DashboardOutlined />}>Dashboard</Menu.Item>
                     <Menu.Item key="users" icon={<UserOutlined />}>Users</Menu.Item>
-                    <Menu.Item key="categories" icon={<AppstoreOutlined />}>Category Management</Menu.Item>
-                    <Menu.Item key="discounts" icon={ <PercentageOutlined />}>Discount Management</Menu.Item>
+                    <Menu.Item key="staff" icon={<UserOutlined />}>Staff</Menu.Item>
+                    <Menu.Item key="products" icon={<InboxOutlined />}>Products</Menu.Item>
+                    <Menu.Item key="categories" icon={<AppstoreOutlined />}>Categories</Menu.Item>
+                    <Menu.Item key="discounts" icon={<PercentageOutlined />}>Discounts</Menu.Item>
+                    <Menu.Item key="skinTypes" icon={<i className="fa-solid fa-hand-dots"></i>}>Skin Types</Menu.Item>
                 </Menu>
             </Sider>
             <Layout>
-                <Header className="bg-primary text-white text-center">Admin Dashboard</Header>
+                <Header className="bg-primary text-white text-center" style={{fontSize: 35}}>Bảng quản lý</Header>
                 <Content className="p-4">
-                    <div className="row">
-                        <div className="col-md-4">
-                            <Card>
-                                <Statistic title="Total Users" value={users.length} />
-                            </Card>
-                        </div>
-                        <div className="col-md-4">
-                            <Card>
-                                <Statistic title="Total Categories" value={categories.length} />
-                            </Card>
-                        </div>
-                        <div className="col-md-4">
-                            <Card>
-                                <Statistic title="Total Discounts" value={discounts.length} />
-                            </Card>
-                        </div>
-                    </div>
-                    <div className="mt-4">
-                        {selectedMenu === "users" && <Table columns={userColumns} dataSource={users} loading={loading} rowKey="id" />}
-                        {selectedMenu === "categories" && (
-                            <div>
-                                {/* <Button type="primary" onClick={handleOpenModal} style={{ marginBottom: 16 }}>Add Category</Button> */}
-                                {/* <Table columns={categoryColumns} dataSource={categories} loading={loading} rowKey="categoryId" /> */}
-                                <CategoryManagement />
+
+                    <div className="mt-4" >
+                        {selectedMenu === "dashboard" && (
+                            <div className="row">
+                                <div className="col-md-3">
+                                    <Card>
+                                        <Statistic title="Total Users" value={users.length} />
+                                    </Card>
+                                </div>
+                                <div className="col-md-3">
+                                    <Card>
+                                        <Statistic title="Total Staff" value={staff.length} />
+                                    </Card>
+                                </div>
+                                <div className="col-md-3">
+                                    <Card>
+                                        <Statistic title="Total Products" value={products.length} />
+                                    </Card>
+                                </div>
+                                <div className="col-md-3">
+                                    <Card>
+                                        <Statistic title="Total Categories" value={categories.length} />
+                                    </Card>
+                                </div>
+                                <div className="col-md-3">
+                                    <Card>
+                                        <Statistic title="Total Discounts" value={discounts.length} />
+                                    </Card>
+                                </div>
+                                <div className="col-md-3">
+                                    <Card>
+                                        <Statistic title="Total Skin Types" value={skinTypes.length} />
+                                    </Card>
+                                </div>
                             </div>
                         )}
+                        {selectedMenu === "users" && <Table columns={userColumns} dataSource={users} loading={loading} rowKey="id" />}
+                        {selectedMenu === "staff" && (
+                            <div><ListStaff /></div>
+                        )}
+                        {selectedMenu === "products" && (
+                            <div><ListProduct /></div>
+                        )}
+                        {selectedMenu === "categories" && (
+                            <div><CategoryManagement /></div>
+                        )}
                         {selectedMenu === "discounts" && (
-                            <div><DiscountManagement /></div>
+                            <div ><DiscountManagement /></div>
+                        )}
+                        {selectedMenu === "skinTypes" && (
+                            <div><SkinTypeManagement /></div>
                         )}
                     </div>
                 </Content>
