@@ -200,14 +200,14 @@
 .user-container .subnav {
     position: absolute;
     top: 100%;
-    right: 0; /* Hiển thị dropdown ở bên phải icon */
+    right: 0; 
     background-color: #900001;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     min-width: 120px;
     display: none;
     text-align: left;
     border-radius: 5px;
-    z-index: 9999; /* Đảm bảo nó hiển thị trên cùng */
+    z-index: 9999; 
 }
 
 .user-container .subnav li {
