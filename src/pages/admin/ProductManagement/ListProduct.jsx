@@ -3,6 +3,7 @@ import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
+import api from "../../../config/api";
 
 const ListProduct = () => {
     const [productList, setProductList] = useState([]);
@@ -51,7 +52,7 @@ const ListProduct = () => {
 
     const fetchProducts = async () => {
         try {
-            const response = await axios.get("http://localhost:8080/haven-skin/products");
+            const response = await api.get("/products");
             setProductList(response.data);
         } catch (error) {
             console.error("Error fetching products:", error);
@@ -75,7 +76,7 @@ const ListProduct = () => {
     const handleSubmitForm = async (values) => {
         if (editingProduct) {
             try {
-                await axios.put(`http://localhost:8080/haven-skin/products/${editingProduct.productId}`, values);
+                await api.put(`/products/${editingProduct.productId}`, values);
                 toast.success("Cập nhật sản phẩm thành công!");
                 fetchProducts();
                 handleCloseModal();
@@ -84,7 +85,7 @@ const ListProduct = () => {
             }
         } else {
             try {
-                await axios.post("http://localhost:8080/haven-skin/products", values);
+                await api.post("/products", values);
                 toast.success("Thêm sản phẩm thành công");
                 fetchProducts();
                 handleCloseModal();
@@ -102,7 +103,7 @@ const ListProduct = () => {
 
     const handleDeleteProduct = async (productId) => {
         try {
-            await axios.delete(`http://localhost:8080/haven-skin/products/${productId}`);
+            await api.delete(`/products/${productId}`);
             toast.success("Xóa sản phẩm thành công!");
             fetchProducts();
         } catch (error) {

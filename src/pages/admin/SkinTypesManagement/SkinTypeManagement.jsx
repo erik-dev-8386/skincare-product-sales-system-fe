@@ -3,6 +3,7 @@ import { useForm } from "antd/es/form/Form";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
+import api from "../../../config/api";
 
 const SkinTypeManagement = () => {
     const [skinTypeList, setSkinTypeList] = useState([]);
@@ -10,6 +11,12 @@ const SkinTypeManagement = () => {
     const [form] = useForm();
     const [editingSkinType, setEditingSkinType] = useState(null);
     const [loading, setLoading] = useState(false);
+
+    const statusMapping = {
+        1: "ACTIVE",
+        2: "INACTIVE",
+        3: "DELETED"
+    };
 
     const columns = [
         { title: 'Skin Type ID', dataIndex: 'skinTypeId', key: 'skinTypeId' },
@@ -21,6 +28,12 @@ const SkinTypeManagement = () => {
         { title: 'Plan Skin Care', dataIndex: 'planSkinCare', key: 'planSkinCare' },
         { title: 'Products', dataIndex: 'products', key: 'products' },
         { title: 'Skin Type Images', dataIndex: 'skinTypeImages', key: 'skinTypeImages' },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'status',
+            render: (status) => statusMapping[status] || "UNKNOWN",
+        },
 
         {
             title: 'Actions',
@@ -50,7 +63,7 @@ const SkinTypeManagement = () => {
     const fetchSkinTypes = async () => {
         setLoading(true);
         try {
-            const response = await axios.get('http://localhost:8080/haven-skin/skin-types');
+            const response = await api.get('/skin-types');
             setSkinTypeList(response.data);
         } catch (error) {
             console.error("Error fetching skin types:", error);
@@ -77,7 +90,7 @@ const SkinTypeManagement = () => {
         if (editingSkinType) {
             values.skinTypeId = editingSkinType.skinTypeId;
             try {
-                await axios.put(`http://localhost:8080/haven-skin/skin-types/${editingSkinType.skinTypeId}`, values);
+                await api.put(`/skin-types/${editingSkinType.skinTypeId}`, values);
                 toast.success("Đã sửa loại da này thành công!");
                 fetchSkinTypes();
                 handleCloseModal();
@@ -89,7 +102,7 @@ const SkinTypeManagement = () => {
             }
         } else {
             try {
-                await axios.post('http://localhost:8080/haven-skin/skin-types', values);
+                await api.post('/skin-types', values);
                 toast.success("Đã thêm loại da mới thành công!");
                 fetchSkinTypes();
                 handleCloseModal();
@@ -107,7 +120,7 @@ const SkinTypeManagement = () => {
 
     const handleDeleteSkinType = async (skinTypeId) => {
         try {
-            await axios.delete(`http://localhost:8080/haven-skin/skin-types/${skinTypeId}`);
+            await api.delete(`/skin-types/${skinTypeId}`);
             toast.success("Đã xóa loại da này thành công!");
             fetchSkinTypes();
         } catch (error) {
@@ -145,6 +158,19 @@ const SkinTypeManagement = () => {
                     <Form.Item label="Max Mark" name="maxMark">
                         <Input type="number" />
                     </Form.Item>
+                    {editingSkinType && (
+                        <Form.Item
+                            label="Status"
+                            name="status"
+                            rules={[{ required: false, message: "Status can't be empty!" }]}
+                        >
+                            <Select>
+                                <Option value={1}>ACTIVE</Option>
+                                <Option value={2}>INACTIVE</Option>
+                                <Option value={3}>DELETED</Option>
+                            </Select>
+                        </Form.Item>
+                    )}
                 </Form>
             </Modal>
         </div>

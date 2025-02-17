@@ -5,6 +5,7 @@ import axios from "axios";
 import { jwtDecode } from "jwt-decode";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../../../config/api";
 
 export default function LoginAndSignup() {
 
@@ -40,11 +41,11 @@ export default function LoginAndSignup() {
           setLoading(false);
           return;
         }
-        await axios.post("http://localhost:8080/haven-skin/users", formData);
+        await api.post("/users", formData);
         toast.success("Đăng ký thành công!");
         setTimeout(() => navigate("/"), 1500);
       } else {
-        const response = await axios.post("http://localhost:8080/haven-skin/users/login", {
+        const response = await api.post("/users/login", {
           email: formData.email,
           password: formData.password
         });

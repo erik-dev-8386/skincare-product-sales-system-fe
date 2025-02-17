@@ -4,6 +4,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { Select } from "antd";
+import api from "../../../config/api";
 
 const DiscountManagement = () => {
     const { Option } = Select;
@@ -11,6 +12,7 @@ const DiscountManagement = () => {
     const [isModalOpen, setModalOpen] = useState(false);
     const [form] = useForm();
     const [editingDiscount, setEditingDiscount] = useState(null);
+
 
     const statusMapping = {
         0: "EXPIRED",
@@ -100,7 +102,7 @@ const DiscountManagement = () => {
 
     const fetchDiscount = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/haven-skin/discounts');
+            const response = await api.get('/discounts');
             setDiscountList(response.data);
         } catch (error) {
             console.error("Error fetching Discounts:", error);
@@ -126,7 +128,7 @@ const DiscountManagement = () => {
             // Edit Discount
             values.discountId = editingDiscount.discountId;
             try {
-                await axios.put(`http://localhost:8080/haven-skin/discounts/${editingDiscount.discountId}`, values);
+                await api.put(`/discounts/${editingDiscount.discountId}`, values);
                 toast.success("Discount updated successfully!");
                 fetchDiscount();
                 handleCloseModal();
@@ -136,7 +138,7 @@ const DiscountManagement = () => {
         } else {
             // Add new Discount
             try {
-                await axios.post('http://localhost:8080/haven-skin/discounts', values);
+                await api.post('/discounts', values);
                 toast.success("Discount added successfully!");
                 fetchDiscount();
                 handleCloseModal();
@@ -154,7 +156,7 @@ const DiscountManagement = () => {
 
     const handleDeleteDiscount = async (id) => {
         try {
-            await axios.delete(`http://localhost:8080/haven-skin/discounts/${id}`);
+            await api.delete(`/discounts/${id}`);
             toast.success("Discount deleted successfully!");
             fetchDiscount();
         } catch (error) {
