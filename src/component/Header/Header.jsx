@@ -47,6 +47,8 @@ export default function Header() {
                     </a>
                     <ul className="subnav">
                         <li><a href="/profile">Profile</a></li>
+                        <li><a href="/login-and-signup">Login</a></li>
+                        <li><a href="/login-and-signup">Register</a></li>
                         <li><a href="/admin-dashboard">Admin Dashboard</a></li>
                     </ul>
                 </div>
