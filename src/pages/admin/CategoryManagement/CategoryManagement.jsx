@@ -127,11 +127,11 @@ const CategoryManagement = () => {
 
     const handleDeleteCategory = async (categoryId) => {
         try {
-            await axios.delete(`http://localhost:8080/haven-skin/category/${categoryId}`);
-            toast.success("Discount deleted successfully!");
+            await axios.delete(`http://localhost:8080/haven-skin/categories/${categoryId}`);
+            toast.success("Category deleted successfully!");
             fetchCategories();
         } catch (error) {
-            toast.error("Failed to delete discount!");
+            toast.error("Failed to delete category!");
         }
     };
 

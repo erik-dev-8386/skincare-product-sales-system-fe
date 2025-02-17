@@ -17,20 +17,38 @@ function Login() {
 
   const navigate = useNavigate(); // Khai báo navigate để chuyển trang
 
-  const handleSuccess = async (response) => {
-    try {
-      const { credential } = response; // Dùng "credential" thay vì "tokenId"
-      const res = await axios.post("http://localhost:8080/users/login/google", { token: credential });
+  // const handleSuccess = async (response) => {
+  //   try {
+  //     const { credential } = response; // Dùng "credential" thay vì "tokenId"
+  //     const res = await axios.post("http://localhost:8080/haven-skin/users/login/google", { token: credential });
 
-      alert("Đăng nhập thành công!"); // Thông báo thành công
+  //     alert("Đăng nhập thành công!"); // Thông báo thành công
+  //     toast.success("Đăng nhập thành công!");
+  //     navigate("/"); // Chuyển hướng về trang chủ
+  //   } catch (error) {
+  //     console.error("Đăng nhập thất bại", error);
+  //     toast.error("Đăng nhập thất bại!");
+  //   }
+  // };
+
+  const handleSuccess = async (response) => {
+    console.log("Google Token:", response.credential); // Kiểm tra token nhận được
+    try {
+      const res = await fetch("http://localhost:8080/haven-skin/users/login/google", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(response.credential),
+      });
+  
+      const data = await res.json();
+      console.log("User data:", data);
       toast.success("Đăng nhập thành công!");
       navigate("/"); // Chuyển hướng về trang chủ
     } catch (error) {
-      console.error("Đăng nhập thất bại", error);
+      console.error("Login failed:", error);
       toast.error("Đăng nhập thất bại!");
     }
   };
-
 
   return (
     <>
