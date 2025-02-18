@@ -6,6 +6,7 @@ import { jwtDecode } from "jwt-decode";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../config/api";
+import { GoogleLogin } from "@react-oauth/google";
 
 export default function LoginAndSignup() {
 
@@ -19,6 +20,7 @@ export default function LoginAndSignup() {
     confirmPassword: ""
   });
 
+  const CLIENT_ID = "525168437786-6gp97ecr9iuminm11fv9fkuteggdjcd8.apps.googleusercontent.com";
 
   const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -62,6 +64,24 @@ export default function LoginAndSignup() {
     setLoading(false);
   };
 
+  const handleSuccess = async (response) => {
+      console.log("Google Token:", response.credential); // Kiểm tra token nhận được
+      try {
+        const res = await fetch("http://localhost:8080/haven-skin/users/login/google", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(response.credential),
+        });
+    
+        const data = await res.json();
+        console.log("User data:", data);
+        toast.success("Đăng nhập thành công!");
+        navigate("/"); // Chuyển hướng về trang chủ
+      } catch (error) {
+        console.error("Login failed:", error);
+        toast.error("Đăng nhập thất bại!");
+      }
+    };
 
 
   return (
@@ -73,18 +93,27 @@ export default function LoginAndSignup() {
             <form onSubmit={handleSubmit}>
               <h1>Đăng ký tài khoản</h1>
               <div className="icons">
-                <a href="#" className="icon">
+                {/* <a href="#" className="icon">
                   <i className="fa-brands fa-facebook"></i>
                 </a>
                 <a href="#" className="icon">
                   <i className="fa-brands fa-google"></i>
+                  
                 </a>
                 <a href="#" className="icon">
                   <i className="fa-brands fa-github"></i>
                 </a>
                 <a href="#" className="icon">
                   <i className="fa-brands fa-linkedin"></i>
-                </a>
+                </a> */}
+                <GoogleLogin
+                                  className="google-login"
+                                    clientId={CLIENT_ID}
+                                    buttonText="Login with Google"
+                                    onSuccess={handleSuccess}
+                                    onError={() => console.log("Đăng nhập thất bại")}
+                                    cookiePolicy={"single_host_origin"}
+                                  />
               </div>
               <span>hoặc dùng email để tạo tài khoản</span>
               <input type="text" name="firstName" placeholder="Tên" onChange={handleChange} />
@@ -107,7 +136,7 @@ export default function LoginAndSignup() {
             <form onSubmit={handleSubmit}>
               <h1>Đăng nhập</h1>
               <div className="icons">
-                <a href="#" className="icon">
+                {/* <a href="#" className="icon">
                   <i className="fa-brands fa-facebook"></i>
                 </a>
                 <a href="#" className="icon">
@@ -118,7 +147,15 @@ export default function LoginAndSignup() {
                 </a>
                 <a href="#" className="icon">
                   <i className="fa-brands fa-linkedin"></i>
-                </a>
+                </a> */}
+                <GoogleLogin
+                                  className="google-login"
+                                    clientId={CLIENT_ID}
+                                    buttonText="Login with Google"
+                                    onSuccess={handleSuccess}
+                                    onError={() => console.log("Đăng nhập thất bại")}
+                                    cookiePolicy={"single_host_origin"}
+                                  />
               </div>
               <span>hoặc dùng email và mật khẩu</span>
               <input type="email" name="email" placeholder="Email" onChange={handleChange} />
