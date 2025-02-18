@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal, Table, Popconfirm, DatePicker, Select } from "antd";
+import { Button, Form, Input, Modal, Table, Popconfirm, Select } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -10,57 +10,68 @@ const ListProduct = () => {
     const [isModalOpen, setModalOpen] = useState(false);
     const [form] = useForm();
     const [editingProduct, setEditingProduct] = useState(null);
+    const [brands, setBrands] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [discounts, setDiscounts] = useState([]);
+    const [skinTypes, setSkinTypes] = useState([]);
 
     const columns = [
         { title: "Product ID", dataIndex: "productId", key: "productId" },
         { title: "Product Name", dataIndex: "productName", key: "productName" },
         { title: "Description", dataIndex: "description", key: "description" },
         { title: "Ingredients", dataIndex: "ingredients", key: "ingredients" },
-        { title: "Unit Price", dataIndex: "unitPrice", key: "unitPrice" },
+        { title: "Unit Price", dataIndex: "unitPrice", key: "unitPrice" },  
         { title: "Discount Price", dataIndex: "discountPrice", key: "discountPrice" },
         { title: "Stock", dataIndex: "quantity", key: "quantity" },
         { title: "Manufacture Date", dataIndex: "mfg", key: "mfg" },
         { title: "Expiry Date", dataIndex: "exp", key: "exp" },
         { title: "Net Weight", dataIndex: "netWeight", key: "netWeight" },
-        { title: "Discount ID", dataIndex: "discountId", key: "discountId" },
-        { title: "Category", dataIndex: "categoryId", key: "categoryId" },
-        { title: "Brand", dataIndex: "brandId", key: "brandId" },
-        { title: "Skin Type", dataIndex: "skinTypeId", key: "skinTypeId" },
-        { title: "Status", dataIndex: "status", key: "status" },
-        {
-            title: "Actions",
-            key: "actions",
-            render: (text, record) => (
-                <div>
-                    <Button onClick={() => handleEditProduct(record)} style={{ marginRight: 8 }}>
-                        <i className="fa-solid fa-pen-to-square"></i> Sửa
+        { title: "Brand", dataIndex: "brandId", key: "brandId", render: (brandId) => brands.find(b => b.id === brandId)?.name || "Unknown" },
+        { title: "Skin Type ID", dataIndex: "skinTypeId", key: "skinTypeId", render: (skinTypeId) => skinTypes.find(b => b.id === skinTypeId)?.name || "Unknown" },
+        { title: "Category ID", dataIndex: "categoryId", key: "categoryId", render: (categoryId) => categories.find(b => b.id === categoryId)?.name || "Unknown" },
+        { title: "Discount ID", dataIndex: "discountId", key: "discountId", render: (discountId) => discounts.find(b => b.id === discountId)?.name || "Unknown" },
+     
+
+        { title: "Actions", key: "actions", render: (text, record) => (
+            <div>
+                <Button onClick={() => handleEditProduct(record)} style={{ marginRight: 8 }}>
+                    <i className="fa-solid fa-pen-to-square"></i> Sửa
+                </Button>
+                <Popconfirm
+                    title="Bạn có chắc muốn xóa sản phẩm này không?"
+                    onConfirm={() => handleDeleteProduct(record.productId)}
+                    okText="Có"
+                    cancelText="Không"
+                >
+                    <Button danger>
+                        <i className="fa-solid fa-trash"></i> Xóa
                     </Button>
-                    <Popconfirm
-                        title="Bạn có chắc muốn xóa sản phẩm này không?"
-                        onConfirm={() => handleDeleteProduct(record.productId)}
-                        okText="Có"
-                        cancelText="Không"
-                    >
-                        <Button danger>
-                            <i className="fa-solid fa-trash"></i> Xóa
-                        </Button>
-                    </Popconfirm>
-                </div>
-            ),
-        },
+                </Popconfirm>
+            </div>
+        ) },
     ];
 
-    const fetchProducts = async () => {
+    const fetchData = async () => {
         try {
-            const response = await api.get("/products");
-            setProductList(response.data);
+            const [productsRes, brandsRes, categoriesRes, discountsRes, skinTypesRes] = await Promise.all([
+                api.get("/products"),
+                api.get("/brands/list-name-brands"),
+                api.get("/categories/list-name-categories"),
+                api.get("/discounts/list-name-discounts"),
+                api.get("/skin-types/list-name-skin-types")
+            ]);
+            setProductList(productsRes.data);
+            setBrands(brandsRes.data.map(name => ({ id: name, name })));
+            setCategories(categoriesRes.data.map(name => ({ id: name, name })));
+            setDiscounts(discountsRes.data.map(name => ({ id: name, name })));
+            setSkinTypes(skinTypesRes.data.map(name => ({ id: name, name })));
         } catch (error) {
-            console.error("Error fetching products:", error);
+            console.error("Error fetching data:", error);
         }
     };
 
     useEffect(() => {
-        fetchProducts();
+        fetchData();
     }, []);
 
     const handleOpenModal = () => {
@@ -74,24 +85,17 @@ const ListProduct = () => {
     };
 
     const handleSubmitForm = async (values) => {
-        if (editingProduct) {
-            try {
-                await api.put(`/products/${editingProduct.productId}`, values);
-                toast.success("Cập nhật sản phẩm thành công!");
-                fetchProducts();
-                handleCloseModal();
-            } catch (error) {
-                toast.error("Cập nhật sản phẩm không thành công!");
-            }
-        } else {
-            try {
-                await api.post("/products", values);
-                toast.success("Thêm sản phẩm thành công");
-                fetchProducts();
-                handleCloseModal();
-            } catch (error) {
-                toast.error("Thêm sản phẩm không thành công!");
-            }
+        try {
+            const response = editingProduct
+                ? await api.put(`/products/${editingProduct.productId}`, values)
+                : await api.post("/products", values);
+            
+            const updatedProduct = response.data;
+            toast.success(editingProduct ? "Cập nhật sản phẩm thành công!" : "Thêm sản phẩm thành công!");
+            fetchData();
+            handleCloseModal();
+        } catch (error) {
+            toast.error("Xử lý sản phẩm không thành công!");
         }
     };
 
@@ -105,7 +109,7 @@ const ListProduct = () => {
         try {
             await api.delete(`/products/${productId}`);
             toast.success("Xóa sản phẩm thành công!");
-            fetchProducts();
+            fetchData();
         } catch (error) {
             toast.error("Xóa sản phẩm không thành công!");
         }
@@ -126,41 +130,16 @@ const ListProduct = () => {
                 onOk={() => form.submit()}
             >
                 <Form form={form} labelCol={{ span: 24 }} onFinish={handleSubmitForm}>
-                    <Form.Item
-                        label="Tên sản phẩm"
-                        name="productName"
-                        rules={[{ required: true, message: "Tên sản phẩm không được để trống!" }]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        label="Mô tả"
-                        name="description"
-                        rules={[{ required: false, message: "Mô tả phẩm không được để trống!" }]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        label="Thành phần"
-                        name="ingredients"
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        label="Giá gốc"
-                        name="unitPrice">
-                        <Input type="number" />
-                    </Form.Item>
-                    <Form.Item
-                        label="Giá giảm"
-                        name="discountPrice">
-                        <Input type="number" />
-                    </Form.Item>
-                    <Form.Item
-                        label="Tồn kho"
-                        name="quantity">
-                        <Input type="number" />
-                    </Form.Item>
+                <Form.Item label="Tên sản phẩm" name="productName" rules={[{ required: true, message: "Tên sản phẩm không được để trống!" }]}> <Input /> </Form.Item>
+                <Form.Item label="Mô tả" name="description" rules={[{ required: true, message: "Tên sản phẩm không được để trống!" }]}> <Input /> </Form.Item>
+                <Form.Item label="Thành phần" name="ingredients" rules={[{ required: true, message: "Tên sản phẩm không được để trống!" }]}> <Input /> </Form.Item>
+                <Form.Item label="Giá gốc" name="unitPrice" rules={[{ required: true, message: "Tên sản phẩm không được để trống!" }]}> <Input type="number" /> </Form.Item>
+                <Form.Item label="Giá giảm" name="discountPrice" rules={[{ required: true, message: "Tên sản phẩm không được để trống!" }]}> <Input type="number" /> </Form.Item>
+                <Form.Item label="Tồn kho" name="quantity" rules={[{ required: true, message: "Tên sản phẩm không được để trống!" }]}> <Input type="number" /> </Form.Item>
+                <Form.Item label="Ngày sản xuất" name="mfg" rules={[{ required: true, message: "Tên sản phẩm không được để trống!" }]}> <Input type="number" /> </Form.Item>
+                <Form.Item label="Hạn sử dụng" name="mfg" rules={[{ required: true, message: "Tên sản phẩm không được để trống!" }]}> <Input type="number" /> </Form.Item>
+                <Form.Item label="Trọng lượng (g)" name="netWeight" rules={[{ required: true, message: "Tên sản phẩm không được để trống!" }]}> <Input type="number" /> </Form.Item>
+                {/* 
                     <Form.Item
                         label="Ngày sản xuất"
                         name="mfg">
@@ -175,38 +154,27 @@ const ListProduct = () => {
                         label="Trọng lượng (g)"
                         name="netWeight">
                         <Input type="number" />
+                    </Form.Item> */}
+                    <Form.Item label="Thương hiệu" name="brandId"> 
+                        <Select>
+                            {brands.map(brand => <Select.Option key={brand.id} value={brand.id}>{brand.name}</Select.Option>)}
+                        </Select>
                     </Form.Item>
-                    <Form.Item
-                        label="Mã giảm giá"
-                        name="discountId">
-                        <Input />
+                    <Form.Item label="Loại da" name="skinTypeId"> 
+                        <Select>
+                            {skinTypes.map(skinType => <Select.Option key={skinType.id} value={skinType.id}>{skinType.name}</Select.Option>)}
+                        </Select>
                     </Form.Item>
-                    <Form.Item
-                        label="Danh mục"
-                        name="categoryId">
-                        <Select> <Select.Option value="1">Danh mục 1</Select.Option>
-                            <Select.Option value="2">Danh mục 2</Select.Option>
-                        </Select> </Form.Item>
-                    <Form.Item
-                        label="Thương hiệu"
-                        name="brandId">
-                        <Select> <Select.Option value="1">Thương hiệu A</Select.Option>
-                            <Select.Option value="2">Thương hiệu B</Select.Option>
-                        </Select> </Form.Item>
-                    <Form.Item
-                        label="Loại da"
-                        name="skinTypeId">
-                        <Input />
+                    <Form.Item label="Danh mục" name="categoryId"> 
+                        <Select>
+                            {categories.map(category => <Select.Option key={category.id} value={category.id}>{category.name}</Select.Option>)}
+                        </Select>
                     </Form.Item>
-                    {editingProduct && (
-                        <Form.Item
-                            label="Status"
-                            name="status"
-                            rules={[{ required: false, message: "Status can't be empty!" }]}
-                        >
-                            <Input />
-                        </Form.Item>
-                    )}
+                    <Form.Item label="Giảm giá" name="discountId"> 
+                        <Select>
+                            {discounts.map(discount => <Select.Option key={discount.id} value={discount.id}>{discount.name}</Select.Option>)}
+                        </Select>
+                    </Form.Item>
                 </Form>
             </Modal>
         </div>
