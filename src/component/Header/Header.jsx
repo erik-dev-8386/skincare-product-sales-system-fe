@@ -47,9 +47,9 @@ export default function Header() {
                         <i className="fas fa-user"></i>
                     </Link>
                     <ul className="subnav">
-                        <li><Link to="/profile">Profile</Link></li>
-                        <li><Link to="/login-and-signup">Login</Link></li>
-                        <li><Link to="/login-and-signup">Register</Link></li>
+                        <li><Link to="/profile">Hồ sơ</Link></li>
+                        <li><Link to="/login-and-signup">Đăng nhập</Link></li>
+                        <li><Link to="/login-and-signup">Đăng ký</Link></li>
                         <li><Link to="/admin-dashboard">Admin Dashboard</Link></li>
                     </ul>
                 </div>

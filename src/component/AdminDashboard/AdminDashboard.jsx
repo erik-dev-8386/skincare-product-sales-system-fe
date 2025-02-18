@@ -8,7 +8,8 @@ import CategoryManagement from '../../pages/admin/CategoryManagement/CategoryMan
 import DiscountManagement from "../../pages/admin/DiscountManagement/DiscountManagement";
 import SkinTypeManagement from "../../pages/admin/SkinTypesManagement/SkinTypeManagement";
 import ListStaff from "../../pages/admin/StaffManagement/ListStaff";
-import ListProduct from "../../pages/admin/ProductManagement/ListProduct"
+import ListProduct from "../../pages/admin/ProductManagement/ListProduct";
+import BrandManagement from "../../pages/admin/BrandManagement/BrandManagement";
 import '../AdminDashboard/AdminDashboard.css'
 
 
@@ -18,6 +19,7 @@ const AdminDashboard = () => {
     const [users, setUsers] = useState([]);
     const [staff, setStaff] = useState([]);
     const [products, setProduct] = useState([]);
+    const [brands, setBrands] = useState([]);
     const [categories, setCategories] = useState([]);
     const [discounts, setDiscounts] = useState([]);
     const [skinTypes, setSkinTypes] = useState([]);
@@ -42,7 +44,7 @@ const AdminDashboard = () => {
                 setStaff(response.data);
                 setLoading(false);
             })
-            .catch(error => console.error("Error fetching discount data:", error));
+            .catch(error => console.error("Error fetching staff data:", error));
     }, []);
 
     useEffect(() => {
@@ -51,7 +53,16 @@ const AdminDashboard = () => {
                 setProduct(response.data);
                 setLoading(false);
             })
-            .catch(error => console.error("Error fetching discount data:", error));
+            .catch(error => console.error("Error fetching products data:", error));
+    }, []);
+
+    useEffect(() => {
+        axios.get("http://localhost:8080/haven-skin/brands")
+            .then(response => {
+                setProduct(response.data);
+                setLoading(false);
+            })
+            .catch(error => console.error("Error fetching brands data:", error));
     }, []);
 
     useEffect(() => {
@@ -172,6 +183,7 @@ const AdminDashboard = () => {
                     <Menu.Item key="users" icon={<UserOutlined />}>Users</Menu.Item>
                     <Menu.Item key="staff" icon={<UserOutlined />}>Staff</Menu.Item>
                     <Menu.Item key="products" icon={<InboxOutlined />}>Products</Menu.Item>
+                    <Menu.Item key="brands" icon={<InboxOutlined />}>Brands</Menu.Item>
                     <Menu.Item key="categories" icon={<AppstoreOutlined />}>Categories</Menu.Item>
                     <Menu.Item key="discounts" icon={<PercentageOutlined />}>Discounts</Menu.Item>
                     <Menu.Item key="skinTypes" icon={<i className="fa-solid fa-hand-dots"></i>}>Skin Types</Menu.Item>
@@ -201,6 +213,11 @@ const AdminDashboard = () => {
                                 </div>
                                 <div className="col-md-3">
                                     <Card>
+                                        <Statistic title="Total Brands" value={brands.length} />
+                                    </Card>
+                                </div>
+                                <div className="col-md-3">
+                                    <Card>
                                         <Statistic title="Total Categories" value={categories.length} />
                                     </Card>
                                 </div>
@@ -222,6 +239,9 @@ const AdminDashboard = () => {
                         )}
                         {selectedMenu === "products" && (
                             <div><ListProduct /></div>
+                        )}
+                         {selectedMenu === "brands" && (
+                            <div><BrandManagement /></div>
                         )}
                         {selectedMenu === "categories" && (
                             <div><CategoryManagement /></div>
