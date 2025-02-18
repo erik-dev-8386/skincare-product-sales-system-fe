@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './register.css';
 import logo from "../../../assets/Logo_01.jpg"
+import { Link } from 'react-router-dom';
 export default function Register() {
     const [formData, setFormData] = useState({
         name: '',
@@ -26,12 +27,12 @@ export default function Register() {
 
     return (
         <div className="register-form">
-            <a href="/"><img
+            <Link to="/"><img
                 alt="Haven Skin logo with a leaf design"
                 height="100"
                 src={logo}
                 width="100"
-            /></a>
+            /></Link>
             <h1>Đăng ký</h1>
             <form onSubmit={handleSubmit}>
                 <div className='input-register'>

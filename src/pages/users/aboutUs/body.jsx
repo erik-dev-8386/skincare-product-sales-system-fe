@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 
 export default function body() {
     return (
@@ -29,18 +30,18 @@ export default function body() {
             <div className="contact-container">
                 <p>
                     <i className="fa-brands fa-facebook"></i>
-                    <a href="https://www.facebook.com/profile.php?id=100084565232953&locale=vi_VN"> Haven Skin</a>
+                    <Link to="https://www.facebook.com/profile.php?id=100084565232953&locale=vi_VN"> Haven Skin</Link>
                 </p>
                 <p>
                     <i className="fa-solid fa-phone ph"></i><span className="phone-number">0966340303</span>
                 </p>
                 <p>
                     <i className="fa-solid fa-envelope"></i>
-                    <a href="mailto: havenskin032025@gmail.com"> havenskin032025@gmail.com</a>
+                    <Link to="mailto: havenskin032025@gmail.com"> havenskin032025@gmail.com</Link>
                 </p>
                 <p>
                     <i className="fa-solid fa-location-dot"></i>
-                    <a href="https://www.google.com/maps/place/Nh%C3%A0+V%C4%83n+h%C3%B3a+Sinh+vi%C3%AAn+TP.HCM"> Nhà Văn hóa Sinh viên TP.HCM</a>
+                    <Link to="https://www.google.com/maps/place/Nh%C3%A0+V%C4%83n+h%C3%B3a+Sinh+vi%C3%AAn+TP.HCM"> Nhà Văn hóa Sinh viên TP.HCM</Link>
                 </p>
             </div>
 

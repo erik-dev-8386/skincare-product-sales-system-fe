@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './Header.css';
 import logo from "../../assets/Logo_01.jpg";
 
@@ -8,26 +9,26 @@ export default function Header() {
     return (
         <div className='Header'>
             <div className='col-1'>
-                <a href="/"><img src={logo} alt="Haven SkinLogo" className='logo' /></a>
+                <Link to="/"><img src={logo} alt="Haven Skin Logo" className='logo' /></Link>
             </div>
 
             <div className='nav col-8'>
                 <ul>
-                    <li><a href='/' className="active">Trang chủ</a></li>
-                    <li><a href='#' className="active">Sản phẩm</a></li>
-                    <li><a href='/discount' className="active">Giảm giá</a></li>
-                    <li><a href='/blog' className="active">Blog</a></li>
-                    <li><a href='#' className="active">Xác định da</a></li>
+                    <li><Link to='/' className="active">Trang chủ</Link></li>
+                    <li><Link to='#' className="active">Sản phẩm</Link></li>
+                    <li><Link to='/discount' className="active">Giảm giá</Link></li>
+                    <li><Link to='/blog' className="active">Blog</Link></li>
+                    <li><Link to='#' className="active">Xác định da</Link></li>
                     <li>
-                        <a href='#' className="active">Lộ trình chăm sóc da</a>
+                        <Link to='#' className="active">Lộ trình chăm sóc da</Link>
                         <ul className="subnav">
-                            <li><a href="/listskincare/Thuong">Da thường</a></li>
-                            <li><a href="/listskincare/Nhaycam">Da nhạy cảm</a></li>
-                            <li><a href="/listskincare/Honhop">Da hỗn hợp</a></li>
-                            <li><a href="/listskincare/Kho">Da khô</a></li>
+                            <li><Link to="/listskincare/Thuong">Da thường</Link></li>
+                            <li><Link to="/listskincare/Nhaycam">Da nhạy cảm</Link></li>
+                            <li><Link to="/listskincare/Honhop">Da hỗn hợp</Link></li>
+                            <li><Link to="/listskincare/Kho">Da khô</Link></li>
                         </ul>
                     </li>
-                    <li><a href='/about-us'>Giới thiệu & Liên hệ</a></li>
+                    <li><Link to='/about-us'>Giới thiệu & Liên hệ</Link></li>
                 </ul>
             </div>
 
@@ -37,22 +38,21 @@ export default function Header() {
                     <i className="fas fa-search search-icon"></i>
                 </div>
 
-                <a href="/shopping-cart" className="cart">
+                <Link to="/shopping-cart" className="cart">
                     <i className="fas fa-shopping-cart"></i>
-                </a>
+                </Link>
 
                 <div className='user-container'>
-                    <a href="#" className="user">
+                    <Link to="#" className="user">
                         <i className="fas fa-user"></i>
-                    </a>
+                    </Link>
                     <ul className="subnav">
-                        <li><a href="/profile">Profile</a></li>
-                        <li><a href="/login-and-signup">Login</a></li>
-                        <li><a href="/login-and-signup">Register</a></li>
-                        <li><a href="/admin-dashboard">Admin Dashboard</a></li>
+                        <li><Link to="/profile">Profile</Link></li>
+                        <li><Link to="/login-and-signup">Login</Link></li>
+                        <li><Link to="/login-and-signup">Register</Link></li>
+                        <li><Link to="/admin-dashboard">Admin Dashboard</Link></li>
                     </ul>
                 </div>
-
             </div>
         </div>
     );

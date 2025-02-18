@@ -7,6 +7,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../../config/api";
 import { GoogleLogin } from "@react-oauth/google";
+import { Link } from 'react-router-dom';
 
 export default function LoginAndSignup() {
 
@@ -83,6 +84,32 @@ export default function LoginAndSignup() {
       }
     };
 
+  // const handleSuccess = async (response) => {
+  //   console.log("Google Token:", response.credential); 
+  //   try {
+  //     const res = await fetch("http://localhost:8080/haven-skin/users/login/google", {
+  //       method: "POST",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify({ token: response.credential }), // Đảm bảo gửi đúng format
+  //     });
+  
+  //     const data = await res.json();
+  //     console.log("User data:", data);
+  
+  //     if (res.ok) {
+  //       console.log("Google Login Success");
+  //       toast.success("Đăng nhập thành công!");
+  //       navigate("/");
+  //     } else {
+  //       console.error("Server returned an error:", data);
+  //       toast.error(data.message || "Đăng nhập thất bại!");
+  //     }
+  //   } catch (error) {
+  //     console.error("Login failed:", error);
+  //     toast.error("Đăng nhập thất bại!");
+  //   }
+  // };
+
 
   return (
     <div className="body">
@@ -93,27 +120,27 @@ export default function LoginAndSignup() {
             <form onSubmit={handleSubmit}>
               <h1>Đăng ký tài khoản</h1>
               <div className="icons">
-                {/* <a href="#" className="icon">
+                {/* <Link to="#" className="icon">
                   <i className="fa-brands fa-facebook"></i>
-                </a>
-                <a href="#" className="icon">
+                </Link>
+                <Link to="#" className="icon">
                   <i className="fa-brands fa-google"></i>
                   
-                </a>
-                <a href="#" className="icon">
+                </Link>
+                <Link to="#" className="icon">
                   <i className="fa-brands fa-github"></i>
-                </a>
-                <a href="#" className="icon">
+                </Link>
+                <Link to="#" className="icon">
                   <i className="fa-brands fa-linkedin"></i>
-                </a> */}
+                </Link> */}
                 <GoogleLogin
-                                  className="google-login"
-                                    clientId={CLIENT_ID}
-                                    buttonText="Login with Google"
-                                    onSuccess={handleSuccess}
-                                    onError={() => console.log("Đăng nhập thất bại")}
-                                    cookiePolicy={"single_host_origin"}
-                                  />
+                  className="google-login"
+                  clientId={CLIENT_ID}
+                  buttonText="Login with Google"
+                  onSuccess={handleSuccess}
+                  onError={() => console.log("Đăng nhập thất bại")}
+                  cookiePolicy={"single_host_origin"}
+                  />
               </div>
               <span>hoặc dùng email để tạo tài khoản</span>
               <input type="text" name="firstName" placeholder="Tên" onChange={handleChange} />
@@ -136,33 +163,33 @@ export default function LoginAndSignup() {
             <form onSubmit={handleSubmit}>
               <h1>Đăng nhập</h1>
               <div className="icons">
-                {/* <a href="#" className="icon">
+                {/* <Link to="#" className="icon">
                   <i className="fa-brands fa-facebook"></i>
-                </a>
-                <a href="#" className="icon">
+                </Link>
+                <Link to="#" className="icon">
                   <i className="fa-brands fa-google"></i>
-                </a>
-                <a href="#" className="icon">
+                </Link>
+                <Link to="#" className="icon">
                   <i className="fa-brands fa-github"></i>
-                </a>
-                <a href="#" className="icon">
+                </Link>
+                <Link to="#" className="icon">
                   <i className="fa-brands fa-linkedin"></i>
-                </a> */}
+                </Link> */}
                 <GoogleLogin
-                                  className="google-login"
-                                    clientId={CLIENT_ID}
-                                    buttonText="Login with Google"
-                                    onSuccess={handleSuccess}
-                                    onError={() => console.log("Đăng nhập thất bại")}
-                                    cookiePolicy={"single_host_origin"}
-                                  />
+                  className="google-login"
+                  clientId={CLIENT_ID}
+                  buttonText="Login with Google"
+                  onSuccess={handleSuccess}
+                  onError={() => console.log("Đăng nhập thất bại")}
+                  cookiePolicy={"single_host_origin"}
+                />
               </div>
               <span>hoặc dùng email và mật khẩu</span>
               <input type="email" name="email" placeholder="Email" onChange={handleChange} />
 
               <input type="password" name="password" id="password" placeholder="Mật khẩu"  onChange={handleChange} />
 
-              <a href="#" className="forgot">Quên mật khẩu</a>
+              <Link to="#" className="forgot">Quên mật khẩu</Link>
               <button type="submit" disabled={loading}>{loading ? "Đang xử lý..." : "Đăng nhập"}</button>
             </form>
             {role !== null && <p>Vai trò của bạn: {role === 1 ? "ADMIN" : role === 2 ? "STAFF" : "CUSTOMER"}</p>}
@@ -175,7 +202,7 @@ export default function LoginAndSignup() {
               <h1>Chào mừng!</h1>
               <p>Nếu bạn đã có tài khoản</p>
               <button className="hidden" id="login" onClick={toggleForm}>Đăng nhập</button>
-              <div className="back-to-home"><a href="/"><i className="fa-solid fa-arrow-left"></i> Quay lại trang chủ</a></div>
+              <div className="back-to-home"><Link to="/"><i className="fa-solid fa-arrow-left"></i> Quay lại trang chủ</Link></div>
             </div>
 
             <div className="toogle-panel toogle-right">
@@ -183,7 +210,7 @@ export default function LoginAndSignup() {
               <h1>Xin chào!</h1>
               <p>Nếu bạn chưa có tài khoản</p>
               <button className="hidden" id="register" onClick={toggleForm}>Đăng ký</button>
-              <div className="back-to-home"><a href="/"><i className="fa-solid fa-arrow-left"></i> Quay lại trang chủ</a></div>
+              <div className="back-to-home"><Link to="/"><i className="fa-solid fa-arrow-left"></i> Quay lại trang chủ</Link></div>
             </div>
           </div>
         </div>
@@ -192,112 +219,3 @@ export default function LoginAndSignup() {
   );
 }
 
-
-//==========================================================================================================================================
-
-// import "./loginAndSignup.css";
-// import React, { useEffect } from "react";
-// import { ToastContainer, toast } from "react-toastify";
-// import axios from "axios";
-// import { jwtDecode } from "jwt-decode";
-// import { useState } from "react";
-// import { useNavigate } from "react-router-dom";
-
-// export default function loginAndSignup() {
-//   const [isRegister, setIsRegister] = useState(false);
-
-//   const toggleForm = () => setIsRegister(!isRegister);
-
-
-
-//   return (
-//     <div className="body">
-//       <ToastContainer />
-//       <div className={`container login-page ${isRegister ? "active" : ""}`} id="container">
-       
-//           <div className="sign-up">
-//             <form >
-//               <h1>Đăng ký tài khoản</h1>
-//               <div className="icons">
-//                 <a href="#" className="icon">
-//                   <i className="fa-brands fa-facebook"></i>
-//                 </a>
-//                 <a href="#" className="icon">
-//                   <i className="fa-brands fa-google"></i>
-//                 </a>
-//                 <a href="#" className="icon">
-//                   <i className="fa-brands fa-github"></i>
-//                 </a>
-//                 <a href="#" className="icon">
-//                   <i className="fa-brands fa-linkedin"></i>
-//                 </a>
-//               </div>
-//               <span>hoặc dùng email để tạo tài khoản</span>
-//               <input type="text" name="firstName" placeholder="Tên"  />
-//               <input type="text" name="lastName" placeholder="Họ"  />
-//               <input type="email" name="email" placeholder="Email"  />
-//               <input
-//                 type="text"
-//                 name="phone"
-//                 placeholder="Số điện thoại"
-            
-//               />
-//               <input type="password" name="password" placeholder="Mật khẩu"  />
-//               <input type="password" name="confirmPassword" placeholder="Xác nhận lại mật khẩu" />
-
-//               <button type="submit" >Đăng ký</button>
-//             </form>
-//           </div>
-    
-//           <div className="sign-in">
-//             <form >
-//               <h1>Đăng nhập</h1>
-//               <div className="icons">
-//                 <a href="#" className="icon">
-//                   <i className="fa-brands fa-facebook"></i>
-//                 </a>
-//                 <a href="#" className="icon">
-//                   <i className="fa-brands fa-google"></i>
-//                 </a>
-//                 <a href="#" className="icon">
-//                   <i className="fa-brands fa-github"></i>
-//                 </a>
-//                 <a href="#" className="icon">
-//                   <i className="fa-brands fa-linkedin"></i>
-//                 </a>
-//               </div>
-//               <span>hoặc dùng email và mật khẩu</span>
-//               <input type="email" name="email" placeholder="Email"  />
-
-//               <input type="password" name="password"placeholder="Mật khẩu"  />
-
-//               <a href="#" className="forgot">Quên mật khẩu</a>
-//               <button type="submit" >Đăng nhập</button>
-//             </form>
-           
-//           </div>
-       
-//         <div className="toogle-container">
-//           <div className="toogle">
-//             <div className="toogle-panel toogle-left">
-
-//               <h1>Chào mừng!</h1>
-//               <p>Nếu bạn đã có tài khoản</p>
-//               <button className="hidden" id="login" onClick={toggleForm}>Đăng nhập</button>
-//               <div className="back-to-home"><a href="/"><i className="fa-solid fa-arrow-left"></i> Quay lại trang chủ</a></div>
-//             </div>
-
-//             <div className="toogle-panel toogle-right">
-
-//               <h1>Xin chào!</h1>
-//               <p>Nếu bạn chưa có tài khoản</p>
-//               <button className="hidden" id="register" onClick={toggleForm}>Đăng ký</button>
-//               <div className="back-to-home"><a href="/"><i className="fa-solid fa-arrow-left"></i> Quay lại trang chủ</a></div>
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-  
-// }
