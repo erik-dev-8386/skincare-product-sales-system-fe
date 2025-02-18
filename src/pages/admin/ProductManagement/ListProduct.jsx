@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal, Table, Popconfirm, Select } from "antd";
+import { Button, Form, Input, Modal, Table, Popconfirm, DatePicker, Select } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -136,8 +136,8 @@ const ListProduct = () => {
                 <Form.Item label="Giá gốc" name="unitPrice" rules={[{ required: true, message: "Tên sản phẩm không được để trống!" }]}> <Input type="number" /> </Form.Item>
                 <Form.Item label="Giá giảm" name="discountPrice" rules={[{ required: true, message: "Tên sản phẩm không được để trống!" }]}> <Input type="number" /> </Form.Item>
                 <Form.Item label="Tồn kho" name="quantity" rules={[{ required: true, message: "Tên sản phẩm không được để trống!" }]}> <Input type="number" /> </Form.Item>
-                <Form.Item label="Ngày sản xuất" name="mfg" rules={[{ required: true, message: "Tên sản phẩm không được để trống!" }]}> <Input type="number" /> </Form.Item>
-                <Form.Item label="Hạn sử dụng" name="mfg" rules={[{ required: true, message: "Tên sản phẩm không được để trống!" }]}> <Input type="number" /> </Form.Item>
+                <Form.Item label="Ngày sản xuất" name="mfg" rules={[{ required: true, message: "Tên sản phẩm không được để trống!" }]}> <DatePicker style={{ width: "100%" }} /> </Form.Item>
+                <Form.Item label="Hạn sử dụng" name="exp" rules={[{ required: true, message: "Tên sản phẩm không được để trống!" }]}> <DatePicker style={{ width: "100%" }} /> </Form.Item>
                 <Form.Item label="Trọng lượng (g)" name="netWeight" rules={[{ required: true, message: "Tên sản phẩm không được để trống!" }]}> <Input type="number" /> </Form.Item>
                 {/* 
                     <Form.Item
