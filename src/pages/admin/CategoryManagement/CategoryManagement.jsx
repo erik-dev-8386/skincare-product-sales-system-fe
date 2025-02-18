@@ -3,7 +3,7 @@ import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Select } from "antd";
-
+import api from "../../../config/api";
 import { toast, ToastContainer } from "react-toastify";
 
 const CategoryManagement = () => {
@@ -75,7 +75,7 @@ const CategoryManagement = () => {
 
     const fetchCategories = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/haven-skin/categories');
+            const response = await api.get('/categories');
             setCategoryList(response.data);
         } catch (error) {
             console.error("Error fetching categories:", error);
@@ -99,7 +99,7 @@ const CategoryManagement = () => {
     const handleSubmitForm = async (values) => {
         if (editingCategory) {
             try {
-                await axios.put(`http://localhost:8080/haven-skin/categories/${editingCategory.categoryId}`, values);
+                await api.put(`/categories/${editingCategory.categoryId}`, values);
                 toast.success("Category updated successfully!");
                 fetchCategories();
                 handleCloseModal();
@@ -109,7 +109,7 @@ const CategoryManagement = () => {
         } else {
             try {
                 const { status, ...newCategory } = values; // Loại bỏ status khi tạo mới
-                await axios.post('http://localhost:8080/haven-skin/categories', newCategory);
+                await api.post('/categories', newCategory);
                 toast.success("Category added successfully!");
                 fetchCategories();
                 handleCloseModal();
@@ -127,7 +127,7 @@ const CategoryManagement = () => {
 
     const handleDeleteCategory = async (categoryId) => {
         try {
-            await axios.delete(`http://localhost:8080/haven-skin/categories/${categoryId}`);
+            await api.delete(`/categories/${categoryId}`);
             toast.success("Category deleted successfully!");
             fetchCategories();
         } catch (error) {
