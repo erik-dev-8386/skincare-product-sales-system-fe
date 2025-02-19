@@ -52,14 +52,17 @@ export default function LoginAndSignup() {
           email: formData.email,
           password: formData.password
         });
+        console.log("Sending login data:", formData);
+
         const token = response.data.token;
         localStorage.setItem("token", token);
         const decodedToken = jwtDecode(token);
         setRole(decodedToken.role);
-        toast.success("Đăng nhập thành công!");
+      toast.success("Đăng nhập thành công!");
         setTimeout(() => navigate("/"), 1500);
       }
     } catch (error) {
+      console.error("Login failed:", error.response?.data);
       toast.error(error.response?.data?.message || "Có lỗi xảy ra!");
     }
     setLoading(false);
