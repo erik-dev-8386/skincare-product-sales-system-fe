@@ -1,10 +1,47 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
+
 import { Link } from 'react-router-dom';
 import './Header.css';
 import logo from "../../assets/Logo_01.jpg";
+import { jwtDecode } from "jwt-decode"; // Import thư viện giải mã JWT
 
 export default function Header() {
     const [showDropdown, setShowDropdown] = useState(false);
+
+    const [role, setRole] = useState(null);
+
+    // useEffect(() => {
+    //     // Lấy role từ localStorage hoặc từ context nếu có
+    //     const userRole = localStorage.getItem("role");
+    //     setRole(userRole);
+    // }, []);
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            try {
+                const decoded = jwtDecode(token);
+
+                setRole(decoded.role); // Giả sử role có trong payload token
+            } catch (error) {
+                console.error("Lỗi khi giải mã token:", error);
+                setRole(null);
+            }
+        }
+    }, []);
+
+
+    // const handleLogout = () => {
+    //     localStorage.removeItem("role");
+    //     localStorage.removeItem("token");
+    //     window.location.reload();
+    // };
+
+    const handleLogout = () => {
+        localStorage.removeItem("token");
+        window.location.reload();
+    };
 
     return (
         <div className='Header'>
@@ -46,11 +83,27 @@ export default function Header() {
                     <Link to="#" className="user">
                         <i className="fas fa-user"></i>
                     </Link>
-                    <ul className="subnav">
+                    {/* <ul className="subnav">
                         <li><Link to="/profile">Hồ sơ</Link></li>
                         <li><Link to="/login-and-signup">Đăng nhập</Link></li>
                         <li><Link to="/login-and-signup">Đăng ký</Link></li>
-                        <li><Link to="/admin-dashboard">Admin Dashboard</Link></li>
+                         <li><Link to="/admin-dashboard">Admin Dashboard</Link></li>
+                        {role === "admin" && <li><Link to="/admin-dashboard">Admin Dashboard</Link></li>}
+                    </ul> */}
+
+                    <ul className="subnav">
+                        {role ? (
+                            <>
+                                <li><Link to="/profile">Hồ sơ</Link></li>
+                                {role === 1 && <li><Link to="/admin-dashboard">Admin Dashboard</Link></li>}
+                                <li onClick={handleLogout} style={{ cursor: "pointer", color: "white" }}>Đăng xuất</li>
+                            </>
+                        ) : (
+                            <>
+                                <li><Link to="/login-and-signup">Đăng nhập</Link></li>
+                                <li><Link to="/login-and-signup">Đăng ký</Link></li>
+                            </>
+                        )}
                     </ul>
                 </div>
             </div>

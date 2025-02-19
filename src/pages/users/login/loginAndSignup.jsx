@@ -54,6 +54,8 @@ export default function LoginAndSignup() {
         });
         console.log("Sending login data:", formData);
 
+        // localStorage.setItem("role", response.data.role);
+
         const token = response.data.token;
         localStorage.setItem("token", token);
         const decodedToken = jwtDecode(token);
