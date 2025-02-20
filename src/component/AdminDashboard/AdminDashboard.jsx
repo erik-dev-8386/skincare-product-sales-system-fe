@@ -40,7 +40,7 @@ const AdminDashboard = () => {
     }, []);
 
     useEffect(() => {
-        axios.get("https://jsonplaceholder.typicode.com/staff")
+        axios.get("http://localhost:8080/haven-skin/users")
             .then(response => {
                 setStaff(response.data);
                 setLoading(false);
@@ -67,7 +67,7 @@ const AdminDashboard = () => {
     }, []);
 
     useEffect(() => {
-        axios.get("http://localhost:8080/haven-skin/category")
+        axios.get("http://localhost:8080/haven-skin/categories")
             .then(response => {
                 setCategories(response.data);
                 setLoading(false);
