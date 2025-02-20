@@ -25,8 +25,10 @@ function Discount() {
   return (
     <>
       <Header />
+      <div className="discount-banner" style={{display: "flex", marginLeft: 50, marginRight: 50, marginTop: 50, paddingTop: 60,
+         paddingLeft: 60, paddingRight: 60, paddingBottom: 30, justifyContent: "space-between"}}>
       {discountBanners.map((banner) => (
-        <div key={banner.id} className={`discount-${banner.id}`}>
+        <div  key={banner.id} className={`discount-${banner.id}`}>
           <Link to={`/discount/${banner.id}`}>
             <img
               className={`discount-${banner.id}`}
@@ -37,6 +39,7 @@ function Discount() {
           </Link>
         </div>
       ))}
+      </div>
       <Footer />
     </>
   );

@@ -36,23 +36,60 @@ export default function LoginAndSignup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
+
     try {
 
       if (isRegister) {
-        if (formData.password !== formData.confirmPassword) {
+
+        // Kiểm tra trường bị trống
+        for (let key in formData) {
+          if (formData[key].trim() === "") {
+            toast.error(`Vui lòng nhập ${key === "firstName" ? "tên" : key === "lastName" ? "họ" : key}`);
+            setLoading(false);
+            return;
+          }
+        }
+
+        // Kiểm tra định dạng email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.email)) {
+          toast.error("Email không hợp lệ!");
+          setLoading(false);
+          return;
+        }
+
+        // Kiểm tra số điện thoại (chỉ chứa số, độ dài từ 10-11 số)
+        const phoneRegex = /^[0-9]{10,11}$/;
+        if (!phoneRegex.test(formData.phone)) {
+          toast.error("Số điện thoại không hợp lệ! Phải có 10-11 chữ số.");
+          setLoading(false);
+          return;
+        }
+
+        // Kiểm tra độ dài mật khẩu
+        if (formData.password.length < 6) {
+          toast.error("Mật khẩu phải có ít nhất 6 ký tự!");
+          setLoading(false);
+          return;
+        }
+
+        // Kiểm tra mật khẩu khớp nhau
+       if (formData.password !== formData.confirmPassword) {
           toast.error("Mật khẩu không khớp!");
           setLoading(false);
           return;
         }
         await api.post("/users", formData);
         toast.success("Đăng ký thành công!");
-        setTimeout(() => navigate("/"), 1500);
+        setTimeout(() => navigate("/login-and-signup"), 1500);
       } else {
         const response = await api.post("/users/login", {
           email: formData.email,
           password: formData.password
         });
         console.log("Sending login data:", formData);
+        
 
         // localStorage.setItem("role", response.data.role);
 
@@ -60,7 +97,8 @@ export default function LoginAndSignup() {
         localStorage.setItem("token", token);
         const decodedToken = jwtDecode(token);
         setRole(decodedToken.role);
-      toast.success("Đăng nhập thành công!");
+        console.log("Token:", token);
+        toast.success("Đăng nhập thành công!");
         setTimeout(() => navigate("/"), 1500);
       }
     } catch (error) {
@@ -71,47 +109,55 @@ export default function LoginAndSignup() {
   };
 
   const handleSuccess = async (response) => {
-      console.log("Google Token:", response.credential); // Kiểm tra token nhận được
-      try {
-        const res = await fetch("http://localhost:8080/haven-skin/users/login/google", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(response.credential),
-        });
-    
-        const data = await res.json();
-        console.log("User data:", data);
-        toast.success("Đăng nhập thành công!");
-        navigate("/"); // Chuyển hướng về trang chủ
-      } catch (error) {
-        console.error("Login failed:", error);
-        toast.error("Đăng nhập thất bại!");
-      }
-    };
+    console.log("Google Token:", response.credential); // Kiểm tra token nhận được
+    try {
+      const res = await fetch("http://localhost:8080/haven-skin/users/login/google", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(response.credential),
+      });
+
+
+
+      const data = await res.json();
+      console.log("User data:", data);
+
+   
+
+
+      toast.success("Đăng nhập thành công!");
+      setTimeout(() => navigate("/"), 1500); // Chuyển hướng về trang chủ
+    } catch (error) {
+      console.error("Login failed:", error);
+      toast.error("Đăng nhập thất bại!");
+    }
+  };
 
   // const handleSuccess = async (response) => {
-  //   console.log("Google Token:", response.credential); 
+  //   console.log("Google Token:", response.credential);
   //   try {
-  //     const res = await fetch("http://localhost:8080/haven-skin/users/login/google", {
-  //       method: "POST",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify({ token: response.credential }), // Đảm bảo gửi đúng format
-  //     });
-  
+  //     const res = await fetch(
+  //       "http://localhost:8080/haven-skin/users/login/google",
+  //       {
+  //         method: "POST",
+  //         headers: { "Content-Type": "application/json" },
+  //         body: JSON.stringify(response.credential),
+  //       }
+  //     );
+
   //     const data = await res.json();
   //     console.log("User data:", data);
-  
-  //     if (res.ok) {
-  //       console.log("Google Login Success");
+
+  //     if (res.ok && data.redirectUrl) {
   //       toast.success("Đăng nhập thành công!");
-  //       navigate("/");
+  //       navigate(data.redirectUrl); // Chuyển hướng đúng trang
   //     } else {
   //       console.error("Server returned an error:", data);
-  //       toast.error(data.message || "Đăng nhập thất bại!");
+  //       toast.error(data.error || "Đăng nhập thất bại!");
   //     }
   //   } catch (error) {
   //     console.error("Login failed:", error);
-  //     toast.error("Đăng nhập thất bại!");
+  //     toast.error("Lỗi kết nối đến server!");
   //   }
   // };
 
@@ -145,7 +191,7 @@ export default function LoginAndSignup() {
                   onSuccess={handleSuccess}
                   onError={() => console.log("Đăng nhập thất bại")}
                   cookiePolicy={"single_host_origin"}
-                  />
+                />
               </div>
               <span>hoặc dùng email để tạo tài khoản</span>
               <input type="text" name="firstName" placeholder="Tên" onChange={handleChange} />
@@ -192,7 +238,7 @@ export default function LoginAndSignup() {
               <span>hoặc dùng email và mật khẩu</span>
               <input type="email" name="email" placeholder="Email" onChange={handleChange} />
 
-              <input type="password" name="password" id="password" placeholder="Mật khẩu"  onChange={handleChange} />
+              <input type="password" name="password" id="password" placeholder="Mật khẩu" onChange={handleChange} />
 
               <Link to="#" className="forgot">Quên mật khẩu</Link>
               <button type="submit" disabled={loading}>{loading ? "Đang xử lý..." : "Đăng nhập"}</button>

@@ -11,11 +11,7 @@ export default function Header() {
 
     const [role, setRole] = useState(null);
 
-    // useEffect(() => {
-    //     // Lấy role từ localStorage hoặc từ context nếu có
-    //     const userRole = localStorage.getItem("role");
-    //     setRole(userRole);
-    // }, []);
+
 
     useEffect(() => {
         const token = localStorage.getItem("token");
@@ -32,11 +28,7 @@ export default function Header() {
     }, []);
 
 
-    // const handleLogout = () => {
-    //     localStorage.removeItem("role");
-    //     localStorage.removeItem("token");
-    //     window.location.reload();
-    // };
+
 
     const handleLogout = () => {
         localStorage.removeItem("token");
@@ -83,19 +75,13 @@ export default function Header() {
                     <Link to="#" className="user">
                         <i className="fas fa-user"></i>
                     </Link>
-                    {/* <ul className="subnav">
-                        <li><Link to="/profile">Hồ sơ</Link></li>
-                        <li><Link to="/login-and-signup">Đăng nhập</Link></li>
-                        <li><Link to="/login-and-signup">Đăng ký</Link></li>
-                         <li><Link to="/admin-dashboard">Admin Dashboard</Link></li>
-                        {role === "admin" && <li><Link to="/admin-dashboard">Admin Dashboard</Link></li>}
-                    </ul> */}
+
 
                     <ul className="subnav">
                         {role ? (
                             <>
                                 <li><Link to="/profile">Hồ sơ</Link></li>
-                                {role === 1 && <li><Link to="/admin-dashboard">Admin Dashboard</Link></li>}
+                                {role === 1 && <li><Link to="/admin-dashboard">Admin Dashboard</Link></li>} 
                                 <li onClick={handleLogout} style={{ cursor: "pointer", color: "white" }}>Đăng xuất</li>
                             </>
                         ) : (

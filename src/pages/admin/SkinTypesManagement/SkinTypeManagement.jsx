@@ -4,6 +4,9 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import api from "../../../config/api";
+import { Select } from 'antd';
+import { useCallback } from "react";
+
 
 const SkinTypeManagement = () => {
     const [skinTypeList, setSkinTypeList] = useState([]);
@@ -11,6 +14,7 @@ const SkinTypeManagement = () => {
     const [form] = useForm();
     const [editingSkinType, setEditingSkinType] = useState(null);
     const [loading, setLoading] = useState(false);
+    const { Option } = Select;
 
     const statusMapping = {
         1: "ACTIVE",
@@ -60,21 +64,23 @@ const SkinTypeManagement = () => {
         },
     ];
 
-    const fetchSkinTypes = async () => {
+  
+    const fetchSkinTypes = useCallback(async () => {
         setLoading(true);
         try {
             const response = await api.get('/skin-types');
             setSkinTypeList(response.data);
         } catch (error) {
-            console.error("Error fetching skin types:", error);
+            console.error("Error fetching skin types:", error.response?.data?.message || error.message);
         } finally {
             setLoading(false);
         }
-    };
+    }, []);
 
     useEffect(() => {
         fetchSkinTypes();
-    }, []);
+    }, [fetchSkinTypes]);
+
 
     const handleOpenModal = () => {
         setModalOpen(true);
@@ -115,7 +121,7 @@ const SkinTypeManagement = () => {
     const handleEditSkinType = (skinType) => {
         setEditingSkinType(skinType);
         form.setFieldsValue(skinType);
-        handleOpenModal();
+        setModalOpen(true);
     };
 
     const handleDeleteSkinType = async (skinTypeId) => {
@@ -133,7 +139,7 @@ const SkinTypeManagement = () => {
             <ToastContainer />
             <h1>Skin Type Management</h1>
             <Button type="primary" onClick={handleOpenModal}>
-            <i class="fa-solid fa-plus"></i>
+                <i className="fa-solid fa-plus"></i>
                 Add New Skin Type
             </Button>
             <Table loading={loading} dataSource={skinTypeList} columns={columns} rowKey="skinTypeId" style={{ marginTop: 16 }} />
@@ -178,3 +184,207 @@ const SkinTypeManagement = () => {
 };
 
 export default SkinTypeManagement;
+
+
+//=============================================================================
+
+// import { Button, Form, Input, Modal, Table, Popconfirm, Upload, Select } from "antd";
+// import { useForm } from "antd/es/form/Form";
+// import { UploadOutlined } from "@ant-design/icons";
+// import axios from "axios";
+// import { useEffect, useState } from "react";
+// import { toast, ToastContainer } from "react-toastify";
+// import api from "../../../config/api";
+
+// const { Option } = Select;
+
+// const SkinTypeManagement = () => {
+//     const [skinTypeList, setSkinTypeList] = useState([]);
+//     const [isModalOpen, setModalOpen] = useState(false);
+//     const [form] = useForm();
+//     const [editingSkinType, setEditingSkinType] = useState(null);
+//     const [loading, setLoading] = useState(false);
+//     const [imageUrl, setImageUrl] = useState(""); // Lưu URL ảnh đã upload
+
+//     const statusMapping = {
+//         1: "ACTIVE",
+//         2: "INACTIVE",
+//         3: "DELETED"
+//     };
+
+//     const columns = [
+//         { title: 'Skin Type ID', dataIndex: 'skinTypeId', key: 'skinTypeId' },
+//         { title: 'Skin Name', dataIndex: 'skinName', key: 'skinName' },
+//         { title: 'Description', dataIndex: 'description', key: 'description' },
+//         { title: 'Min Mark', dataIndex: 'minMark', key: 'minMark' },
+//         { title: 'Max Mark', dataIndex: 'maxMark' },
+//         {
+//             title: 'Image',
+//             dataIndex: 'skinTypeImages',
+//             key: 'skinTypeImages',
+//             render: (url) => url ? <img src={url} alt="Skin Type" width={80} height={50} /> : "No Image"
+//         },
+//         {
+//             title: 'Status',
+//             dataIndex: 'status',
+//             key: 'status',
+//             render: (status) => statusMapping[status] || "UNKNOWN",
+//         },
+//         {
+//             title: 'Actions',
+//             key: 'actions',
+//             render: (text, record) => (
+//                 <div>
+//                     <Button onClick={() => handleEditSkinType(record)} style={{ marginRight: 8 }}>
+//                         <i className="fa-solid fa-pen-to-square"></i> Sửa
+//                     </Button>
+//                     <Popconfirm
+//                         title="Bạn có muốn xóa loại da này không?"
+//                         onConfirm={() => handleDeleteSkinType(record.skinTypeId)}
+//                         okText="Có"
+//                         cancelText="Không"
+//                     >
+//                         <Button danger>
+//                             <i className="fa-solid fa-trash"></i> Xóa
+//                         </Button>
+//                     </Popconfirm>
+//                 </div>
+//             ),
+//         },
+//     ];
+
+//     const fetchSkinTypes = async () => {
+//         setLoading(true);
+//         try {
+//             const response = await api.get('/skin-types');
+//             setSkinTypeList(response.data);
+//         } catch (error) {
+//             console.error("Error fetching skin types:", error);
+//         } finally {
+//             setLoading(false);
+//         }
+//     };
+
+//     useEffect(() => {
+//         fetchSkinTypes();
+//     }, []);
+
+//     const handleOpenModal = () => {
+//         setModalOpen(true);
+//     };
+
+//     const handleCloseModal = () => {
+//         setModalOpen(false);
+//         form.resetFields();
+//         setEditingSkinType(null);
+//         setImageUrl(""); // Reset hình ảnh khi đóng modal
+//     };
+
+//     const handleUpload = async (file) => {
+//         const formData = new FormData();
+//         formData.append("file", file);
+//         formData.append("upload_preset", "haven-skin-03-2025"); // Thay thế bằng upload preset của bạn
+
+//         try {
+//             const response = await axios.post(
+//                 "https://api.cloudinary.com/v1_1/dawyqsudx/image/upload",
+//                 formData
+//             );
+//             setImageUrl(response.data.secure_url); // Lưu URL ảnh
+//             toast.success("Upload ảnh thành công!");
+//         } catch (error) {
+//             toast.error("Upload ảnh thất bại!");
+//         }
+//     };
+
+//     const handleSubmitForm = async (values) => {
+//         values.skinTypeImages = imageUrl || (editingSkinType?.skinTypeImages || "");
+
+//         if (editingSkinType) {
+//             values.skinTypeId = editingSkinType.skinTypeId;
+//             try {
+//                 await api.put(`/skin-types/${editingSkinType.skinTypeId}`, values);
+//                 toast.success("Đã sửa loại da này thành công!");
+//                 fetchSkinTypes();
+//                 handleCloseModal();
+//             } catch (error) {
+//                 toast.error("Sửa loại da này không thành công!");
+//             }
+//         } else {
+//             try {
+//                 await api.post('/skin-types', values);
+//                 toast.success("Đã thêm loại da mới thành công!");
+//                 fetchSkinTypes();
+//                 handleCloseModal();
+//             } catch (error) {
+//                 toast.error("Thêm loại da mới không thành công!");
+//             }
+//         }
+//     };
+
+//     const handleEditSkinType = (skinType) => {
+//         setEditingSkinType(skinType);
+//         form.setFieldsValue(skinType);
+//         setImageUrl(skinType.skinTypeImages || "");
+//         handleOpenModal();
+//     };
+
+//     const handleDeleteSkinType = async (skinTypeId) => {
+//         try {
+//             await api.delete(`/skin-types/${skinTypeId}`);
+//             toast.success("Đã xóa loại da này thành công!");
+//             fetchSkinTypes();
+//         } catch (error) {
+//             toast.error("Xóa loại da này không thành công!");
+//         }
+//     };
+
+//     return (
+//         <div>
+//             <ToastContainer />
+//             <h1>Skin Type Management</h1>
+//             <Button type="primary" onClick={handleOpenModal}>
+//                 <i className="fa-solid fa-plus"></i> Add New Skin Type
+//             </Button>
+//             <Table loading={loading} dataSource={skinTypeList} columns={columns} rowKey="skinTypeId" style={{ marginTop: 16 }} />
+//             <Modal
+//                 title={editingSkinType ? "Edit Skin Type" : "Create New Skin Type"}
+//                 open={isModalOpen}
+//                 onCancel={handleCloseModal}
+//                 onOk={() => form.submit()}
+//                 okText={editingSkinType ? "Save Changes" : "Create"}
+//                 cancelText="Cancel"
+//             >
+//                 <Form form={form} labelCol={{ span: 24 }} onFinish={handleSubmitForm}>
+//                     <Form.Item label="Skin Name" name="skinName" rules={[{ required: true, message: "Skin name is required!" }]}>
+//                         <Input />
+//                     </Form.Item>
+//                     <Form.Item label="Description" name="description" rules={[{ required: true, message: "Description is required!" }]}>
+//                         <Input.TextArea />
+//                     </Form.Item>
+//                     <Form.Item label="Upload Image">
+//                         <Upload
+//                             customRequest={({ file }) => handleUpload(file)}
+//                             showUploadList={false}
+//                         >
+//                             <Button icon={<UploadOutlined />}>Click to Upload</Button>
+//                         </Upload>
+//                         {imageUrl && <img src={imageUrl} alt="Preview" width={100} style={{ marginTop: 10 }} />}
+//                     </Form.Item>
+//                     {editingSkinType && (
+//                         <Form.Item label="Status" name="status">
+//                             <Select>
+//                                 <Option value={1}>ACTIVE</Option>
+//                                 <Option value={2}>INACTIVE</Option>
+//                                 <Option value={3}>DELETED</Option>
+//                             </Select>
+//                         </Form.Item>
+//                     )}
+//                 </Form>
+//             </Modal>
+//         </div>
+//     );
+// };
+
+// export default SkinTypeManagement;
+
