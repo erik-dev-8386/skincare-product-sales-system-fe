@@ -88,7 +88,7 @@ export default function Header() {
                             <>
                                 <li><Link to="/login-and-signup">Đăng nhập</Link></li>
                                 <li><Link to="/login-and-signup">Đăng ký</Link></li>
-                                <li onClick={handleLogout} style={{ cursor: "pointer", color: "white" }}>Đăng xuất</li>
+                               
                                 
                             </>
                         )}
