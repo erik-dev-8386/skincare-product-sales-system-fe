@@ -11,7 +11,8 @@ import ListStaff from "../../pages/admin/StaffManagement/ListStaff";
 import ListProduct from "../../pages/admin/ProductManagement/ListProduct";
 import BrandManagement from "../../pages/admin/BrandManagement/BrandManagement";
 import '../AdminDashboard/AdminDashboard.css'
-
+import cot from '../../assets/cot.jpg';
+import tron from '../../assets/tron.jpg';
 
 const { Header, Content, Sider } = Layout;
 
@@ -171,7 +172,7 @@ const AdminDashboard = () => {
     return (
         <Layout style={{ minHeight: "100vh" }}>
             <Sider collapsible>
-                <div className="back-to-home" style={{marginTop: 5, marginLeft: 10}}><a href="/"><i className="fa-solid fa-arrow-left"></i> Quay lại trang chủ</a></div>
+                <div className="back-to-home" style={{ marginTop: 5, marginLeft: 10 }}><a href="/"><i className="fa-solid fa-arrow-left"></i> Quay lại trang chủ</a></div>
                 <div className="avarta">
                     <img className="img-avarta" src="./src/assets/Logo_01.jpg" alt="Avarta" />
                 </div>
@@ -190,48 +191,62 @@ const AdminDashboard = () => {
                 </Menu>
             </Sider>
             <Layout>
-                <Header className="bg-primary text-white text-center" style={{fontSize: 35}}>Bảng quản lý</Header>
+                <Header className="bg-primary text-white text-center" style={{ fontSize: 35 }}>Bảng quản lý</Header>
                 <Content className="p-4">
 
                     <div className="mt-4" >
                         {selectedMenu === "dashboard" && (
-                            <div className="row">
-                                <div className="col-md-3">
-                                    <Card>
-                                        <Statistic title="Total Users" value={users.length} />
-                                    </Card>
+                            <>
+                                <div className="row">
+                                    <div className="col-md-3">
+                                        <Card>
+                                            <Statistic title="Total Users" value={users.length} />
+                                        </Card>
+                                    </div>
+                                    <div className="col-md-3">
+                                        <Card>
+                                            <Statistic title="Total Staff" value={staff.length} />
+                                        </Card>
+                                    </div>
+                                    <div className="col-md-3">
+                                        <Card>
+                                            <Statistic title="Total Products" value={products.length} />
+                                        </Card>
+                                    </div>
+                                    <div className="col-md-3">
+                                        <Card>
+                                            <Statistic title="Total Brands" value={brands.length} />
+                                        </Card>
+                                    </div>
+                                    <div className="col-md-3">
+                                        <Card>
+                                            <Statistic title="Total Categories" value={categories.length} />
+                                        </Card>
+                                    </div>
+                                    <div className="col-md-3">
+                                        <Card>
+                                            <Statistic title="Total Discounts" value={discounts.length} />
+                                        </Card>
+                                    </div>
+                                    <div className="col-md-3">
+                                        <Card>
+                                            <Statistic title="Total Skin Types" value={skinTypes.length} />
+                                        </Card>
+                                    </div>
+                                   
+                                   
                                 </div>
-                                <div className="col-md-3">
-                                    <Card>
-                                        <Statistic title="Total Staff" value={staff.length} />
-                                    </Card>
+
+                                <div className="row mt-4">
+                                    <div className="col-md-6">
+                                    <img src={cot} alt="Da kho" className='bieudo' />
+                                    </div>
+                                    <div className="col-md-6">
+                                    <img src={tron} alt="Da kho" className='bieudo' />
+                                    </div>
                                 </div>
-                                <div className="col-md-3">
-                                    <Card>
-                                        <Statistic title="Total Products" value={products.length} />
-                                    </Card>
-                                </div>
-                                <div className="col-md-3">
-                                    <Card>
-                                        <Statistic title="Total Brands" value={brands.length} />
-                                    </Card>
-                                </div>
-                                <div className="col-md-3">
-                                    <Card>
-                                        <Statistic title="Total Categories" value={categories.length} />
-                                    </Card>
-                                </div>
-                                <div className="col-md-3">
-                                    <Card>
-                                        <Statistic title="Total Discounts" value={discounts.length} />
-                                    </Card>
-                                </div>
-                                <div className="col-md-3">
-                                    <Card>
-                                        <Statistic title="Total Skin Types" value={skinTypes.length} />
-                                    </Card>
-                                </div>
-                            </div>
+                            </>
+
                         )}
                         {selectedMenu === "users" && <Table columns={userColumns} dataSource={users} loading={loading} rowKey="id" />}
                         {selectedMenu === "staff" && (
@@ -240,7 +255,7 @@ const AdminDashboard = () => {
                         {selectedMenu === "products" && (
                             <div><ListProduct /></div>
                         )}
-                         {selectedMenu === "brands" && (
+                        {selectedMenu === "brands" && (
                             <div><BrandManagement /></div>
                         )}
                         {selectedMenu === "categories" && (
@@ -253,48 +268,11 @@ const AdminDashboard = () => {
                             <div><SkinTypeManagement /></div>
                         )}
                     </div>
-                </Content>
-            </Layout>
-            {/* <Modal
-                title={editingCategory ? "Edit Category" : "Create New Category"}
-                open={isModalOpen}
-                onCancel={handleCloseModal}
-                onOk={() => form.submit()}
-            >
-                <Form form={form} labelCol={{ span: 24 }} onFinish={handleSubmitForm}>
-                    <Form.Item
-                        label="Category Name"
-                        name="categoryName"
-                        rules={[{ required: true, message: "Category name can't be empty!" }]}
-                    >
-                        <Input />
-                    </Form.Item>
 
-                    <Form.Item
-                        label="Description"
-                        name="description"
-                        rules={[{ required: true, message: "Description can't be empty!" }]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        label="Usage Instruction"
-                        name="usageInstruction"
-                        rules={[{ required: true, message: "Usage instruction can't be empty!" }]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    {editingCategory && (
-                        <Form.Item
-                            label="Status"
-                            name="status"
-                            rules={[{ required: false, message: "Status can't be empty!" }]}
-                        >
-                            <Input />
-                        </Form.Item>
-                    )}
-                </Form>
-            </Modal> */}
+                </Content>
+
+            </Layout>
+
         </Layout>
     );
 };
