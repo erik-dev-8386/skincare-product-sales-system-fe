@@ -191,12 +191,10 @@ export default SkinTypeManagement;
 // import { Button, Form, Input, Modal, Table, Popconfirm, Upload, Select } from "antd";
 // import { useForm } from "antd/es/form/Form";
 // import { UploadOutlined } from "@ant-design/icons";
-// import axios from "axios";
-// import { useEffect, useState } from "react";
+// import { useEffect, useState, useCallback } from "react";
 // import { toast, ToastContainer } from "react-toastify";
 // import api from "../../../config/api";
-
-// const { Option } = Select;
+// import axios from "axios";
 
 // const SkinTypeManagement = () => {
 //     const [skinTypeList, setSkinTypeList] = useState([]);
@@ -204,7 +202,11 @@ export default SkinTypeManagement;
 //     const [form] = useForm();
 //     const [editingSkinType, setEditingSkinType] = useState(null);
 //     const [loading, setLoading] = useState(false);
-//     const [imageUrl, setImageUrl] = useState(""); // Lưu URL ảnh đã upload
+//     const [imageFile, setImageFile] = useState(null);
+//     const { Option } = Select;
+
+//     const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/dawyqsudx/upload";
+//     const CLOUDINARY_UPLOAD_PRESET = "haven-skin-03-2025";
 
 //     const statusMapping = {
 //         1: "ACTIVE",
@@ -217,26 +219,22 @@ export default SkinTypeManagement;
 //         { title: 'Skin Name', dataIndex: 'skinName', key: 'skinName' },
 //         { title: 'Description', dataIndex: 'description', key: 'description' },
 //         { title: 'Min Mark', dataIndex: 'minMark', key: 'minMark' },
-//         { title: 'Max Mark', dataIndex: 'maxMark' },
+//         { title: 'Max Mark', dataIndex: 'maxMark', key: 'maxMark' },
+//         { title: 'Status', dataIndex: 'status', key: 'status', render: (status) => statusMapping[status] || "UNKNOWN" },
 //         {
-//             title: 'Image',
+//             title: 'Skin Type Image',
 //             dataIndex: 'skinTypeImages',
 //             key: 'skinTypeImages',
-//             render: (url) => url ? <img src={url} alt="Skin Type" width={80} height={50} /> : "No Image"
-//         },
-//         {
-//             title: 'Status',
-//             dataIndex: 'status',
-//             key: 'status',
-//             render: (status) => statusMapping[status] || "UNKNOWN",
+//             render: (image) => image ? <img src={image} alt="Skin Type" style={{ width: 50, height: 50 }} /> : "No Image"
 //         },
 //         {
 //             title: 'Actions',
 //             key: 'actions',
 //             render: (text, record) => (
-//                 <div>
+//                 <div className="button">
 //                     <Button onClick={() => handleEditSkinType(record)} style={{ marginRight: 8 }}>
-//                         <i className="fa-solid fa-pen-to-square"></i> Sửa
+//                         <i className="fa-solid fa-pen-to-square"></i>
+//                         Sửa
 //                     </Button>
 //                     <Popconfirm
 //                         title="Bạn có muốn xóa loại da này không?"
@@ -245,7 +243,8 @@ export default SkinTypeManagement;
 //                         cancelText="Không"
 //                     >
 //                         <Button danger>
-//                             <i className="fa-solid fa-trash"></i> Xóa
+//                             <i className="fa-solid fa-trash"></i>
+//                             Xóa
 //                         </Button>
 //                     </Popconfirm>
 //                 </div>
@@ -253,21 +252,21 @@ export default SkinTypeManagement;
 //         },
 //     ];
 
-//     const fetchSkinTypes = async () => {
+//     const fetchSkinTypes = useCallback(async () => {
 //         setLoading(true);
 //         try {
 //             const response = await api.get('/skin-types');
 //             setSkinTypeList(response.data);
 //         } catch (error) {
-//             console.error("Error fetching skin types:", error);
+//             console.error("Error fetching skin types:", error.response?.data?.message || error.message);
 //         } finally {
 //             setLoading(false);
 //         }
-//     };
+//     }, []);
 
 //     useEffect(() => {
 //         fetchSkinTypes();
-//     }, []);
+//     }, [fetchSkinTypes]);
 
 //     const handleOpenModal = () => {
 //         setModalOpen(true);
@@ -277,47 +276,52 @@ export default SkinTypeManagement;
 //         setModalOpen(false);
 //         form.resetFields();
 //         setEditingSkinType(null);
-//         setImageUrl(""); // Reset hình ảnh khi đóng modal
+//         setImageFile(null);
 //     };
 
-//     const handleUpload = async (file) => {
+//     const uploadImageToCloudinary = async (file) => {
 //         const formData = new FormData();
 //         formData.append("file", file);
-//         formData.append("upload_preset", "haven-skin-03-2025"); // Thay thế bằng upload preset của bạn
+//         formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
 
 //         try {
-//             const response = await axios.post(
-//                 "https://api.cloudinary.com/v1_1/dawyqsudx/image/upload",
-//                 formData
-//             );
-//             setImageUrl(response.data.secure_url); // Lưu URL ảnh
-//             toast.success("Upload ảnh thành công!");
+//             const response = await axios.post(CLOUDINARY_UPLOAD_URL, formData);
+//             return response.data.secure_url;
 //         } catch (error) {
-//             toast.error("Upload ảnh thất bại!");
+//             console.error("Error uploading image:", error);
+//             toast.error("Lỗi tải ảnh lên Cloudinary!");
+//             return null;
 //         }
 //     };
 
 //     const handleSubmitForm = async (values) => {
-//         values.skinTypeImages = imageUrl || (editingSkinType?.skinTypeImages || "");
+//         let imageUrl = editingSkinType?.skinTypeImages || null;
+
+//         if (imageFile) {
+//             imageUrl = await uploadImageToCloudinary(imageFile);
+//             if (!imageUrl) return;
+//         }
+
+//         const payload = { ...values, skinTypeImages: imageUrl };
 
 //         if (editingSkinType) {
-//             values.skinTypeId = editingSkinType.skinTypeId;
+//             payload.skinTypeId = editingSkinType.skinTypeId;
 //             try {
-//                 await api.put(`/skin-types/${editingSkinType.skinTypeId}`, values);
+//                 await api.put(`/skin-types/${editingSkinType.skinTypeId}`, payload);
 //                 toast.success("Đã sửa loại da này thành công!");
 //                 fetchSkinTypes();
 //                 handleCloseModal();
 //             } catch (error) {
-//                 toast.error("Sửa loại da này không thành công!");
+//                 toast.error(error.response?.data?.message || "Sửa loại da không thành công!");
 //             }
 //         } else {
 //             try {
-//                 await api.post('/skin-types', values);
+//                 await api.post('/skin-types', payload);
 //                 toast.success("Đã thêm loại da mới thành công!");
 //                 fetchSkinTypes();
 //                 handleCloseModal();
 //             } catch (error) {
-//                 toast.error("Thêm loại da mới không thành công!");
+//                 toast.error("Thêm loại da không thành công!");
 //             }
 //         }
 //     };
@@ -325,8 +329,7 @@ export default SkinTypeManagement;
 //     const handleEditSkinType = (skinType) => {
 //         setEditingSkinType(skinType);
 //         form.setFieldsValue(skinType);
-//         setImageUrl(skinType.skinTypeImages || "");
-//         handleOpenModal();
+//         setModalOpen(true);
 //     };
 
 //     const handleDeleteSkinType = async (skinTypeId) => {
@@ -335,7 +338,7 @@ export default SkinTypeManagement;
 //             toast.success("Đã xóa loại da này thành công!");
 //             fetchSkinTypes();
 //         } catch (error) {
-//             toast.error("Xóa loại da này không thành công!");
+//             toast.error("Xóa loại da không thành công!");
 //         }
 //     };
 
@@ -344,7 +347,8 @@ export default SkinTypeManagement;
 //             <ToastContainer />
 //             <h1>Skin Type Management</h1>
 //             <Button type="primary" onClick={handleOpenModal}>
-//                 <i className="fa-solid fa-plus"></i> Add New Skin Type
+//                 <i className="fa-solid fa-plus"></i>
+//                 Add New Skin Type
 //             </Button>
 //             <Table loading={loading} dataSource={skinTypeList} columns={columns} rowKey="skinTypeId" style={{ marginTop: 16 }} />
 //             <Modal
@@ -359,27 +363,15 @@ export default SkinTypeManagement;
 //                     <Form.Item label="Skin Name" name="skinName" rules={[{ required: true, message: "Skin name is required!" }]}>
 //                         <Input />
 //                     </Form.Item>
-//                     <Form.Item label="Description" name="description" rules={[{ required: true, message: "Description is required!" }]}>
+//                     <Form.Item label="Description" name="description">
 //                         <Input.TextArea />
 //                     </Form.Item>
 //                     <Form.Item label="Upload Image">
-//                         <Upload
-//                             customRequest={({ file }) => handleUpload(file)}
-//                             showUploadList={false}
-//                         >
-//                             <Button icon={<UploadOutlined />}>Click to Upload</Button>
+//                         <Upload beforeUpload={(file) => { setImageFile(file); return false; }} showUploadList={false}>
+//                             <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
 //                         </Upload>
-//                         {imageUrl && <img src={imageUrl} alt="Preview" width={100} style={{ marginTop: 10 }} />}
+//                         {editingSkinType?.skinTypeImages && <img src={editingSkinType.skinTypeImages} alt="Preview" style={{ width: 100, marginTop: 8 }} />}
 //                     </Form.Item>
-//                     {editingSkinType && (
-//                         <Form.Item label="Status" name="status">
-//                             <Select>
-//                                 <Option value={1}>ACTIVE</Option>
-//                                 <Option value={2}>INACTIVE</Option>
-//                                 <Option value={3}>DELETED</Option>
-//                             </Select>
-//                         </Form.Item>
-//                     )}
 //                 </Form>
 //             </Modal>
 //         </div>
@@ -387,4 +379,3 @@ export default SkinTypeManagement;
 // };
 
 // export default SkinTypeManagement;
-
