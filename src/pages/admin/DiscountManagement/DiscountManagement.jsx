@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal, Table, Popconfirm } from "antd";
+import { Button, Form, Input, Modal, Table, Popconfirm, DatePicker } from "antd";
 import { useForm } from "antd/es/form/Form";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -81,7 +81,7 @@ const DiscountManagement = () => {
             render: (text, record) => (
                 <div className="button">
                     <Button onClick={() => handleEditDiscount(record)} style={{ marginRight: 8 }}>
-                        <i class="fa-solid fa-pen-to-square"></i>
+                        <i className="fa-solid fa-pen-to-square"></i>
                         Edit
                     </Button>
                     <Popconfirm
@@ -91,7 +91,7 @@ const DiscountManagement = () => {
                         cancelText="No"
                     >
                         <Button danger>
-                            <i class="fa-solid fa-trash"></i>
+                            <i className="fa-solid fa-trash"></i>
                             Delete
                         </Button>
                     </Popconfirm>
@@ -169,7 +169,7 @@ const DiscountManagement = () => {
             <ToastContainer />
             <h1>Discount Management</h1>
             <Button type="primary" onClick={handleOpenModal}>
-            <i class="fa-solid fa-plus"></i>
+            <i className="fa-solid fa-plus"></i>
                 Add new discount
             </Button>
             <Table dataSource={discountList} columns={columns} rowKey="discountId" style={{ marginTop: 16 }} />
@@ -207,28 +207,28 @@ const DiscountManagement = () => {
                         name="createdTime"
                         rules={[{ required: false, message: "Created Time can't be empty!" }]}
                     >
-                        <Input />
+                        <DatePicker style={{ width: "100%" }} />
                     </Form.Item>
                     <Form.Item
                         label="Deleted Time"
                         name="deletedTime"
                         rules={[{ required: false, message: "Deleted Time can't be empty!" }]}
                     >
-                        <Input />
+                        <DatePicker style={{ width: "100%" }} />
                     </Form.Item>
                     <Form.Item
                         label="Actual Start Time"
                         name="actualStartTime"
                         rules={[{ required: false, message: "Actual Start Time can't be empty!" }]}
                     >
-                        <Input />
+                        <DatePicker style={{ width: "100%" }} />
                     </Form.Item>
                     <Form.Item
                         label="Actual End Time"
                         name="actualEndTime"
                         rules={[{ required: false, message: "Actual End Time can't be empty!" }]}
                     >
-                        <Input />
+                        <DatePicker style={{ width: "100%" }} />
                     </Form.Item>
                     <Form.Item
                         label="Discount Percent"

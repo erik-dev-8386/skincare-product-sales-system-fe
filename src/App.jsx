@@ -29,6 +29,8 @@ import ListStaff from './pages/admin/StaffManagement/ListStaff.jsx';
 import CreateStaff from './pages/admin/StaffManagement/CreateStaff.jsx';
 import UserManagement from './pages/admin/UserManagement/UserManagement.jsx'
 import LoginAndSignup from './pages/users/login/loginAndSignup.jsx';
+import CustomerDiscounts from './pages/users/discount/CustomerDiscounts.jsx';
+import NotFound from './pages/users/NotFound/NotFound.jsx';
 
 function App() {
 
@@ -36,23 +38,31 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
-      <Route path="/login" element={<Login />} />
-      <Route path='/login-and-signup' element={<LoginAndSignup/>} />
-      {/* <Route path="/auth/callback" element={<Callback />} /> */}
+      <Route path='/about-us' element={<AboutUs />} />
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="/terms-of-use" element={<TermsOfUse />} />
+      {/* Login */}
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path='/login-and-signup' element={<LoginAndSignup/>} />
+
+      
+      {/* Blog */}
       <Route path="/blog" element={<Blog />} />
       <Route path="/blog/:id" element={<BlogDetail />} />
-      <Route path="/register" element={<Register />} />
+      {/* Discount */}
       <Route path="/discount" element={<Discount />} />
       <Route path="/discount/:discountPercentage" element={<DiscountDetail />} /> 
-      <Route path='/about-us' element={<AboutUs />} />
+      <Route path='/customer-discounts' element={<CustomerDiscounts />} />
+      
+      {/* Cart */}
       <Route path='/shopping-cart' element={<Shopping />} />
       <Route path='/cart' element={<Cart />} />
       <Route path='/listskincare/Kho' element={<Kho />} />
       <Route path='/listskincare/Honhop' element={<Honhop />} />
       <Route path='/listskincare/Nhaycam' element={<Nhaycam />} />
       <Route path='/listskincare/Thuong' element={<Thuong />} />
+      {/* admin */}
       <Route path='/discount-management' element={<DiscountManagement/>} />
       <Route path='/category-management' element={<CategoryManagement/>} />
       <Route path='/brand-management' element={<BrandManagement/>} />
@@ -61,6 +71,8 @@ function App() {
       <Route path='/list-staff' element={<ListStaff/>} />
       <Route path='/create-staff' element={<CreateStaff/>} />
       <Route path='/list-user' element={<UserManagement/>} />
+
+      <Route path='*' element={<NotFound/>} />
       
 
     </Routes>
