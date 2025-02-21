@@ -1,9 +1,10 @@
-import { Button, Form, Input, Modal, Table, Popconfirm } from "antd";
+import { Button, Form, Input, Modal, Table, Popconfirm, DatePicker } from "antd";
 import { useForm } from "antd/es/form/Form";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { Select } from "antd";
+import api from "../../../config/api";
 
 const DiscountManagement = () => {
     const { Option } = Select;
@@ -11,6 +12,7 @@ const DiscountManagement = () => {
     const [isModalOpen, setModalOpen] = useState(false);
     const [form] = useForm();
     const [editingDiscount, setEditingDiscount] = useState(null);
+
 
     const statusMapping = {
         0: "EXPIRED",
@@ -79,7 +81,7 @@ const DiscountManagement = () => {
             render: (text, record) => (
                 <div className="button">
                     <Button onClick={() => handleEditDiscount(record)} style={{ marginRight: 8 }}>
-                        <i class="fa-solid fa-pen-to-square"></i>
+                        <i className="fa-solid fa-pen-to-square"></i>
                         Edit
                     </Button>
                     <Popconfirm
@@ -89,7 +91,7 @@ const DiscountManagement = () => {
                         cancelText="No"
                     >
                         <Button danger>
-                            <i class="fa-solid fa-trash"></i>
+                            <i className="fa-solid fa-trash"></i>
                             Delete
                         </Button>
                     </Popconfirm>
@@ -100,7 +102,7 @@ const DiscountManagement = () => {
 
     const fetchDiscount = async () => {
         try {
-            const response = await axios.get('http://localhost:8080/haven-skin/discounts');
+            const response = await api.get('/discounts');
             setDiscountList(response.data);
         } catch (error) {
             console.error("Error fetching Discounts:", error);
@@ -126,7 +128,7 @@ const DiscountManagement = () => {
             // Edit Discount
             values.discountId = editingDiscount.discountId;
             try {
-                await axios.put(`http://localhost:8080/haven-skin/discounts/${editingDiscount.discountId}`, values);
+                await api.put(`/discounts/${editingDiscount.discountId}`, values);
                 toast.success("Discount updated successfully!");
                 fetchDiscount();
                 handleCloseModal();
@@ -136,7 +138,7 @@ const DiscountManagement = () => {
         } else {
             // Add new Discount
             try {
-                await axios.post('http://localhost:8080/haven-skin/discounts', values);
+                await api.post('/discounts', values);
                 toast.success("Discount added successfully!");
                 fetchDiscount();
                 handleCloseModal();
@@ -154,7 +156,7 @@ const DiscountManagement = () => {
 
     const handleDeleteDiscount = async (id) => {
         try {
-            await axios.delete(`http://localhost:8080/haven-skin/discounts/${id}`);
+            await api.delete(`/discounts/${id}`);
             toast.success("Discount deleted successfully!");
             fetchDiscount();
         } catch (error) {
@@ -167,7 +169,7 @@ const DiscountManagement = () => {
             <ToastContainer />
             <h1>Discount Management</h1>
             <Button type="primary" onClick={handleOpenModal}>
-            <i class="fa-solid fa-plus"></i>
+            <i className="fa-solid fa-plus"></i>
                 Add new discount
             </Button>
             <Table dataSource={discountList} columns={columns} rowKey="discountId" style={{ marginTop: 16 }} />
@@ -205,28 +207,28 @@ const DiscountManagement = () => {
                         name="createdTime"
                         rules={[{ required: false, message: "Created Time can't be empty!" }]}
                     >
-                        <Input />
+                        <DatePicker style={{ width: "100%" }} />
                     </Form.Item>
                     <Form.Item
                         label="Deleted Time"
                         name="deletedTime"
                         rules={[{ required: false, message: "Deleted Time can't be empty!" }]}
                     >
-                        <Input />
+                        <DatePicker style={{ width: "100%" }} />
                     </Form.Item>
                     <Form.Item
                         label="Actual Start Time"
                         name="actualStartTime"
                         rules={[{ required: false, message: "Actual Start Time can't be empty!" }]}
                     >
-                        <Input />
+                        <DatePicker style={{ width: "100%" }} />
                     </Form.Item>
                     <Form.Item
                         label="Actual End Time"
                         name="actualEndTime"
                         rules={[{ required: false, message: "Actual End Time can't be empty!" }]}
                     >
-                        <Input />
+                        <DatePicker style={{ width: "100%" }} />
                     </Form.Item>
                     <Form.Item
                         label="Discount Percent"

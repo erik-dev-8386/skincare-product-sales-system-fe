@@ -94,7 +94,7 @@
 
 }
 
-.nav .subnav li a {
+.nav .subnav li Link {
     color: white;
     text-decoration: none;
     padding: 18px 22px;
