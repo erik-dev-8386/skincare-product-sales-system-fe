@@ -283,7 +283,7 @@ const ListProduct = () => {
                     <Form.Item label="Hạn sử dụng" name="exp" rules={[{ required: true, message: "Hạn sử dụng không được để trống!" }]}>
                         <DatePicker style={{ width: "100%" }} />
                     </Form.Item>
-                    <Form.Item label="Trọng lượng (g)" name="quantity" rules={[{ required: true, message: "Trọng lượng không được để trống!" }]}>
+                    <Form.Item label="Trọng lượng (g)" name="netWeight" rules={[{ required: true, message: "Trọng lượng không được để trống!" }]}>
                         <Input type="number" />
                     </Form.Item>
 
