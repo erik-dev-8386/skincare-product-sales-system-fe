@@ -286,6 +286,8 @@ const SkinTypeManagement = () => {
 
         try {
             const response = await axios.post(CLOUDINARY_UPLOAD_URL, formData);
+            console.log("Cloudinary URL:", response.data.secure_url);
+
             return response.data.secure_url;
         } catch (error) {
             console.error("Error uploading image:", error);
