@@ -30,23 +30,25 @@ import CreateStaff from './pages/admin/StaffManagement/CreateStaff.jsx';
 import UserManagement from './pages/admin/UserManagement/UserManagement.jsx'
 import LoginAndSignup from './pages/users/login/loginAndSignup.jsx';
 import Question from './pages/users/question/Question.jsx';
+import CustomerDiscounts from './pages/users/discount/CustomerDiscounts.jsx';
+import NotFound from './pages/users/NotFound/NotFound.jsx';
 function App() {
 
 
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
-      <Route path="/login" element={<Login />} />
-      <Route path='/login-and-signup' element={<LoginAndSignup/>} />
-      {/* <Route path="/auth/callback" element={<Callback />} /> */}
+      <Route path='/about-us' element={<AboutUs />} />
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="/terms-of-use" element={<TermsOfUse />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/register" element={<Register />} />
+      <Route path='/login-and-signup' element={<LoginAndSignup/>} />
       <Route path="/blog" element={<Blog />} />
       <Route path="/blog/:id" element={<BlogDetail />} />
-      <Route path="/register" element={<Register />} />
       <Route path="/discount" element={<Discount />} />
       <Route path="/discount/:discountPercentage" element={<DiscountDetail />} /> 
-      <Route path='/about-us' element={<AboutUs />} />
+      <Route path='/customer-discounts' element={<CustomerDiscounts />} />
       <Route path='/shopping-cart' element={<Shopping />} />
       <Route path='/cart' element={<Cart />} />
       <Route path='/listskincare/Kho' element={<Kho />} />
@@ -61,7 +63,11 @@ function App() {
       <Route path='/list-staff' element={<ListStaff/>} />
       <Route path='/create-staff' element={<CreateStaff/>} />
       <Route path='/list-user' element={<UserManagement/>} />
+
       <Route path='/question' element={<Question/>} />
+
+
+      <Route path='*' element={<NotFound/>} />
 
     </Routes>
   );

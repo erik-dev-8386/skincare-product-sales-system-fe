@@ -1,6 +1,6 @@
 
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useNavigate} from "react";
 import axios from "axios";
 import { Layout, Menu, Table, Card, Statistic, Button, Form, Input, Modal, Popconfirm } from "antd";
 import { UserOutlined, DashboardOutlined, AppstoreOutlined, PercentageOutlined, InboxOutlined } from "@ant-design/icons";
@@ -13,6 +13,7 @@ import BrandManagement from "../../pages/admin/BrandManagement/BrandManagement";
 import '../AdminDashboard/AdminDashboard.css'
 import cot from '../../assets/cot.jpg';
 import tron from '../../assets/tron.jpg';
+// import { jwtDecode } from "jwt-decode";
 
 const { Header, Content, Sider } = Layout;
 
@@ -26,9 +27,35 @@ const AdminDashboard = () => {
     const [skinTypes, setSkinTypes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedMenu, setSelectedMenu] = useState("users");
-    // const [isModalOpen, setModalOpen] = useState(false);
+    
     const [form] = Form.useForm();
-    // const [editingCategory, setEditingCategory] = useState(null);
+    // const navigate = useNavigate();
+
+    // //Kiểm tra quyền truy cập khi vào trang
+    // useEffect(() => {
+    //     const token = localStorage.getItem("token"); // Lấy token từ localStorage
+
+    //     if (!token) {
+    //         message.error("Bạn chưa đăng nhập!");
+    //         navigate("/login-and-signup"); // Chuyển hướng về trang login
+    //         return;
+    //     }
+
+    //     try {
+    //         const decodedToken = jwtDecode(token); // Giải mã token
+    //         const userRole = decodedToken.role; // Lấy role từ token
+
+    //         if (userRole !== 1 && userRole !== 2) {
+    //             message.error("Bạn không có quyền truy cập vào trang này!");
+    //             navigate("/"); // Chuyển hướng về trang chủ
+    //         }
+    //     } catch (error) {
+    //         console.error("Lỗi khi kiểm tra quyền truy cập:", error);
+    //         message.error("Phiên đăng nhập không hợp lệ. Vui lòng đăng nhập lại!");
+    //         navigate("/login-and-signup");
+    //     }
+    // }, [navigate]);
+ 
 
     useEffect(() => {
         axios.get("https://jsonplaceholder.typicode.com/users")
@@ -93,50 +120,7 @@ const AdminDashboard = () => {
             .catch(error => console.error("Error fetching discount data:", error));
     }, []);
 
-    // const handleOpenModal = () => {
-    //     setModalOpen(true);
-    // };
 
-    // const handleCloseModal = () => {
-    //     setModalOpen(false);
-    //     form.resetFields();
-    //     setEditingCategory(null);
-    // };
-
-    // const handleSubmitForm = async (values) => {
-    //     if (editingCategory) {
-    //         try {
-    //             await axios.put(`http://localhost:8080/haven-skin/category/${editingCategory.categoryId}`, values);
-    //             fetchCategories();
-    //             handleCloseModal();
-    //         } catch (error) {
-    //             console.error("Error updating category:", error);
-    //         }
-    //     } else {
-    //         try {
-    //             await axios.post("http://localhost:8080/haven-skin/category", values);
-    //             fetchCategories();
-    //             handleCloseModal();
-    //         } catch (error) {
-    //             console.error("Error adding category:", error);
-    //         }
-    //     }
-    // };
-
-    // const handleEditCategory = (category) => {
-    //     setEditingCategory(category);
-    //     form.setFieldsValue(category);
-    //     handleOpenModal();
-    // };
-
-    // const handleDeleteCategory = async (categoryId) => {
-    //     try {
-    //         await axios.delete(`http://localhost:8080/haven-skin/category/${categoryId}`);
-    //         fetchCategories();
-    //     } catch (error) {
-    //         console.error("Error deleting category:", error);
-    //     }
-    // };
 
     const userColumns = [
         { title: "ID", dataIndex: "id", key: "id" },
@@ -144,30 +128,7 @@ const AdminDashboard = () => {
         { title: "Email", dataIndex: "email", key: "email" },
     ];
 
-    // const categoryColumns = [
-    //     { title: "Category ID", dataIndex: "categoryId", key: "categoryId" },
-    //     { title: "Category Name", dataIndex: "categoryName", key: "categoryName" },
-    //     { title: "Description", dataIndex: "description", key: "description" },
-    //     { title: "Usage Instruction", dataIndex: "usageInstruction", key: "usageInstruction" },
-    //     { title: "Status", dataIndex: "status", key: "status" },
-    //     {
-    //         title: "Actions",
-    //         key: "actions",
-    //         render: (text, record) => (
-    //             <div>
-    //                 <Button onClick={() => handleEditCategory(record)} style={{ marginRight: 8 }}>Edit</Button>
-    //                 <Popconfirm
-    //                     title="Are you sure to delete this category?"
-    //                     onConfirm={() => handleDeleteCategory(record.categoryId)}
-    //                     okText="Yes"
-    //                     cancelText="No"
-    //                 >
-    //                     <Button danger>Delete</Button>
-    //                 </Popconfirm>
-    //             </div>
-    //         ),
-    //     },
-    // ];
+
 
     return (
         <Layout style={{ minHeight: "100vh" }}>
@@ -233,16 +194,16 @@ const AdminDashboard = () => {
                                             <Statistic title="Total Skin Types" value={skinTypes.length} />
                                         </Card>
                                     </div>
-                                   
-                                   
+
+
                                 </div>
 
                                 <div className="row mt-4">
                                     <div className="col-md-6">
-                                    <img src={cot} alt="Da kho" className='bieudo' />
+                                        <img src={cot} alt="Da kho" className='bieudo' />
                                     </div>
                                     <div className="col-md-6">
-                                    <img src={tron} alt="Da kho" className='bieudo' />
+                                        <img src={tron} alt="Da kho" className='bieudo' />
                                     </div>
                                 </div>
                             </>
