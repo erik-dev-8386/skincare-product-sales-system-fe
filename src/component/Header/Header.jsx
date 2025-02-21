@@ -45,9 +45,9 @@ export default function Header() {
                 <ul>
                     <li><Link to='/' className="active">Trang chủ</Link></li>
                     <li><Link to='#' className="active">Sản phẩm</Link></li>
-                    <li><Link to='/discount' className="active">Giảm giá</Link></li>
+                    <li><Link to='/customer-discounts' className="active">Giảm giá</Link></li>
                     <li><Link to='/blog' className="active">Blog</Link></li>
-                    <li><Link to='#' className="active">Xác định da</Link></li>
+                    <li><Link to='/question' className="active">Xác định da</Link></li>
                     <li>
                         <Link to='#' className="active">Lộ trình chăm sóc da</Link>
                         <ul className="subnav">
