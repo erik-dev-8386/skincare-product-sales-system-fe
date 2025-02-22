@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal, Table, Popconfirm, DatePicker } from "antd";
+import { Button, Form, Input, Modal, Table, Popconfirm, DatePicker, Col, Row } from "antd";
 import { useForm } from "antd/es/form/Form";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -6,6 +6,11 @@ import { toast, ToastContainer } from "react-toastify";
 import { Select } from "antd";
 import api from "../../../config/api";
 import dayjs from "dayjs";
+import MyEditor from "../../../component/TinyMCE/MyEditor";
+// import { CKEditor } from "@ckeditor/ckeditor5-react";
+// import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+
+
 
 const DiscountManagement = () => {
     const { Option } = Select;
@@ -44,6 +49,9 @@ const DiscountManagement = () => {
             title: 'Mô tả',
             dataIndex: 'description',
             key: 'description',
+            render: (text) => (
+                <div dangerouslySetInnerHTML={{ __html: text }} />
+            ),
         },
         {
             title: 'Ngày tạo',
@@ -133,13 +141,13 @@ const DiscountManagement = () => {
     const handleSubmitForm = async (values) => {
 
         // Chuyển đổi ngày về dạng YYYY-MM-DD
-    const formattedValues = {
-        ...values,
-        createdTime: values.createdTime?.format('YYYY-MM-DD'),
-        deletedTime: values.deletedTime?.format('YYYY-MM-DD'),
-        actualStartTime: values.actualStartTime?.format('YYYY-MM-DD'),
-        actualEndTime: values.actualEndTime?.format('YYYY-MM-DD'),
-    };
+        const formattedValues = {
+            ...values,
+            createdTime: values.createdTime?.format('YYYY-MM-DD'),
+            deletedTime: values.deletedTime?.format('YYYY-MM-DD'),
+            actualStartTime: values.actualStartTime?.format('YYYY-MM-DD'),
+            actualEndTime: values.actualEndTime?.format('YYYY-MM-DD'),
+        };
         if (editingDiscount) {
             // Chỉnh sửa giảm giá
             formattedValues.discountId = editingDiscount.discountId;
@@ -202,84 +210,110 @@ const DiscountManagement = () => {
                 onOk={() => form.submit()}
                 okText={editingDiscount ? "Lưu thay đổi" : "Tạo"}
                 cancelText="Hủy"
+                width={800}
             >
-                <Form form={form} labelCol={{ span: 24 }} onFinish={handleSubmitForm}>
+                <Form form={form} labelCol={{ span: 24 }} onFinish={handleSubmitForm} layout="vertical">
 
-                    <Form.Item
-                        label="Tên giảm giá"
-                        name="discountName"
-                        rules={[{ required: true, message: "Tên giảm giá không được để trống!" }]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        label="Mã giảm giá"
-                        name="discountCode"
-                        rules={[{ required: true, message: "Mã giảm giá không được để trống!" }]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
+                    <Row gutter={16}>
+                        {/* Cột 1 */}
+                        <Col span={12}>
+                            <Form.Item
+                                label="Tên giảm giá"
+                                name="discountName"
+                                rules={[{ required: true, message: "Tên giảm giá không được để trống!" }]}
+                            >
+                                <Input />
+                            </Form.Item>
+                            <Form.Item
+                                label="Mã giảm giá"
+                                name="discountCode"
+                                rules={[{ required: true, message: "Mã giảm giá không được để trống!" }]}
+                            >
+                                <Input />
+                            </Form.Item>
+                            {/* <Form.Item
                         label="Mô tả"
                         name="description"
                         rules={[{ required: true, message: "Mô tả không được để trống!" }]}
                     >
                         <Input />
-                    </Form.Item>
-                    <Form.Item
-                        label="Ngày tạo"
-                        name="createdTime"
-                        rules={[{ required: false, message: "Ngày tạo không được để trống!" }]}
-                    >
-                        <DatePicker value={dayjs()} format="YYYY-MM-DD" />
-                    </Form.Item>
-                    <Form.Item
-                        label="Ngày xóa"
-                        name="deletedTime"
-                        rules={[{ required: false, message: "Ngày xóa không được để trống!" }]}
-                    >
-                        <DatePicker value={dayjs()} format="YYYY-MM-DD" />
-                    </Form.Item>
-                    <Form.Item
-                        label="Ngày áp dụng"
-                        name="actualStartTime"
-                        rules={[{ required: false, message: "Ngày áp dụng không được để trống!" }]}
-                    >
-                        <DatePicker value={dayjs()} format="YYYY-MM-DD" />
-                    </Form.Item>
-                    <Form.Item
-                        label="Ngày hết hạn"
-                        name="actualEndTime"
-                        rules={[{ required: false, message: "Ngày hết hạn không được để trống!" }]}
-                    >
-                        <DatePicker value={dayjs()} format="YYYY-MM-DD" />
-                    </Form.Item>
-                    <Form.Item
-                        label="Phần trăm giảm giá"
-                        name="discountPercent"
-                        rules={[
-                            { required: true, message: "Phần trăm giảm giá không được để trống!" },
-                            // { type: "number", min: 0, max: 100, message: "Giá trị phải từ 0 đến 100!" },
-                        ]}
-                    >
-                        <Input type="number" />
-                    </Form.Item>
+                    </Form.Item> */}
+                            <Form.Item
+                                label="Mô tả"
+                                name="description"
+                                rules={[{ required: true, message: "Mô tả không được để trống!" }]}
+                            >
+                                <MyEditor
+                                    value={form.getFieldValue("description")}
+                                    onChange={(value) => form.setFieldsValue({ description: value })}
+                                />
+                            </Form.Item>
 
 
-                    {editingDiscount && (
-                        <Form.Item
-                            label="Trạng thái"
-                            name="status"
-                            rules={[{ required: false, message: "Trạng thái không được để trống!" }]}
-                        >
-                            <Select>
-                                <Option value={0}>HẾT HẠN</Option>
-                                <Option value={1}>SẮP TỚI</Option>
-                                <Option value={2}>HOẠT ĐỘNG</Option>
-                                <Option value={3}>BỊ VÔ HIỆU HÓA</Option>
-                            </Select>
-                        </Form.Item>
-                    )}
+                        </Col>
+
+                        {/* Cột 2 */}
+                        <Col span={12}>
+
+                            <Form.Item
+                                label="Ngày tạo"
+                                name="createdTime"
+                                rules={[{ required: false, message: "Ngày tạo không được để trống!" }]}
+                            >
+                                <DatePicker value={dayjs()} format="YYYY-MM-DD" />
+                            </Form.Item>
+                            <Form.Item
+                                label="Ngày xóa"
+                                name="deletedTime"
+                                rules={[{ required: false, message: "Ngày xóa không được để trống!" }]}
+                            >
+                                <DatePicker value={dayjs()} format="YYYY-MM-DD" />
+                            </Form.Item>
+                            <Form.Item
+                                label="Ngày áp dụng"
+                                name="actualStartTime"
+                                rules={[{ required: false, message: "Ngày áp dụng không được để trống!" }]}
+                            >
+                                <DatePicker value={dayjs()} format="YYYY-MM-DD" />
+                            </Form.Item>
+                            <Form.Item
+                                label="Ngày hết hạn"
+                                name="actualEndTime"
+                                rules={[{ required: false, message: "Ngày hết hạn không được để trống!" }]}
+                            >
+                                <DatePicker value={dayjs()} format="YYYY-MM-DD" />
+                            </Form.Item>
+
+                            <Form.Item
+                                label="Phần trăm giảm giá"
+                                name="discountPercent"
+                                rules={[
+                                    { required: true, message: "Phần trăm giảm giá không được để trống!" },
+                                    // { type: "number", min: 0, max: 100, message: "Giá trị phải từ 0 đến 100!" },
+                                ]}
+                            >
+                                <Input type="number" />
+                            </Form.Item>
+
+
+
+
+                            {editingDiscount && (
+                                <Form.Item
+                                    label="Trạng thái"
+                                    name="status"
+                                    rules={[{ required: false, message: "Trạng thái không được để trống!" }]}
+                                >
+                                    <Select>
+                                        <Option value={0}>HẾT HẠN</Option>
+                                        <Option value={1}>SẮP TỚI</Option>
+                                        <Option value={2}>HOẠT ĐỘNG</Option>
+                                        <Option value={3}>BỊ VÔ HIỆU HÓA</Option>
+                                    </Select>
+                                </Form.Item>
+                            )}
+                        </Col>
+                    </Row>
 
                 </Form>
             </Modal>
