@@ -75,7 +75,7 @@ export default function LoginAndSignup() {
         }
 
         // Kiểm tra mật khẩu khớp nhau
-       if (formData.password !== formData.confirmPassword) {
+        if (formData.password !== formData.confirmPassword) {
           toast.error("Mật khẩu không khớp!");
           setLoading(false);
           return;
@@ -89,7 +89,7 @@ export default function LoginAndSignup() {
           password: formData.password
         });
         console.log("Sending login data:", formData);
-        
+
 
         // localStorage.setItem("role", response.data.role);
 
@@ -117,12 +117,20 @@ export default function LoginAndSignup() {
         body: JSON.stringify(response.credential),
       });
 
-
-
       const data = await res.json();
       console.log("User data:", data);
 
-   
+      if (res.ok && data.token) {
+        //  Lưu token vào localStorage
+        localStorage.setItem("token", data.token);
+
+        //  Giải mã token lấy role
+        const decodedToken = jwtDecode(data.token);
+        setRole(decodedToken.role);
+
+      }
+
+
 
 
       toast.success("Đăng nhập thành công!");

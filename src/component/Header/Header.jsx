@@ -7,7 +7,7 @@ import logo from "../../assets/Logo_01.jpg";
 import { jwtDecode } from "jwt-decode"; // Import thư viện giải mã JWT
 
 export default function Header() {
-    const [showDropdown, setShowDropdown] = useState(false);
+    // const [showDropdown, setShowDropdown] = useState(false);
 
     const [role, setRole] = useState(null);
 
@@ -57,7 +57,7 @@ export default function Header() {
                             <li><Link to="/listskincare/Kho">Da khô</Link></li>
                         </ul>
                     </li>
-                    <li><Link to='/about-us'>Giới thiệu & Liên hệ</Link></li>
+                    <li><Link to='/about-me'>Giới thiệu & Liên hệ</Link></li>
                 </ul>
             </div>
 
@@ -88,6 +88,7 @@ export default function Header() {
                             <>
                                 <li><Link to="/login-and-signup">Đăng nhập</Link></li>
                                 <li><Link to="/login-and-signup">Đăng ký</Link></li>
+                                
                                
                                 
                             </>
