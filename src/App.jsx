@@ -5,7 +5,7 @@ import './App.css'
 import { Routes, Route } from 'react-router-dom';
 import HomePage from '../src/pages/users/homePage/HomePage';
 import Login from '../src/pages/users/login/Login';
-import Callback from '../src/pages/users/callBack/Callback';
+// import Callback from '../src/pages/users/callBack/Callback';
 import PrivacyPolicy from '../src/pages/users/privacyPolicy/PrivacyPolicy';
 import TermsOfUse from '../src/pages/users/termsOfUse/TermsOfUse';
 import Blog from "../src/pages/users/blog/Blog.jsx";
@@ -32,13 +32,15 @@ import LoginAndSignup from './pages/users/login/loginAndSignup.jsx';
 import Question from './pages/users/question/Question.jsx';
 import CustomerDiscounts from './pages/users/discount/CustomerDiscounts.jsx';
 import NotFound from './pages/users/NotFound/NotFound.jsx';
+import AboutMe from './pages/users/aboutUs/AboutMe.jsx';
 function App() {
 
 
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
-      <Route path='/about-us' element={<AboutUs />} />
+      {/* <Route path='/about-us' element={<AboutUs />} /> */}
+      <Route path='/about-me' element={<AboutMe />} />
       <Route path="/privacy-policy" element={<PrivacyPolicy />} />
       <Route path="/terms-of-use" element={<TermsOfUse />} />
       <Route path="/login" element={<Login />} />

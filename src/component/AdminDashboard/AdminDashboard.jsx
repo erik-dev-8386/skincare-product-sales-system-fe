@@ -1,6 +1,6 @@
 
 
-import React, { useEffect, useState, useNavigate} from "react";
+import React, { useEffect, useState, useNavigate } from "react";
 import axios from "axios";
 import { Layout, Menu, Table, Card, Statistic, Button, Form, Input, Modal, Popconfirm } from "antd";
 import { UserOutlined, DashboardOutlined, AppstoreOutlined, PercentageOutlined, InboxOutlined } from "@ant-design/icons";
@@ -13,6 +13,7 @@ import BrandManagement from "../../pages/admin/BrandManagement/BrandManagement";
 import '../AdminDashboard/AdminDashboard.css'
 import cot from '../../assets/cot.jpg';
 import tron from '../../assets/tron.jpg';
+import api from "../../config/api";
 // import { jwtDecode } from "jwt-decode";
 
 const { Header, Content, Sider } = Layout;
@@ -27,7 +28,7 @@ const AdminDashboard = () => {
     const [skinTypes, setSkinTypes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedMenu, setSelectedMenu] = useState("users");
-    
+
     const [form] = Form.useForm();
     // const navigate = useNavigate();
 
@@ -55,7 +56,7 @@ const AdminDashboard = () => {
     //         navigate("/login-and-signup");
     //     }
     // }, [navigate]);
- 
+
 
     useEffect(() => {
         axios.get("https://jsonplaceholder.typicode.com/users")
@@ -67,7 +68,7 @@ const AdminDashboard = () => {
     }, []);
 
     useEffect(() => {
-        axios.get("http://localhost:8080/haven-skin/users")
+        api.get("/users")
             .then(response => {
                 setStaff(response.data);
                 setLoading(false);
@@ -76,7 +77,7 @@ const AdminDashboard = () => {
     }, []);
 
     useEffect(() => {
-        axios.get("http://localhost:8080/haven-skin/products")
+        api.get("/products")
             .then(response => {
                 setProduct(response.data);
                 setLoading(false);
@@ -85,16 +86,16 @@ const AdminDashboard = () => {
     }, []);
 
     useEffect(() => {
-        axios.get("http://localhost:8080/haven-skin/brands")
+        api.get("/brands")
             .then(response => {
-                setProduct(response.data);
+                setBrands(response.data);
                 setLoading(false);
             })
             .catch(error => console.error("Error fetching brands data:", error));
     }, []);
 
     useEffect(() => {
-        axios.get("http://localhost:8080/haven-skin/categories")
+        api.get("/categories")
             .then(response => {
                 setCategories(response.data);
                 setLoading(false);
@@ -103,7 +104,7 @@ const AdminDashboard = () => {
     }, []);
 
     useEffect(() => {
-        axios.get("http://localhost:8080/haven-skin/discounts")
+        api.get("/discounts")
             .then(response => {
                 setDiscounts(response.data);
                 setLoading(false);
@@ -112,7 +113,7 @@ const AdminDashboard = () => {
     }, []);
 
     useEffect(() => {
-        axios.get("http://localhost:8080/haven-skin/skin-types")
+        api.get("/skin-types")
             .then(response => {
                 setSkinTypes(response.data);
                 setLoading(false);
@@ -128,6 +129,23 @@ const AdminDashboard = () => {
         { title: "Email", dataIndex: "email", key: "email" },
     ];
 
+    const menuItems = [
+        { key: "dashboard", icon: <DashboardOutlined />, label: "Bảng điều khiển" },
+        { key: "users", icon: <UserOutlined />, label: "Khách hàng" },
+        { key: "staff", icon: <UserOutlined />, label: "Nhân viên" },
+        { key: "products", icon: <InboxOutlined />, label: "Sản phẩm" },
+        { key: "brands", icon: <InboxOutlined />, label: "Thương hiệu" },
+        { key: "categories", icon: <AppstoreOutlined />, label: "Loại sản phẩm" },
+        { key: "discounts", icon: <PercentageOutlined />, label: "Giảm giá" },
+        { 
+          key: "skinTypes", 
+          icon: <i className="fa-solid fa-hand-dots"></i>, 
+          label: "Loại da" 
+        },
+      ];
+
+
+
 
 
     return (
@@ -140,19 +158,26 @@ const AdminDashboard = () => {
                 <div className="logo text-center text-white py-3">
                     Chào mừng Admin PRO đã trở lại!
                 </div>
-                <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline" onClick={(e) => setSelectedMenu(e.key)}>
-                    <Menu.Item key="dashboard" icon={<DashboardOutlined />}>Dashboard</Menu.Item>
-                    <Menu.Item key="users" icon={<UserOutlined />}>Users</Menu.Item>
-                    <Menu.Item key="staff" icon={<UserOutlined />}>Staff</Menu.Item>
-                    <Menu.Item key="products" icon={<InboxOutlined />}>Products</Menu.Item>
-                    <Menu.Item key="brands" icon={<InboxOutlined />}>Brands</Menu.Item>
-                    <Menu.Item key="categories" icon={<AppstoreOutlined />}>Categories</Menu.Item>
-                    <Menu.Item key="discounts" icon={<PercentageOutlined />}>Discounts</Menu.Item>
-                    <Menu.Item key="skinTypes" icon={<i className="fa-solid fa-hand-dots"></i>}>Skin Types</Menu.Item>
-                </Menu>
+                {/* <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline" onClick={(e) => setSelectedMenu(e.key)}>
+                    <Menu.Item key="dashboard" icon={<DashboardOutlined />}>Bảng điều khiển</Menu.Item>
+                    <Menu.Item key="users" icon={<UserOutlined />}>Khách hàng</Menu.Item>
+                    <Menu.Item key="staff" icon={<UserOutlined />}>Nhân viên</Menu.Item>
+                    <Menu.Item key="products" icon={<InboxOutlined />}>Sản phẩm</Menu.Item>
+                    <Menu.Item key="brands" icon={<InboxOutlined />}>Thương hiệu</Menu.Item>
+                    <Menu.Item key="categories" icon={<AppstoreOutlined />}>Loại sản phẩm</Menu.Item>
+                    <Menu.Item key="discounts" icon={<PercentageOutlined />}>Giảm giá</Menu.Item>
+                    <Menu.Item key="skinTypes" icon={<i className="fa-solid fa-hand-dots"></i>}>Loại da</Menu.Item>
+                </Menu> */}
+                <Menu
+                    theme="dark"
+                    defaultSelectedKeys={["dashboard"]}
+                    mode="inline"
+                    onClick={(e) => setSelectedMenu(e.key)}
+                    items={menuItems}
+                />;
             </Sider>
             <Layout>
-                <Header className="bg-primary text-white text-center" style={{ fontSize: 35 }}>Bảng quản lý</Header>
+                {/* <Header className="bg-primary text-white text-center" style={{ fontSize: 35 }}>Bảng quản lý</Header> */}
                 <Content className="p-4">
 
                     <div className="mt-4" >

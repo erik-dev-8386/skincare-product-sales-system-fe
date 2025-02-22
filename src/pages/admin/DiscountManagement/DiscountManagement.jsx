@@ -1,10 +1,16 @@
-import { Button, Form, Input, Modal, Table, Popconfirm, DatePicker } from "antd";
+import { Button, Form, Input, Modal, Table, Popconfirm, DatePicker, Col, Row } from "antd";
 import { useForm } from "antd/es/form/Form";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { Select } from "antd";
 import api from "../../../config/api";
+import dayjs from "dayjs";
+import MyEditor from "../../../component/TinyMCE/MyEditor";
+// import { CKEditor } from "@ckeditor/ckeditor5-react";
+// import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+
+
 
 const DiscountManagement = () => {
     const { Option } = Select;
@@ -14,85 +20,94 @@ const DiscountManagement = () => {
     const [editingDiscount, setEditingDiscount] = useState(null);
 
 
+
+
     const statusMapping = {
-        0: "EXPIRED",
-        1: "UPCOMING",
-        2: "ACTIVE",
-        3: "DISABLED"
+        0: "HẾT HẠN",
+        1: "SẮP TỚI",
+        2: "HOẠT ĐỘNG",
+        3: "BỊ VÔ HIỆU HÓA"
     };
 
     const columns = [
         {
-            title: 'Discount ID',
+            title: 'ID giảm giá',
             dataIndex: 'discountId',
             key: 'discountId',
         },
         {
-            title: 'Discount Name',
+            title: 'Tên giảm giá',
             dataIndex: 'discountName',
             key: 'discountName',
         },
         {
-            title: 'Discount Code',
+            title: 'Mã giảm giá',
             dataIndex: 'discountCode',
             key: 'discountCode',
         },
         {
-            title: 'Description',
+            title: 'Mô tả',
             dataIndex: 'description',
             key: 'description',
+            render: (text) => (
+                <div dangerouslySetInnerHTML={{ __html: text }} />
+            ),
         },
         {
-            title: 'Created Time',
+            title: 'Ngày tạo',
             dataIndex: 'createdTime',
             key: 'createdTime',
+            render: (date) => date ? dayjs(date).format("YYYY-MM-DD") : "",
 
         },
         {
-            title: 'Deleted Time',
+            title: 'Ngày xóa',
             dataIndex: 'deletedTime',
             key: 'deletedTime',
+            render: (date) => date ? dayjs(date).format("YYYY-MM-DD") : "",
         },
         {
-            title: 'ActualStart Time',
+            title: 'Ngày áp dụng',
             dataIndex: 'actualStartTime',
             key: 'actualStartTime',
+            render: (date) => date ? dayjs(date).format("YYYY-MM-DD") : "",
 
         },
         {
-            title: 'Actual End Time',
+            title: 'Ngày hết hạn',
             dataIndex: 'actualEndTime',
             key: 'actualEndTime',
+            render: (date) => date ? dayjs(date).format("YYYY-MM-DD") : "",
         },
         {
-            title: 'Discount Percent',
+            title: 'Phần trăm giảm giá',
             dataIndex: 'discountPercent',
             key: 'discountPercent',
         },
         {
-            title: 'Status',
+            title: 'Trạng thái',
             dataIndex: 'status',
             key: 'status',
-            render: (status) => statusMapping[status] || "UNKNOWN",
+            render: (status) => statusMapping[status] || "KHÔNG BIẾT",
         },
         {
-            title: 'Actions',
+            title: 'Nút điều khiển',
             key: 'actions',
             render: (text, record) => (
                 <div className="button">
                     <Button onClick={() => handleEditDiscount(record)} style={{ marginRight: 8 }}>
                         <i className="fa-solid fa-pen-to-square"></i>
-                        Edit
+                        Sửa
                     </Button>
                     <Popconfirm
-                        title="Do you want to delete this discount?"
+                        title="Bạn có muốn xóa giảm giá này không?"
                         onConfirm={() => handleDeleteDiscount(record.discountId)}
-                        okText="Yes"
-                        cancelText="No"
+                        okText="Có"
+                        cancelText="Không"
                     >
                         <Button danger>
                             <i className="fa-solid fa-trash"></i>
-                            Delete
+                            Xóa
                         </Button>
                     </Popconfirm>
                 </div>
@@ -124,135 +139,181 @@ const DiscountManagement = () => {
     };
 
     const handleSubmitForm = async (values) => {
+
+        // Chuyển đổi ngày về dạng YYYY-MM-DD
+        const formattedValues = {
+            ...values,
+            createdTime: values.createdTime?.format('YYYY-MM-DD'),
+            deletedTime: values.deletedTime?.format('YYYY-MM-DD'),
+            actualStartTime: values.actualStartTime?.format('YYYY-MM-DD'),
+            actualEndTime: values.actualEndTime?.format('YYYY-MM-DD'),
+        };
         if (editingDiscount) {
-            // Edit Discount
-            values.discountId = editingDiscount.discountId;
+            // Chỉnh sửa giảm giá
+            formattedValues.discountId = editingDiscount.discountId;
             try {
-                await api.put(`/discounts/${editingDiscount.discountId}`, values);
-                toast.success("Discount updated successfully!");
+                await api.put(`/discounts/${editingDiscount.discountId}`, formattedValues);
+                toast.success("Đã cập nhật giảm giá thành công!");
                 fetchDiscount();
                 handleCloseModal();
             } catch (error) {
-                toast.error("Failed to update discount!");
+                toast.error("Cập nhật giảm giá không thành công!");
             }
         } else {
             // Add new Discount
             try {
-                await api.post('/discounts', values);
-                toast.success("Discount added successfully!");
+                await api.post('/discounts', formattedValues);
+                toast.success("Đã thêm giảm giá mới thành công!");
                 fetchDiscount();
                 handleCloseModal();
             } catch (error) {
-                toast.error("Failed to add discount!");
+                toast.error("Thêm giảm giá mới không thành công!");
             }
         }
     };
 
     const handleEditDiscount = (Discount) => {
         setEditingDiscount(Discount);
-        form.setFieldsValue(Discount);
+        form.setFieldsValue({
+            ...Discount,
+            createdTime: Discount.createdTime ? dayjs(Discount.createdTime) : null,
+            deletedTime: Discount.deletedTime ? dayjs(Discount.deletedTime) : null,
+            actualStartTime: Discount.actualStartTime ? dayjs(Discount.actualStartTime) : null,
+            actualEndTime: Discount.actualEndTime ? dayjs(Discount.actualEndTime) : null,
+        });
         handleOpenModal();
     };
 
     const handleDeleteDiscount = async (id) => {
         try {
             await api.delete(`/discounts/${id}`);
-            toast.success("Discount deleted successfully!");
+            toast.success("Đã xóa giảm giá thành công!");
             fetchDiscount();
         } catch (error) {
-            toast.error("Failed to delete discount!");
+            toast.error("Xóa giảm giá không thành công!");
         }
     };
 
     return (
         <div >
             <ToastContainer />
-            <h1>Discount Management</h1>
+            <h1>Quản lý giảm giá</h1>
             <Button type="primary" onClick={handleOpenModal}>
-            <i className="fa-solid fa-plus"></i>
-                Add new discount
+                <i className="fa-solid fa-plus"></i>
+                Thêm giảm giá mới
             </Button>
             <Table dataSource={discountList} columns={columns} rowKey="discountId" style={{ marginTop: 16 }} />
             <Modal
-                title={editingDiscount ? "Edit Discount" : "Create New Discount"}
+                title={editingDiscount ? "Chỉnh sửa giảm giá" : "Tạo giảm giá mới"}
                 open={isModalOpen}
                 onCancel={handleCloseModal}
                 onOk={() => form.submit()}
+                okText={editingDiscount ? "Lưu thay đổi" : "Tạo"}
+                cancelText="Hủy"
+                width={800}
             >
-                <Form form={form} labelCol={{ span: 24 }} onFinish={handleSubmitForm}>
+                <Form form={form} labelCol={{ span: 24 }} onFinish={handleSubmitForm} layout="vertical">
 
-                    <Form.Item
-                        label="Discount Name"
-                        name="discountName"
-                        rules={[{ required: true, message: "Discount Name can't be empty!" }]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        label="Discount Code"
-                        name="discountCode"
-                        rules={[{ required: true, message: "Discount Code can't be empty!" }]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        label="Description"
+                    <Row gutter={16}>
+                        {/* Cột 1 */}
+                        <Col span={12}>
+                            <Form.Item
+                                label="Tên giảm giá"
+                                name="discountName"
+                                rules={[{ required: true, message: "Tên giảm giá không được để trống!" }]}
+                            >
+                                <Input />
+                            </Form.Item>
+                            <Form.Item
+                                label="Mã giảm giá"
+                                name="discountCode"
+                                rules={[{ required: true, message: "Mã giảm giá không được để trống!" }]}
+                            >
+                                <Input />
+                            </Form.Item>
+                            {/* <Form.Item
+                        label="Mô tả"
                         name="description"
-                        rules={[{ required: true, message: "Description can't be empty!" }]}
+                        rules={[{ required: true, message: "Mô tả không được để trống!" }]}
                     >
                         <Input />
-                    </Form.Item>
-                    <Form.Item
-                        label="Created Time"
-                        name="createdTime"
-                        rules={[{ required: false, message: "Created Time can't be empty!" }]}
-                    >
-                        <DatePicker style={{ width: "100%" }} />
-                    </Form.Item>
-                    <Form.Item
-                        label="Deleted Time"
-                        name="deletedTime"
-                        rules={[{ required: false, message: "Deleted Time can't be empty!" }]}
-                    >
-                        <DatePicker style={{ width: "100%" }} />
-                    </Form.Item>
-                    <Form.Item
-                        label="Actual Start Time"
-                        name="actualStartTime"
-                        rules={[{ required: false, message: "Actual Start Time can't be empty!" }]}
-                    >
-                        <DatePicker style={{ width: "100%" }} />
-                    </Form.Item>
-                    <Form.Item
-                        label="Actual End Time"
-                        name="actualEndTime"
-                        rules={[{ required: false, message: "Actual End Time can't be empty!" }]}
-                    >
-                        <DatePicker style={{ width: "100%" }} />
-                    </Form.Item>
-                    <Form.Item
-                        label="Discount Percent"
-                        name="discountPercent"
-                        rules={[{ required: true, message: "Discount Percent can't be empty!" }]}
-                    >
-                        <Input type="number" />
-                    </Form.Item>
-                   
+                    </Form.Item> */}
+                            <Form.Item
+                                label="Mô tả"
+                                name="description"
+                                rules={[{ required: true, message: "Mô tả không được để trống!" }]}
+                            >
+                                <MyEditor
+                                    value={form.getFieldValue("description")}
+                                    onChange={(value) => form.setFieldsValue({ description: value })}
+                                />
+                            </Form.Item>
 
-                    {editingDiscount && (
-                        <Form.Item
-                            label="Status"
-                            name="status"
-                            rules={[{ required: false, message: "Status can't be empty!" }]}
-                        >
-                            <Select>
-                                <Option value={0}>EXPIRED</Option>
-                                <Option value={1}>UPCOMING</Option>
-                                <Option value={2}>ACTIVE</Option>
-                                <Option value={3}>DISABLED</Option>
-                            </Select>
-                        </Form.Item>
-                    )}
+
+                        </Col>
+
+                        {/* Cột 2 */}
+                        <Col span={12}>
+
+                            <Form.Item
+                                label="Ngày tạo"
+                                name="createdTime"
+                                rules={[{ required: false, message: "Ngày tạo không được để trống!" }]}
+                            >
+                                <DatePicker value={dayjs()} format="YYYY-MM-DD" />
+                            </Form.Item>
+                            <Form.Item
+                                label="Ngày xóa"
+                                name="deletedTime"
+                                rules={[{ required: false, message: "Ngày xóa không được để trống!" }]}
+                            >
+                                <DatePicker value={dayjs()} format="YYYY-MM-DD" />
+                            </Form.Item>
+                            <Form.Item
+                                label="Ngày áp dụng"
+                                name="actualStartTime"
+                                rules={[{ required: false, message: "Ngày áp dụng không được để trống!" }]}
+                            >
+                                <DatePicker value={dayjs()} format="YYYY-MM-DD" />
+                            </Form.Item>
+                            <Form.Item
+                                label="Ngày hết hạn"
+                                name="actualEndTime"
+                                rules={[{ required: false, message: "Ngày hết hạn không được để trống!" }]}
+                            >
+                                <DatePicker value={dayjs()} format="YYYY-MM-DD" />
+                            </Form.Item>
+
+                            <Form.Item
+                                label="Phần trăm giảm giá"
+                                name="discountPercent"
+                                rules={[
+                                    { required: true, message: "Phần trăm giảm giá không được để trống!" },
+                                    // { type: "number", min: 0, max: 100, message: "Giá trị phải từ 0 đến 100!" },
+                                ]}
+                            >
+                                <Input type="number" />
+                            </Form.Item>
+
+
+
+
+                            {editingDiscount && (
+                                <Form.Item
+                                    label="Trạng thái"
+                                    name="status"
+                                    rules={[{ required: false, message: "Trạng thái không được để trống!" }]}
+                                >
+                                    <Select>
+                                        <Option value={0}>HẾT HẠN</Option>
+                                        <Option value={1}>SẮP TỚI</Option>
+                                        <Option value={2}>HOẠT ĐỘNG</Option>
+                                        <Option value={3}>BỊ VÔ HIỆU HÓA</Option>
+                                    </Select>
+                                </Form.Item>
+                            )}
+                        </Col>
+                    </Row>
 
                 </Form>
             </Modal>

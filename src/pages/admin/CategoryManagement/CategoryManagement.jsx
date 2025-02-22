@@ -15,57 +15,57 @@ const CategoryManagement = () => {
 
 
     const statusMapping = {
-        0: "INACTIVE",
-        1: "PENDING",
-        2: "ACTIVE",
-        3: "DELETED"
+        0: "KHÔNG HOẠT ĐỘNG",
+        1: "CHỜ",
+        2: "HOẠT ĐỘNG",
+        3: "ĐÃ XÓA"
     };
 
     const columns = [
         {
-            title: 'Category ID',
+            title: 'ID loại sản phẩm',
             dataIndex: 'categoryId',
             key: 'categoryId',
         },
         {
-            title: 'Category Name',
+            title: 'Tên loại sản phẩm',
             dataIndex: 'categoryName',
             key: 'categoryName',
         },
         {
-            title: 'Description',
+            title: 'Mô tả',
             dataIndex: 'description',
             key: 'description',
         },
         {
-            title: 'Usage Instruction',
+            title: 'Hướng dẫn sử dụng',
             dataIndex: 'usageInstruction',
             key: 'usageInstruction',
         },
         {
-            title: 'Status',
+            title: 'Trạng thái',
             dataIndex: 'status',
             key: 'status',
             render: (status) => statusMapping[status] || "UNKNOWN",
         },
         {
-            title: 'Actions',
+            title: 'Nút điều khiển',
             key: 'actions',
             render: (text, record) => (
                 <div>
                     <Button onClick={() => handleEditCategory(record)} style={{ marginRight: 8 }}>
                         <i class="fa-solid fa-pen-to-square"></i>
-                        Edit
+                        Sửa
                     </Button>
                     <Popconfirm
-                        title="Do you want to delete this category?"
+                        title="Bạn có muốn xóa loại sản phẩm này không?"
                         onConfirm={() => handleDeleteCategory(record.categoryId)}
-                        okText="Yes"
-                        cancelText="No"
+                        okText="Có"
+                        cancelText="Không"
                     >
                         <Button danger>
                             <i class="fa-solid fa-trash"></i>
-                            Delete
+                            Xóa
                         </Button>
                     </Popconfirm>
                 </div>
@@ -100,21 +100,21 @@ const CategoryManagement = () => {
         if (editingCategory) {
             try {
                 await api.put(`/categories/${editingCategory.categoryId}`, values);
-                toast.success("Category updated successfully!");
+                toast.success("Đã cập nhật loại sản phẩm thành công!");
                 fetchCategories();
                 handleCloseModal();
             } catch (error) {
-                toast.error("Failed to update category!");
+                toast.error("Cập nhật loại sản phẩm không thành công!");
             }
         } else {
             try {
                 const { status, ...newCategory } = values; // Loại bỏ status khi tạo mới
                 await api.post('/categories', newCategory);
-                toast.success("Category added successfully!");
+                toast.success("Đã thêm loại sản phẩm mới thành công!");
                 fetchCategories();
                 handleCloseModal();
             } catch (error) {
-                toast.error("Failed to add category!");
+                toast.error("Thêm loại sản phẩm mới không thành công!");
             }
         }
     };
@@ -128,48 +128,50 @@ const CategoryManagement = () => {
     const handleDeleteCategory = async (categoryId) => {
         try {
             await api.delete(`/categories/${categoryId}`);
-            toast.success("Category deleted successfully!");
+            toast.success("Đã xóa loại sản phẩm này thành công!");
             fetchCategories();
         } catch (error) {
-            toast.error("Failed to delete category!");
+            toast.error("Xóa loại sản phẩm này không thành công!");
         }
     };
 
     return (
         <div>
             <ToastContainer />
-            <h1>Category Management</h1>
+            <h1>Quản lý loại sản phẩm</h1>
             <Button type="primary" onClick={handleOpenModal}>
             <i class="fa-solid fa-plus"></i>
-                Add new category
+            Thêm loại sản phẩm mới
             </Button>
             <Table dataSource={categoryList} columns={columns} rowKey="categoryId" style={{ marginTop: 16 }} />
             <Modal
-                title={editingCategory ? "Edit Category" : "Create New Category"}
+                title={editingCategory ? "Chỉnh sửa loại sản phẩm" : "Tạo loại sản phẩm mới"}
                 open={isModalOpen}
                 onCancel={handleCloseModal}
                 onOk={() => form.submit()}
+                okText={editingCategory ? "Lưu thay đổi" : "Tạo"}
+                cancelText="Hủy"
             >
                 <Form form={form} labelCol={{ span: 24 }} onFinish={handleSubmitForm}>
                     <Form.Item
-                        label="Category Name"
+                        label="Tên loại sản phẩm"
                         name="categoryName"
-                        rules={[{ required: true, message: "Category name can't be empty!" }]}
+                        rules={[{ required: true, message: "Tên loại sản phẩm không được bỏ trống!" }]}
                     >
                         <Input />
                     </Form.Item>
 
                     <Form.Item
-                        label="Description"
+                        label="Mô tả"
                         name="description"
-                        rules={[{ required: true, message: "Description can't be empty!" }]}
+                        rules={[{ required: true, message: "Mô tả không được bỏ trống!" }]}
                     >
                         <Input />
                     </Form.Item>
                     <Form.Item
-                        label="Usage Instruction"
+                        label="Hướng dẫn sử dụng"
                         name="usageInstruction"
-                        rules={[{ required: true, message: "Usage instruction can't be empty!" }]}
+                        rules={[{ required: true, message: "Hướng dẫn sử dụng không được bỏ trống!" }]}
                     >
                         <Input />
                     </Form.Item>
@@ -177,15 +179,15 @@ const CategoryManagement = () => {
 
                     {editingCategory && (
                         <Form.Item
-                            label="Status"
+                            label="Trạng thái"
                             name="status"
-                            rules={[{ required: false, message: "Status can't be empty!" }]}
+                            rules={[{ required: false, message: "Trạng thái không được bỏ trống!" }]}
                         >
                             <Select>
-                                <Option value={0}>INACTIVE</Option>
-                                <Option value={1}>PENDING</Option>
-                                <Option value={2}>ACTIVE</Option>
-                                <Option value={3}>DELETED</Option>
+                                <Option value={0}>KHÔNG HOẠT ĐỘNG</Option>
+                                <Option value={1}>CHỜ</Option>
+                                <Option value={2}>HOẠT ĐỘNG</Option>
+                                <Option value={3}>ĐÃ XÓA</Option>
                             </Select>
                         </Form.Item>
                     )}
