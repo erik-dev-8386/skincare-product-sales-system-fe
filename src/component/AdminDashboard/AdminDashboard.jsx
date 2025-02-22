@@ -88,7 +88,7 @@ const AdminDashboard = () => {
     useEffect(() => {
         api.get("/brands")
             .then(response => {
-                setProduct(response.data);
+                setBrands(response.data);
                 setLoading(false);
             })
             .catch(error => console.error("Error fetching brands data:", error));
