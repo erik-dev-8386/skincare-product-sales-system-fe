@@ -155,11 +155,11 @@ const DiscountManagement = () => {
             // Add new Discount
             try {
                 await api.post('/discounts', formattedValues);
-                toast.success("Đã thêm giảm giá thành công!");
+                toast.success("Đã thêm giảm giá mới thành công!");
                 fetchDiscount();
                 handleCloseModal();
             } catch (error) {
-                toast.error("Thêm giảm giá không thành công!");
+                toast.error("Thêm giảm giá mới không thành công!");
             }
         }
     };

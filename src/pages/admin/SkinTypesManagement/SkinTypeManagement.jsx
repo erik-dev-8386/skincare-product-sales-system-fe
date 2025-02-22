@@ -324,7 +324,7 @@ const SkinTypeManagement = () => {
                 fetchSkinTypes();
                 handleCloseModal();
             } catch (error) {
-                toast.error("Thêm loại da không thành công!");
+                toast.error("Thêm loại da mới không thành công!");
             }
         }
     };
