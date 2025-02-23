@@ -231,59 +231,6 @@ const DiscountManagement = () => {
                             >
                                 <Input />
                             </Form.Item>
-                            {/* <Form.Item
-                        label="Mô tả"
-                        name="description"
-                        rules={[{ required: true, message: "Mô tả không được để trống!" }]}
-                    >
-                        <Input />
-                    </Form.Item> */}
-                            <Form.Item
-                                label="Mô tả"
-                                name="description"
-                                rules={[{ required: true, message: "Mô tả không được để trống!" }]}
-                            >
-                                <MyEditor
-                                    value={form.getFieldValue("description")}
-                                    onChange={(value) => form.setFieldsValue({ description: value })}
-                                />
-                            </Form.Item>
-
-
-                        </Col>
-
-                        {/* Cột 2 */}
-                        <Col span={12}>
-
-                            <Form.Item
-                                label="Ngày tạo"
-                                name="createdTime"
-                                rules={[{ required: false, message: "Ngày tạo không được để trống!" }]}
-                            >
-                                <DatePicker value={dayjs()} format="YYYY-MM-DD" />
-                            </Form.Item>
-                            <Form.Item
-                                label="Ngày xóa"
-                                name="deletedTime"
-                                rules={[{ required: false, message: "Ngày xóa không được để trống!" }]}
-                            >
-                                <DatePicker value={dayjs()} format="YYYY-MM-DD" />
-                            </Form.Item>
-                            <Form.Item
-                                label="Ngày áp dụng"
-                                name="actualStartTime"
-                                rules={[{ required: false, message: "Ngày áp dụng không được để trống!" }]}
-                            >
-                                <DatePicker value={dayjs()} format="YYYY-MM-DD" />
-                            </Form.Item>
-                            <Form.Item
-                                label="Ngày hết hạn"
-                                name="actualEndTime"
-                                rules={[{ required: false, message: "Ngày hết hạn không được để trống!" }]}
-                            >
-                                <DatePicker value={dayjs()} format="YYYY-MM-DD" />
-                            </Form.Item>
-
                             <Form.Item
                                 label="Phần trăm giảm giá"
                                 name="discountPercent"
@@ -295,9 +242,53 @@ const DiscountManagement = () => {
                                 <Input type="number" />
                             </Form.Item>
 
+                        </Col>
+
+                        {/* Cột 2 */}
+                        <Col span={12}>
+                            <Row gutter={24}>
+                                <Col span={12}>
 
 
 
+                                    <Form.Item
+                                        label="Ngày tạo"
+                                        name="createdTime"
+                                        rules={[{ required: false, message: "Ngày tạo không được để trống!" }]}
+                                    >
+                                        <DatePicker value={dayjs()} format="YYYY-MM-DD" />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="Ngày xóa"
+                                        name="deletedTime"
+                                        rules={[{ required: false, message: "Ngày xóa không được để trống!" }]}
+                                    >
+                                        <DatePicker value={dayjs()} format="YYYY-MM-DD" />
+                                    </Form.Item>
+
+
+                                </Col>
+
+
+                                <Col span={12}>
+                                    <Form.Item
+                                        label="Ngày áp dụng"
+                                        name="actualStartTime"
+                                        rules={[{ required: false, message: "Ngày áp dụng không được để trống!" }]}
+                                    >
+                                        <DatePicker value={dayjs()} format="YYYY-MM-DD" />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="Ngày hết hạn"
+                                        name="actualEndTime"
+                                        rules={[{ required: false, message: "Ngày hết hạn không được để trống!" }]}
+                                    >
+                                        <DatePicker value={dayjs()} format="YYYY-MM-DD" />
+                                    </Form.Item>
+
+                                </Col>
+
+                            </Row>
                             {editingDiscount && (
                                 <Form.Item
                                     label="Trạng thái"
@@ -314,7 +305,16 @@ const DiscountManagement = () => {
                             )}
                         </Col>
                     </Row>
-
+                    <Form.Item
+                        label="Mô tả"
+                        name="description"
+                        rules={[{ required: true, message: "Mô tả không được để trống!" }]}
+                    >
+                        <MyEditor
+                            value={form.getFieldValue("description")}
+                            onChange={(value) => form.setFieldsValue({ description: value })}
+                        />
+                    </Form.Item>
                 </Form>
             </Modal>
         </div>
