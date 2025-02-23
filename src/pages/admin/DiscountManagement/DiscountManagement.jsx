@@ -7,8 +7,7 @@ import { Select } from "antd";
 import api from "../../../config/api";
 import dayjs from "dayjs";
 import MyEditor from "../../../component/TinyMCE/MyEditor";
-// import { CKEditor } from "@ckeditor/ckeditor5-react";
-// import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+
 
 
 
@@ -18,6 +17,8 @@ const DiscountManagement = () => {
     const [isModalOpen, setModalOpen] = useState(false);
     const [form] = useForm();
     const [editingDiscount, setEditingDiscount] = useState(null);
+    const [isDetailModalOpen, setDetailModalOpen] = useState(false);
+    const [selectedDiscount, setSelectedDiscount] = useState(null);
 
 
 
@@ -50,9 +51,10 @@ const DiscountManagement = () => {
             dataIndex: 'description',
             key: 'description',
             render: (text) => (
-                <div dangerouslySetInnerHTML={{ __html: text }} />
+                <div dangerouslySetInnerHTML={{ __html: text && typeof text === "string" ? (text.length > 50 ? text.substring(0, 50) + "..." : text) : "" }} />
             ),
         },
+
         {
             title: 'Ngày tạo',
             dataIndex: 'createdTime',
@@ -90,14 +92,39 @@ const DiscountManagement = () => {
             key: 'status',
             render: (status) => statusMapping[status] || "KHÔNG BIẾT",
         },
+        // {
+        //     title: 'Nút điều khiển',
+        //     key: 'actions',
+        //     render: (text, record) => (
+        //         <div className="button">
+        //             <Button onClick={() => handleEditDiscount(record)} style={{ marginRight: 8 }}>
+        //                 <i className="fa-solid fa-pen-to-square"></i>
+        //                 Sửa
+        //             </Button>
+        //             <Popconfirm
+        //                 title="Bạn có muốn xóa giảm giá này không?"
+        //                 onConfirm={() => handleDeleteDiscount(record.discountId)}
+        //                 okText="Có"
+        //                 cancelText="Không"
+        //             >
+        //                 <Button danger>
+        //                     <i className="fa-solid fa-trash"></i>
+        //                     Xóa
+        //                 </Button>
+        //             </Popconfirm>
+        //         </div>
+        //     ),
+        // },
         {
             title: 'Nút điều khiển',
             key: 'actions',
             render: (text, record) => (
                 <div className="button">
-                    <Button onClick={() => handleEditDiscount(record)} style={{ marginRight: 8 }}>
-                        <i className="fa-solid fa-pen-to-square"></i>
-                        Sửa
+                    <Button color="orange" variant="filled"  onClick={() => handleEditDiscount(record)} style={{ marginRight: 8, border: "2px solid "}}>
+                        <i className="fa-solid fa-pen-to-square"></i> Sửa
+                    </Button>
+                    <Button color="primary" variant="filled" type="default" onClick={() => handleViewDetails(record)} style={{ marginRight: 8, border: "2px solid " }}>
+                        <i className="fa-solid fa-eye"></i> Chi tiết
                     </Button>
                     <Popconfirm
                         title="Bạn có muốn xóa giảm giá này không?"
@@ -105,9 +132,8 @@ const DiscountManagement = () => {
                         okText="Có"
                         cancelText="Không"
                     >
-                        <Button danger>
-                            <i className="fa-solid fa-trash"></i>
-                            Xóa
+                        <Button  color="red" variant="filled" style={{ marginRight: 8, border: "2px solid "}} >
+                            <i className="fa-solid fa-trash"></i> Xóa
                         </Button>
                     </Popconfirm>
                 </div>
@@ -136,6 +162,16 @@ const DiscountManagement = () => {
         setModalOpen(false);
         form.resetFields();
         setEditingDiscount(null);
+    };
+
+    const handleViewDetails = (discount) => {
+        setSelectedDiscount(discount);
+        setDetailModalOpen(true);
+    };
+
+    const handleCloseDetailModal = () => {
+        setDetailModalOpen(false);
+        setSelectedDiscount(null);
     };
 
     const handleSubmitForm = async (values) => {
@@ -305,7 +341,7 @@ const DiscountManagement = () => {
                             )}
                         </Col>
                     </Row>
-                    <Form.Item
+                    {/* <Form.Item
                         label="Mô tả"
                         name="description"
                         rules={[{ required: true, message: "Mô tả không được để trống!" }]}
@@ -314,8 +350,41 @@ const DiscountManagement = () => {
                             value={form.getFieldValue("description")}
                             onChange={(value) => form.setFieldsValue({ description: value })}
                         />
+                    </Form.Item> */}
+                    <Form.Item
+                        label="Mô tả"
+                        name="description"
+                        rules={[{ required: true, message: "Mô tả không được để trống!" }]}>
+                        <MyEditor
+                            value={form.getFieldValue("description") || ""}
+                            onChange={(value) => form.setFieldsValue({ description: value })}
+                        />
                     </Form.Item>
+
                 </Form>
+            </Modal>
+             {/* Modal Chi Tiết */}
+             <Modal
+                title="Chi tiết giảm giá"
+                open={isDetailModalOpen}
+                onCancel={handleCloseDetailModal}
+                footer={null}
+                width={800}
+            >
+                {selectedDiscount && (
+                    <div>
+                        <p><strong>ID: </strong> {selectedDiscount.discountId}</p>
+                        <p><strong>Tên giảm giá: </strong> {selectedDiscount.discountName}</p>
+                        <p><strong>Mã giảm giá: </strong> {selectedDiscount.discountCode}</p>
+                        <p><strong>Mô tả: </strong></p>
+                        <div dangerouslySetInnerHTML={{ __html: selectedDiscount.description }} />
+                        <p><strong>Ngày tạo: </strong> {selectedDiscount.createdTime ? dayjs(selectedDiscount.createdTime).format("YYYY-MM-DD") : "N/A"}</p>
+                        <p><strong>Ngày áp dụng: </strong> {selectedDiscount.actualStartTime ? dayjs(selectedDiscount.actualStartTime).format("YYYY-MM-DD") : "N/A"}</p>
+                        <p><strong>Ngày hết hạn: </strong> {selectedDiscount.actualEndTime ? dayjs(selectedDiscount.actualEndTime).format("YYYY-MM-DD") : "N/A"}</p>
+                        <p><strong>Phần trăm giảm giá: </strong> {selectedDiscount.discountPercent}%</p>
+                        <p><strong>Trạng thái: </strong> {statusMapping[selectedDiscount.status]}</p>
+                    </div>
+                )}
             </Modal>
         </div>
     );
