@@ -18,6 +18,7 @@ import MyEditor from "../../../component/TinyMCE/MyEditor";
 import dayjs from "dayjs";
 import "antd/dist/reset.css";
 import { EditOutlined, DeleteOutlined, CheckOutlined } from "@ant-design/icons";
+import { name } from "@cloudinary/url-gen/actions/namedTransformation";
 const ListProduct = () => {
   const [productList, setProductList] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
@@ -27,9 +28,6 @@ const ListProduct = () => {
   const [categories, setCategories] = useState([]);
   const [discounts, setDiscounts] = useState([]);
   const [skinTypes, setSkinTypes] = useState([]);
-  const [selectedIds, setSelectedIds] = useState({});
-  const [editingKey, setEditingKey] = useState(null);
-  const [editedRecord, setEditedRecord] = useState({});
 
   const columns = [
     { title: "ID sản phẩm", dataIndex: "productId", key: "productId" },
@@ -120,13 +118,10 @@ const ListProduct = () => {
     },
   ];
 
-  // const getDisplayName = (id, list) =>
-  //   list.find((item) => String(item.id) === String(id))?.name || "N/A";
-
   const getDisplayName = (id, list) => {
     // Nếu id đã là name, trả về trực tiếp
     if (list.some((item) => item.name === id)) {
-      return id;
+      return item.name;
     }
 
     // Nếu id là số, tìm kiếm trong danh sách
