@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal, Table, Popconfirm } from "antd";
+import { Button, Form, Input, Modal, Table, Popconfirm, Tag } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -18,10 +18,10 @@ const CategoryManagement = () => {
 
 
     const statusMapping = {
-        0: "KHÔNG HOẠT ĐỘNG",
-        1: "CHỜ",
-        2: "HOẠT ĐỘNG",
-        3: "ĐÃ XÓA"
+        0: { text: "KHÔNG HOẠT ĐỘNG", color: "red" },
+        1: { text: "CHỜ", color: "orange" },
+        2: { text: "HOẠT ĐỘNG", color: "green" },
+        3: { text: "ĐÃ XÓA", color: "gray" }
     };
 
     const columns = [
@@ -52,7 +52,10 @@ const CategoryManagement = () => {
             title: 'Trạng thái',
             dataIndex: 'status',
             key: 'status',
-            render: (status) => statusMapping[status] || "KHÔNG BIẾT",
+            render: (status) => {
+                const statusInfo = statusMapping[status] || { text: "KHÔNG BIẾT", color: "default" };
+                return <Tag color={statusInfo.color}>{statusInfo.text}</Tag>;
+            }
         },
         {
             title: 'Nút điều khiển',
@@ -228,7 +231,13 @@ const CategoryManagement = () => {
                         <p><strong>Mô tả: </strong></p>
                         <div dangerouslySetInnerHTML={{ __html: selectedCategory.description }} />
                         <p><strong>Hướng dẫn sử dụng: </strong> {selectedCategory.usageInstruction}</p>
-                        <p><strong>Trạng thái: </strong> {statusMapping[selectedCategory.status]}</p>
+                        <p><strong>Trạng Thái:</strong>
+                            {selectedCategory.status !== undefined ? (
+                                <Tag color={statusMapping[selectedCategory.status]?.color}>
+                                    {statusMapping[selectedCategory.status]?.text}
+                                </Tag>
+                            ) : "Không xác định"}
+                        </p>
                     </div>
                 )}
             </Modal>

@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal, Table, Popconfirm, DatePicker, Col, Row } from "antd";
+import { Button, Form, Input, Modal, Table, Popconfirm, DatePicker, Col, Row, Tag } from "antd";
 import { useForm } from "antd/es/form/Form";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -24,10 +24,10 @@ const DiscountManagement = () => {
 
 
     const statusMapping = {
-        0: "HẾT HẠN",
-        1: "SẮP TỚI",
-        2: "HOẠT ĐỘNG",
-        3: "BỊ VÔ HIỆU HÓA"
+        0: { text: "HẾT HẠN", color: "red" },
+        1: { text: "SẮP TỚI", color: "orange" },
+        2: { text: "HOẠT ĐỘNG", color: "green" },
+        3: { text: "BỊ VÔ HIỆU HÓA", color: "gray" }
     };
 
     const columns = [
@@ -90,7 +90,10 @@ const DiscountManagement = () => {
             title: 'Trạng thái',
             dataIndex: 'status',
             key: 'status',
-            render: (status) => statusMapping[status] || "KHÔNG BIẾT",
+            render: (status) => {
+                const statusInfo = statusMapping[status] || { text: "KHÔNG BIẾT", color: "default" };
+                return <Tag color={statusInfo.color}>{statusInfo.text}</Tag>;
+            }
         },
         // {
         //     title: 'Nút điều khiển',
@@ -120,7 +123,7 @@ const DiscountManagement = () => {
             key: 'actions',
             render: (text, record) => (
                 <div className="button">
-                    <Button color="orange" variant="filled"  onClick={() => handleEditDiscount(record)} style={{ marginRight: 8, border: "2px solid "}}>
+                    <Button color="orange" variant="filled" onClick={() => handleEditDiscount(record)} style={{ marginRight: 8, border: "2px solid " }}>
                         <i className="fa-solid fa-pen-to-square"></i> Sửa
                     </Button>
                     <Button color="primary" variant="filled" type="default" onClick={() => handleViewDetails(record)} style={{ marginRight: 8, border: "2px solid " }}>
@@ -132,7 +135,7 @@ const DiscountManagement = () => {
                         okText="Có"
                         cancelText="Không"
                     >
-                        <Button  color="red" variant="filled" style={{ marginRight: 8, border: "2px solid "}} >
+                        <Button color="red" variant="filled" style={{ marginRight: 8, border: "2px solid " }} >
                             <i className="fa-solid fa-trash"></i> Xóa
                         </Button>
                     </Popconfirm>
@@ -363,8 +366,8 @@ const DiscountManagement = () => {
 
                 </Form>
             </Modal>
-             {/* Modal Chi Tiết */}
-             <Modal
+            {/* Modal Chi Tiết */}
+            <Modal
                 title="Chi tiết giảm giá"
                 open={isDetailModalOpen}
                 onCancel={handleCloseDetailModal}
@@ -382,7 +385,13 @@ const DiscountManagement = () => {
                         <p><strong>Ngày áp dụng: </strong> {selectedDiscount.actualStartTime ? dayjs(selectedDiscount.actualStartTime).format("YYYY-MM-DD") : "N/A"}</p>
                         <p><strong>Ngày hết hạn: </strong> {selectedDiscount.actualEndTime ? dayjs(selectedDiscount.actualEndTime).format("YYYY-MM-DD") : "N/A"}</p>
                         <p><strong>Phần trăm giảm giá: </strong> {selectedDiscount.discountPercent}%</p>
-                        <p><strong>Trạng thái: </strong> {statusMapping[selectedDiscount.status]}</p>
+                        <p><strong>Trạng Thái:</strong>
+                            {selectedDiscount.status !== undefined ? (
+                                <Tag color={statusMapping[selectedDiscount.status]?.color}>
+                                    {statusMapping[selectedDiscount.status]?.text}
+                                </Tag>
+                            ) : "Không xác định"}
+                        </p>
                     </div>
                 )}
             </Modal>
