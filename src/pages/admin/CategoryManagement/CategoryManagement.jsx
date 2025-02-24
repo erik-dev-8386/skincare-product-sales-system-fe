@@ -59,7 +59,7 @@ const CategoryManagement = () => {
             key: 'actions',
             render: (text, record) => (
                 <div className="button">
-                    <Button color="orange" variant="filled"  onClick={() => handleEditCategory(record)} style={{ marginRight: 8, border: "2px solid "}}>
+                    <Button color="orange" variant="filled" onClick={() => handleEditCategory(record)} style={{ marginRight: 8, border: "2px solid " }}>
                         <i className="fa-solid fa-pen-to-square"></i> Sửa
                     </Button>
                     <Button color="primary" variant="filled" type="default" onClick={() => handleViewDetails(record)} style={{ marginRight: 8, border: "2px solid " }}>
@@ -71,7 +71,7 @@ const CategoryManagement = () => {
                         okText="Có"
                         cancelText="Không"
                     >
-                        <Button  color="red" variant="filled" style={{ marginRight: 8, border: "2px solid "}} >
+                        <Button color="red" variant="filled" style={{ marginRight: 8, border: "2px solid " }} >
                             <i className="fa-solid fa-trash"></i> Xóa
                         </Button>
                     </Popconfirm>
@@ -158,8 +158,8 @@ const CategoryManagement = () => {
             <ToastContainer />
             <h1>Quản lý loại sản phẩm</h1>
             <Button type="primary" onClick={handleOpenModal}>
-            <i class="fa-solid fa-plus"></i>
-            Thêm loại sản phẩm mới
+                <i class="fa-solid fa-plus"></i>
+                Thêm loại sản phẩm mới
             </Button>
             <Table dataSource={categoryList} columns={columns} rowKey="categoryId" style={{ marginTop: 16 }} />
             <Modal
@@ -195,7 +195,7 @@ const CategoryManagement = () => {
                     >
                         <Input />
                     </Form.Item>
-                  
+
 
                     {editingCategory && (
                         <Form.Item
@@ -213,25 +213,25 @@ const CategoryManagement = () => {
                     )}
                 </Form>
             </Modal>
-             {/* Modal Chi Tiết */}
-                         <Modal
-                            title="Chi tiết loại sản phẩm"
-                            open={isDetailModalOpen}
-                            onCancel={handleCloseDetailModal}
-                            footer={null}
-                            width={800}
-                        >
-                            {selectedCategory && (
-                                <div>
-                                    <p><strong>ID: </strong> {selectedCategory.categoryId}</p>
-                                    <p><strong>Tên giảm giá: </strong> {selectedCategory.categoryName}</p>
-                                    <p><strong>Mô tả: </strong></p>
-                                    <div dangerouslySetInnerHTML={{ __html: selectedCategory.description }} />
-                                    <p><strong>Hướng dẫn sử dụng: </strong> {selectedCategory.usageInstruction}</p>
-                                    <p><strong>Trạng thái: </strong> {statusMapping[selectedCategory.status]}</p>
-                                </div>
-                            )}
-                        </Modal>
+            {/* Modal Chi Tiết */}
+            <Modal
+                title="Chi tiết loại sản phẩm"
+                open={isDetailModalOpen}
+                onCancel={handleCloseDetailModal}
+                footer={null}
+                width={800}
+            >
+                {selectedCategory && (
+                    <div>
+                        <p><strong>ID: </strong> {selectedCategory.categoryId}</p>
+                        <p><strong>Tên giảm giá: </strong> {selectedCategory.categoryName}</p>
+                        <p><strong>Mô tả: </strong></p>
+                        <div dangerouslySetInnerHTML={{ __html: selectedCategory.description }} />
+                        <p><strong>Hướng dẫn sử dụng: </strong> {selectedCategory.usageInstruction}</p>
+                        <p><strong>Trạng thái: </strong> {statusMapping[selectedCategory.status]}</p>
+                    </div>
+                )}
+            </Modal>
         </div>
     );
 };

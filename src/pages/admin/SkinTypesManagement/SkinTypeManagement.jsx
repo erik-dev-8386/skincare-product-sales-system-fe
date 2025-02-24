@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal, Table, Popconfirm, Upload, Select } from "antd";
+import { Button, Form, Input, Modal, Table, Popconfirm, Upload, Select, Col, Row } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { UploadOutlined } from "@ant-design/icons";
 import { useEffect, useState, useCallback } from "react";
@@ -195,6 +195,7 @@ const SkinTypeManagement = () => {
                 onOk={() => form.submit()}
                 okText={editingSkinType ? "Lưu thay đổi" : "Tạo"}
                 cancelText="Hủy"
+                width={800}
             >
                 <Form form={form} labelCol={{ span: 24 }} onFinish={handleSubmitForm}>
                     <Form.Item label="Tên loại da" name="skinName" rules={[{ required: true, message: "Tên loại da không được để trống!" }]}>
@@ -209,12 +210,16 @@ const SkinTypeManagement = () => {
                             onChange={(value) => form.setFieldsValue({ description: value })}
                         />
                     </Form.Item>
+                    <Row gutter={16}>
+                    <Col span={12}>
                     <Form.Item label="Điểm tối thiểu" name="minMark">
                         <Input type="number" />
                     </Form.Item>
                     <Form.Item label="Điểm tối đa" name="maxMark">
                         <Input type="number" />
                     </Form.Item>
+                    </Col>
+                    <Col span={12}>
                     <Form.Item label="Tải hình ảnh lên">
                         <Upload
                             beforeUpload={(file) => {
@@ -241,7 +246,10 @@ const SkinTypeManagement = () => {
                             </Select>
                         </Form.Item>
                     )}
+                    </Col>
+                    </Row>
                 </Form>
+                
             </Modal>
             <Modal
                 title="Chi tiết loại da"
