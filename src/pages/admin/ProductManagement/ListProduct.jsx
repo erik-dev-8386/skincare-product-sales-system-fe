@@ -17,6 +17,8 @@ import api from "../../../config/api";
 import MyEditor from "../../../component/TinyMCE/MyEditor";
 import dayjs from "dayjs";
 import "antd/dist/reset.css";
+import { EditOutlined, DeleteOutlined, CheckOutlined } from "@ant-design/icons";
+import { name } from "@cloudinary/url-gen/actions/namedTransformation";
 const ListProduct = () => {
   const [productList, setProductList] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
@@ -26,7 +28,6 @@ const ListProduct = () => {
   const [categories, setCategories] = useState([]);
   const [discounts, setDiscounts] = useState([]);
   const [skinTypes, setSkinTypes] = useState([]);
-  const [selectedIds, setSelectedIds] = useState({});
 
   const columns = [
     { title: "ID sản phẩm", dataIndex: "productId", key: "productId" },
@@ -117,8 +118,15 @@ const ListProduct = () => {
     },
   ];
 
-  const getDisplayName = (id, list) =>
-    list.find((item) => String(item.id) === String(id))?.name || "N/A";
+  const getDisplayName = (id, list) => {
+    // Nếu id đã là name, trả về trực tiếp
+    if (list.some((item) => item.name === id)) {
+      return item.name;
+    }
+
+    // Nếu id là số, tìm kiếm trong danh sách
+    return list.find((item) => String(item.id) === String(id))?.name || id;
+  };
 
   // const fetchData = async () => {
   //     try {
@@ -337,6 +345,29 @@ const ListProduct = () => {
       toast.error("Xóa sản phẩm không thành công!");
     }
   };
+
+  // // them moi thu
+  // const isEditing = (record) => record.key === editingKey;
+
+  // const edit = (record) => {
+  //   setEditingKey(record.key);
+  //   setEditedRecord({ ...record });
+  // };
+
+  // const save = () => {
+  //   setProducts((prev) =>
+  //     prev.map((item) => (item.key === editingKey ? { ...editedRecord } : item))
+  //   );
+  //   setEditingKey(null);
+  // };
+
+  // const cancel = () => {
+  //   setEditingKey(null);
+  // };
+
+  // const handleInputChange = (e, field) => {
+  //   setEditedRecord({ ...editedRecord, [field]: e.target.value });
+  // };
 
   return (
     <div>
