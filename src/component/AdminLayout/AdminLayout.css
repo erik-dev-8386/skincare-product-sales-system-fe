@@ -15,7 +15,30 @@
     height: 150px;
     border-radius: 50%;
 }
-.bieudo{
-    height: 500px;
-    width: 600px;
+
+
+/* Make the sidebar (Sider) scrollable */
+.sider-menu {
+    height: calc(100vh - 120px); /* Adjust height to fit viewport, accounting for other elements */
+    overflow-y: auto;
+}
+
+/* Make the Outlet (Content area) scrollable */
+.content-container {
+    height: calc(100vh - 64px); /* Adjust based on header height */
+    overflow-y: auto;
+    padding: 16px;
+    background: #f0f2f5; /* Optional: Background color */
+}
+
+/* Hide scrollbar in WebKit-based browsers */
+.sider-menu::-webkit-scrollbar,
+.content-container::-webkit-scrollbar {
+    width: 5px;
+}
+
+.sider-menu::-webkit-scrollbar-thumb,
+.content-container::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
 }

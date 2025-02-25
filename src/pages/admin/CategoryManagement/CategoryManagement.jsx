@@ -161,7 +161,7 @@ const CategoryManagement = () => {
             <ToastContainer />
             <h1>Quản lý loại sản phẩm</h1>
             <Button type="primary" onClick={handleOpenModal}>
-                <i class="fa-solid fa-plus"></i>
+                <i className="fa-solid fa-plus"></i>
                 Thêm loại sản phẩm mới
             </Button>
             <Table dataSource={categoryList} columns={columns} rowKey="categoryId" style={{ marginTop: 16 }} />

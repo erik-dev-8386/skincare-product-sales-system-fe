@@ -277,8 +277,8 @@ const SkinTypeManagement = () => {
                         <p><strong>Ảnh: </strong> <img src={selectedSkinType.skinTypeImages} alt="Skin Type" style={{ width: 100 }} /></p>
                         <p><strong>Trạng Thái:</strong>
                             {selectedSkinType.status !== undefined ? (
-                                <Tag color={statusMapping[selectedSkinType.status]?.color}>
-                                    {statusMapping[selectedSkinType.status]?.text}
+                                <Tag color={statusColors[selectedSkinType.status]?.color}>
+                                    {statusColors[selectedSkinType.status]?.text}
                                 </Tag>
                             ) : "Không xác định"}
                         </p>
