@@ -39,9 +39,11 @@ function App() {
 
   return (
     <Routes>
-      <Route path="/" element={<Layout />} >
-        {/* <Route path='/about-us' element={<AboutUs />} /> */}
+      {/* user */}
+      <Route path="/" element={<Layout />} > 
+        
         <Route index element={<HomePage />} />
+        <Route path='/about-us' element={<AboutUs />} />
         <Route path='/about-me' element={<AboutMe />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-of-use" element={<TermsOfUse />} />
@@ -57,13 +59,14 @@ function App() {
         <Route path='/listskincare/Nhaycam' element={<Nhaycam />} />
         <Route path='/listskincare/Thuong' element={<Thuong />} />
         <Route path='/question' element={<Question />} />
-        <Route path='*' element={<NotFound />} />
+
       </Route>
-      
+      {/* login */}
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path='/login-and-signup' element={<LoginAndSignup />} />
 
+      {/* admin */}
       <Route path='/discount-management' element={<DiscountManagement />} />
       <Route path='/category-management' element={<CategoryManagement />} />
       <Route path='/brand-management' element={<BrandManagement />} />
@@ -73,10 +76,10 @@ function App() {
       <Route path='/create-staff' element={<CreateStaff />} />
       <Route path='/list-user' element={<UserManagement />} />
 
-      
 
 
-      
+
+      <Route path='*' element={<NotFound />} />
 
     </Routes>
   );
