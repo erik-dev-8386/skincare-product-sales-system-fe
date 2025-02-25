@@ -59,32 +59,6 @@ const ListProduct = () => {
     // { title: "Ngày hết hạn", dataIndex: "exp", key: "exp" },
     // { title: "Trọng lượng", dataIndex: "netWeight", key: "netWeight" },
 
-    // Hiển thị tên thay vì ID bằng cách tìm trong danh sách
-    // {
-    //     title: "Brand",
-    //     dataIndex: "brandId",
-    //     key: "brandId",
-    //     render: (brandId) => brands.find((b) => b.id === brandId)?.name || "N/A",
-    // },
-    // {
-    //     title: "Skin Type",
-    //     dataIndex: "skinTypeId",
-    //     key: "skinTypeId",
-    //     render: (skinTypeId) => skinTypes.find((s) => s.id === skinTypeId)?.name || "N/A",
-    // },
-    // {
-    //     title: "Category",
-    //     dataIndex: "categoryId",
-    //     key: "categoryId",
-    //     render: (categoryId) => categories.find((c) => c.id === categoryId)?.name || "N/A",
-    // },
-    // {
-    //     title: "Discount",
-    //     dataIndex: "discountId",
-    //     key: "discountId",
-    //     render: (discountId) => discounts.find((d) => d.id === discountId)?.name || "N/A",
-    // },
-
     {
       title: "Thương hiệu",
       dataIndex: "brandId",
@@ -151,59 +125,8 @@ const ListProduct = () => {
   ];
 
   const getDisplayName = (id, list) => {
-    // Nếu id đã là name, trả về trực tiếp
-    if (list.some((item) => item.name === id)) {
-      return item.name;
-    }
-
-    // Nếu id là số, tìm kiếm trong danh sách
     return list.find((item) => String(item.id) === String(id))?.name || id;
   };
-
-  // const fetchData = async () => {
-  //     try {
-  //         const [productsRes, brandsRes, categoriesRes, discountsRes, skinTypesRes] = await Promise.all([
-  //             api.get("/products"),
-  //             api.get("/brands/list-name-brands"),
-  //             api.get("/categories/list-name-categories"),
-  //             api.get("/discounts/list-name-discounts"),
-  //             api.get("/skin-types/list-name-skin-types"),
-  //         ]);
-  //         setProductList(productsRes.data);
-  //         setBrands(brandsRes.data);
-  //         setCategories(categoriesRes.data);
-  //         setDiscounts(discountsRes.data);
-  //         setSkinTypes(skinTypesRes.data);
-  //     } catch (error) {
-  //         console.error("Error fetching data:", error);
-  //     }
-  // };
-
-  // const fetchData = async () => {
-  //     try {
-  //         const [productsRes, brandsRes, categoriesRes, discountsRes, skinTypesRes] = await Promise.all([
-  //             api.get("/products"),
-  //             api.get("/brands/list-name-brands"),
-  //             api.get("/categories/list-name-categories"),
-  //             api.get("/discounts/list-name-discounts"),
-  //             api.get("/skin-types/list-name-skin-types"),
-  //         ]);
-
-  //         console.log("Products:", productsRes.data);
-  //         console.log("Brands:", brandsRes.data);
-  //         console.log("Categories:", categoriesRes.data);
-  //         console.log("Discounts:", discountsRes.data);
-  //         console.log("SkinTypes:", skinTypesRes.data);
-
-  //         setProductList(productsRes.data);
-  //         setBrands(brandsRes.data);
-  //         setCategories(categoriesRes.data);
-  //         setDiscounts(discountsRes.data);
-  //         setSkinTypes(skinTypesRes.data);
-  //     } catch (error) {
-  //         console.error("Error fetching data:", error);
-  //     }
-  // };
 
   const fetchData = async () => {
     try {
@@ -276,15 +199,6 @@ const ListProduct = () => {
     setEditingProduct(null);
   };
 
-  //   const fetchIdByName = async (name, type) => {
-  //     try {
-  //       const response = await api.get(`/${type}/name/${name}`);
-  //       setSelectedIds((prev) => ({ ...prev, [type]: response.data }));
-  //     } catch (error) {
-  //       console.error(`Error fetching ${type} ID:`, error);
-  //     }
-  //   };
-
   const handleViewDetails = (productList) => {
     setSelectedProduct(productList);
     setDetailModalOpen(true);
@@ -303,51 +217,6 @@ const ListProduct = () => {
     };
     return map[type]?.find((item) => item.name === name)?.id || null;
   };
-
-  // const handleSubmitForm = async (values) => {
-  //     try {
-  //         const productData = { ...values, ...selectedIds };
-  //         const response = editingProduct
-  //             ? await api.put(`/products/${editingProduct.productId}`, productData)
-  //             : await api.post("/products", productData);
-
-  //         toast.success(editingProduct ? "Cập nhật sản phẩm thành công!" : "Thêm sản phẩm thành công!");
-  //         fetchData();
-  //         handleCloseModal();
-  //     } catch (error) {
-  //         console.error("Lỗi khi gửi request:", error.response?.data || error.message);
-  //         toast.error("Xử lý sản phẩm không thành công!");
-  //     }
-  // };
-
-  //   const handleSubmitForm = async (values) => {
-  //     try {
-  //       const productData = {
-  //         ...values,
-  //         brandId: selectedIds.brands,
-  //         skinTypeId: selectedIds["skin-types"],
-  //         categoryId: selectedIds.categories,
-  //         discountId: selectedIds.discounts,
-  //       };
-
-  //       if (editingProduct) {
-  //         await api.put(`/products/${editingProduct.productId}`, productData);
-  //         toast.success("Cập nhật sản phẩm thành công!");
-  //       } else {
-  //         await api.post("/products", productData);
-  //         toast.success("Thêm sản phẩm thành công!");
-  //       }
-
-  //       handleCloseModal();
-  //       await fetchData(); // Gọi lại danh sách để cập nhật tên
-  //     } catch (error) {
-  //       console.error(
-  //         "Lỗi khi gửi request:",
-  //         error.response?.data || error.message
-  //       );
-  //       toast.error("Xử lý sản phẩm không thành công!");
-  //     }
-  //   };
 
   const handleSubmitForm = async (values) => {
     try {
@@ -421,29 +290,6 @@ const ListProduct = () => {
     }
   };
 
-  // // them moi thu
-  // const isEditing = (record) => record.key === editingKey;
-
-  // const edit = (record) => {
-  //   setEditingKey(record.key);
-  //   setEditedRecord({ ...record });
-  // };
-
-  // const save = () => {
-  //   setProducts((prev) =>
-  //     prev.map((item) => (item.key === editingKey ? { ...editedRecord } : item))
-  //   );
-  //   setEditingKey(null);
-  // };
-
-  // const cancel = () => {
-  //   setEditingKey(null);
-  // };
-
-  // const handleInputChange = (e, field) => {
-  //   setEditedRecord({ ...editedRecord, [field]: e.target.value });
-  // };
-
   return (
     <div>
       <ToastContainer />
@@ -512,37 +358,37 @@ const ListProduct = () => {
             <Input type="number" />
           </Form.Item>
           <Form.Item label="Thương hiệu" name="brandName">
-            <Select>
+            <Select onChange={(value) => fetchIdByName(value, "brands")}>
               {brands.map((brand) => (
-                <Select.Option key={brand.id} value={brand.name}>
-                  {brand.name}
+                <Select.Option key={brand} value={brand}>
+                  {brand}
                 </Select.Option>
               ))}
             </Select>
           </Form.Item>
           <Form.Item label="Loại da" name="skinTypeName">
-            <Select>
-              {skinTypes.map((type) => (
-                <Select.Option key={type.id} value={type.name}>
-                  {type.name}
+            <Select onChange={(value) => fetchIdByName(value, "skin-types")}>
+              {skinTypes.map((skinType) => (
+                <Select.Option key={skinType} value={skinType}>
+                  {skinType}
                 </Select.Option>
               ))}
             </Select>
           </Form.Item>
           <Form.Item label="Loại sản phẩm" name="categoryName">
-            <Select>
+            <Select onChange={(value) => fetchIdByName(value, "categories")}>
               {categories.map((category) => (
-                <Select.Option key={category.id} value={category.name}>
-                  {category.name}
+                <Select.Option key={category} value={category}>
+                  {category}
                 </Select.Option>
               ))}
             </Select>
           </Form.Item>
           <Form.Item label="Giảm giá" name="discountName">
-            <Select>
+            <Select onChange={(value) => fetchIdByName(value, "discounts")}>
               {discounts.map((discount) => (
-                <Select.Option key={discount.id} value={discount.name}>
-                  {discount.name}
+                <Select.Option key={discount} value={discount}>
+                  {discount}
                 </Select.Option>
               ))}
             </Select>
