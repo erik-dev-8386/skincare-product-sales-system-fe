@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal, Table, Popconfirm } from "antd";
+import { Button, Form, Input, Modal, Table, Popconfirm, Tag } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -18,10 +18,10 @@ const CategoryManagement = () => {
 
 
     const statusMapping = {
-        0: "KHÔNG HOẠT ĐỘNG",
-        1: "CHỜ",
-        2: "HOẠT ĐỘNG",
-        3: "ĐÃ XÓA"
+        0: { text: "KHÔNG HOẠT ĐỘNG", color: "red" },
+        1: { text: "CHỜ", color: "orange" },
+        2: { text: "HOẠT ĐỘNG", color: "green" },
+        3: { text: "ĐÃ XÓA", color: "gray" }
     };
 
     const columns = [
@@ -52,14 +52,17 @@ const CategoryManagement = () => {
             title: 'Trạng thái',
             dataIndex: 'status',
             key: 'status',
-            render: (status) => statusMapping[status] || "KHÔNG BIẾT",
+            render: (status) => {
+                const statusInfo = statusMapping[status] || { text: "KHÔNG BIẾT", color: "default" };
+                return <Tag color={statusInfo.color}>{statusInfo.text}</Tag>;
+            }
         },
         {
             title: 'Nút điều khiển',
             key: 'actions',
             render: (text, record) => (
                 <div className="button">
-                    <Button color="orange" variant="filled"  onClick={() => handleEditCategory(record)} style={{ marginRight: 8, border: "2px solid "}}>
+                    <Button color="orange" variant="filled" onClick={() => handleEditCategory(record)} style={{ marginRight: 8, border: "2px solid " }}>
                         <i className="fa-solid fa-pen-to-square"></i> Sửa
                     </Button>
                     <Button color="primary" variant="filled" type="default" onClick={() => handleViewDetails(record)} style={{ marginRight: 8, border: "2px solid " }}>
@@ -71,7 +74,7 @@ const CategoryManagement = () => {
                         okText="Có"
                         cancelText="Không"
                     >
-                        <Button  color="red" variant="filled" style={{ marginRight: 8, border: "2px solid "}} >
+                        <Button color="red" variant="filled" style={{ marginRight: 8, border: "2px solid " }} >
                             <i className="fa-solid fa-trash"></i> Xóa
                         </Button>
                     </Popconfirm>
@@ -158,8 +161,8 @@ const CategoryManagement = () => {
             <ToastContainer />
             <h1>Quản lý loại sản phẩm</h1>
             <Button type="primary" onClick={handleOpenModal}>
-            <i class="fa-solid fa-plus"></i>
-            Thêm loại sản phẩm mới
+                <i class="fa-solid fa-plus"></i>
+                Thêm loại sản phẩm mới
             </Button>
             <Table dataSource={categoryList} columns={columns} rowKey="categoryId" style={{ marginTop: 16 }} />
             <Modal
@@ -195,7 +198,7 @@ const CategoryManagement = () => {
                     >
                         <Input />
                     </Form.Item>
-                  
+
 
                     {editingCategory && (
                         <Form.Item
@@ -213,25 +216,31 @@ const CategoryManagement = () => {
                     )}
                 </Form>
             </Modal>
-             {/* Modal Chi Tiết */}
-                         <Modal
-                            title="Chi tiết loại sản phẩm"
-                            open={isDetailModalOpen}
-                            onCancel={handleCloseDetailModal}
-                            footer={null}
-                            width={800}
-                        >
-                            {selectedCategory && (
-                                <div>
-                                    <p><strong>ID: </strong> {selectedCategory.categoryId}</p>
-                                    <p><strong>Tên giảm giá: </strong> {selectedCategory.categoryName}</p>
-                                    <p><strong>Mô tả: </strong></p>
-                                    <div dangerouslySetInnerHTML={{ __html: selectedCategory.description }} />
-                                    <p><strong>Hướng dẫn sử dụng: </strong> {selectedCategory.usageInstruction}</p>
-                                    <p><strong>Trạng thái: </strong> {statusMapping[selectedCategory.status]}</p>
-                                </div>
-                            )}
-                        </Modal>
+            {/* Modal Chi Tiết */}
+            <Modal
+                title="Chi tiết loại sản phẩm"
+                open={isDetailModalOpen}
+                onCancel={handleCloseDetailModal}
+                footer={null}
+                width={800}
+            >
+                {selectedCategory && (
+                    <div>
+                        <p><strong>ID: </strong> {selectedCategory.categoryId}</p>
+                        <p><strong>Tên giảm giá: </strong> {selectedCategory.categoryName}</p>
+                        <p><strong>Mô tả: </strong></p>
+                        <div dangerouslySetInnerHTML={{ __html: selectedCategory.description }} />
+                        <p><strong>Hướng dẫn sử dụng: </strong> {selectedCategory.usageInstruction}</p>
+                        <p><strong>Trạng Thái:</strong>
+                            {selectedCategory.status !== undefined ? (
+                                <Tag color={statusMapping[selectedCategory.status]?.color}>
+                                    {statusMapping[selectedCategory.status]?.text}
+                                </Tag>
+                            ) : "Không xác định"}
+                        </p>
+                    </div>
+                )}
+            </Modal>
         </div>
     );
 };

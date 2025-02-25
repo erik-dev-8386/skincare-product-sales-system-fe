@@ -1,4 +1,13 @@
-import { Button, Form, Input, Modal, Table, Popconfirm, Select } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  Modal,
+  Table,
+  Popconfirm,
+  Select,
+  Tag,
+} from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
 import api from "../../../config/api";
@@ -10,10 +19,12 @@ const BrandManagement = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [form] = useForm();
   const [editingBrand, setEditingBrand] = useState(null);
+  const [isDetailModalOpen, setDetailModalOpen] = useState(false);
+  const [selectedBrand, setSelectedBrand] = useState(null);
 
   const statusMapping = {
-    1: "ACTIVE",
-    2: "INACTIVE",
+    0: { text: "KHÔNG HOẠT ĐỘNG", color: "red" },
+    1: { text: "HOẠT ĐỘNG", color: "green" },
   };
 
   const columns = [
@@ -31,9 +42,21 @@ const BrandManagement = () => {
       title: "Mô tả",
       dataIndex: "description",
       key: "description",
+      render: (text) => (
+        <div
+          dangerouslySetInnerHTML={{
+            __html:
+              text && typeof text === "string"
+                ? text.length > 50
+                  ? text.substring(0, 50) + "..."
+                  : text
+                : "",
+          }}
+        />
+      ),
     },
     {
-      title: "Đất nước",
+      title: "Quốc gia",
       dataIndex: "country",
       key: "country",
     },
@@ -41,26 +64,47 @@ const BrandManagement = () => {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
-      render: (status) => statusMapping[status] || "UNKNOWN",
+      render: (status) => {
+        const statusInfo = statusMapping[status] || {
+          text: "KHÔNG BIẾT",
+          color: "default",
+        };
+        return <Tag color={statusInfo.color}>{statusInfo.text}</Tag>;
+      },
     },
     {
       title: "Nút điều khiển",
       key: "actions",
-      render: (_, record) => (
-        <div>
+      render: (text, record) => (
+        <div className="button">
           <Button
+            color="orange"
+            variant="filled"
             onClick={() => handleEditBrand(record)}
-            style={{ marginRight: 8 }}
+            style={{ marginRight: 8, border: "2px solid " }}
           >
             <i className="fa-solid fa-pen-to-square"></i> Sửa
           </Button>
-          <Popconfirm
-            title="Are you sure you want to delete this brand?"
-            onConfirm={() => handleDeleteBrand(record.brandName)}
-            okText="Yes"
-            cancelText="No"
+          <Button
+            color="primary"
+            variant="filled"
+            type="default"
+            onClick={() => handleViewDetails(record)}
+            style={{ marginRight: 8, border: "2px solid " }}
           >
-            <Button danger>
+            <i className="fa-solid fa-eye"></i> Chi tiết
+          </Button>
+          <Popconfirm
+            title="Bạn có muốn xóa thương hiệu này không?"
+            onConfirm={() => handleDeleteBrand(record.brandId)}
+            okText="Có"
+            cancelText="Không"
+          >
+            <Button
+              color="red"
+              variant="filled"
+              style={{ marginRight: 8, border: "2px solid " }}
+            >
               <i className="fa-solid fa-trash"></i> Xóa
             </Button>
           </Popconfirm>
@@ -92,6 +136,16 @@ const BrandManagement = () => {
     setEditingBrand(null);
   };
 
+  const handleViewDetails = (brand) => {
+    setSelectedBrand(brand);
+    setDetailModalOpen(true);
+  };
+
+  const handleCloseDetailModal = () => {
+    setDetailModalOpen(false);
+    setSelectedBrand(null);
+  };
+
   const handleSubmitForm = async (values) => {
     if (editingBrand) {
       try {
@@ -106,11 +160,11 @@ const BrandManagement = () => {
       try {
         const { status, ...newBrands } = values;
         await api.post("/brands", newBrands);
-        toast.success("Brand added successfully!");
+        toast.success("Đã thêm thương hiệu mới thành công!");
         fetchBrands();
         handleCloseModal();
       } catch (error) {
-        toast.error("Failed to add brand!");
+        toast.error("Thêm thương hiệu mới không thành công!");
       }
     }
   };
@@ -124,10 +178,10 @@ const BrandManagement = () => {
   const handleDeleteBrand = async (brandId) => {
     try {
       await api.delete(`/brands/${brandId}`);
-      toast.success("Brand deleted successfully!");
+      toast.success("Đã xóa thương hiệu này thành công!");
       fetchBrands();
     } catch (error) {
-      toast.error("Failed to delete brand!");
+      toast.error("Xóa thương hiệu này không thành công!");
     }
   };
 
@@ -145,10 +199,12 @@ const BrandManagement = () => {
         style={{ marginTop: 16 }}
       />
       <Modal
-        title={editingBrand ? "Edit Brand" : "Create New Brand"}
+        title={editingBrand ? "Chỉnh sửa thương hiệu" : "Tạo thương hiệu mới"}
         open={isModalOpen}
         onCancel={handleCloseModal}
         onOk={() => form.submit()}
+        okText={editingBrand ? "Lưu thay đổi" : "Tạo"}
+        cancelText="Hủy"
       >
         <Form form={form} labelCol={{ span: 24 }} onFinish={handleSubmitForm}>
           <Form.Item
@@ -170,25 +226,69 @@ const BrandManagement = () => {
           </Form.Item>
 
           <Form.Item
-            label="Đất nước"
+            label="Quốc gia"
             name="country"
-            rules={[{ required: true, message: "Country can't be empty!" }]}
+            rules={[
+              { required: true, message: "Quốc gia không được để trống" },
+            ]}
           >
             <Input />
           </Form.Item>
+
           {editingBrand && (
             <Form.Item
               label="Trạng thái"
               name="status"
-              rules={[{ required: true, message: "Status can't be empty!" }]}
+              rules={[
+                { required: true, message: "Trạng thái không được bỏ trống!" },
+              ]}
             >
               <Select>
-                <Option value={1}>ACTIVE</Option>
-                <Option value={2}>INACTIVE</Option>
+                <Option value={1}>HOẠT ĐỘNG</Option>
+                <Option value={0}>KHÔNG HOẠT ĐỘNG</Option>
               </Select>
             </Form.Item>
           )}
         </Form>
+      </Modal>
+
+      {/* Modal Chi Tiết */}
+      <Modal
+        title="Chi tiết loại sản phẩm"
+        open={isDetailModalOpen}
+        onCancel={handleCloseDetailModal}
+        footer={null}
+        width={800}
+      >
+        {selectedBrand && (
+          <div>
+            <p>
+              <strong>BrandID: </strong> {selectedBrand.brandId}
+            </p>
+            <p>
+              <strong>Tên thương hiệu: </strong> {selectedBrand.brandName}
+            </p>
+            <p>
+              <strong>Mô tả: </strong>
+            </p>
+            <div
+              dangerouslySetInnerHTML={{ __html: selectedBrand.description }}
+            />
+            <p>
+              <strong>Quốc gia: </strong> {selectedBrand.country}
+            </p>
+            <p>
+              <strong>Trạng Thái:</strong>
+              {selectedBrand.status !== undefined ? (
+                <Tag color={statusMapping[selectedBrand.status]?.color}>
+                  {statusMapping[selectedBrand.status]?.text}
+                </Tag>
+              ) : (
+                "Không xác định"
+              )}
+            </p>
+          </div>
+        )}
       </Modal>
     </div>
   );
