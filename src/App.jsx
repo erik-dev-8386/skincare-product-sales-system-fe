@@ -24,7 +24,6 @@ import DiscountManagement from './pages/admin/DiscountManagement/DiscountManagem
 import CategoryManagement from './pages/admin/CategoryManagement/CategoryManagement.jsx';
 import BrandManagement from './pages/admin/BrandManagement/BrandManagement.jsx';
 import SkinTypeManagement from './pages/admin/SkinTypesManagement/SkinTypeManagement.jsx'
-import AdminDashboard from './component/AdminDashboard/AdminDashboard.jsx'
 import ListStaff from './pages/admin/StaffManagement/ListStaff.jsx';
 import CreateStaff from './pages/admin/StaffManagement/CreateStaff.jsx';
 import UserManagement from './pages/admin/UserManagement/UserManagement.jsx'
@@ -34,14 +33,18 @@ import CustomerDiscounts from './pages/users/discount/CustomerDiscounts.jsx';
 import NotFound from './pages/users/NotFound/NotFound.jsx';
 import AboutMe from './pages/users/aboutUs/AboutMe.jsx';
 import Layout from './component/Layout/Layout.jsx';
+import ListProduct from './pages/admin/ProductManagement/ListProduct.jsx';
+import DashBoard from './pages/admin/DashBoard/DashBoard.jsx';
+import AdminLayout from './component/AdminLayout/AdminLayout.jsx';
+
 function App() {
 
 
   return (
     <Routes>
       {/* user */}
-      <Route path="/" element={<Layout />} > 
-        
+      <Route path="/" element={<Layout />} >
+
         <Route index element={<HomePage />} />
         <Route path='/about-us' element={<AboutUs />} />
         <Route path='/about-me' element={<AboutMe />} />
@@ -67,14 +70,18 @@ function App() {
       <Route path='/login-and-signup' element={<LoginAndSignup />} />
 
       {/* admin */}
-      <Route path='/discount-management' element={<DiscountManagement />} />
-      <Route path='/category-management' element={<CategoryManagement />} />
-      <Route path='/brand-management' element={<BrandManagement />} />
-      <Route path='/skin-type-management' element={<SkinTypeManagement />} />
-      <Route path='/admin-dashboard' element={<AdminDashboard />} />
-      <Route path='/list-staff' element={<ListStaff />} />
-      <Route path='/create-staff' element={<CreateStaff />} />
-      <Route path='/list-user' element={<UserManagement />} />
+      <Route path='/admin' element={<AdminLayout />} >
+        <Route index  element={<DashBoard />} />
+        <Route path='/admin/discount-management' element={<DiscountManagement />} />
+        <Route path='/admin/category-management' element={<CategoryManagement />} />
+        <Route path='/admin/brand-management' element={<BrandManagement />} />
+        <Route path='/admin/skin-type-management' element={<SkinTypeManagement />} />
+        <Route path='/admin/list-staff' element={<ListStaff />} />
+        <Route path='/admin/create-staff' element={<CreateStaff />} />
+        <Route path='/admin/list-user' element={<UserManagement />} />
+        <Route path='/admin/list-product' element={<ListProduct />} />
+      </Route>
+
 
 
 
