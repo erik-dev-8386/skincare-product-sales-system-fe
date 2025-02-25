@@ -248,7 +248,7 @@ import React from "react";
 import { Layout, Menu} from "antd";
 import { UserOutlined, DashboardOutlined, AppstoreOutlined, PercentageOutlined, InboxOutlined } from "@ant-design/icons";
 import { Link, useNavigate, Outlet, useLocation } from "react-router-dom";
-import './AdminLayout'
+import './AdminLayout.css'
 
 
 const { Content, Sider } = Layout;
