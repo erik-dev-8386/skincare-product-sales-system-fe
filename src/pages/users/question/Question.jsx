@@ -35,7 +35,7 @@ export default function Question() {
 
     return (
         <>
-            <Header />
+            {/* <Header /> */}
             <div className="containerr">
                 <h2 className="question-title">Q1: Da của bạn thường trông ra sao vào buổi chiều?</h2>
                 <ul className="options-list">
@@ -117,7 +117,7 @@ export default function Question() {
 
                 {result && <div className="result-message">{result}</div>}
             </div>
-            <Footer />
+            {/* <Footer /> */}
         </>
     )
 }

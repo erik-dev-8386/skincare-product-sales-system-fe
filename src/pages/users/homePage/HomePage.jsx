@@ -7,15 +7,10 @@ import { Link } from 'react-router-dom';
 function HomePage(){
     return(
         <>
-        {/* <div>
-      <h1>Chào mừng bạn!</h1>
-      <button><Link to="/Login">Đăng nhập</Link></button>
-
-      <button onClick={logout}>Đăng xuất</button>
-    </div> */}
-        <Header />
+       
+        {/* <Header /> */}
         <Body />
-        <Footer/>
+        {/* <Footer/> */}
         </>
     );
 }

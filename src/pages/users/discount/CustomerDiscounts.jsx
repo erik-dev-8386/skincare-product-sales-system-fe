@@ -71,7 +71,7 @@ const CustomerDiscounts = () => {
 
     return (
         <>
-        <Header/>
+        {/* <Header/> */}
         <div className="container">
         <Card>
             <Title className="discount-title" style={{color: "white"}} level={2}>Danh sách mã giảm giá</Title>
@@ -79,7 +79,7 @@ const CustomerDiscounts = () => {
             <Table dataSource={discounts} columns={columns} rowKey="discountId" style={{ marginTop: 16 }} />
         </Card>
         </div>
-        <Footer/>
+        {/* <Footer/> */}
         </>
     );
 };

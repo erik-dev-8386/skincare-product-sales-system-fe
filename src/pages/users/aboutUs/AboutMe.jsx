@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 export default function AboutMe() {
     return (
         <>
-            <Header />
+            {/* <Header /> */}
             <section className="about-us-section">
                 <div className="overlay">
                     <div className="content">
@@ -72,7 +72,7 @@ export default function AboutMe() {
                     </div>
                 </div>
             </section>
-            <Footer />
+            {/* <Footer /> */}
         </>
     );
 }

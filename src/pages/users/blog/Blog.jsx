@@ -47,7 +47,7 @@ const Blog = () => {
 
     return (
         <>
-            <Header />
+            {/* <Header /> */}
 
             <div className="container">
                 <h2 className="text-center-blog">Blog của chúng tôi</h2>
@@ -65,7 +65,7 @@ const Blog = () => {
                 </Row>
             </div>
 
-            <Footer />
+            {/* <Footer /> */}
         </>
     );
 };

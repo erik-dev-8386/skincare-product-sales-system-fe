@@ -7,9 +7,9 @@ import Body from "./body.jsx"
 export default function AboutUs() {
     return (
         <>
-            <Header />
+            {/* <Header /> */}
             <Body/>
-            <Footer />
+            {/* <Footer /> */}
         </>
     )
 }

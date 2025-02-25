@@ -81,7 +81,7 @@ export default function Header() {
                         {role ? (
                             <>
                                 <li><Link to="/profile">Hồ sơ</Link></li>
-                                {role === 1 && <li><Link to="/admin-dashboard">Admin Dashboard</Link></li>} 
+                                {role === 1 && <li><Link to="/admin">Admin Dashboard</Link></li>} 
                                 <li onClick={handleLogout} style={{ cursor: "pointer", color: "white" }}>Đăng xuất</li>
                             </>
                         ) : (

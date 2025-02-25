@@ -15,7 +15,7 @@ export default function Kho() {
   {
     return (
       <>
-        <Header />
+        {/* <Header /> */}
         <div className="container">
           <div className="row">
             <h5 className="trang">
@@ -140,7 +140,7 @@ export default function Kho() {
             </div>
           </div>
         </div>
-        <Footer />
+        {/* <Footer /> */}
       </>
     );
   }
