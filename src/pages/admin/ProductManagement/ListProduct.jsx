@@ -52,12 +52,12 @@ const ListProduct = () => {
       ),
     },
     { title: "Thành phần", dataIndex: "ingredients", key: "ingredients" },
-    { title: "Giá gốc", dataIndex: "unitPrice", key: "unitPrice" },
-    { title: "Giá giảm", dataIndex: "discountPrice", key: "discountPrice" },
-    { title: "Tồn kho", dataIndex: "quantity", key: "quantity" },
-    { title: "Ngày sản xuất", dataIndex: "mfg", key: "mfg" },
-    { title: "Ngày hết hạn", dataIndex: "exp", key: "exp" },
-    { title: "Trọng lượng", dataIndex: "netWeight", key: "netWeight" },
+    // { title: "Giá gốc", dataIndex: "unitPrice", key: "unitPrice" },
+    { title: "Giá bán", dataIndex: "discountPrice", key: "discountPrice" },
+    // { title: "Tồn kho", dataIndex: "quantity", key: "quantity" },
+    // { title: "Ngày sản xuất", dataIndex: "mfg", key: "mfg" },
+    // { title: "Ngày hết hạn", dataIndex: "exp", key: "exp" },
+    // { title: "Trọng lượng", dataIndex: "netWeight", key: "netWeight" },
 
     // Hiển thị tên thay vì ID bằng cách tìm trong danh sách
     // {
