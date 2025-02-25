@@ -24,7 +24,7 @@ const discountBanners = [
 function Discount() {
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <div className="discount-banner" style={{display: "flex", marginLeft: 50, marginRight: 50, marginTop: 50, paddingTop: 60,
          paddingLeft: 60, paddingRight: 60, paddingBottom: 30, justifyContent: "space-between"}}>
       {discountBanners.map((banner) => (
@@ -40,7 +40,7 @@ function Discount() {
         </div>
       ))}
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 }

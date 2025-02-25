@@ -19,7 +19,7 @@ import Cart from './pages/users/cart/Cart.jsx';
 import Kho from './pages/users/listskincare/Kho.jsx';
 import Honhop from './pages/users/listskincare/Honhop.jsx';
 import Nhaycam from './pages/users/listskincare/Nhaycam.jsx';
-import Thuong from './pages/users/listskincare/Thuong.jsx'; 
+import Thuong from './pages/users/listskincare/Thuong.jsx';
 import DiscountManagement from './pages/admin/DiscountManagement/DiscountManagement.jsx';
 import CategoryManagement from './pages/admin/CategoryManagement/CategoryManagement.jsx';
 import BrandManagement from './pages/admin/BrandManagement/BrandManagement.jsx';
@@ -33,43 +33,50 @@ import Question from './pages/users/question/Question.jsx';
 import CustomerDiscounts from './pages/users/discount/CustomerDiscounts.jsx';
 import NotFound from './pages/users/NotFound/NotFound.jsx';
 import AboutMe from './pages/users/aboutUs/AboutMe.jsx';
+import Layout from './component/Layout/Layout.jsx';
 function App() {
 
 
   return (
     <Routes>
-      <Route path="/" element={<HomePage />} />
-      {/* <Route path='/about-us' element={<AboutUs />} /> */}
-      <Route path='/about-me' element={<AboutMe />} />
-      <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-      <Route path="/terms-of-use" element={<TermsOfUse />} />
+      <Route path="/" element={<Layout />} >
+        {/* <Route path='/about-us' element={<AboutUs />} /> */}
+        <Route index element={<HomePage />} />
+        <Route path='/about-me' element={<AboutMe />} />
+        <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+        <Route path="/terms-of-use" element={<TermsOfUse />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/blog/:id" element={<BlogDetail />} />
+        <Route path="/discount" element={<Discount />} />
+        <Route path="/discount/:discountPercentage" element={<DiscountDetail />} />
+        <Route path='/customer-discounts' element={<CustomerDiscounts />} />
+        <Route path='/shopping-cart' element={<Shopping />} />
+        <Route path='/cart' element={<Cart />} />
+        <Route path='/listskincare/Kho' element={<Kho />} />
+        <Route path='/listskincare/Honhop' element={<Honhop />} />
+        <Route path='/listskincare/Nhaycam' element={<Nhaycam />} />
+        <Route path='/listskincare/Thuong' element={<Thuong />} />
+        <Route path='/question' element={<Question />} />
+        <Route path='*' element={<NotFound />} />
+      </Route>
+      
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
-      <Route path='/login-and-signup' element={<LoginAndSignup/>} />
-      <Route path="/blog" element={<Blog />} />
-      <Route path="/blog/:id" element={<BlogDetail />} />
-      <Route path="/discount" element={<Discount />} />
-      <Route path="/discount/:discountPercentage" element={<DiscountDetail />} /> 
-      <Route path='/customer-discounts' element={<CustomerDiscounts />} />
-      <Route path='/shopping-cart' element={<Shopping />} />
-      <Route path='/cart' element={<Cart />} />
-      <Route path='/listskincare/Kho' element={<Kho />} />
-      <Route path='/listskincare/Honhop' element={<Honhop />} />
-      <Route path='/listskincare/Nhaycam' element={<Nhaycam />} />
-      <Route path='/listskincare/Thuong' element={<Thuong />} />
-      <Route path='/discount-management' element={<DiscountManagement/>} />
-      <Route path='/category-management' element={<CategoryManagement/>} />
-      <Route path='/brand-management' element={<BrandManagement/>} />
-      <Route path='/skin-type-management' element={<SkinTypeManagement/>} />
-      <Route path='/admin-dashboard' element={<AdminDashboard/>} />
-      <Route path='/list-staff' element={<ListStaff/>} />
-      <Route path='/create-staff' element={<CreateStaff/>} />
-      <Route path='/list-user' element={<UserManagement/>} />
+      <Route path='/login-and-signup' element={<LoginAndSignup />} />
 
-      <Route path='/question' element={<Question/>} />
+      <Route path='/discount-management' element={<DiscountManagement />} />
+      <Route path='/category-management' element={<CategoryManagement />} />
+      <Route path='/brand-management' element={<BrandManagement />} />
+      <Route path='/skin-type-management' element={<SkinTypeManagement />} />
+      <Route path='/admin-dashboard' element={<AdminDashboard />} />
+      <Route path='/list-staff' element={<ListStaff />} />
+      <Route path='/create-staff' element={<CreateStaff />} />
+      <Route path='/list-user' element={<UserManagement />} />
+
+      
 
 
-      <Route path='*' element={<NotFound/>} />
+      
 
     </Routes>
   );
