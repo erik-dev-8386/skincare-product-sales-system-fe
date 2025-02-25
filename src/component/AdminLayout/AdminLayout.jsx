@@ -243,13 +243,11 @@
 
 //================================================================================
 
-
 import React from "react";
-import { Layout, Menu} from "antd";
+import { Layout, Menu } from "antd";
 import { UserOutlined, DashboardOutlined, AppstoreOutlined, PercentageOutlined, InboxOutlined } from "@ant-design/icons";
 import { Link, useNavigate, Outlet, useLocation } from "react-router-dom";
-import './AdminLayout.css'
-
+import './AdminLayout.css';
 
 const { Content, Sider } = Layout;
 
@@ -271,22 +269,28 @@ const AdminLayout = () => {
     return (
         <Layout style={{ minHeight: "100vh" }}>
             <Sider collapsible width={200} breakpoint="lg">
-                <div className="back-to-home" style={{ marginTop: 5, marginLeft: 10 }}><Link to="/"><i className="fa-solid fa-arrow-left"></i> Quay lại trang chủ</Link></div>
+                <div className="back-to-home" style={{ marginTop: 5, marginLeft: 10 }}>
+                    <Link to="/"><i className="fa-solid fa-arrow-left"></i> Quay lại trang chủ</Link>
+                </div>
                 <div className="avarta">
                     <img className="img-avarta" src="./src/assets/Logo_01.jpg" alt="Avarta" />
                 </div>
                 <div className="logo text-center text-white py-3">Chào mừng Admin!</div>
                 <Menu
+                    className="sider-menu"
                     theme="dark"
                     mode="inline"
                     selectedKeys={[location.pathname]}
                     onClick={(e) => navigate(e.key)}
-                    items={menuItems.map(({ key, icon, label }) => ({ key, icon, label: <Link style={{textDecoration: "none"}} to={key}>{label}</Link> }))}
+                    items={menuItems.map(({ key, icon, label }) => ({
+                        key,
+                        icon,
+                        label: <Link style={{ textDecoration: "none" }} to={key}>{label}</Link>
+                    }))}
                 />
-
             </Sider>
             <Layout>
-                <Content className="p-4">
+                <Content className="content-container">
                     <Outlet />
                 </Content>
             </Layout>
