@@ -44,7 +44,7 @@ const BlogDetail = () => {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       
       <div  style={{ margin: "2rem", height: 800, paddingTop: 50}}>
         <h2>{blog.title}</h2>
@@ -56,7 +56,7 @@ const BlogDetail = () => {
         />
         <p>{blog.body}</p>
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

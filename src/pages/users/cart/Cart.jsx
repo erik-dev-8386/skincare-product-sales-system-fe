@@ -58,7 +58,7 @@ const Cart = () => {
 
   return (
     <>
-      <Header />
+      {/* <Header /> */}
       <div className="cart-container">
         {/* Thông tin người nhận */}
         <div className="customer-info">
@@ -123,7 +123,7 @@ const Cart = () => {
           </div>
         </div>
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

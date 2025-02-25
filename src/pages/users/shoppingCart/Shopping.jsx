@@ -36,7 +36,7 @@ export default function CartPage() {
     };
     return (
         <>
-            <Header />
+            {/* <Header /> */}
             <div className="cart-container">
                 <div className="cart-header">
                     <h1 className="gh">Giỏ hàng</h1>
@@ -93,7 +93,7 @@ export default function CartPage() {
                     <button className="checkout-btn" onClick={handleCheckout}>Đặt hàng</button>
                 </div>
             </div>
-            <Footer />
+            {/* <Footer /> */}
         </>
     );
 } 

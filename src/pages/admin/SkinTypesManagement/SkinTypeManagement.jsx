@@ -1,12 +1,11 @@
-
-
-import { Button, Form, Input, Modal, Table, Popconfirm, Upload, Select } from "antd";
+import { Button, Form, Input, Modal, Table, Popconfirm, Upload, Select, Col, Row, Tag } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { UploadOutlined } from "@ant-design/icons";
 import { useEffect, useState, useCallback } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import api from "../../../config/api";
 import axios from "axios";
+import MyEditor from "../../../component/TinyMCE/MyEditor";
 
 const SkinTypeManagement = () => {
     const [skinTypeList, setSkinTypeList] = useState([]);
@@ -15,24 +14,42 @@ const SkinTypeManagement = () => {
     const [editingSkinType, setEditingSkinType] = useState(null);
     const [loading, setLoading] = useState(false);
     const [imageFile, setImageFile] = useState(null);
+    const [imagePreview, setImagePreview] = useState(null); // Thêm state để lưu URL ảnh tạm thời
+    const [isDetailModalOpen, setDetailModalOpen] = useState(false);
+    const [selectedSkinType, setSelectedSkinType] = useState(null);
     const { Option } = Select;
 
     const CLOUDINARY_UPLOAD_URL = "https://api.cloudinary.com/v1_1/dawyqsudx/upload";
     const CLOUDINARY_UPLOAD_PRESET = "haven-skin-03-2025";
 
-    const statusMapping = {
-        1: "HOẠT ĐỘNG",
-        2: "KHÔNG HOẠT ĐỘNG",
-        3: "ĐÃ XÓA"
+    const statusColors = {
+        1: { text: "HOẠT ĐỘNG", color: "green" },
+        2: { text: "KHÔNG HOẠT ĐỘNG", color: "red" },
+        3: { text: "ĐÃ XÓA", color: "gray" }
     };
 
     const columns = [
         { title: 'ID loại da', dataIndex: 'skinTypeId', key: 'skinTypeId' },
         { title: 'Tên loại da', dataIndex: 'skinName', key: 'skinName' },
-        { title: 'Mô tả', dataIndex: 'description', key: 'description' },
+        {
+            title: 'Mô tả',
+            dataIndex: 'description',
+            key: 'description',
+            render: (text) => (
+                <div dangerouslySetInnerHTML={{ __html: text && typeof text === "string" ? (text.length > 50 ? text.substring(0, 50) + "..." : text) : "" }} />
+            ),
+        },
         { title: 'Điểm tối thiểu', dataIndex: 'minMark', key: 'minMark' },
         { title: 'Điểm tối đa', dataIndex: 'maxMark', key: 'maxMark' },
-        { title: 'Trạng thái', dataIndex: 'status', key: 'status', render: (status) => statusMapping[status] || "KHÔNG BIẾT" },
+        {
+            title: 'Trạng thái',
+            dataIndex: 'status',
+            key: 'status',
+            render: (status) => {
+                const statusData = statusColors[status] || { text: "KHÔNG BIẾT", color: "default" };
+                return <Tag color={statusData.color}>{statusData.text}</Tag>;
+            }
+        },
         {
             title: 'Ảnh',
             dataIndex: 'skinTypeImages',
@@ -44,9 +61,13 @@ const SkinTypeManagement = () => {
             key: 'actions',
             render: (text, record) => (
                 <div className="button">
-                    <Button onClick={() => handleEditSkinType(record)} style={{ marginRight: 8 }}>
+                    <Button color="orange" variant="filled" onClick={() => handleEditSkinType(record)} style={{ marginRight: 8, border: "2px solid " }}>
                         <i className="fa-solid fa-pen-to-square"></i>
                         Sửa
+                    </Button>
+                    <Button color="primary" variant="filled" onClick={() => handleViewDetails(record)} style={{ marginRight: 8, border: "2px solid " }}>
+                        <i className="fa-solid fa-eye"></i>
+                        Chi tiết
                     </Button>
                     <Popconfirm
                         title="Bạn có muốn xóa loại da này không?"
@@ -54,7 +75,7 @@ const SkinTypeManagement = () => {
                         okText="Có"
                         cancelText="Không"
                     >
-                        <Button danger>
+                        <Button color="red" variant="filled" style={{ marginRight: 8, border: "2px solid " }}>
                             <i className="fa-solid fa-trash"></i>
                             Xóa
                         </Button>
@@ -89,6 +110,17 @@ const SkinTypeManagement = () => {
         form.resetFields();
         setEditingSkinType(null);
         setImageFile(null);
+        setImagePreview(null); // Reset ảnh tạm thời khi đóng modal
+    };
+
+    const handleViewDetails = (skinType) => {
+        setSelectedSkinType(skinType);
+        setDetailModalOpen(true);
+    };
+
+    const handleCloseDetailModal = () => {
+        setDetailModalOpen(false);
+        setSelectedSkinType(null);
     };
 
     const uploadImageToCloudinary = async (file) => {
@@ -98,8 +130,6 @@ const SkinTypeManagement = () => {
 
         try {
             const response = await axios.post(CLOUDINARY_UPLOAD_URL, formData);
-            console.log("Cloudinary URL:", response.data.secure_url);
-
             return response.data.secure_url;
         } catch (error) {
             console.error("Error uploading image:", error);
@@ -131,7 +161,6 @@ const SkinTypeManagement = () => {
         } else {
             try {
                 await api.post('/skin-types', payload);
-                console.log("Payload gửi đến backend:", payload);
                 toast.success("Đã thêm loại da mới thành công!");
                 fetchSkinTypes();
                 handleCloseModal();
@@ -144,6 +173,7 @@ const SkinTypeManagement = () => {
     const handleEditSkinType = (skinType) => {
         setEditingSkinType(skinType);
         form.setFieldsValue(skinType);
+        setImagePreview(skinType.skinTypeImages); // Hiển thị ảnh hiện tại khi chỉnh sửa
         setModalOpen(true);
     };
 
@@ -173,40 +203,87 @@ const SkinTypeManagement = () => {
                 onOk={() => form.submit()}
                 okText={editingSkinType ? "Lưu thay đổi" : "Tạo"}
                 cancelText="Hủy"
+                width={800}
             >
                 <Form form={form} labelCol={{ span: 24 }} onFinish={handleSubmitForm}>
                     <Form.Item label="Tên loại da" name="skinName" rules={[{ required: true, message: "Tên loại da không được để trống!" }]}>
                         <Input />
                     </Form.Item>
-                    <Form.Item label="Mô tả" name="description">
-                        <Input.TextArea />
+                    <Form.Item
+                        label="Mô tả"
+                        name="description"
+                        rules={[{ required: true, message: "Mô tả không được để trống!" }]}>
+                        <MyEditor
+                            value={form.getFieldValue("description") || ""}
+                            onChange={(value) => form.setFieldsValue({ description: value })}
+                        />
                     </Form.Item>
-                    <Form.Item label="Điểm tối thiểu" name="minMark">
-                        <Input type="number" />
-                    </Form.Item>
-                    <Form.Item label="Điểm tối đa" name="maxMark">
-                        <Input type="number" />
-                    </Form.Item>
-                    <Form.Item label="Tải hình ảnh lên">
-                        <Upload beforeUpload={(file) => { setImageFile(file); return false; }} showUploadList={false}>
-                            <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
-                        </Upload>
-                        {editingSkinType?.skinTypeImages && <img src={editingSkinType.skinTypeImages} alt="Preview" style={{ width: 100, marginTop: 8 }} />}
-                    </Form.Item>
-                    {editingSkinType && (
-                         <Form.Item
-                             label="Trạng thái"
-                             name="status"
-                             rules={[{ required: false, message: "Status can't be empty!" }]}
-                         >
-                             <Select>
-                                 <Option value={1}>HOẠT ĐỘNG</Option>
-                                 <Option value={2}>KHÔNG HOẠT ĐỘNG</Option>
-                                 <Option value={3}>ĐÃ XÓA</Option>
-                             </Select>
-                         </Form.Item>
-                     )}
+                    <Row gutter={16}>
+                        <Col span={12}>
+                            <Form.Item label="Điểm tối thiểu" name="minMark">
+                                <Input type="number" />
+                            </Form.Item>
+                            <Form.Item label="Điểm tối đa" name="maxMark">
+                                <Input type="number" />
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item label="Tải hình ảnh lên">
+                                <Upload
+                                    beforeUpload={(file) => {
+                                        setImageFile(file);
+                                        setImagePreview(URL.createObjectURL(file)); // Tạo URL tạm thời để hiển thị ảnh
+                                        return false; // Ngăn chặn việc tự động upload
+                                    }}
+                                    showUploadList={false}
+                                >
+                                    <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
+                                </Upload>
+                                {imagePreview && <img src={imagePreview} alt="Preview" style={{ width: 100, marginTop: 8 }} />} {/* Hiển thị ảnh tạm thời */}
+                            </Form.Item>
+                            {editingSkinType && (
+                                <Form.Item
+                                    label="Trạng thái"
+                                    name="status"
+                                    rules={[{ required: false, message: "Status can't be empty!" }]}
+                                >
+                                    <Select>
+                                        <Option value={1}>HOẠT ĐỘNG</Option>
+                                        <Option value={2}>KHÔNG HOẠT ĐỘNG</Option>
+                                        <Option value={3}>ĐÃ XÓA</Option>
+                                    </Select>
+                                </Form.Item>
+                            )}
+                        </Col>
+                    </Row>
                 </Form>
+
+            </Modal>
+            <Modal
+                title="Chi tiết loại da"
+                open={isDetailModalOpen}
+                onCancel={handleCloseDetailModal}
+                footer={null}
+                width={800}
+            >
+                {selectedSkinType && (
+                    <div>
+                        <p><strong>ID: </strong> {selectedSkinType.skinTypeId}</p>
+                        <p><strong>Tên loại da: </strong> {selectedSkinType.skinName}</p>
+                        <p><strong>Mô tả: </strong></p>
+                        <div dangerouslySetInnerHTML={{ __html: selectedSkinType.description }} />
+                        <p><strong>Điểm tối thiểu: </strong> {selectedSkinType.minMark}</p>
+                        <p><strong>Điểm tối đa: </strong> {selectedSkinType.maxMark}</p>
+                        <p><strong>Ảnh: </strong> <img src={selectedSkinType.skinTypeImages} alt="Skin Type" style={{ width: 100 }} /></p>
+                        <p><strong>Trạng Thái:</strong>
+                            {selectedSkinType.status !== undefined ? (
+                                <Tag color={statusMapping[selectedSkinType.status]?.color}>
+                                    {statusMapping[selectedSkinType.status]?.text}
+                                </Tag>
+                            ) : "Không xác định"}
+                        </p>
+                    </div>
+                )}
             </Modal>
         </div>
     );

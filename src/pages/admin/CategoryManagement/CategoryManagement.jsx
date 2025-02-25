@@ -1,10 +1,11 @@
-import { Button, Form, Input, Modal, Table, Popconfirm } from "antd";
+import { Button, Form, Input, Modal, Table, Popconfirm, Tag } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Select } from "antd";
 import api from "../../../config/api";
 import { toast, ToastContainer } from "react-toastify";
+import MyEditor from "../../../component/TinyMCE/MyEditor";
 
 const CategoryManagement = () => {
     const { Option } = Select;
@@ -12,13 +13,15 @@ const CategoryManagement = () => {
     const [isModalOpen, setModalOpen] = useState(false);
     const [form] = useForm();
     const [editingCategory, setEditingCategory] = useState(null);
+    const [isDetailModalOpen, setDetailModalOpen] = useState(false);
+    const [selectedCategory, setSelectedCategory] = useState(null);
 
 
     const statusMapping = {
-        0: "KHÔNG HOẠT ĐỘNG",
-        1: "CHỜ",
-        2: "HOẠT ĐỘNG",
-        3: "ĐÃ XÓA"
+        0: { text: "KHÔNG HOẠT ĐỘNG", color: "red" },
+        1: { text: "CHỜ", color: "orange" },
+        2: { text: "HOẠT ĐỘNG", color: "green" },
+        3: { text: "ĐÃ XÓA", color: "gray" }
     };
 
     const columns = [
@@ -36,6 +39,9 @@ const CategoryManagement = () => {
             title: 'Mô tả',
             dataIndex: 'description',
             key: 'description',
+            render: (text) => (
+                <div dangerouslySetInnerHTML={{ __html: text && typeof text === "string" ? (text.length > 50 ? text.substring(0, 50) + "..." : text) : "" }} />
+            ),
         },
         {
             title: 'Hướng dẫn sử dụng',
@@ -46,26 +52,30 @@ const CategoryManagement = () => {
             title: 'Trạng thái',
             dataIndex: 'status',
             key: 'status',
-            render: (status) => statusMapping[status] || "UNKNOWN",
+            render: (status) => {
+                const statusInfo = statusMapping[status] || { text: "KHÔNG BIẾT", color: "default" };
+                return <Tag color={statusInfo.color}>{statusInfo.text}</Tag>;
+            }
         },
         {
             title: 'Nút điều khiển',
             key: 'actions',
             render: (text, record) => (
-                <div>
-                    <Button onClick={() => handleEditCategory(record)} style={{ marginRight: 8 }}>
-                        <i class="fa-solid fa-pen-to-square"></i>
-                        Sửa
+                <div className="button">
+                    <Button color="orange" variant="filled" onClick={() => handleEditCategory(record)} style={{ marginRight: 8, border: "2px solid " }}>
+                        <i className="fa-solid fa-pen-to-square"></i> Sửa
+                    </Button>
+                    <Button color="primary" variant="filled" type="default" onClick={() => handleViewDetails(record)} style={{ marginRight: 8, border: "2px solid " }}>
+                        <i className="fa-solid fa-eye"></i> Chi tiết
                     </Button>
                     <Popconfirm
-                        title="Bạn có muốn xóa loại sản phẩm này không?"
+                        title="Bạn có muốn xóa giảm giá này không?"
                         onConfirm={() => handleDeleteCategory(record.categoryId)}
                         okText="Có"
                         cancelText="Không"
                     >
-                        <Button danger>
-                            <i class="fa-solid fa-trash"></i>
-                            Xóa
+                        <Button color="red" variant="filled" style={{ marginRight: 8, border: "2px solid " }} >
+                            <i className="fa-solid fa-trash"></i> Xóa
                         </Button>
                     </Popconfirm>
                 </div>
@@ -95,6 +105,17 @@ const CategoryManagement = () => {
         form.resetFields();
         setEditingCategory(null);
     };
+
+    const handleViewDetails = (category) => {
+        setSelectedCategory(category);
+        setDetailModalOpen(true);
+    };
+
+    const handleCloseDetailModal = () => {
+        setDetailModalOpen(false);
+        setSelectedCategory(null);
+    };
+
 
     const handleSubmitForm = async (values) => {
         if (editingCategory) {
@@ -140,8 +161,8 @@ const CategoryManagement = () => {
             <ToastContainer />
             <h1>Quản lý loại sản phẩm</h1>
             <Button type="primary" onClick={handleOpenModal}>
-            <i class="fa-solid fa-plus"></i>
-            Thêm loại sản phẩm mới
+                <i class="fa-solid fa-plus"></i>
+                Thêm loại sản phẩm mới
             </Button>
             <Table dataSource={categoryList} columns={columns} rowKey="categoryId" style={{ marginTop: 16 }} />
             <Modal
@@ -164,9 +185,11 @@ const CategoryManagement = () => {
                     <Form.Item
                         label="Mô tả"
                         name="description"
-                        rules={[{ required: true, message: "Mô tả không được bỏ trống!" }]}
-                    >
-                        <Input />
+                        rules={[{ required: true, message: "Mô tả không được để trống!" }]}>
+                        <MyEditor
+                            value={form.getFieldValue("description") || ""}
+                            onChange={(value) => form.setFieldsValue({ description: value })}
+                        />
                     </Form.Item>
                     <Form.Item
                         label="Hướng dẫn sử dụng"
@@ -175,7 +198,7 @@ const CategoryManagement = () => {
                     >
                         <Input />
                     </Form.Item>
-                  
+
 
                     {editingCategory && (
                         <Form.Item
@@ -192,6 +215,31 @@ const CategoryManagement = () => {
                         </Form.Item>
                     )}
                 </Form>
+            </Modal>
+            {/* Modal Chi Tiết */}
+            <Modal
+                title="Chi tiết loại sản phẩm"
+                open={isDetailModalOpen}
+                onCancel={handleCloseDetailModal}
+                footer={null}
+                width={800}
+            >
+                {selectedCategory && (
+                    <div>
+                        <p><strong>ID: </strong> {selectedCategory.categoryId}</p>
+                        <p><strong>Tên giảm giá: </strong> {selectedCategory.categoryName}</p>
+                        <p><strong>Mô tả: </strong></p>
+                        <div dangerouslySetInnerHTML={{ __html: selectedCategory.description }} />
+                        <p><strong>Hướng dẫn sử dụng: </strong> {selectedCategory.usageInstruction}</p>
+                        <p><strong>Trạng Thái:</strong>
+                            {selectedCategory.status !== undefined ? (
+                                <Tag color={statusMapping[selectedCategory.status]?.color}>
+                                    {statusMapping[selectedCategory.status]?.text}
+                                </Tag>
+                            ) : "Không xác định"}
+                        </p>
+                    </div>
+                )}
             </Modal>
         </div>
     );
