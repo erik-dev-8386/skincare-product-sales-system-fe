@@ -27,8 +27,9 @@ const ListProduct = () => {
   const [categories, setCategories] = useState([]);
   const [discounts, setDiscounts] = useState([]);
   const [skinTypes, setSkinTypes] = useState([]);
-  const [isDetailModalOpen, setDetailModalOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState(null);
+  const [selectedIds, setSelectedIds] = useState({});
+  const [editingKey, setEditingKey] = useState(null);
+  const [editedRecord, setEditedRecord] = useState({});
 
   const columns = [
     { title: "ID sản phẩm", dataIndex: "productId", key: "productId" },
@@ -104,15 +105,6 @@ const ListProduct = () => {
           >
             <i className="fa-solid fa-pen-to-square"></i> Sửa
           </Button>
-          <Button
-            color="primary"
-            variant="filled"
-            type="default"
-            onClick={() => handleViewDetails(record)}
-            style={{ marginRight: 8, border: "2px solid " }}
-          >
-            <i className="fa-solid fa-eye"></i> Chi tiết
-          </Button>
           <Popconfirm
             title="Bạn có chắc muốn xóa sản phẩm này không?"
             onConfirm={() => handleDeleteProduct(record.productId)}
@@ -140,6 +132,51 @@ const ListProduct = () => {
     // Nếu id là số, tìm kiếm trong danh sách
     return list.find((item) => String(item.id) === String(id))?.name || id;
   };
+
+  // const fetchData = async () => {
+  //     try {
+  //         const [productsRes, brandsRes, categoriesRes, discountsRes, skinTypesRes] = await Promise.all([
+  //             api.get("/products"),
+  //             api.get("/brands/list-name-brands"),
+  //             api.get("/categories/list-name-categories"),
+  //             api.get("/discounts/list-name-discounts"),
+  //             api.get("/skin-types/list-name-skin-types"),
+  //         ]);
+  //         setProductList(productsRes.data);
+  //         setBrands(brandsRes.data);
+  //         setCategories(categoriesRes.data);
+  //         setDiscounts(discountsRes.data);
+  //         setSkinTypes(skinTypesRes.data);
+  //     } catch (error) {
+  //         console.error("Error fetching data:", error);
+  //     }
+  // };
+
+  // const fetchData = async () => {
+  //     try {
+  //         const [productsRes, brandsRes, categoriesRes, discountsRes, skinTypesRes] = await Promise.all([
+  //             api.get("/products"),
+  //             api.get("/brands/list-name-brands"),
+  //             api.get("/categories/list-name-categories"),
+  //             api.get("/discounts/list-name-discounts"),
+  //             api.get("/skin-types/list-name-skin-types"),
+  //         ]);
+
+  //         console.log("Products:", productsRes.data);
+  //         console.log("Brands:", brandsRes.data);
+  //         console.log("Categories:", categoriesRes.data);
+  //         console.log("Discounts:", discountsRes.data);
+  //         console.log("SkinTypes:", skinTypesRes.data);
+
+  //         setProductList(productsRes.data);
+  //         setBrands(brandsRes.data);
+  //         setCategories(categoriesRes.data);
+  //         setDiscounts(discountsRes.data);
+  //         setSkinTypes(skinTypesRes.data);
+  //     } catch (error) {
+  //         console.error("Error fetching data:", error);
+  //     }
+  // };
 
   const fetchData = async () => {
     try {
@@ -191,14 +228,14 @@ const ListProduct = () => {
     setEditingProduct(null);
   };
 
-  //   const fetchIdByName = async (name, type) => {
-  //     try {
-  //       const response = await api.get(`/${type}/name/${name}`);
-  //       setSelectedIds((prev) => ({ ...prev, [type]: response.data }));
-  //     } catch (error) {
-  //       console.error(`Error fetching ${type} ID:`, error);
-  //     }
-  //   };
+    const fetchIdByName = async (name, type) => {
+      try {
+        const response = await api.get(`/${type}/name/${name}`);
+        setSelectedIds((prev) => ({ ...prev, [type]: response.data }));
+      } catch (error) {
+        console.error(`Error fetching ${type} ID:`, error);
+      }
+    };
 
   const getIdByName = (name, type) => {
     const map = {
@@ -210,15 +247,51 @@ const ListProduct = () => {
     return map[type]?.find((item) => item.name === name)?.id || null;
   };
 
-  const handleViewDetails = (productList) => {
-    setSelectedProduct(productList);
-    setDetailModalOpen(true);
-  };
+  // const handleSubmitForm = async (values) => {
+  //     try {
+  //         const productData = { ...values, ...selectedIds };
+  //         const response = editingProduct
+  //             ? await api.put(`/products/${editingProduct.productId}`, productData)
+  //             : await api.post("/products", productData);
 
-  const handleCloseDetailModal = () => {
-    setDetailModalOpen(false);
-    setSelectedProduct(null);
-  };
+  //         toast.success(editingProduct ? "Cập nhật sản phẩm thành công!" : "Thêm sản phẩm thành công!");
+  //         fetchData();
+  //         handleCloseModal();
+  //     } catch (error) {
+  //         console.error("Lỗi khi gửi request:", error.response?.data || error.message);
+  //         toast.error("Xử lý sản phẩm không thành công!");
+  //     }
+  // };
+
+  //   const handleSubmitForm = async (values) => {
+  //     try {
+  //       const productData = {
+  //         ...values,
+  //         brandId: selectedIds.brands,
+  //         skinTypeId: selectedIds["skin-types"],
+  //         categoryId: selectedIds.categories,
+  //         discountId: selectedIds.discounts,
+  //       };
+
+  //       if (editingProduct) {
+  //         await api.put(`/products/${editingProduct.productId}`, productData);
+  //         toast.success("Cập nhật sản phẩm thành công!");
+  //       } else {
+  //         await api.post("/products", productData);
+  //         toast.success("Thêm sản phẩm thành công!");
+  //       }
+
+  //       handleCloseModal();
+  //       await fetchData(); // Gọi lại danh sách để cập nhật tên
+  //     } catch (error) {
+  //       console.error(
+  //         "Lỗi khi gửi request:",
+  //         error.response?.data || error.message
+  //       );
+  //       toast.error("Xử lý sản phẩm không thành công!");
+  //     }
+  //   };
+
   const handleSubmitForm = async (values) => {
     try {
       const productData = {
@@ -277,6 +350,29 @@ const ListProduct = () => {
       toast.error("Xóa sản phẩm không thành công!");
     }
   };
+
+  // // them moi thu
+  // const isEditing = (record) => record.key === editingKey;
+
+  // const edit = (record) => {
+  //   setEditingKey(record.key);
+  //   setEditedRecord({ ...record });
+  // };
+
+  // const save = () => {
+  //   setProducts((prev) =>
+  //     prev.map((item) => (item.key === editingKey ? { ...editedRecord } : item))
+  //   );
+  //   setEditingKey(null);
+  // };
+
+  // const cancel = () => {
+  //   setEditingKey(null);
+  // };
+
+  // const handleInputChange = (e, field) => {
+  //   setEditedRecord({ ...editedRecord, [field]: e.target.value });
+  // };
 
   return (
     <div>
@@ -486,70 +582,6 @@ const ListProduct = () => {
             </Col>
           </Row>
         </Form>
-      </Modal>
-
-      {/* Modal chi tiết sản phẩm */}
-      <Modal
-        title="Chi tiết sản phẩm"
-        open={isDetailModalOpen}
-        onCancel={handleCloseDetailModal}
-        footer={null}
-      >
-        {selectedProduct && (
-          <div>
-            <p>
-              <strong>ID sản phẩm:</strong> {selectedProduct.productId}
-            </p>
-            <p>
-              <strong>Tên sản phẩm:</strong> {selectedProduct.productName}
-            </p>
-            <p>
-              <strong>Mô tả:</strong>{" "}
-              <span
-                dangerouslySetInnerHTML={{
-                  __html: selectedProduct.description,
-                }}
-              />
-            </p>
-            <p>
-              <strong>Thành phần:</strong> {selectedProduct.ingredients}
-            </p>
-            <p>
-              <strong>Giá gốc:</strong> {selectedProduct.unitPrice}
-            </p>
-            <p>
-              <strong>Giá giảm:</strong> {selectedProduct.discountPrice}
-            </p>
-            <p>
-              <strong>Số lượng:</strong> {selectedProduct.quantity}
-            </p>
-            <p>
-              <strong>Ngày sản xuất:</strong> {selectedProduct.mfg}
-            </p>
-            <p>
-              <strong>Ngày hết hạn:</strong> {selectedProduct.exp}
-            </p>
-            <p>
-              <strong>Trọng lượng:</strong> {selectedProduct.netWeight}g
-            </p>
-            <p>
-              <strong>Thương hiệu:</strong>{" "}
-              {getDisplayName(selectedProduct.brandId, brands)}
-            </p>
-            <p>
-              <strong>Loại da:</strong>{" "}
-              {getDisplayName(selectedProduct.skinTypeId, skinTypes)}
-            </p>
-            <p>
-              <strong>Loại sản phẩm:</strong>{" "}
-              {getDisplayName(selectedProduct.categoryId, categories)}
-            </p>
-            <p>
-              <strong>Giảm giá:</strong>{" "}
-              {getDisplayName(selectedProduct.discountId, discounts)}
-            </p>
-          </div>
-        )}
       </Modal>
     </div>
   );

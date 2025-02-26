@@ -259,7 +259,7 @@ const AdminLayout = () => {
         { key: "/admin", icon: <DashboardOutlined />, label: "Bảng điều khiển" },
         { key: "/admin/list-user", icon: <UserOutlined />, label: "Khách hàng" },
         { key: "/admin/list-staff", icon: <UserOutlined />, label: "Nhân viên" },
-        { key: "/admin/list-product", icon: <InboxOutlined />, label: "Sản phẩm" },
+        { key: "/admin/product-management", icon: <InboxOutlined />, label: "Sản phẩm" },
         { key: "/admin/brand-management", icon: <InboxOutlined />, label: "Thương hiệu" },
         { key: "/admin/category-management", icon: <AppstoreOutlined />, label: "Loại sản phẩm" },
         { key: "/admin/discount-management", icon: <PercentageOutlined />, label: "Giảm giá" },
