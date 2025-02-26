@@ -36,6 +36,9 @@ import Layout from './component/Layout/Layout.jsx';
 import ListProduct from './pages/admin/ProductManagement/ListProduct.jsx';
 import DashBoard from './pages/admin/DashBoard/DashBoard.jsx';
 import AdminLayout from './component/AdminLayout/AdminLayout.jsx';
+import Products from './pages/users/products/Products.jsx';
+import ProductDetail from './pages/users/products/ProductDetail.jsx';
+
 
 function App() {
 
@@ -62,6 +65,9 @@ function App() {
         <Route path='/listskincare/Nhaycam' element={<Nhaycam />} />
         <Route path='/listskincare/Thuong' element={<Thuong />} />
         <Route path='/question' element={<Question />} />
+        <Route path='/products' element={<Products/>} />
+        <Route path='/products/:id' element={<ProductDetail/>} />
+     
 
       </Route>
       {/* login */}
