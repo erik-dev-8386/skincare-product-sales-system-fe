@@ -31,11 +31,11 @@ const DiscountManagement = () => {
     };
 
     const columns = [
-        {
-            title: 'ID giảm giá',
-            dataIndex: 'discountId',
-            key: 'discountId',
-        },
+        // {
+        //     title: 'ID giảm giá',
+        //     dataIndex: 'discountId',
+        //     key: 'discountId',
+        // },
         {
             title: 'Tên giảm giá',
             dataIndex: 'discountName',

@@ -25,11 +25,11 @@ const CategoryManagement = () => {
     };
 
     const columns = [
-        {
-            title: 'ID danh mục',
-            dataIndex: 'categoryId',
-            key: 'categoryId',
-        },
+        // {
+        //     title: 'ID danh mục',
+        //     dataIndex: 'categoryId',
+        //     key: 'categoryId',
+        // },
         {
             title: 'Tên danh mục',
             dataIndex: 'categoryName',

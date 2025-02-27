@@ -19,14 +19,10 @@ const ProductManagement = () => {
     const [editingProduct, setEditingProduct] = useState(null);
     const [isDetailModalOpen, setDetailModalOpen] = useState(false);
     const [selectedProduct, setSelectedProduct] = useState(null);
-
     const [brands, setBrands] = useState([]);
     const [skinTypes, setSkinTypes] = useState([]);
     const [categories, setCategories] = useState([]);
     const [discounts, setDiscounts] = useState([]);
-
-
-
 
     const statusMapping = {
 
@@ -36,11 +32,11 @@ const ProductManagement = () => {
     };
 
     const columns = [
-        {
-            title: 'ID sản phẩm',
-            dataIndex: 'productId',
-            key: 'productId',
-        },
+        // {
+        //     title: 'ID sản phẩm',
+        //     dataIndex: 'productId',
+        //     key: 'productId',
+        // },
         {
             title: 'Tên sản phẩm',
             dataIndex: 'productName',
@@ -145,7 +141,19 @@ const ProductManagement = () => {
                 return skinType ? skinType.skinName : "N/A";
             },
         },
-
+        {
+            title: 'Ảnh',
+            dataIndex: ' productImages',
+            key: ' productImages',
+            render: (images) => (
+                <div>
+                    {images && images.map((image, index) => (
+                        <img key={index} src={image.imageURL} alt="Product" style={{ width: 50, height: 50, marginRight: 8 }} />
+                    ))}
+                </div>
+            )
+        },
+       
         {
             title: 'Trạng thái',
             dataIndex: 'status',
