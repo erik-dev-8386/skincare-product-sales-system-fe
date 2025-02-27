@@ -368,7 +368,7 @@ const DiscountManagement = () => {
             </Modal>
             {/* Modal Chi Tiết */}
             <Modal
-                title="Chi tiết giảm giá"
+                title={<h2>Chi tiết giảm giá</h2>}
                 open={isDetailModalOpen}
                 onCancel={handleCloseDetailModal}
                 footer={null}

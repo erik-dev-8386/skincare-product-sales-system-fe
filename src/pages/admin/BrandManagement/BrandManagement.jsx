@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import api from "../../../config/api";
 import { toast, ToastContainer } from "react-toastify";
 import MyEditor from "../../../component/TinyMCE/MyEditor";
+import { h264 } from "@cloudinary/url-gen/qualifiers/videoCodec";
 const BrandManagement = () => {
   const { Option } = Select;
   const [brandList, setBrandList] = useState([]);
@@ -254,7 +255,7 @@ const BrandManagement = () => {
 
       {/* Modal Chi Tiết */}
       <Modal
-        title="Chi tiết loại sản phẩm"
+        title={<h2>Chi tiết thương hiệu</h2>}
         open={isDetailModalOpen}
         onCancel={handleCloseDetailModal}
         footer={null}
@@ -263,7 +264,7 @@ const BrandManagement = () => {
         {selectedBrand && (
           <div>
             <p>
-              <strong>BrandID: </strong> {selectedBrand.brandId}
+              <strong>ID: </strong> {selectedBrand.brandId}
             </p>
             <p>
               <strong>Tên thương hiệu: </strong> {selectedBrand.brandName}

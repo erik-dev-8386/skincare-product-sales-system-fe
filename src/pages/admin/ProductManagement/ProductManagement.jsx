@@ -528,7 +528,7 @@ const ProductManagement = () => {
             </Modal>
             {/* Modal Chi Tiết */}
             <Modal
-                title="Chi tiết sản phẩm"
+                title={<h2>Chi tiết sản phẩm</h2>}
                 open={isDetailModalOpen}
                 onCancel={handleCloseDetailModal}
                 footer={null}

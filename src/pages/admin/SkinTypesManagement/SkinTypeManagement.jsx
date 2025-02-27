@@ -322,7 +322,7 @@ const SkinTypeManagement = () => {
                 />
             )}
             <Modal
-                title="Chi tiết loại da"
+                title={<h2>Chi tiết loại da</h2>}
                 open={isDetailModalOpen}
                 onCancel={handleCloseDetailModal}
                 footer={null}
