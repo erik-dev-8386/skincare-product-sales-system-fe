@@ -13,7 +13,6 @@ import { useEffect, useState } from "react";
 import api from "../../../config/api";
 import { toast, ToastContainer } from "react-toastify";
 import MyEditor from "../../../component/TinyMCE/MyEditor";
-import { h264 } from "@cloudinary/url-gen/qualifiers/videoCodec";
 const BrandManagement = () => {
   const { Option } = Select;
   const [brandList, setBrandList] = useState([]);
@@ -186,35 +185,6 @@ const BrandManagement = () => {
     }
   };
 
-  const admin = require("firebase-admin");
-
-// Khởi tạo Firebase Admin SDK
-admin.initializeApp({
-  credential: admin.credential.applicationDefault(),
-  storageBucket: "haven-skin-03-2025-d1f5f.firebasestorage.app"
-});
-
-async function getFileUrl(filename) {
-  const bucket = admin.storage().bucket();
-  const file = bucket.file(filename);
-
-  try {
-    const [metadata] = await file.getMetadata();
-    const token = metadata.metadata.firebaseStorageDownloadTokens;
-
-    if (token) {
-      return `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(filename)}?alt=media&token=${token}`;
-    } else {
-      console.log("File không có token.");
-    }
-  } catch (error) {
-    console.error("Lỗi lấy metadata:", error);
-  }
-}
-
-// Test với ảnh "2.jpg"
-getFileUrl("2.jpg").then((url) => console.log("Download URL:", url));
-
   return (
     <div>
       <ToastContainer />
@@ -284,7 +254,7 @@ getFileUrl("2.jpg").then((url) => console.log("Download URL:", url));
 
       {/* Modal Chi Tiết */}
       <Modal
-        title={<h2>Chi tiết thương hiệu</h2>}
+        title="Chi tiết loại sản phẩm"
         open={isDetailModalOpen}
         onCancel={handleCloseDetailModal}
         footer={null}
@@ -293,7 +263,7 @@ getFileUrl("2.jpg").then((url) => console.log("Download URL:", url));
         {selectedBrand && (
           <div>
             <p>
-              <strong>ID: </strong> {selectedBrand.brandId}
+              <strong>BrandID: </strong> {selectedBrand.brandId}
             </p>
             <p>
               <strong>Tên thương hiệu: </strong> {selectedBrand.brandName}
