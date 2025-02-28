@@ -5,8 +5,8 @@ import { useEffect, useState, useCallback } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import api from "../../../config/api";
 import MyEditor from "../../../component/TinyMCE/MyEditor";
-// import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-// import { storage } from "../../../config/firebase"; // Import Firebase Storage
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { storage } from "../../../config/firebase"; // Import Firebase Storage
 
 
 const SkinTypeManagement = () => {
@@ -28,7 +28,7 @@ const SkinTypeManagement = () => {
     };
 
     const columns = [
-        { title: 'ID loại da', dataIndex: 'skinTypeId', key: 'skinTypeId' },
+        // { title: 'ID loại da', dataIndex: 'skinTypeId', key: 'skinTypeId' },
         { title: 'Tên loại da', dataIndex: 'skinName', key: 'skinName' },
         {
             title: 'Mô tả',
@@ -172,25 +172,25 @@ const SkinTypeManagement = () => {
     // };
     const handleSubmitForm = async (values) => {
         const formData = new FormData();
-
+    
         // Append dữ liệu JSON vào phần "skinTypeDTO"
         formData.append("skinTypeDTO", new Blob([JSON.stringify(values)], { type: "application/json" }));
-
+    
         // Append các file ảnh vào phần "images"
         imageFiles.forEach(file => {
             formData.append("images", file);
         });
-
+    
         try {
             const response = await api.post('/skin-types', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-
+    
             // Thêm dữ liệu mới vào state skinTypeList
             setSkinTypeList(prevList => [...prevList, response.data]);
-
+    
             toast.success("Đã thêm loại da mới thành công!");
             fetchSkinTypes(); // Gọi lại API để cập nhật danh sách
             handleCloseModal();
@@ -308,10 +308,10 @@ const SkinTypeManagement = () => {
                         <p><strong>Điểm tối thiểu: </strong> {selectedSkinType.minMark}</p>
                         <p><strong>Điểm tối đa: </strong> {selectedSkinType.maxMark}</p>
                         <p><strong>Ảnh: </strong>
-                            {selectedSkinType.skinTypeImages.map((image, index) => (
-                                <img key={index} src={image.imageURL} alt="Skin Type" style={{ width: 100, marginRight: 8 }} />
-                            ))}
-                        </p>
+    {selectedSkinType.skinTypeImages.map((image, index) => (
+        <img key={index} src={image.imageURL} alt="Skin Type" style={{ width: 100, marginRight: 8 }} />
+    ))}
+</p>
                         <p><strong>Trạng Thái:</strong>
                             {selectedSkinType.status !== undefined ? (
                                 <Tag color={statusColors[selectedSkinType.status]?.color}>

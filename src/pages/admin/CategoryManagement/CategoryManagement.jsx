@@ -43,11 +43,11 @@ const CategoryManagement = () => {
                 <div dangerouslySetInnerHTML={{ __html: text && typeof text === "string" ? (text.length > 50 ? text.substring(0, 50) + "..." : text) : "" }} />
             ),
         },
-        {
-            title: 'Hướng dẫn sử dụng',
-            dataIndex: 'usageInstruction',
-            key: 'usageInstruction',
-        },
+        // {
+        //     title: 'Hướng dẫn sử dụng',
+        //     dataIndex: 'usageInstruction',
+        //     key: 'usageInstruction',
+        // },
         {
             title: 'Trạng thái',
             dataIndex: 'status',
@@ -191,13 +191,13 @@ const CategoryManagement = () => {
                             onChange={(value) => form.setFieldsValue({ description: value })}
                         />
                     </Form.Item>
-                    <Form.Item
+                    {/* <Form.Item
                         label="Hướng dẫn sử dụng"
                         name="usageInstruction"
                         rules={[{ required: true, message: "Hướng dẫn sử dụng không được bỏ trống!" }]}
                     >
                         <Input />
-                    </Form.Item>
+                    </Form.Item> */}
 
 
                     {editingCategory && (
