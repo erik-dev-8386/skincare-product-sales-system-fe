@@ -169,7 +169,9 @@ export default function Products() {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOption, setSortOption] = useState("");
   const [categories, setCategories] = useState([]);
+  const [skinTypes, setSkinTypes] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedSkinType, setSelectedSkinType] = useState("");
   const [cart, setCart] = useState([]);
 
   const navigate = useNavigate();
@@ -177,6 +179,7 @@ export default function Products() {
   useEffect(() => {
     fetchProducts();
     fetchCategories();
+    fetchSkinTypes();
   }, []);
 
   const fetchProducts = async () => {
@@ -200,15 +203,24 @@ export default function Products() {
     }
   };
 
+  const fetchSkinTypes = async () => {
+    try {
+      const response = await api.get("/skin-types"); // Update this URL
+      setSkinTypes(response.data);
+    } catch (error) {
+      console.error("Error fetching skin types:", error);
+    }
+  };
+
   const handleSearch = (event) => {
     const query = event.target.value.toLowerCase();
     setSearchTerm(query);
-    filterProducts(query, selectedCategory, sortOption);
+    filterProducts(query, selectedCategory, selectedSkinType, sortOption);
   };
 
   const handleSort = (value) => {
     setSortOption(value);
-    filterProducts(searchTerm, selectedCategory, value);
+    filterProducts(searchTerm, selectedCategory, selectedSkinType, value);
   };
 
   const handleCategorySelect = (category) => {
@@ -216,7 +228,12 @@ export default function Products() {
     filterProducts(searchTerm, category, sortOption);
   };
 
-  const filterProducts = (search, category, sort) => {
+  const handleSkinTypeSelect = (skintype) => {
+    setSelectedSkinType(skintype);
+    filterProducts(searchTerm,selectedCategory, skintype, sortOption);
+  };
+
+  const filterProducts = (search, category, skintype, sort) => {
     let filtered = [...products];
 
     if (search) {
@@ -227,6 +244,10 @@ export default function Products() {
 
     if (category) {
       filtered = filtered.filter((product) => product.categoryId === category); // Assuming categoryId is used for filtering
+    }
+
+    if (skintype) {
+      filtered = filtered.filter((product) => product.skinTypeId === skintype); // Assuming skinTypeId is used for filtering
     }
 
     switch (sort) {
@@ -258,7 +279,7 @@ export default function Products() {
     <div className="container">
       <Layout style={{ minHeight: "100vh" }}>
         <Header style={{ background: "#fff", padding: "10px 20px", display: "flex", justifyContent: "space-between" }}>
-          <h1 style={{ color: "#333" }}>Hasaki-style Store</h1>
+          <h1 style={{ color: "#333" }}>Sản phẩm của Haven Skin</h1>
           <Badge count={cart.length}>
             <ShoppingCartOutlined style={{ fontSize: "24px", cursor: "pointer" }} />
           </Badge>
@@ -266,11 +287,18 @@ export default function Products() {
 
         <Layout>
           <Sider width={250} style={{ background: "#fff", padding: "20px" }}>
-            <h2>Categories</h2>
+            <h4>Danh mục</h4>
             <Menu mode="inline" selectedKeys={[selectedCategory]} onClick={(e) => handleCategorySelect(e.key)}>
               <Menu.Item key="">All</Menu.Item>
               {categories.map((category) => (
                 <Menu.Item key={category.categoryId}>{category.categoryName}</Menu.Item> // Assuming categoryId and categoryName are available
+              ))}
+            </Menu>
+            <h4>Loại da</h4>
+            <Menu mode="inline" selectedKeys={[selectedSkinType]} onClick={(e) => handleSkinTypeSelect(e.key)}>
+              <Menu.Item key="">All</Menu.Item>
+              {skinTypes.map((skinType) => (
+                <Menu.Item key={skinType.skinTypeId}>{skinType.skinName}</Menu.Item> // Assuming categoryId and categoryName are available
               ))}
             </Menu>
           </Sider>
