@@ -1,10 +1,19 @@
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Products.css";
-import React, { useEffect, useState } from "react";
-import { Card, Button, Input, Select, Layout, Menu, Badge, Row, Col, Rate } from "antd";
+import {
+  Card,
+  Button,
+  Input,
+  Select,
+  Layout,
+  Menu,
+  Badge,
+  Row,
+  Col,
+} from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import api from "../../../config/api";
-import { center } from "@cloudinary/url-gen/qualifiers/textAlignment";
+import { CartContext } from "../../../context/CartContext"; // Import CartContext
 
 const { Meta } = Card;
 const { Option } = Select;
@@ -19,10 +28,10 @@ export default function Products() {
   const [skinTypes, setSkinTypes] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSkinType, setSelectedSkinType] = useState("");
-  const [cart, setCart] = useState([]);
   const [discounts, setDiscounts] = useState({}); // Store discounts by discountId
 
   const navigate = useNavigate();
+  const { cart, addToCart } = useContext(CartContext); // Use CartContext
 
   useEffect(() => {
     fetchProducts();
@@ -131,44 +140,85 @@ export default function Products() {
     setFilteredProducts(filtered);
   };
 
+  // const handleAddToCart = (product) => {
+  //   addToCart(product); // Add product to cart
+  //   alert(`${product.productName} added to cart!`);
+  // };
+
   const handleAddToCart = (product) => {
-    setCart([...cart, product]);
+    addToCart({
+      ...product,
+      quantity: 1, // Add initial quantity
+    });
     alert(`${product.productName} added to cart!`);
   };
-
   return (
     <div className="container">
       <Layout style={{ minHeight: "100vh" }}>
-        <Header style={{ background: "#fff", padding: "10px 20px", display: "flex", justifyContent: "space-between" }}>
+        <Header
+          style={{
+            background: "#fff",
+            padding: "10px 20px",
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
           <h1 style={{ color: "#333" }}>Sản phẩm của Haven Skin</h1>
           <Badge count={cart.length}>
-            <ShoppingCartOutlined style={{ fontSize: "24px", cursor: "pointer" }} />
+            <ShoppingCartOutlined
+              style={{ fontSize: "24px", cursor: "pointer" }}
+              onClick={() => navigate("/shopping-cart")}
+            />
           </Badge>
         </Header>
 
         <Layout>
           <Sider width={250} style={{ background: "#fff", padding: "20px" }}>
             <h4>Danh mục</h4>
-            <Menu mode="inline" selectedKeys={[selectedCategory]} onClick={(e) => handleCategorySelect(e.key)}>
+            <Menu
+              mode="inline"
+              selectedKeys={[selectedCategory]}
+              onClick={(e) => handleCategorySelect(e.key)}
+            >
               <Menu.Item key="">All</Menu.Item>
               {categories.map((category) => (
-                <Menu.Item key={category.categoryId}>{category.categoryName}</Menu.Item>
+                <Menu.Item key={category.categoryId}>
+                  {category.categoryName}
+                </Menu.Item>
               ))}
             </Menu>
             <h4>Loại da</h4>
-            <Menu mode="inline" selectedKeys={[selectedSkinType]} onClick={(e) => handleSkinTypeSelect(e.key)}>
+            <Menu
+              mode="inline"
+              selectedKeys={[selectedSkinType]}
+              onClick={(e) => handleSkinTypeSelect(e.key)}
+            >
               <Menu.Item key="">All</Menu.Item>
               {skinTypes.map((skinType) => (
-                <Menu.Item key={skinType.skinTypeId}>{skinType.skinName}</Menu.Item>
+                <Menu.Item key={skinType.skinTypeId}>
+                  {skinType.skinName}
+                </Menu.Item>
               ))}
             </Menu>
           </Sider>
 
           <Layout>
             <Content style={{ padding: "20px" }}>
-              <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
-                <Input placeholder="Search for products..." value={searchTerm} onChange={handleSearch} style={{ width: "300px" }} />
-                <Select placeholder="Sort by" style={{ width: "200px" }} onChange={handleSort} value={sortOption}>
+              <div
+                style={{ display: "flex", gap: "10px", marginBottom: "20px" }}
+              >
+                <Input
+                  placeholder="Search for products..."
+                  value={searchTerm}
+                  onChange={handleSearch}
+                  style={{ width: "300px" }}
+                />
+                <Select
+                  placeholder="Sort by"
+                  style={{ width: "200px" }}
+                  onChange={handleSort}
+                  value={sortOption}
+                >
                   <Option value="a-z">A-Z</Option>
                   <Option value="z-a">Z-A</Option>
                   <Option value="low-high">Price: Low to High</Option>
@@ -178,19 +228,23 @@ export default function Products() {
 
               <Row gutter={[16, 16]}>
                 {filteredProducts.map((product) => (
-                  <Col xs={24} sm={12} md={8} lg={6} key={product.productId}  onClick={() => navigate(`/products/${product.productId}`)}>
-                    
+                  <Col xs={24} sm={12} md={8} lg={6} key={product.productId}>
                     <Card
-                    
                       hoverable
                       cover={[
-                        <p style={{padding: 2,marginLeft: "79%", backgroundColor: "red", color: "white", width: 50, borderRadius: "5px"}}><i class="fa-solid fa-down-long"></i> {discounts[product.discountId] || 0}%</p>,
+                        <p style={{padding: 2,marginLeft: "79%",
+                           backgroundColor: "red", color: "white", width: 50,
+                            borderRadius: "5px"}}><i class="fa-solid fa-down-long"></i> 
+                            {discounts[product.discountId] || 0}%</p>,
                         <img
                           alt={product.productName}
                           src={product.productImages[0]?.imageURL}
-                          style={{ height: "200px", objectFit: "contain", padding: 2 }}
+                          style={{
+                            height: "200px",
+                            objectFit: "contain",
+                            padding: 2,
+                          }}
                         />
-                       
                       ]}
                     >
                       <Meta
@@ -199,23 +253,25 @@ export default function Products() {
                           <>
                             <strong>{product.discountPrice}VND</strong>
                             <br />
-                            <p style={{ textDecoration: "line-through", color: "red" }}>
+                            <p
+                              style={{
+                                textDecoration: "line-through",
+                                color: "red",
+                              }}
+                            >
                               {product.unitPrice}VND
                             </p>
                             <br />
-                            {/* <p>Giảm giá: {discounts[product.discountId] || 0}%</p> // Display discount percentage */}
-                            {/* <Rate allowHalf defaultValue={Math.random() * 5} /> */}
+                            {/* <p>
+                              Giảm giá: {discounts[product.discountId] || 0}%
+                            </p>{" "} */}
                           </>
                         }
                       />
-                      {/* <Button
+                      <Button
                         type="primary"
-                        onClick={() => navigate(`/products/${product.productId}`)}
-                        style={{ marginTop: "10px", marginRight: "10px" }}
+                        onClick={() => handleAddToCart(product)}
                       >
-                        View Details
-                      </Button> */}
-                      <Button  type="primary" onClick={() => handleAddToCart(product)}>
                         Add to Cart
                       </Button>
                     </Card>
