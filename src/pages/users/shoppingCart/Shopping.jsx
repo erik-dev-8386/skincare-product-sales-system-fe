@@ -42,7 +42,7 @@ export default function CartPage() {
 
   return (
     <div>
-      <Header />
+      {/* <Header /> */}
       <ShoppingCartContent
         cartItems={cart}
         increaseQuantity={increaseQuantity}
@@ -51,7 +51,7 @@ export default function CartPage() {
         handleCheckout={handleCheckout}
         totalAmount={totalAmount}
       />
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 }
