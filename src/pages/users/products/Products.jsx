@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Card, Button, Input, Select, Layout, Menu, Badge, Row, Col, Rate } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import api from "../../../config/api";
+import { center } from "@cloudinary/url-gen/qualifiers/textAlignment";
 
 const { Meta } = Card;
 const { Option } = Select;
@@ -178,15 +179,19 @@ export default function Products() {
               <Row gutter={[16, 16]}>
                 {filteredProducts.map((product) => (
                   <Col xs={24} sm={12} md={8} lg={6} key={product.productId}  onClick={() => navigate(`/products/${product.productId}`)}>
+                    
                     <Card
+                    
                       hoverable
-                      cover={
+                      cover={[
+                        <p style={{padding: 2,marginLeft: "79%", backgroundColor: "red", color: "white", width: 50, borderRadius: "5px"}}><i class="fa-solid fa-down-long"></i> {discounts[product.discountId] || 0}%</p>,
                         <img
                           alt={product.productName}
                           src={product.productImages[0]?.imageURL}
                           style={{ height: "200px", objectFit: "contain", padding: 2 }}
                         />
-                      }
+                       
+                      ]}
                     >
                       <Meta
                         title={product.productName}
@@ -198,7 +203,7 @@ export default function Products() {
                               {product.unitPrice}VND
                             </p>
                             <br />
-                            <p>Giảm giá: {discounts[product.discountId] || 0}%</p> {/* Display discount percentage */}
+                            {/* <p>Giảm giá: {discounts[product.discountId] || 0}%</p> // Display discount percentage */}
                             {/* <Rate allowHalf defaultValue={Math.random() * 5} /> */}
                           </>
                         }
@@ -210,7 +215,7 @@ export default function Products() {
                       >
                         View Details
                       </Button> */}
-                      <Button type="primary" onClick={() => handleAddToCart(product)}>
+                      <Button  type="primary" onClick={() => handleAddToCart(product)}>
                         Add to Cart
                       </Button>
                     </Card>
