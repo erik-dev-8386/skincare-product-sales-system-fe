@@ -28,11 +28,11 @@ const BrandManagement = () => {
   };
 
   const columns = [
-    {
-      title: "ID thương hiệu",
-      dataIndex: "brandId",
-      key: "brandId",
-    },
+    // {
+    //   title: "ID thương hiệu",
+    //   dataIndex: "brandId",
+    //   key: "brandId",
+    // },
     {
       title: "Tên thương hiệu",
       dataIndex: "brandName",

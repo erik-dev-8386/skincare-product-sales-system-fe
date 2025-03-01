@@ -3,6 +3,7 @@
     position: fixed;
     top: 0;
     background-color: #900001;
+    /* background: linear-gradient(to right, #900001, #c0244e); */
     left: 0;
     right: 0;
     /* height: 85px; */
@@ -113,11 +114,13 @@
     /*  bóng đổ cho màu đen mờ */
     min-width: 160px;
     background-color: #900001;
+    /* background: linear-gradient(to right, #900001, #c0244e); */
 }
 
 .nav .subnav {
     position: absolute;
     background-color: #900001;
+    /* background: linear-gradient(to right, #900001, #c0244e); */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     display: none;
     min-width: 160px;
@@ -125,6 +128,7 @@
 
 .nav .subnav li:hover a {
     background-color: #900001;
+    /* background: linear-gradient(to right,#900001, #c0244e ); */
     color: #fff;
 }
 
@@ -202,6 +206,7 @@
     top: 100%;
     right: 0; 
     background-color: #900001;
+    /* background: linear-gradient(to right,#900001, #c0244e ); */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     min-width: 120px;
     display: none;

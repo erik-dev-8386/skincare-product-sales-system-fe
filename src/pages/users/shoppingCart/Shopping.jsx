@@ -1,99 +1,137 @@
-import React, { useState } from "react";
-import s1 from '../../../assets/home/s1.jpg'
+import React, { useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { CartContext } from "../../../context/CartContext"; // Import CartContext
+import Header from "../../../component/Header/Header";
 import Footer from "../../../component/Footer/Footer";
-import Header from '../../../component/Header/Header'
-import './Shopping.css'
+import "./Shopping.css";
+
 export default function CartPage() {
-    const [cartItems, setCartItems] = useState([
-        { id: 1, name: "Tên sản phẩm", price: ".....", category: ".....", quantity: 1, selected: false },
-        { id: 2, name: "Tên sản phẩm", price: ".....", category: ".....", quantity: 1, selected: false },
-        { id: 3, name: "Tên sản phẩm", price: ".....", category: ".....", quantity: 1, selected: false }
-    ]);
+  const navigate = useNavigate();
+  const { cart, setCart } = useContext(CartContext); // Use CartContext
 
-    const increaseQuantity = (id) => {
-        setCartItems(cartItems.map(item =>
-            item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-        ));
-    };
-
-    const decreaseQuantity = (id) => {
-        setCartItems(cartItems.map(item =>
-            item.id === id && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item
-        ));
-    };
-
-    const deleteItem = (id) => {
-        setCartItems(cartItems.filter(item => item.id !== id));
-    };
-
-    const toggleSelectAll = (e) => {
-        const isChecked = e.target.checked;
-        setCartItems(cartItems.map(item => ({ ...item, selected: isChecked })));
-    };
-
-    const handleCheckout = () => {
-        window.location.href = "/cart"; // Điều hướng sang trang mới
-    };
-    return (
-        <>
-            {/* <Header /> */}
-            <div className="cart-container">
-                <div className="cart-header">
-                    <h1 className="gh">Giỏ hàng</h1>
-                    <span>{cartItems.length} sản phẩm</span>
-                </div>
-
-                <div className="cart-items">
-                    <div className="select-all">
-                        <input type="checkbox" id="select-all" onChange={toggleSelectAll} />
-                        <label htmlFor="select-all">Chọn tất cả</label>
-                    </div>
-
-                    {cartItems.map(item => (
-    <div key={item.id} className="cart-item">
-        <div className="product-container">
-            <img src={s1} alt="Product" className="sss" />
-            <div className="product-info">
-                <div className="product-name">{item.name}</div>
-                <div className="product-details">
-                    Đơn giá: {item.price} | Phân loại: {item.category}
-                </div>
-            </div>
-            <div className="quantity-control">
-                <button onClick={() => decreaseQuantity(item.id)}>-</button>
-                <span>{String(item.quantity).padStart(2, '0')}</span>
-                <button onClick={() => increaseQuantity(item.id)}>+</button>
-                <input 
-                    type="checkbox" 
-                    checked={item.selected} 
-                    onChange={() =>
-                        setCartItems(cartItems.map(i => i.id === item.id ? { ...i, selected: !i.selected } : i))
-                    } 
-                />
-                <button className="delete-btn" onClick={() => deleteItem(item.id)}>🗑</button>
-            </div>
-        </div>
-    </div>
-))}
-
-
-                </div>
-
-                <div className="order-summary">
-                    <div className="summary-header">
-                        <h2>Thông tin đơn hàng</h2>
-                    </div>
-                    <div className="summary-content">
-                        <div>Tổng sản phẩm đã chọn: {cartItems.filter(item => item.selected).length}</div>
-                        <div>Tạm tính: ..................VNĐ</div>
-                        <div>Giảm giá: ......%</div>
-                        <div>Tích điểm: ......</div>
-                        <div className="total-price">Tổng thanh toán: ..........VNĐ</div>
-                    </div>
-                    <button className="checkout-btn" onClick={handleCheckout}>Đặt hàng</button>
-                </div>
-            </div>
-            {/* <Footer /> */}
-        </>
+  const increaseQuantity = (id) => {
+    setCart((prevCart) =>
+      prevCart.map((item) =>
+        item.productId === id ? { ...item, quantity: item.quantity + 1 } : item
+      )
     );
-} 
+  };
+
+  const decreaseQuantity = (id) => {
+    setCart((prevCart) =>
+      prevCart.map((item) =>
+        item.productId === id && item.quantity > 1
+          ? { ...item, quantity: item.quantity - 1 }
+          : item
+      )
+    );
+  };
+
+  const deleteItem = (id) => {
+    setCart((prevCart) => prevCart.filter((item) => item.productId !== id));
+  };
+
+  const handleCheckout = () => {
+    navigate("/cart", { state: { cartItems: cart } });
+  };
+
+  const totalAmount = cart.reduce(
+    (total, item) => total + item.unitPrice * item.quantity,
+    0
+  );
+
+  return (
+    <div>
+      <Header />
+      <ShoppingCartContent
+        cartItems={cart}
+        increaseQuantity={increaseQuantity}
+        decreaseQuantity={decreaseQuantity}
+        deleteItem={deleteItem}
+        handleCheckout={handleCheckout}
+        totalAmount={totalAmount}
+      />
+      <Footer />
+    </div>
+  );
+}
+
+const ShoppingCartContent = ({
+  cartItems,
+  increaseQuantity,
+  decreaseQuantity,
+  deleteItem,
+  handleCheckout,
+  totalAmount,
+}) => {
+  return (
+    <div className="container px-3 my-5 clearfix">
+      <div className="card">
+        <div className="card-header">
+          <h2>Shopping Cart</h2>
+        </div>
+        <div className="card-body">
+          <div className="table-responsive">
+            <table className="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Price</th>
+                  <th>Quantity</th>
+                  <th>Total</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {cartItems.map((item) => (
+                  <tr key={item.productId}>
+                    <td>
+                      <img
+                        src={item.productImages[0]?.imageURL}
+                        className="d-block ui-w-40 ui-bordered mr-4"
+                        alt={item.productName}
+                        width="50"
+                      />
+                      {item.productName}
+                    </td>
+                    <td>{item.unitPrice} VND</td>
+                    <td>
+                      <button
+                        className="btn btn-sm btn-secondary"
+                        onClick={() => decreaseQuantity(item.productId)}
+                      >
+                        ➖
+                      </button>
+                      <span className="mx-2">{item.quantity}</span>
+                      <button
+                        className="btn btn-sm btn-secondary"
+                        onClick={() => increaseQuantity(item.productId)}
+                      >
+                        ➕
+                      </button>
+                    </td>
+                    <td>{item.unitPrice * item.quantity} VND</td>
+                    <td>
+                      <button
+                        className="btn btn-danger"
+                        onClick={() => deleteItem(item.productId)}
+                      >
+                        ❌ Remove
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div className="card-footer text-right">
+          <h4>Total Amount: {totalAmount} VND</h4>
+          <button className="btn btn-primary" onClick={handleCheckout}>
+            Checkout
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};

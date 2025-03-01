@@ -36,6 +36,10 @@ import Layout from './component/Layout/Layout.jsx';
 import ListProduct from './pages/admin/ProductManagement/ListProduct.jsx';
 import DashBoard from './pages/admin/DashBoard/DashBoard.jsx';
 import AdminLayout from './component/AdminLayout/AdminLayout.jsx';
+import Products from './pages/users/products/Products.jsx';
+import ProductDetail from './pages/users/products/ProductDetail.jsx';
+import ProductManagement from './pages/admin/ProductManagement/ProductManagement.jsx';
+
 
 function App() {
 
@@ -62,6 +66,9 @@ function App() {
         <Route path='/listskincare/Nhaycam' element={<Nhaycam />} />
         <Route path='/listskincare/Thuong' element={<Thuong />} />
         <Route path='/question' element={<Question />} />
+        <Route path='/products' element={<Products/>} />
+        <Route path='/products/:id' element={<ProductDetail/>} />
+     
 
       </Route>
       {/* login */}
@@ -79,10 +86,13 @@ function App() {
         <Route path='/admin/list-staff' element={<ListStaff />} />
         <Route path='/admin/create-staff' element={<CreateStaff />} />
         <Route path='/admin/list-user' element={<UserManagement />} />
-        <Route path='/admin/list-product' element={<ListProduct />} />
+        {/* <Route path='/admin/list-product' element={<ListProduct />} /> */}
+        <Route path='/admin/product-management' element={<ProductManagement />} />
       </Route>
 
       <Route path='*' element={<NotFound />} />
+      <Route path='/product-management' element={<ProductManagement />} />
+     
 
     </Routes>
   );
