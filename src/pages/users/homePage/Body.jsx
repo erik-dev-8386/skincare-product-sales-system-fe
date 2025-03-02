@@ -9,19 +9,29 @@ import s5 from '../../../assets/home/s5.jpg'
 import s7 from '../../../assets/home/s7.jpg'
 import s8 from '../../../assets/home/s8.jpg'
 import s6 from '../../../assets/home/s6.jpg'
+import { Breadcrumb } from 'antd';
+import {  useNavigate } from "react-router-dom";
+
+
 export default function Body() {
   const hotDealSlides = [
     { src: hot, title: "Hot Deal 1"} ,
     { src: hot, title: "Hot Deal 2"},
     { src: hot, title: "Hot Deal 3"},
   ];
+
+const navigate = useNavigate();
+
   return (
     <>
      
       <div className='container home-page'>
-        <div className="row">
+        {/* <div className="row">
         <h5 className='trang'>Trang chủ</h5>
-        </div>
+        </div> */}
+        <Breadcrumb style={{ marginBottom: "20px" }}>
+          <Breadcrumb.Item onClick={() => navigate("/")} style={{ cursor: "pointer" }}>Trang chủ</Breadcrumb.Item>
+        </Breadcrumb>
         <div className="row">
           <div className="col-12">
             <h3 className='hot'>Hot deal</h3>

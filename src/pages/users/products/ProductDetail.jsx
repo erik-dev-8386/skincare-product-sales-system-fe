@@ -166,8 +166,8 @@ export default function ProductDetail() {
     <div className="container">
       <div style={{ maxWidth: "1200px", margin: "auto", padding: "20px" }}>
         <Breadcrumb style={{ marginBottom: "20px" }}>
-          <Breadcrumb.Item onClick={() => navigate("/")} style={{ cursor: "pointer" }}>Home</Breadcrumb.Item>
-          <Breadcrumb.Item>Products</Breadcrumb.Item>
+          <Breadcrumb.Item onClick={() => navigate("/")} style={{ cursor: "pointer" }}>Trang chủ</Breadcrumb.Item>
+          <Breadcrumb.Item onClick={() => navigate("/products")} style={{ cursor: "pointer" }}>Sản phẩm</Breadcrumb.Item>
           <Breadcrumb.Item>{product.productName}</Breadcrumb.Item>
         </Breadcrumb>
 

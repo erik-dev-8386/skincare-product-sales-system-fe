@@ -1,16 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Card,
-  Button,
-  Input,
-  Select,
-  Layout,
-  Menu,
-  Badge,
-  Row,
-  Col,
-} from "antd";
+import {Card,Button,Input,Select,Layout,Menu,Badge,Row,Col,Breadcrumb} from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import api from "../../../config/api";
 import { CartContext } from "../../../context/CartContext"; // Import CartContext
@@ -155,6 +145,11 @@ export default function Products() {
   return (
     <div className="container">
       <Layout style={{ minHeight: "100vh" }}>
+      <Breadcrumb style={{ marginBottom: "20px" }}>
+          <Breadcrumb.Item onClick={() => navigate("/")} style={{ cursor: "pointer" }}>Trang chủ</Breadcrumb.Item>
+          <Breadcrumb.Item onClick={() => navigate("/products")} style={{ cursor: "pointer" }}>Sản phẩm</Breadcrumb.Item>
+          
+        </Breadcrumb>
         <Header
           style={{
             background: "#fff",
