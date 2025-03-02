@@ -128,10 +128,10 @@ export default function Products() {
         filtered.sort((a, b) => b.productName.localeCompare(a.productName));
         break;
       case "low-high":
-        filtered.sort((a, b) => a.unitPrice - b.unitPrice);
+        filtered.sort((a, b) => a.discountPrice - b.discountPrice);
         break;
       case "high-low":
-        filtered.sort((a, b) => b.unitPrice - a.unitPrice);
+        filtered.sort((a, b) => b.discountPrice - a.discountPrice);
         break;
       default:
         break;
@@ -228,14 +228,13 @@ export default function Products() {
 
               <Row gutter={[16, 16]}>
                 {filteredProducts.map((product) => (
-                  <Col xs={24} sm={12} md={8} lg={6} key={product.productId}>
+                  <Col xs={24} sm={12} md={8} lg={6} key={product.productId} onClick={() => navigate(`/products/${product.productId}`)}>
                     <Card
                       hoverable
                       cover={[
                         <p style={{padding: 2,marginLeft: "79%",
                            backgroundColor: "red", color: "white", width: 50,
-                            borderRadius: "5px"}}><i class="fa-solid fa-down-long"></i> 
-                            {discounts[product.discountId] || 0}%</p>,
+                            borderRadius: "5px"}}><i class="fa-solid fa-down-long"></i> {discounts[product.discountId] || 0}%</p>,
                         <img
                           alt={product.productName}
                           src={product.productImages[0]?.imageURL}
@@ -261,7 +260,7 @@ export default function Products() {
                             >
                               {product.unitPrice}VND
                             </p>
-                            <br />
+                            {/* <br /> */}
                             {/* <p>
                               Giảm giá: {discounts[product.discountId] || 0}%
                             </p>{" "} */}
