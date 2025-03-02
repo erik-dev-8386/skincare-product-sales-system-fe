@@ -186,7 +186,7 @@ export default function ProductDetail() {
             <div className="border rounded-4 mb-3 d-flex justify-content-center">
               <Zoom>
                 <img
-                  style={{ maxWidth: "100%", maxHeight: "100vh", margin: "auto", width: "800px" }}
+                  style={{ maxWidth: "100%", maxHeight: "100vh", margin: "auto", width: "800px", height: "400px" }}
                   className="rounded-4 fit"
                   src={mainImage} // Sử dụng mainImage để hiển thị ảnh chính
                   alt={product.productName}
