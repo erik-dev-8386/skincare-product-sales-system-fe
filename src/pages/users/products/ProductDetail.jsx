@@ -87,7 +87,9 @@ import { useParams, useNavigate } from "react-router-dom";
 import { Card, Button, Breadcrumb, Row, Col, Typography, Divider, InputNumber } from "antd";
 import { ShoppingCartOutlined, ArrowLeftOutlined, HeartOutlined, DollarOutlined } from "@ant-design/icons";
 import api from "../../../config/api";
-import './ProductDetail.css';
+import Zoom from "react-medium-image-zoom"; // Import the Zoom component
+import "react-medium-image-zoom/dist/styles.css"; // Import the default styles
+import "./ProductDetail.css";
 
 const { Title, Text } = Typography;
 
@@ -103,6 +105,7 @@ export default function ProductDetail() {
   const [discounts, setDiscounts] = useState([]);
   const [similarProducts, setSimilarProducts] = useState([]); // Sản phẩm tương tự
   const [sameSkinTypeProducts, setSameSkinTypeProducts] = useState([]); // Sản phẩm cùng loại da
+  const [mainImage, setMainImage] = useState(""); // State để lưu ảnh chính hiện tại
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -110,6 +113,7 @@ export default function ProductDetail() {
         const response = await api.get(`/products/${id}`);
         console.log("Product Response:", response.data); // Log product response
         setProduct(response.data);
+        setMainImage(response.data.productImages[0]?.imageURL); // Set ảnh chính ban đầu
 
         // Fetch similar products based on category
         const similarResponse = await api.get(`/products?categoryId=${response.data.categoryId}`);
@@ -160,6 +164,11 @@ export default function ProductDetail() {
     alert(`${product.productName} added to cart!`);
   };
 
+  // Function to update the main image when a thumbnail is clicked
+  const handleThumbnailClick = (imageURL) => {
+    setMainImage(imageURL);
+  };
+
   if (loading || !product) return <p>Loading...</p>;
 
   return (
@@ -175,30 +184,22 @@ export default function ProductDetail() {
           {/* Product Image */}
           <Col xs={24} md={12}>
             <div className="border rounded-4 mb-3 d-flex justify-content-center">
-              <a
-                data-fslightbox="mygalley"
-                className="rounded-4"
-                target="_blank"
-                data-type="image"
-                href={product.productImages[0]?.imageURL}
-              >
+              <Zoom>
                 <img
-                  style={{ maxWidth: "100%", maxHeight: "100vh", margin: "auto" }}
+                  style={{ maxWidth: "100%", maxHeight: "100vh", margin: "auto", width: "800px" }}
                   className="rounded-4 fit"
-                  src={product.productImages[0]?.imageURL}
+                  src={mainImage} // Sử dụng mainImage để hiển thị ảnh chính
                   alt={product.productName}
                 />
-              </a>
+              </Zoom>
             </div>
             <div className="d-flex justify-content-center mb-3">
               {product.productImages.map((image, index) => (
-                <a
+                <div
                   key={index}
-                  data-fslightbox="mygalley"
-                  className="border mx-1 rounded-2"
-                  target="_blank"
-                  data-type="image"
-                  href={image.imageURL}
+                  className={`border mx-1 rounded-2 ${mainImage === image.imageURL ? "thumbnail-active" : ""}`}
+                  onClick={() => handleThumbnailClick(image.imageURL)} // Cập nhật ảnh chính khi nhấp vào ảnh nhỏ
+                  style={{ cursor: "pointer"}}
                 >
                   <img
                     width={60}
@@ -207,7 +208,7 @@ export default function ProductDetail() {
                     src={image.imageURL}
                     alt={`Thumbnail ${index + 1}`}
                   />
-                </a>
+                </div>
               ))}
             </div>
           </Col>
@@ -240,8 +241,6 @@ export default function ProductDetail() {
               <strong>Mô tả:</strong>
               <p dangerouslySetInnerHTML={{ __html: product.description }} />
               <div className="row" style={{ color: "black" }}>
-
-
                 <div className="row" style={{ fontSize: 25, color: "red" }}>
                   <dt className="col-3">Giảm giá:</dt>
                   <dd className="col-9">{findNameById(product.discountId, discounts)} %</dd>
@@ -261,7 +260,6 @@ export default function ProductDetail() {
 
                 <dt className="col-3">Loại da:</dt>
                 <dd className="col-9">{findNameById(product.skinTypeId, skinTypes)}</dd>
-
               </div>
               <hr />
               <div className="row mb-4">
@@ -283,7 +281,7 @@ export default function ProductDetail() {
                 icon={<ShoppingCartOutlined />}> Thêm vào giỏ hàng</Button>
               <Button type="default" className="btn btn-light border border-secondary py-2 icon-hover px-3 ms-2"
                 style={{ padding: 5 }}
-                icon={<HeartOutlined style={{color: "red"}}/>}> Yêu thích</Button>
+                icon={<HeartOutlined style={{ color: "red" }} />}> Yêu thích</Button>
             </div>
           </Col>
         </Row>
