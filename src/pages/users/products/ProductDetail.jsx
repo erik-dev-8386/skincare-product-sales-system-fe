@@ -81,17 +81,15 @@
 //     </div>
 //   );
 // }
-
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Card, Button, Breadcrumb, Row, Col, Typography, Divider, InputNumber } from "antd";
-import { ShoppingCartOutlined, ArrowLeftOutlined, HeartOutlined, DollarOutlined } from "@ant-design/icons";
+import { ShoppingCartOutlined, HeartOutlined, DollarOutlined } from "@ant-design/icons";
 import api from "../../../config/api";
-import Zoom from "react-medium-image-zoom"; // Import the Zoom component
-import "react-medium-image-zoom/dist/styles.css"; // Import the default styles
 import "./ProductDetail.css";
+import { MapInteractionCSS } from "react-map-interaction";
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -103,25 +101,24 @@ export default function ProductDetail() {
   const [skinTypes, setSkinTypes] = useState([]);
   const [categories, setCategories] = useState([]);
   const [discounts, setDiscounts] = useState([]);
-  const [similarProducts, setSimilarProducts] = useState([]); // Sản phẩm tương tự
-  const [sameSkinTypeProducts, setSameSkinTypeProducts] = useState([]); // Sản phẩm cùng loại da
-  const [mainImage, setMainImage] = useState(""); // State để lưu ảnh chính hiện tại
+  const [similarProducts, setSimilarProducts] = useState([]);
+  const [sameSkinTypeProducts, setSameSkinTypeProducts] = useState([]);
+  const [mainImage, setMainImage] = useState("");
+  const [value, setValue] = useState({ scale: 1, translation: { x: 0, y: 0 } }); // State for zoom and translation
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const response = await api.get(`/products/${id}`);
-        console.log("Product Response:", response.data); // Log product response
+        console.log("Product Response:", response.data);
         setProduct(response.data);
-        setMainImage(response.data.productImages[0]?.imageURL); // Set ảnh chính ban đầu
+        setMainImage(response.data.productImages[0]?.imageURL);
 
-        // Fetch similar products based on category
         const similarResponse = await api.get(`/products?categoryId=${response.data.categoryId}`);
-        setSimilarProducts(similarResponse.data.filter(p => p.productId !== id)); // Loại bỏ sản phẩm hiện tại
+        setSimilarProducts(similarResponse.data.filter(p => p.productId !== id));
 
-        // Fetch products with the same skin type
         const sameSkinTypeResponse = await api.get(`/products?skinTypeId=${response.data.skinTypeId}`);
-        setSameSkinTypeProducts(sameSkinTypeResponse.data.filter(p => p.productId !== id)); // Loại bỏ sản phẩm hiện tại
+        setSameSkinTypeProducts(sameSkinTypeResponse.data.filter(p => p.productId !== id));
       } catch (error) {
         console.error("Error fetching product:", error);
       } finally {
@@ -154,9 +151,8 @@ export default function ProductDetail() {
     fetchOptions();
   }, []);
 
-  // Helper function to find name by ID
   const findNameById = (id, data) => {
-    const item = data.find((item) => item.brandId === id || item.skinTypeId === id || item.categoryId === id || item.discountId === id);
+    const item = data.find(item => item.brandId === id || item.skinTypeId === id || item.categoryId === id || item.discountId === id);
     return item ? item.brandName || item.skinName || item.categoryName || item.discountPercent : "Loading...";
   };
 
@@ -164,9 +160,12 @@ export default function ProductDetail() {
     alert(`${product.productName} added to cart!`);
   };
 
-  // Function to update the main image when a thumbnail is clicked
   const handleThumbnailClick = (imageURL) => {
     setMainImage(imageURL);
+  };
+
+  const resetZoom = () => {
+    setValue({ scale: 1, translation: { x: 0, y: 0 } }); // Reset zoom and translation
   };
 
   if (loading || !product) return <p>Loading...</p>;
@@ -184,22 +183,23 @@ export default function ProductDetail() {
           {/* Product Image */}
           <Col xs={24} md={12}>
             <div className="border rounded-4 mb-3 d-flex justify-content-center">
-              <Zoom>
+              <MapInteractionCSS value={value} onChange={setValue}>
                 <img
                   style={{ maxWidth: "100%", maxHeight: "100vh", margin: "auto", width: "800px", height: "400px" }}
                   className="rounded-4 fit"
-                  src={mainImage} // Sử dụng mainImage để hiển thị ảnh chính
+                  src={mainImage}
                   alt={product.productName}
                 />
-              </Zoom>
+              </MapInteractionCSS>
             </div>
+            <Button onClick={resetZoom} style={{ marginBottom: "20px" }}>Đặt lại hình ảnh</Button>
             <div className="d-flex justify-content-center mb-3">
               {product.productImages.map((image, index) => (
                 <div
                   key={index}
                   className={`border mx-1 rounded-2 ${mainImage === image.imageURL ? "thumbnail-active" : ""}`}
-                  onClick={() => handleThumbnailClick(image.imageURL)} // Cập nhật ảnh chính khi nhấp vào ảnh nhỏ
-                  style={{ cursor: "pointer"}}
+                  onClick={() => handleThumbnailClick(image.imageURL)}
+                  style={{ cursor: "pointer" }}
                 >
                   <img
                     width={60}
@@ -229,13 +229,8 @@ export default function ProductDetail() {
               <div className="mb-3">
                 <span className="h5">{product.discountPrice} VND</span>
                 <span className="text-muted"> /mỗi hộp</span>
-                <p
-                  style={{
-                    textDecoration: "line-through",
-                    color: "gray",
-                  }}
-                >
-                  {product.unitPrice}VND
+                <p style={{ textDecoration: "line-through", color: "gray" }}>
+                  {product.unitPrice} VND
                 </p>
               </div>
               <strong>Mô tả:</strong>
@@ -272,16 +267,10 @@ export default function ProductDetail() {
                   />
                 </div>
               </div>
-              <Button type="primary" className="btn btn-warning shadow-0" onClick={handleAddToCart}
-                style={{ padding: 5 }}
-                icon={<DollarOutlined />}> Mua ngay
+              <Button type="primary" className="btn btn-warning shadow-0" onClick={handleAddToCart} style={{ padding: 5 }} icon={<DollarOutlined />}> Mua ngay
               </Button>
-              <Button type="default" className="btn btn-primary shadow-0 ms-2" onClick={handleAddToCart}
-                style={{ padding: 5 }}
-                icon={<ShoppingCartOutlined />}> Thêm vào giỏ hàng</Button>
-              <Button type="default" className="btn btn-light border border-secondary py-2 icon-hover px-3 ms-2"
-                style={{ padding: 5 }}
-                icon={<HeartOutlined style={{ color: "red" }} />}> Yêu thích</Button>
+              <Button type="default" className="btn btn-primary shadow-0 ms-2" onClick={handleAddToCart} style={{ padding: 5 }} icon={<ShoppingCartOutlined />}> Thêm vào giỏ hàng</Button>
+              <Button type="default" className="btn btn-light border border-secondary py-2 icon-hover px-3 ms-2" style={{ padding: 5 }} icon={<HeartOutlined style={{ color: "red" }} />}> Yêu thích</Button>
             </div>
           </Col>
         </Row>
