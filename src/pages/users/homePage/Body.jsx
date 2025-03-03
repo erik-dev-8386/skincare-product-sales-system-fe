@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import './Body.css';
 import hot from '../../../assets/home/hotdeal.jpg';
+import slider01 from '../../../assets/home/slider_1.webp';
+import slider02 from "../../../assets/home/Slider.jpg";
 import Slider from './Slider';
 import s1 from '../../../assets/home/s1.jpg';
 import s3 from '../../../assets/home/s3.jpg';
@@ -22,8 +24,8 @@ export default function Body() {
 
   const hotDealSlides = [
     { src: hot, title: "Hot Deal 1" },
-    { src: hot, title: "Hot Deal 2" },
-    { src: hot, title: "Hot Deal 3" },
+    { src: slider01, title: "Hot Deal 2" },
+    { src: slider02, title: "Hot Deal 3" },
   ];
 
   // Fetch suitable products from API
