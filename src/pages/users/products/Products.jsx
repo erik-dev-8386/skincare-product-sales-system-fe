@@ -425,13 +425,13 @@ export default function Products() {
     setFilteredProducts(filtered);
   };
 
-  const handleAddToCart = (product) => {
-    addToCart({
-      ...product,
-      quantity: 1,
-    });
-    alert(`${product.productName} added to cart!`);
-  };
+  // const handleAddToCart = (product) => {
+  //   addToCart({
+  //     ...product,
+  //     quantity: 1,
+  //   });
+  //   alert(`${product.productName} added to cart!`);
+  // };
 
   return (
     <div className="container">
@@ -459,12 +459,12 @@ export default function Products() {
           }}
         >
           <h1 style={{ color: "#333" }}>Sản phẩm của Haven Skin</h1>
-          <Badge count={cart.length}>
+          {/* <Badge count={cart.length}>
             <ShoppingCartOutlined
               style={{ fontSize: "24px", cursor: "pointer" }}
               onClick={() => navigate("/shopping-cart")}
             />
-          </Badge>
+          </Badge> */}
         </Header>
 
         <Layout>
@@ -528,7 +528,7 @@ export default function Products() {
                       product={product}
                       discounts={discounts}
                       brands={brands} // Truyền brands vào ProductCard
-                      handleAddToCart={handleAddToCart}
+                      // handleAddToCart={handleAddToCart}
                     />
                   </Col>
                 ))}

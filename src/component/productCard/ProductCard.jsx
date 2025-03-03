@@ -75,7 +75,8 @@ import { useNavigate } from "react-router-dom";
 
 const { Meta } = Card;
 
-const ProductCard = ({ product, discounts = {}, brands = [], handleAddToCart }) => {
+// const ProductCard = ({ product, discounts = {}, brands = [], handleAddToCart }) => {
+  const ProductCard = ({ product, discounts = {}, brands = [] }) => {
   const navigate = useNavigate();
 
   // Kiểm tra và sử dụng giá trị mặc định nếu discountId không tồn tại
@@ -133,7 +134,7 @@ const ProductCard = ({ product, discounts = {}, brands = [], handleAddToCart }) 
           </>
         }
       />
-      <Button
+      {/* <Button
         type="primary"
         onClick={(e) => {
           e.stopPropagation();
@@ -141,7 +142,7 @@ const ProductCard = ({ product, discounts = {}, brands = [], handleAddToCart }) 
         }}
       >
         Add to Cart
-      </Button>
+      </Button> */}
     </Card>
   );
 };
