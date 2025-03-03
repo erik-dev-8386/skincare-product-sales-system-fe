@@ -19,6 +19,7 @@ import api from '../../../config/api'; // Import API config
 export default function Body() {
   const [suitableProducts, setSuitableProducts] = useState([]); // State to store suitable products
   const [discounts, setDiscounts] = useState({}); // State to store discounts
+  const [brands, setBrands] = useState([]); // Thêm state brands
   const [currentSlide, setCurrentSlide] = useState(0); // State to track current slide index
   const navigate = useNavigate();
 
@@ -40,6 +41,19 @@ export default function Body() {
     };
 
     fetchSuitableProducts();
+  }, []);
+
+  useEffect(() => {
+    const fetchBrands = async () => {
+      try {
+        const response = await api.get("/brands");
+        setBrands(response.data);
+      } catch (error) {
+        console.error("Error fetching brands:", error);
+      }
+    };
+  
+    fetchBrands();
   }, []);
 
   // Fetch discounts from API
@@ -69,14 +83,13 @@ export default function Body() {
   // Handle "Next" button click
   const handleNext = () => {
     setCurrentSlide((prevSlide) =>
-      prevSlide + 4 < suitableProducts.length ? prevSlide + 4 : 0 // Loop back to the start if at the end
+      prevSlide + 4 < suitableProducts.length ? prevSlide + 4 : 0
     );
   };
-
   // Handle "Prev" button click
   const handlePrev = () => {
     setCurrentSlide((prevSlide) =>
-      prevSlide - 4 >= 0 ? prevSlide - 4 : Math.floor((suitableProducts.length - 1) / 4) * 4 // Loop to the last slide if at the start
+      prevSlide - 4 >= 0 ? prevSlide - 4 : Math.max(0, suitableProducts.length - 4)
     );
   };
 
@@ -118,6 +131,7 @@ export default function Body() {
                 <ProductCard
                   product={product}
                   discounts={discounts} // Pass discounts to ProductCard
+                  brands={brands} // Truyền brands vào ProductCard
                   handleAddToCart={handleAddToCart}
                 />
               </div>

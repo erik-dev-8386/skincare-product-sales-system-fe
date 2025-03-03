@@ -148,7 +148,7 @@
 //       <Breadcrumb style={{ marginBottom: "20px" }}>
 //           <Breadcrumb.Item onClick={() => navigate("/")} style={{ cursor: "pointer" }}>Trang chủ</Breadcrumb.Item>
 //           <Breadcrumb.Item onClick={() => navigate("/products")} style={{ cursor: "pointer" }}>Sản phẩm</Breadcrumb.Item>
-          
+
 //         </Breadcrumb>
 //         <Header
 //           style={{
@@ -300,6 +300,7 @@ export default function Products() {
   const [sortOption, setSortOption] = useState("");
   const [categories, setCategories] = useState([]);
   const [skinTypes, setSkinTypes] = useState([]);
+  const [brands, setBrands] = useState([]); // Thêm state brands
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSkinType, setSelectedSkinType] = useState("");
   const [discounts, setDiscounts] = useState({});
@@ -312,6 +313,7 @@ export default function Products() {
     fetchCategories();
     fetchSkinTypes();
     fetchDiscounts();
+    fetchBrands(); // Thêm hàm fetchBrands
   }, []);
 
   const fetchProducts = async () => {
@@ -353,6 +355,15 @@ export default function Products() {
       setDiscounts(discountMap);
     } catch (error) {
       console.error("Error fetching discounts:", error);
+    }
+  };
+
+  const fetchBrands = async () => {
+    try {
+      const response = await api.get("/brands");
+      setBrands(response.data);
+    } catch (error) {
+      console.error("Error fetching brands:", error);
     }
   };
 
@@ -516,6 +527,7 @@ export default function Products() {
                     <ProductCard
                       product={product}
                       discounts={discounts}
+                      brands={brands} // Truyền brands vào ProductCard
                       handleAddToCart={handleAddToCart}
                     />
                   </Col>

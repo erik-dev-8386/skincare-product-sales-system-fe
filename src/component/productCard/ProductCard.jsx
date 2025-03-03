@@ -75,11 +75,17 @@ import { useNavigate } from "react-router-dom";
 
 const { Meta } = Card;
 
-const ProductCard = ({ product, discounts = {}, handleAddToCart }) => {
+const ProductCard = ({ product, discounts = {}, brands = [], handleAddToCart }) => {
   const navigate = useNavigate();
 
   // Kiểm tra và sử dụng giá trị mặc định nếu discountId không tồn tại
   const discountPercent = discounts[product.discountId] || 0;
+
+  // Hàm tìm brandName dựa trên brandId
+  const findBrandNameById = (brandId) => {
+    const brand = brands.find((brand) => brand.brandId === brandId);
+    return brand ? brand.brandName : "Unknown Brand";
+  };
 
   return (
     <Card
@@ -113,6 +119,7 @@ const ProductCard = ({ product, discounts = {}, handleAddToCart }) => {
         title={product.productName}
         description={
           <>
+            <p>{findBrandNameById(product.brandId)}</p> {/* Hiển thị brandName thay vì brandId */}
             <strong>{product.discountPrice}VND</strong>
             <br />
             <p

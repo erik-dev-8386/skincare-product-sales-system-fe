@@ -252,11 +252,10 @@ export default function ProductDetail() {
                 <dt className="col-3">Dung tích:</dt>
                 <dd className="col-9">{product.netWeight} ml</dd>
 
-                <dt className="col-3">Thương hiệu:</dt>
-                <dd className="col-9">{findNameById(product.brandId, brands)}</dd>
-
                 <dt className="col-3">Loại da:</dt>
                 <dd className="col-9">{findNameById(product.skinTypeId, skinTypes)}</dd> */}
+                <dt className="col-3">Thương hiệu:</dt>
+                <dd className="col-9">{findNameById(product.brandId, brands)}</dd>
               </div>
               <hr />
               <div className="row mb-4">
