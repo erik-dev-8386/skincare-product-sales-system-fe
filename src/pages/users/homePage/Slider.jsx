@@ -8,7 +8,7 @@ export default class Slider extends Component {
         id="carouselExampleCaptions"
         className="carousel slide"
         data-bs-ride="carousel"
-        data-bs-interval="5000" // Set the interval to 5000ms (5 seconds)
+        data-bs-interval="2000" // Set the interval to 2000ms (2 seconds)
         data-bs-pause="hover" // Pause on hover
       >
         <div className="carousel-indicators">

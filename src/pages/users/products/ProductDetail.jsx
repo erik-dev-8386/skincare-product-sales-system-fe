@@ -83,15 +83,17 @@
 // }
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Card, Button, Breadcrumb, Row, Col, Typography, Divider, InputNumber } from "antd";
+import { Card, Button, Breadcrumb, Row, Col, Typography, Divider, InputNumber, Tabs } from "antd";
 import { ShoppingCartOutlined, HeartOutlined, DollarOutlined } from "@ant-design/icons";
 import api from "../../../config/api";
 import "./ProductDetail.css";
 import { MapInteractionCSS } from "react-map-interaction";
 
 const { Title } = Typography;
+const { TabPane } = Tabs;
 
 export default function ProductDetail() {
+
   const { id } = useParams();
   const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -215,7 +217,7 @@ export default function ProductDetail() {
 
           {/* Product Details */}
           <Col xs={24} md={12}>
-            <div className="ps-lg-3" style={{padding: 10}}>
+            <div className="ps-lg-3" style={{ padding: 10 }}>
               <Title level={2} className="title text-dark">
                 {product.productName}
               </Title>
@@ -233,14 +235,14 @@ export default function ProductDetail() {
                   {product.unitPrice} VND
                 </p>
               </div>
-              <strong>Mô tả:</strong>
-              <p dangerouslySetInnerHTML={{ __html: product.description }} />
+              {/* <strong>Mô tả:</strong>
+              <p dangerouslySetInnerHTML={{ __html: product.description }} /> */}
               <div className="row" style={{ color: "black" }}>
                 <div className="row" style={{ fontSize: 25, color: "red" }}>
                   <dt className="col-3">Giảm giá:</dt>
                   <dd className="col-9">{findNameById(product.discountId, discounts)} %</dd>
                 </div>
-
+                {/* 
                 <dt className="col-3">Danh mục:</dt>
                 <dd className="col-9">{findNameById(product.categoryId, categories)}</dd>
 
@@ -254,7 +256,7 @@ export default function ProductDetail() {
                 <dd className="col-9">{findNameById(product.brandId, brands)}</dd>
 
                 <dt className="col-3">Loại da:</dt>
-                <dd className="col-9">{findNameById(product.skinTypeId, skinTypes)}</dd>
+                <dd className="col-9">{findNameById(product.skinTypeId, skinTypes)}</dd> */}
               </div>
               <hr />
               <div className="row mb-4">
@@ -275,52 +277,47 @@ export default function ProductDetail() {
         </Row>
 
         {/* Additional Information */}
+
         <section className="bg-light border-top py-4">
           <div className="container">
             <div className="row gx-4">
               <div className="col-lg-8 mb-4">
-                <div className="border rounded-2 px-3 py-2 bg-white">
-                  <ul className="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">
-                    <li className="nav-item d-flex" role="presentation">
-                      <a className="nav-link d-flex align-items-center justify-content-center w-100 active" id="ex1-tab-1" data-mdb-toggle="pill" href="#ex1-pills-1" role="tab" aria-controls="ex1-pills-1" aria-selected="true">
-                        Specification
-                      </a>
-                    </li>
-                    <li className="nav-item d-flex" role="presentation">
-                      <a className="nav-link d-flex align-items-center justify-content-center w-100" id="ex1-tab-2" data-mdb-toggle="pill" href="#ex1-pills-2" role="tab" aria-controls="ex1-pills-2" aria-selected="false">
-                        Warranty info
-                      </a>
-                    </li>
-                    <li className="nav-item d-flex" role="presentation">
-                      <a className="nav-link d-flex align-items-center justify-content-center w-100" id="ex1-tab-3" data-mdb-toggle="pill" href="#ex1-pills-3" role="tab" aria-controls="ex1-pills-3" aria-selected="false">
-                        Shipping info
-                      </a>
-                    </li>
-                    <li className="nav-item d-flex" role="presentation">
-                      <a className="nav-link d-flex align-items-center justify-content-center w-100" id="ex1-tab-4" data-mdb-toggle="pill" href="#ex1-pills-4" role="tab" aria-controls="ex1-pills-4" aria-selected="false">
-                        Seller profile
-                      </a>
-                    </li>
-                  </ul>
-                  <div className="tab-content" id="ex1-content">
-                    <div className="tab-pane fade show active" id="ex1-pills-1" role="tabpanel" aria-labelledby="ex1-tab-1">
-                      <p>
-                        With supporting text below as a natural lead-in to additional content. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                      </p>
-                    </div>
-                    <div className="tab-pane fade" id="ex1-pills-2" role="tabpanel" aria-labelledby="ex1-tab-2">
-                      Tab content or sample information now <br />
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    </div>
-                    <div className="tab-pane fade" id="ex1-pills-3" role="tabpanel" aria-labelledby="ex1-tab-3">
-                      Another tab content or sample information now <br />
-                      Dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    </div>
-                    <div className="tab-pane fade" id="ex1-pills-4" role="tabpanel" aria-labelledby="ex1-tab-4">
-                      Some other tab content or sample information now <br />
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    </div>
-                  </div>
+                <div className="tabStyle">
+                  <Tabs defaultActiveKey="1">
+                    <TabPane tab="Mô tả" key="1">
+                      <div className="tabContentStyle">
+                        <p dangerouslySetInnerHTML={{ __html: product.description }} />
+                      </div>
+                    </TabPane>
+                    <TabPane tab="Thông số" key="2">
+                      <div className="tabContentStyle">
+                        <strong>Danh mục:</strong>
+                        <p>{findNameById(product.categoryId, categories)}</p>
+
+                        <strong>Dung tích:</strong>
+                        <p>{product.netWeight} ml</p>
+
+                        <strong>Thương hiệu:</strong>
+                        <p>{findNameById(product.brandId, brands)}</p>
+
+                        <strong>Loại da:</strong>
+                        <p>{findNameById(product.skinTypeId, skinTypes)}</p>
+                      </div>
+                    </TabPane>
+                    <TabPane tab="Thành phần" key="3">
+                      <div className="tabContentStyle">
+                        <p>{product.ingredients}</p>
+                      </div>
+                    </TabPane>
+                    <TabPane tab="Cách dùng" key="4">
+                      <div className="tabContentStyle">
+                        <p>
+                          Some other tab content or sample information now <br />
+                          Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                        </p>
+                      </div>
+                    </TabPane>
+                  </Tabs>
                 </div>
               </div>
               <div className="col-lg-4">

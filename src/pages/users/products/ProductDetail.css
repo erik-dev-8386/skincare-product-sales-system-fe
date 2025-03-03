@@ -1,11 +1,23 @@
 .icon-hover:hover {
-    border-color: #3b71ca !important;
-    background-color: white !important;
-    color: #3b71ca !important;
-  }
-  
-  .icon-hover:hover i {
-    color: #3b71ca !important;
-  }
+  border-color: #3b71ca !important;
+  background-color: white !important;
+  color: #3b71ca !important;
+}
 
-  
+.icon-hover:hover i {
+  color: #3b71ca !important;
+}
+
+.tabStyle {
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.tabContentStyle {
+  padding: 20px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
