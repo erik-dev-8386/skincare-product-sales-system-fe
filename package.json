@@ -26,8 +26,11 @@
     "oidc-client": "^1.10.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-map-interaction": "^2.1.0",
+    "react-medium-image-zoom": "^5.2.14",
     "react-router-dom": "^7.1.5",
     "react-toastify": "^11.0.3",
+    "react-zoom-pan-pinch": "^3.7.0",
     "tinymce": "^7.7.0"
   },
   "devDependencies": {

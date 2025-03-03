@@ -1,21 +1,11 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Card,
-  Button,
-  Input,
-  Select,
-  Layout,
-  Menu,
-  Badge,
-  Row,
-  Col,
-} from "antd";
+import { Input, Select, Layout, Menu, Badge, Row, Col, Breadcrumb } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import api from "../../../config/api";
-import { CartContext } from "../../../context/CartContext"; // Import CartContext
+import { CartContext } from "../../../context/CartContext";
+import ProductCard from "../../../component/productCard/ProductCard"; // Import ProductCard component
 
-const { Meta } = Card;
 const { Option } = Select;
 const { Sider, Content, Header } = Layout;
 
@@ -26,18 +16,20 @@ export default function Products() {
   const [sortOption, setSortOption] = useState("");
   const [categories, setCategories] = useState([]);
   const [skinTypes, setSkinTypes] = useState([]);
+  const [brands, setBrands] = useState([]); // Thêm state brands
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSkinType, setSelectedSkinType] = useState("");
-  const [discounts, setDiscounts] = useState({}); // Store discounts by discountId
+  const [discounts, setDiscounts] = useState({});
 
   const navigate = useNavigate();
-  const { cart, addToCart } = useContext(CartContext); // Use CartContext
+  const { cart, addToCart } = useContext(CartContext);
 
   useEffect(() => {
     fetchProducts();
     fetchCategories();
     fetchSkinTypes();
-    fetchDiscounts(); // Fetch all discounts
+    fetchDiscounts();
+    fetchBrands(); // Thêm hàm fetchBrands
   }, []);
 
   const fetchProducts = async () => {
@@ -73,12 +65,21 @@ export default function Products() {
     try {
       const response = await api.get("/discounts");
       const discountMap = response.data.reduce((acc, discount) => {
-        acc[discount.discountId] = discount.discountPercent; // Map discountId to discountPercent
+        acc[discount.discountId] = discount.discountPercent;
         return acc;
       }, {});
       setDiscounts(discountMap);
     } catch (error) {
       console.error("Error fetching discounts:", error);
+    }
+  };
+
+  const fetchBrands = async () => {
+    try {
+      const response = await api.get("/brands");
+      setBrands(response.data);
+    } catch (error) {
+      console.error("Error fetching brands:", error);
     }
   };
 
@@ -128,10 +129,10 @@ export default function Products() {
         filtered.sort((a, b) => b.productName.localeCompare(a.productName));
         break;
       case "low-high":
-        filtered.sort((a, b) => a.unitPrice - b.unitPrice);
+        filtered.sort((a, b) => a.discountPrice - b.discountPrice);
         break;
       case "high-low":
-        filtered.sort((a, b) => b.unitPrice - a.unitPrice);
+        filtered.sort((a, b) => b.discountPrice - a.discountPrice);
         break;
       default:
         break;
@@ -141,20 +142,30 @@ export default function Products() {
   };
 
   // const handleAddToCart = (product) => {
-  //   addToCart(product); // Add product to cart
+  //   addToCart({
+  //     ...product,
+  //     quantity: 1,
+  //   });
   //   alert(`${product.productName} added to cart!`);
   // };
 
-  const handleAddToCart = (product) => {
-    addToCart({
-      ...product,
-      quantity: 1, // Add initial quantity
-    });
-    alert(`${product.productName} added to cart!`);
-  };
   return (
     <div className="container">
       <Layout style={{ minHeight: "100vh" }}>
+        <Breadcrumb style={{ marginBottom: "20px" }}>
+          <Breadcrumb.Item
+            onClick={() => navigate("/")}
+            style={{ cursor: "pointer" }}
+          >
+            Trang chủ
+          </Breadcrumb.Item>
+          <Breadcrumb.Item
+            onClick={() => navigate("/products")}
+            style={{ cursor: "pointer" }}
+          >
+            Sản phẩm
+          </Breadcrumb.Item>
+        </Breadcrumb>
         <Header
           style={{
             background: "#fff",
@@ -164,12 +175,12 @@ export default function Products() {
           }}
         >
           <h1 style={{ color: "#333" }}>Sản phẩm của Haven Skin</h1>
-          <Badge count={cart.length}>
+          {/* <Badge count={cart.length}>
             <ShoppingCartOutlined
               style={{ fontSize: "24px", cursor: "pointer" }}
               onClick={() => navigate("/shopping-cart")}
             />
-          </Badge>
+          </Badge> */}
         </Header>
 
         <Layout>
@@ -229,48 +240,12 @@ export default function Products() {
               <Row gutter={[16, 16]}>
                 {filteredProducts.map((product) => (
                   <Col xs={24} sm={12} md={8} lg={6} key={product.productId}>
-                    <Card
-                      hoverable
-                      cover={
-                        <img
-                          alt={product.productName}
-                          src={product.productImages[0]?.imageURL}
-                          style={{
-                            height: "200px",
-                            objectFit: "contain",
-                            padding: 2,
-                          }}
-                        />
-                      }
-                    >
-                      <Meta
-                        title={product.productName}
-                        description={
-                          <>
-                            <strong>{product.discountPrice}VND</strong>
-                            <br />
-                            <p
-                              style={{
-                                textDecoration: "line-through",
-                                color: "red",
-                              }}
-                            >
-                              {product.unitPrice}VND
-                            </p>
-                            <br />
-                            <p>
-                              Giảm giá: {discounts[product.discountId] || 0}%
-                            </p>{" "}
-                          </>
-                        }
-                      />
-                      <Button
-                        type="primary"
-                        onClick={() => handleAddToCart(product)}
-                      >
-                        Add to Cart
-                      </Button>
-                    </Card>
+                    <ProductCard
+                      product={product}
+                      discounts={discounts}
+                      brands={brands} // Truyền brands vào ProductCard
+                      // handleAddToCart={handleAddToCart}
+                    />
                   </Col>
                 ))}
               </Row>

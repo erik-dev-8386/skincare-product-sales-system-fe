@@ -1,16 +1,4 @@
-import {
-  Button,
-  Form,
-  Input,
-  Modal,
-  Table,
-  Popconfirm,
-  DatePicker,
-  Col,
-  Row,
-  Tag,
-  Upload,
-} from "antd";
+import {Button,Form,Input,Modal,Table,Popconfirm, DatePicker,Col,Row,Tag,Upload} from "antd";
 import { useForm } from "antd/es/form/Form";
 import { UploadOutlined } from "@ant-design/icons";
 import axios from "axios";
@@ -25,7 +13,7 @@ const ProductManagement = () => {
   const { Option } = Select;
   const [ProductList, setProductList] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
-  const [form] = useForm();
+  const [form] = Form.useForm();
   const [editingProduct, setEditingProduct] = useState(null);
   const [isDetailModalOpen, setDetailModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);

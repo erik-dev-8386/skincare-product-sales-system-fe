@@ -4,7 +4,13 @@ export default class Slider extends Component {
   render() {
     const { slides } = this.props; // Nhận slides từ props
     return (
-      <div id="carouselExampleCaptions" className="carousel slide" data-bs-ride="carousel">
+      <div
+        id="carouselExampleCaptions"
+        className="carousel slide"
+        data-bs-ride="carousel"
+        data-bs-interval="2000" // Set the interval to 2000ms (2 seconds)
+        data-bs-pause="hover" // Pause on hover
+      >
         <div className="carousel-indicators">
           {slides.map((_, index) => (
             <button
