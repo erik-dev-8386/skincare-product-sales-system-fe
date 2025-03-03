@@ -5,6 +5,7 @@ import { UserOutlined, DashboardOutlined, AppstoreOutlined, PercentageOutlined, 
 import cot from '../../../assets/cot.jpg';
 import tron from '../../../assets/tron.jpg';
 import axios from "axios";
+import "./DashBoard.css"
 
 export default function DashBoard() {
 

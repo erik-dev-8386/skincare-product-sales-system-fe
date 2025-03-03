@@ -25,13 +25,13 @@ const CategoryManagement = () => {
     };
 
     const columns = [
+        // {
+        //     title: 'ID danh mục',
+        //     dataIndex: 'categoryId',
+        //     key: 'categoryId',
+        // },
         {
-            title: 'ID loại sản phẩm',
-            dataIndex: 'categoryId',
-            key: 'categoryId',
-        },
-        {
-            title: 'Tên loại sản phẩm',
+            title: 'Tên danh mục',
             dataIndex: 'categoryName',
             key: 'categoryName',
         },
@@ -43,11 +43,11 @@ const CategoryManagement = () => {
                 <div dangerouslySetInnerHTML={{ __html: text && typeof text === "string" ? (text.length > 50 ? text.substring(0, 50) + "..." : text) : "" }} />
             ),
         },
-        {
-            title: 'Hướng dẫn sử dụng',
-            dataIndex: 'usageInstruction',
-            key: 'usageInstruction',
-        },
+        // {
+        //     title: 'Hướng dẫn sử dụng',
+        //     dataIndex: 'usageInstruction',
+        //     key: 'usageInstruction',
+        // },
         {
             title: 'Trạng thái',
             dataIndex: 'status',
@@ -121,21 +121,21 @@ const CategoryManagement = () => {
         if (editingCategory) {
             try {
                 await api.put(`/categories/${editingCategory.categoryId}`, values);
-                toast.success("Đã cập nhật loại sản phẩm thành công!");
+                toast.success("Đã cập nhật danh mục thành công!");
                 fetchCategories();
                 handleCloseModal();
             } catch (error) {
-                toast.error("Cập nhật loại sản phẩm không thành công!");
+                toast.error("Cập nhật danh mục không thành công!");
             }
         } else {
             try {
                 const { status, ...newCategory } = values; // Loại bỏ status khi tạo mới
                 await api.post('/categories', newCategory);
-                toast.success("Đã thêm loại sản phẩm mới thành công!");
+                toast.success("Đã thêm danh mục mới thành công!");
                 fetchCategories();
                 handleCloseModal();
             } catch (error) {
-                toast.error("Thêm loại sản phẩm mới không thành công!");
+                toast.error("Thêm danh mục mới không thành công!");
             }
         }
     };
@@ -149,24 +149,24 @@ const CategoryManagement = () => {
     const handleDeleteCategory = async (categoryId) => {
         try {
             await api.delete(`/categories/${categoryId}`);
-            toast.success("Đã xóa loại sản phẩm này thành công!");
+            toast.success("Đã xóa danh mục này thành công!");
             fetchCategories();
         } catch (error) {
-            toast.error("Xóa loại sản phẩm này không thành công!");
+            toast.error("Xóa danh mục này không thành công!");
         }
     };
 
     return (
         <div>
             <ToastContainer />
-            <h1>Quản lý loại sản phẩm</h1>
+            <h1>Quản lý danh mục</h1>
             <Button type="primary" onClick={handleOpenModal}>
-                <i class="fa-solid fa-plus"></i>
-                Thêm loại sản phẩm mới
+                <i className="fa-solid fa-plus"></i>
+                Thêm danh mục mới
             </Button>
             <Table dataSource={categoryList} columns={columns} rowKey="categoryId" style={{ marginTop: 16 }} />
             <Modal
-                title={editingCategory ? "Chỉnh sửa loại sản phẩm" : "Tạo loại sản phẩm mới"}
+                title={editingCategory ? "Chỉnh sửa danh mục" : "Tạo danh mục mới"}
                 open={isModalOpen}
                 onCancel={handleCloseModal}
                 onOk={() => form.submit()}
@@ -175,9 +175,9 @@ const CategoryManagement = () => {
             >
                 <Form form={form} labelCol={{ span: 24 }} onFinish={handleSubmitForm}>
                     <Form.Item
-                        label="Tên loại sản phẩm"
+                        label="Tên danh mục"
                         name="categoryName"
-                        rules={[{ required: true, message: "Tên loại sản phẩm không được bỏ trống!" }]}
+                        rules={[{ required: true, message: "Tên danh mục không được bỏ trống!" }]}
                     >
                         <Input />
                     </Form.Item>
@@ -191,13 +191,13 @@ const CategoryManagement = () => {
                             onChange={(value) => form.setFieldsValue({ description: value })}
                         />
                     </Form.Item>
-                    <Form.Item
+                    {/* <Form.Item
                         label="Hướng dẫn sử dụng"
                         name="usageInstruction"
                         rules={[{ required: true, message: "Hướng dẫn sử dụng không được bỏ trống!" }]}
                     >
                         <Input />
-                    </Form.Item>
+                    </Form.Item> */}
 
 
                     {editingCategory && (
@@ -218,7 +218,7 @@ const CategoryManagement = () => {
             </Modal>
             {/* Modal Chi Tiết */}
             <Modal
-                title="Chi tiết loại sản phẩm"
+                title={<h2>Chi tiết danh mục</h2>}
                 open={isDetailModalOpen}
                 onCancel={handleCloseDetailModal}
                 footer={null}
