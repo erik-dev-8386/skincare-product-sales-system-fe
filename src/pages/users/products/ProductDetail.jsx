@@ -117,6 +117,14 @@ export default function ProductDetail() {
     alert(`${product.productName} added to cart!`);
   };
 
+  const handleAddToCartAndNavigate = () => {
+    addToCart({
+      ...product,
+      quantity,
+    });
+    navigate("/shopping-cart");
+  };
+
   const handleThumbnailClick = (imageURL) => {
     setMainImage(imageURL);
   };
@@ -238,7 +246,7 @@ export default function ProductDetail() {
               <Button
                 type="primary"
                 className="btn btn-warning shadow-0"
-                onClick={handleAddToCart}
+                onClick={handleAddToCartAndNavigate}
                 style={{ padding: 5 }}
                 icon={<DollarOutlined />}
               >
