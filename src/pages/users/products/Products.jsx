@@ -19,6 +19,7 @@ export default function Products() {
   const [brands, setBrands] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSkinType, setSelectedSkinType] = useState("");
+  const [selectedBrand, setSelectedBrand] = useState("");
   const [discounts, setDiscounts] = useState({});
 
   const navigate = useNavigate();
@@ -86,25 +87,60 @@ export default function Products() {
   const handleSearch = (event) => {
     const query = event.target.value.toLowerCase();
     setSearchTerm(query);
-    filterProducts(query, selectedCategory, selectedSkinType, sortOption);
+    filterProducts(
+      query,
+      selectedCategory,
+      selectedSkinType,
+      selectedBrand,
+      sortOption
+    );
   };
 
   const handleSort = (value) => {
     setSortOption(value);
-    filterProducts(searchTerm, selectedCategory, selectedSkinType, value);
+    filterProducts(
+      searchTerm,
+      selectedCategory,
+      selectedSkinType,
+      selectedBrand,
+      value
+    );
   };
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
-    filterProducts(searchTerm, category, selectedSkinType, sortOption);
+    filterProducts(
+      searchTerm,
+      category,
+      selectedSkinType,
+      selectedBrand,
+      sortOption
+    );
+  };
+
+  const handleBrandSelect = (brand) => {
+    setSelectedBrand(brand);
+    filterProducts(
+      searchTerm,
+      selectedCategory,
+      selectedSkinType,
+      brand,
+      sortOption
+    );
   };
 
   const handleSkinTypeSelect = (skintype) => {
     setSelectedSkinType(skintype);
-    filterProducts(searchTerm, selectedCategory, skintype, sortOption);
+    filterProducts(
+      searchTerm,
+      selectedCategory,
+      skintype,
+      selectedBrand,
+      sortOption
+    );
   };
 
-  const filterProducts = (search, category, skintype, sort) => {
+  const filterProducts = (search, category, skintype, brand, sort) => {
     let filtered = [...products];
 
     if (search) {
@@ -119,6 +155,10 @@ export default function Products() {
 
     if (skintype) {
       filtered = filtered.filter((product) => product.skinTypeId === skintype);
+    }
+
+    if (brand) {
+      filtered = filtered.filter((product) => product.brandId === brand);
     }
 
     switch (sort) {
@@ -147,8 +187,16 @@ export default function Products() {
         <Breadcrumb
           style={{ marginBottom: "20px" }}
           items={[
-            { title: "Trang chủ", onClick: () => navigate("/"), style: { cursor: "pointer" } },
-            { title: "Sản phẩm", onClick: () => navigate("/products"), style: { cursor: "pointer" } },
+            {
+              title: "Trang chủ",
+              onClick: () => navigate("/"),
+              style: { cursor: "pointer" },
+            },
+            {
+              title: "Sản phẩm",
+              onClick: () => navigate("/products"),
+              style: { cursor: "pointer" },
+            },
           ]}
         />
 
@@ -197,11 +245,26 @@ export default function Products() {
                 })),
               ]}
             />
+            <h4>Thương hiệu</h4>
+            <Menu
+              mode="inline"
+              selectedKeys={[selectedBrand]}
+              onClick={(e) => handleBrandSelect(e.key)}
+              items={[
+                { key: "", label: "All" },
+                ...brands.map((brand) => ({
+                  key: brand.brandId,
+                  label: brand.brandName,
+                })),
+              ]}
+            />
           </Sider>
 
           <Layout>
             <Content style={{ padding: "20px" }}>
-              <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+              <div
+                style={{ display: "flex", gap: "10px", marginBottom: "20px" }}
+              >
                 <Input
                   placeholder="Search for products..."
                   value={searchTerm}
@@ -223,7 +286,7 @@ export default function Products() {
 
               <Row gutter={[16, 16]}>
                 {filteredProducts.map((product) => (
-                  <Col xs={24} sm={12} md={8} lg={6} key={product.productId} >
+                  <Col xs={24} sm={12} md={8} lg={6} key={product.productId}>
                     <ProductCard
                       product={product}
                       discounts={discounts}

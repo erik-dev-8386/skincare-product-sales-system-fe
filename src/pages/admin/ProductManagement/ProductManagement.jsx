@@ -1,4 +1,16 @@
-import { Button, Form, Input, Modal, Table, Popconfirm, DatePicker, Col, Row, Tag, Upload } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  Modal,
+  Table,
+  Popconfirm,
+  DatePicker,
+  Col,
+  Row,
+  Tag,
+  Upload,
+} from "antd";
 import { useForm } from "antd/es/form/Form";
 import { UploadOutlined } from "@ant-design/icons";
 import axios from "axios";
@@ -46,79 +58,79 @@ const ProductManagement = () => {
       dataIndex: "discountPrice",
       key: "discountPrice",
     },
-    {
-      title: "Mô tả",
-      dataIndex: "description",
-      key: "description",
-      render: (text) => (
-        <div
-          dangerouslySetInnerHTML={{
-            __html:
-              text && typeof text === "string"
-                ? text.length > 50
-                  ? text.substring(0, 50) + "..."
-                  : text
-                : "",
-          }}
-        />
-      ),
-    },
-    {
-      title: "Hướng dẫn sử dụng",
-      dataIndex: "usageInstruction",
-      key: "usageInstruction",
-      render: (text) => (
-        <div
-          dangerouslySetInnerHTML={{
-            __html:
-              text && typeof text === "string"
-                ? text.length > 50
-                  ? text.substring(0, 50) + "..."
-                  : text
-                : "",
-          }}
-        />
-      ),
-    },
-    {
-      title: "Thành phần",
-      dataIndex: "ingredients",
-      key: "ingredients",
-    },
+    // {
+    //   title: "Mô tả",
+    //   dataIndex: "description",
+    //   key: "description",
+    //   render: (text) => (
+    //     <div
+    //       dangerouslySetInnerHTML={{
+    //         __html:
+    //           text && typeof text === "string"
+    //             ? text.length > 50
+    //               ? text.substring(0, 50) + "..."
+    //               : text
+    //             : "",
+    //       }}
+    //     />
+    //   ),
+    // },
+    // {
+    //   title: "Hướng dẫn sử dụng",
+    //   dataIndex: "usageInstruction",
+    //   key: "usageInstruction",
+    //   render: (text) => (
+    //     <div
+    //       dangerouslySetInnerHTML={{
+    //         __html:
+    //           text && typeof text === "string"
+    //             ? text.length > 50
+    //               ? text.substring(0, 50) + "..."
+    //               : text
+    //             : "",
+    //       }}
+    //     />
+    //   ),
+    // },
+    // {
+    //   title: "Thành phần",
+    //   dataIndex: "ingredients",
+    //   key: "ingredients",
+    // },
     {
       title: "Số lượng",
       dataIndex: "quantity",
       key: "quantity",
     },
-    {
-      title: "Ngày tạo",
-      dataIndex: "createdTime",
-      key: "createdTime",
-      render: (date) => (date ? dayjs(date).format("YYYY-MM-DD") : ""),
-    },
-    {
-      title: "Ngày xóa",
-      dataIndex: "deletedTime",
-      key: "deletedTime",
-      render: (date) => (date ? dayjs(date).format("YYYY-MM-DD") : ""),
-    },
-    {
-      title: "Ngày sản xuất",
-      dataIndex: "mfg",
-      key: "mfg",
-      render: (date) => (date ? dayjs(date).format("YYYY-MM-DD") : ""),
-    },
-    {
-      title: "Hạn sử dụng",
-      dataIndex: "exp",
-      key: "exp",
-      render: (date) => (date ? dayjs(date).format("YYYY-MM-DD") : ""),
-    },
-    {
-      title: "Khối lượng (g)",
-      dataIndex: "netWeight",
-      key: "netWeight",
-    },
+    // {
+    //   title: "Ngày tạo",
+    //   dataIndex: "createdTime",
+    //   key: "createdTime",
+    //   render: (date) => (date ? dayjs(date).format("YYYY-MM-DD") : ""),
+    // },
+    // {
+    //   title: "Ngày xóa",
+    //   dataIndex: "deletedTime",
+    //   key: "deletedTime",
+    //   render: (date) => (date ? dayjs(date).format("YYYY-MM-DD") : ""),
+    // },
+    // {
+    //   title: "Ngày sản xuất",
+    //   dataIndex: "mfg",
+    //   key: "mfg",
+    //   render: (date) => (date ? dayjs(date).format("YYYY-MM-DD") : ""),
+    // },
+    // {
+    //   title: "Hạn sử dụng",
+    //   dataIndex: "exp",
+    //   key: "exp",
+    //   render: (date) => (date ? dayjs(date).format("YYYY-MM-DD") : ""),
+    // },
+    // {
+    //   title: "Khối lượng (g)",
+    //   dataIndex: "netWeight",
+    //   key: "netWeight",
+    // },
     {
       title: "Giảm giá",
       dataIndex: "discountId",
@@ -650,11 +662,18 @@ const ProductManagement = () => {
           <Form.Item
             label="Hướng dẫn sử dụng"
             name="usageInstruction"
-            rules={[{ required: true, message: "Hướng dẫn sử dụng không được để trống!" }]}
+            rules={[
+              {
+                required: true,
+                message: "Hướng dẫn sử dụng không được để trống!",
+              },
+            ]}
           >
             <MyEditor
               value={form.getFieldValue("usageInstruction") || ""}
-              onChange={(value) => form.setFieldsValue({ usageInstruction: value })}
+              onChange={(value) =>
+                form.setFieldsValue({ usageInstruction: value })
+              }
             />
           </Form.Item>
           <Form.Item label="Tải hình ảnh lên">
