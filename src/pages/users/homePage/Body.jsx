@@ -139,7 +139,7 @@ export default function Body() {
                   product={product}
                   discounts={discounts} // Pass discounts to ProductCard
                   brands={brands} // Truyền brands vào ProductCard
-                  handleAddToCart={handleAddToCart}
+                  // handleAddToCart={handleAddToCart}
                 />
               </div>
             ))}

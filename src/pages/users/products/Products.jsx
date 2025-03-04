@@ -161,12 +161,12 @@ export default function Products() {
           }}
         >
           <h1 style={{ color: "#333" }}>Sản phẩm của Haven Skin</h1>
-          <Badge count={cart.length}>
+          {/* <Badge count={cart.length}>
             <ShoppingCartOutlined
               style={{ fontSize: "24px", cursor: "pointer" }}
               onClick={() => navigate("/shopping-cart")}
             />
-          </Badge>
+          </Badge> */}
         </Header>
 
         <Layout>
@@ -223,7 +223,7 @@ export default function Products() {
 
               <Row gutter={[16, 16]}>
                 {filteredProducts.map((product) => (
-                  <Col xs={24} sm={12} md={8} lg={6} key={product.productId}>
+                  <Col xs={24} sm={12} md={8} lg={6} key={product.productId} >
                     <ProductCard
                       product={product}
                       discounts={discounts}

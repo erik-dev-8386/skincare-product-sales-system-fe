@@ -102,9 +102,9 @@ export default function ProductDetail() {
     );
     return item
       ? item.brandName ||
-          item.skinName ||
-          item.categoryName ||
-          item.discountPercent
+      item.skinName ||
+      item.categoryName ||
+      item.discountPercent
       : "Loading...";
   };
 
@@ -195,13 +195,10 @@ export default function ProductDetail() {
       label: "Cách dùng",
       children: (
         <div className="tabContentStyle">
-          <p>
-            Some other tab content or sample information now <br />
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat.
-          </p>
+
+          <p dangerouslySetInnerHTML={{ __html: product.usageInstruction }} />
+
+
         </div>
       ),
     },
@@ -239,9 +236,8 @@ export default function ProductDetail() {
               {product.productImages.map((image, index) => (
                 <div
                   key={index}
-                  className={`border mx-1 rounded-2 ${
-                    mainImage === image.imageURL ? "thumbnail-active" : ""
-                  }`}
+                  className={`border mx-1 rounded-2 ${mainImage === image.imageURL ? "thumbnail-active" : ""
+                    }`}
                   onClick={() => handleThumbnailClick(image.imageURL)}
                   style={{ cursor: "pointer" }}
                 >
@@ -270,13 +266,13 @@ export default function ProductDetail() {
                 </span>
                 <span className="text-success ms-2">Trong kho</span>
               </div>
-              <div className="mb-3">
-                <span className="h5">{product.discountPrice} VND</span>
+              <div className="mb-3" style={{ display: "flex" }}>
+                <span className="h5" style={{ display: "flex" }}>{product.discountPrice} <span style={{ textDecoration: "underline" }}>đ</span></span>
                 <span className="text-muted"> /mỗi hộp</span>
-                <p style={{ textDecoration: "line-through", color: "gray" }}>
-                  {product.unitPrice} VND
-                </p>
               </div>
+              <p style={{ display: "flex", textDecoration: "line-through", color: "gray" }}>
+                {product.unitPrice} <p style={{ textDecoration: "underline" }}>đ</p>
+              </p>
 
               <div className="row" style={{ color: "black" }}>
                 <div className="row" style={{ fontSize: 25, color: "red" }}>
@@ -371,7 +367,7 @@ export default function ProductDetail() {
                             </a>
                             <strong className="text-dark">
                               {" "}
-                              {product.discountPrice} VND
+                              {product.discountPrice} <p style={{ textDecoration: "underline" }}>đ</p>
                             </strong>
                           </div>
                         </div>
@@ -407,7 +403,7 @@ export default function ProductDetail() {
                             </a>
                             <strong className="text-dark">
                               {" "}
-                              {product.discountPrice} VND
+                              {product.discountPrice} <p style={{ textDecoration: "underline" }}>đ</p>
                             </strong>
                           </div>
                         </div>
