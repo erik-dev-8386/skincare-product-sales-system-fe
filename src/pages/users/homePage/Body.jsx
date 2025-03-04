@@ -96,12 +96,19 @@ export default function Body() {
   // Calculate the visible products for the current slide
   const visibleProducts = suitableProducts.slice(currentSlide, currentSlide + 4);
 
+  // Define breadcrumb items
+  const breadcrumbItems = [
+    {
+      title: 'Trang chủ',
+      onClick: () => navigate("/"),
+      className: 'breadcrumb-item',
+    },
+  ];
+
   return (
     <>
       <div className='container home-page'>
-        <Breadcrumb style={{ marginBottom: "20px" }}>
-          <Breadcrumb.Item onClick={() => navigate("/")} style={{ cursor: "pointer" }}>Trang chủ</Breadcrumb.Item>
-        </Breadcrumb>
+        <Breadcrumb style={{ marginBottom: "20px" }} items={breadcrumbItems} />
         <div className="row">
           <div className="col-12">
             <h3 className='hot'>Hot deal</h3>

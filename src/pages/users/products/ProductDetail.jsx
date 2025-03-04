@@ -22,7 +22,6 @@ import { MapInteractionCSS } from "react-map-interaction";
 import { CartContext } from "../../../context/CartContext";
 
 const { Title } = Typography;
-const { TabPane } = Tabs;
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -44,7 +43,7 @@ export default function ProductDetail() {
     const fetchProduct = async () => {
       try {
         const response = await api.get(`/products/${id}`);
-        console.log("Product Response:", response.data);
+        // console.log("Product Response:", response.data);
         setProduct(response.data);
         setMainImage(response.data.productImages[0]?.imageURL);
 
@@ -135,24 +134,84 @@ export default function ProductDetail() {
 
   if (loading || !product) return <p>Loading...</p>;
 
+  // Define breadcrumb items
+  const breadcrumbItems = [
+    {
+      title: "Trang chủ",
+      onClick: () => navigate("/"),
+      style: { cursor: "pointer" },
+    },
+    {
+      title: "Sản phẩm",
+      onClick: () => navigate("/products"),
+      style: { cursor: "pointer" },
+    },
+    {
+      title: product.productName,
+    },
+  ];
+
+  // Define tabs using the `items` prop
+  const tabItems = [
+    {
+      key: "1",
+      label: "Mô tả",
+      children: (
+        <div className="tabContentStyle">
+          <p dangerouslySetInnerHTML={{ __html: product.description }} />
+        </div>
+      ),
+    },
+    {
+      key: "2",
+      label: "Thông số",
+      children: (
+        <div className="tabContentStyle">
+          <strong>Danh mục:</strong>
+          <p>{findNameById(product.categoryId, categories)}</p>
+
+          <strong>Dung tích:</strong>
+          <p>{product.netWeight} ml</p>
+
+          <strong>Thương hiệu:</strong>
+          <p>{findNameById(product.brandId, brands)}</p>
+
+          <strong>Loại da:</strong>
+          <p>{findNameById(product.skinTypeId, skinTypes)}</p>
+        </div>
+      ),
+    },
+    {
+      key: "3",
+      label: "Thành phần",
+      children: (
+        <div className="tabContentStyle">
+          <p>{product.ingredients}</p>
+        </div>
+      ),
+    },
+    {
+      key: "4",
+      label: "Cách dùng",
+      children: (
+        <div className="tabContentStyle">
+          <p>
+            Some other tab content or sample information now <br />
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip ex ea commodo consequat.
+          </p>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div className="container">
       <div style={{ maxWidth: "1200px", margin: "auto", padding: "20px" }}>
-        <Breadcrumb style={{ marginBottom: "20px" }}>
-          <Breadcrumb.Item
-            onClick={() => navigate("/")}
-            style={{ cursor: "pointer" }}
-          >
-            Trang chủ
-          </Breadcrumb.Item>
-          <Breadcrumb.Item
-            onClick={() => navigate("/products")}
-            style={{ cursor: "pointer" }}
-          >
-            Sản phẩm
-          </Breadcrumb.Item>
-          <Breadcrumb.Item>{product.productName}</Breadcrumb.Item>
-        </Breadcrumb>
+        {/* Breadcrumb with `items` prop */}
+        <Breadcrumb style={{ marginBottom: "20px" }} items={breadcrumbItems} />
 
         <Row gutter={32}>
           {/* Product Image */}
@@ -277,56 +336,12 @@ export default function ProductDetail() {
         </Row>
 
         {/* Additional Information */}
-
         <section className="bg-light border-top py-4">
           <div className="container">
             <div className="row gx-4">
               <div className="col-lg-8 mb-4">
                 <div className="tabStyle">
-                  <Tabs defaultActiveKey="1">
-                    <TabPane tab="Mô tả" key="1">
-                      <div className="tabContentStyle">
-                        <p
-                          dangerouslySetInnerHTML={{
-                            __html: product.description,
-                          }}
-                        />
-                      </div>
-                    </TabPane>
-                    <TabPane tab="Thông số" key="2">
-                      <div className="tabContentStyle">
-                        <strong>Danh mục:</strong>
-                        <p>{findNameById(product.categoryId, categories)}</p>
-
-                        <strong>Dung tích:</strong>
-                        <p>{product.netWeight} ml</p>
-
-                        <strong>Thương hiệu:</strong>
-                        <p>{findNameById(product.brandId, brands)}</p>
-
-                        <strong>Loại da:</strong>
-                        <p>{findNameById(product.skinTypeId, skinTypes)}</p>
-                      </div>
-                    </TabPane>
-                    <TabPane tab="Thành phần" key="3">
-                      <div className="tabContentStyle">
-                        <p>{product.ingredients}</p>
-                      </div>
-                    </TabPane>
-                    <TabPane tab="Cách dùng" key="4">
-                      <div className="tabContentStyle">
-                        <p>
-                          Some other tab content or sample information now{" "}
-                          <br />
-                          Lorem ipsum dolor sit amet, consectetur adipisicing
-                          elit, sed do eiusmod tempor incididunt ut labore et
-                          dolore magna aliqua. Ut enim ad minim veniam, quis
-                          nostrud exercitation ullamco laboris nisi ut aliquip
-                          ex ea commodo consequat.
-                        </p>
-                      </div>
-                    </TabPane>
-                  </Tabs>
+                  <Tabs defaultActiveKey="1" items={tabItems} />
                 </div>
               </div>
               <div className="col-lg-4">

@@ -4,7 +4,7 @@ import { Input, Select, Layout, Menu, Badge, Row, Col, Breadcrumb } from "antd";
 import { ShoppingCartOutlined } from "@ant-design/icons";
 import api from "../../../config/api";
 import { CartContext } from "../../../context/CartContext";
-import ProductCard from "../../../component/productCard/ProductCard"; // Import ProductCard component
+import ProductCard from "../../../component/productCard/ProductCard";
 
 const { Option } = Select;
 const { Sider, Content, Header } = Layout;
@@ -16,20 +16,20 @@ export default function Products() {
   const [sortOption, setSortOption] = useState("");
   const [categories, setCategories] = useState([]);
   const [skinTypes, setSkinTypes] = useState([]);
-  const [brands, setBrands] = useState([]); // Thêm state brands
+  const [brands, setBrands] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedSkinType, setSelectedSkinType] = useState("");
   const [discounts, setDiscounts] = useState({});
 
   const navigate = useNavigate();
-  const { cart, addToCart } = useContext(CartContext);
+  const { cart } = useContext(CartContext);
 
   useEffect(() => {
     fetchProducts();
     fetchCategories();
     fetchSkinTypes();
     fetchDiscounts();
-    fetchBrands(); // Thêm hàm fetchBrands
+    fetchBrands();
   }, []);
 
   const fetchProducts = async () => {
@@ -141,31 +141,17 @@ export default function Products() {
     setFilteredProducts(filtered);
   };
 
-  // const handleAddToCart = (product) => {
-  //   addToCart({
-  //     ...product,
-  //     quantity: 1,
-  //   });
-  //   alert(`${product.productName} added to cart!`);
-  // };
-
   return (
     <div className="container">
       <Layout style={{ minHeight: "100vh" }}>
-        <Breadcrumb style={{ marginBottom: "20px" }}>
-          <Breadcrumb.Item
-            onClick={() => navigate("/")}
-            style={{ cursor: "pointer" }}
-          >
-            Trang chủ
-          </Breadcrumb.Item>
-          <Breadcrumb.Item
-            onClick={() => navigate("/products")}
-            style={{ cursor: "pointer" }}
-          >
-            Sản phẩm
-          </Breadcrumb.Item>
-        </Breadcrumb>
+        <Breadcrumb
+          style={{ marginBottom: "20px" }}
+          items={[
+            { title: "Trang chủ", onClick: () => navigate("/"), style: { cursor: "pointer" } },
+            { title: "Sản phẩm", onClick: () => navigate("/products"), style: { cursor: "pointer" } },
+          ]}
+        />
+
         <Header
           style={{
             background: "#fff",
@@ -175,12 +161,12 @@ export default function Products() {
           }}
         >
           <h1 style={{ color: "#333" }}>Sản phẩm của Haven Skin</h1>
-          {/* <Badge count={cart.length}>
+          <Badge count={cart.length}>
             <ShoppingCartOutlined
               style={{ fontSize: "24px", cursor: "pointer" }}
               onClick={() => navigate("/shopping-cart")}
             />
-          </Badge> */}
+          </Badge>
         </Header>
 
         <Layout>
@@ -190,34 +176,32 @@ export default function Products() {
               mode="inline"
               selectedKeys={[selectedCategory]}
               onClick={(e) => handleCategorySelect(e.key)}
-            >
-              <Menu.Item key="">All</Menu.Item>
-              {categories.map((category) => (
-                <Menu.Item key={category.categoryId}>
-                  {category.categoryName}
-                </Menu.Item>
-              ))}
-            </Menu>
+              items={[
+                { key: "", label: "All" },
+                ...categories.map((category) => ({
+                  key: category.categoryId,
+                  label: category.categoryName,
+                })),
+              ]}
+            />
             <h4>Loại da</h4>
             <Menu
               mode="inline"
               selectedKeys={[selectedSkinType]}
               onClick={(e) => handleSkinTypeSelect(e.key)}
-            >
-              <Menu.Item key="">All</Menu.Item>
-              {skinTypes.map((skinType) => (
-                <Menu.Item key={skinType.skinTypeId}>
-                  {skinType.skinName}
-                </Menu.Item>
-              ))}
-            </Menu>
+              items={[
+                { key: "", label: "All" },
+                ...skinTypes.map((skinType) => ({
+                  key: skinType.skinTypeId,
+                  label: skinType.skinName,
+                })),
+              ]}
+            />
           </Sider>
 
           <Layout>
             <Content style={{ padding: "20px" }}>
-              <div
-                style={{ display: "flex", gap: "10px", marginBottom: "20px" }}
-              >
+              <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
                 <Input
                   placeholder="Search for products..."
                   value={searchTerm}
@@ -243,8 +227,7 @@ export default function Products() {
                     <ProductCard
                       product={product}
                       discounts={discounts}
-                      brands={brands} // Truyền brands vào ProductCard
-                      // handleAddToCart={handleAddToCart}
+                      brands={brands}
                     />
                   </Col>
                 ))}
