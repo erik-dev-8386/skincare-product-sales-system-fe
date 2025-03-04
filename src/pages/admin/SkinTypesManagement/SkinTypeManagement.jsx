@@ -172,34 +172,55 @@ const SkinTypeManagement = () => {
     // };
     const handleSubmitForm = async (values) => {
         const formData = new FormData();
-    
-        // Append dữ liệu JSON vào phần "skinTypeDTO"
         formData.append("skinTypeDTO", new Blob([JSON.stringify(values)], { type: "application/json" }));
-    
-        // Append các file ảnh vào phần "images"
         imageFiles.forEach(file => {
             formData.append("images", file);
         });
     
         try {
-            const response = await api.post('/skin-types', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
+            let response;
+            if (editingSkinType) {
+                // Update existing skin type
+                response = await api.put(`/skin-types/${editingSkinType.skinTypeId}`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+                toast.success("Đã sửa loại da thành công!"); // Show success toast
+            } else {
+                // Create new skin type
+                response = await api.post('/skin-types', formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+                toast.success("Đã thêm loại da mới thành công!");
+            }
+    
+            // Update skinTypeList state
+            setSkinTypeList(prevList => {
+                if (editingSkinType) {
+                    return prevList.map(item => item.skinTypeId === editingSkinType.skinTypeId ? response.data : item);
+                } else {
+                    return [...prevList, response.data];
+                }
             });
     
-            // Thêm dữ liệu mới vào state skinTypeList
-            setSkinTypeList(prevList => [...prevList, response.data]);
-    
-            toast.success("Đã thêm loại da mới thành công!");
             fetchSkinTypes(); // Gọi lại API để cập nhật danh sách
             handleCloseModal();
         } catch (error) {
-            console.error("Error adding skin type:", error.response?.data?.message || error.message);
-            toast.error("Thêm loại da mới không thành công!");
+            console.error("Error saving skin type:", error.response?.data?.message || error.message);
+            
+            // Customized error messages
+            if (editingSkinType) {
+                // Error while editing
+                toast.error("Sửa loại da này không thành công!");
+            } else {
+                // Error while adding
+                toast.error("Thêm loại da này không thành công!");
+            }
         }
     };
-
     const handleEditSkinType = (skinType) => {
         setEditingSkinType(skinType);
         form.setFieldsValue(skinType);

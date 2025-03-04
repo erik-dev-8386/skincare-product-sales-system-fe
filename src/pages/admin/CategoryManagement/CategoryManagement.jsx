@@ -121,11 +121,11 @@ const CategoryManagement = () => {
         if (editingCategory) {
             try {
                 await api.put(`/categories/${editingCategory.categoryId}`, values);
-                toast.success("Đã cập nhật danh mục thành công!");
+                toast.success("Đã sửa danh mục thành công!");
                 fetchCategories();
                 handleCloseModal();
             } catch (error) {
-                toast.error("Cập nhật danh mục không thành công!");
+                toast.error("Cập nhật sửa không thành công!");
             }
         } else {
             try {

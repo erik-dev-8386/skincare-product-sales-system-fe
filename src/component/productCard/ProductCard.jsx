@@ -41,7 +41,7 @@
 //         title={product.productName}
 //         description={
 //           <>
-//             <strong>{product.discountPrice}VND</strong>
+//             <strong>{product.discountPrice}đ</strong>
 //             <br />
 //             <p
 //               style={{
@@ -49,7 +49,7 @@
 //                 color: "red",
 //               }}
 //             >
-//               {product.unitPrice}VND
+//               {product.unitPrice}đ
 //             </p>
 //           </>
 //         }
@@ -117,19 +117,22 @@ const { Meta } = Card;
       onClick={() => navigate(`/products/${product.productId}`)}
     >
       <Meta
-        title={product.productName}
+   
+        title={<p style={{display: "flex", justifyContent: "center"}}> {product.productName}</p>}
         description={
           <>
-            <p>{findBrandNameById(product.brandId)}</p> {/* Hiển thị brandName thay vì brandId */}
-            <strong>{product.discountPrice}VND</strong>
+            <p style={{display: "flex", justifyContent: "center"}}>{findBrandNameById(product.brandId)}</p> {/* Hiển thị brandName thay vì brandId */}
+            <strong style={{display: "flex", justifyContent: "center"}}>{product.discountPrice} <p style={{ textDecoration: "underline"}}>đ</p></strong>
             <br />
             <p
               style={{
                 textDecoration: "line-through",
                 color: "red",
+                display: "flex",
+                 justifyContent: "center"
               }}
             >
-              {product.unitPrice}VND
+              {product.unitPrice} <p style={{ textDecoration: "underline"}}>đ</p>
             </p>
           </>
         }

@@ -7,7 +7,6 @@ export default function Cart() {
   const navigate = useNavigate();
   const cartItems = location.state?.cartItems || []; // Nhận dữ liệu giỏ hàng
 
-  // Trạng thái của form thông tin người nhận
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -16,18 +15,15 @@ export default function Cart() {
     paymentMethod: "cod",
   });
 
-  // Xử lý thay đổi input
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Tính tổng số lượng sản phẩm
   const totalQuantity = cartItems.reduce(
     (total, item) => total + item.quantity,
     0
   );
 
-  // Tính tổng giá trị giỏ hàng
   const subtotal = cartItems.reduce(
     (total, item) => total + item.unitPrice * item.quantity,
     0
@@ -39,10 +35,9 @@ export default function Cart() {
   // Tổng thanh toán (có thể thêm phí ship nếu cần)
   const finalTotal = subtotal; // Nếu có phí ship, thêm vào đây
 
-  // Xử lý khi nhấn "Thanh toán"
   const handleCheckout = () => {
     alert("Thanh toán thành công!");
-    navigate("/success"); // Chuyển hướng đến trang thành công
+    navigate("/success");
   };
 
   return (
@@ -72,7 +67,7 @@ export default function Cart() {
               </td>
               <td>{item.unitPrice} VND</td>
               <td>{item.quantity}</td>
-              <td>{(item.quantity * item.unitPrice).toFixed(2)} VND</td>
+              <td>{item.quantity * item.unitPrice} VND</td>
             </tr>
           ))}
         </tbody>
@@ -126,7 +121,7 @@ export default function Cart() {
 
           {/* Phương thức thanh toán */}
           <div className="payment-method">
-            <label>
+            {/* <label>
               <input
                 type="radio"
                 name="paymentMethod"
@@ -135,7 +130,7 @@ export default function Cart() {
                 onChange={handleChange}
               />
               Thanh toán khi nhận hàng
-            </label>
+            </label> */}
             <label>
               <input
                 type="radio"

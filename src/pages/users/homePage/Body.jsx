@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
-import './Body.css';
-import hot from '../../../assets/home/hotdeal.jpg';
-import slider01 from '../../../assets/home/slider_1.webp';
+import React, { useEffect, useState } from "react";
+import "./Body.css";
+import hot from "../../../assets/home/hotdeal.jpg";
+import slider01 from "../../../assets/home/slider_1.webp";
 import slider02 from "../../../assets/home/Slider.jpg";
-import Slider from './Slider';
-import s1 from '../../../assets/home/s1.jpg';
-import s3 from '../../../assets/home/s3.jpg';
-import s4 from '../../../assets/home/s4.jpg';
-import s5 from '../../../assets/home/s5.jpg';
-import s7 from '../../../assets/home/s7.jpg';
-import s8 from '../../../assets/home/s8.jpg';
-import s6 from '../../../assets/home/s6.jpg';
-import { Breadcrumb } from 'antd';
+import Slider from "./Slider";
+import s1 from "../../../assets/home/s1.jpg";
+import s3 from "../../../assets/home/s3.jpg";
+import s4 from "../../../assets/home/s4.jpg";
+import s5 from "../../../assets/home/s5.jpg";
+import s7 from "../../../assets/home/s7.jpg";
+import s8 from "../../../assets/home/s8.jpg";
+import s6 from "../../../assets/home/s6.jpg";
+import { Breadcrumb } from "antd";
 import { useNavigate } from "react-router-dom";
-import ProductCard from '../../../component/productCard/ProductCard'; // Import ProductCard component
-import api from '../../../config/api'; // Import API config
+import ProductCard from "../../../component/productCard/ProductCard"; // Import ProductCard component
+import api from "../../../config/api"; // Import API config
 
 export default function Body() {
   const [suitableProducts, setSuitableProducts] = useState([]); // State to store suitable products
@@ -52,7 +52,7 @@ export default function Body() {
         console.error("Error fetching brands:", error);
       }
     };
-  
+
     fetchBrands();
   }, []);
 
@@ -89,22 +89,34 @@ export default function Body() {
   // Handle "Prev" button click
   const handlePrev = () => {
     setCurrentSlide((prevSlide) =>
-      prevSlide - 4 >= 0 ? prevSlide - 4 : Math.max(0, suitableProducts.length - 4)
+      prevSlide - 4 >= 0
+        ? prevSlide - 4
+        : Math.max(0, suitableProducts.length - 4)
     );
   };
 
   // Calculate the visible products for the current slide
-  const visibleProducts = suitableProducts.slice(currentSlide, currentSlide + 4);
+  const visibleProducts = suitableProducts.slice(
+    currentSlide,
+    currentSlide + 4
+  );
+
+  // Define breadcrumb items
+  const breadcrumbItems = [
+    {
+      title: "Trang chủ",
+      onClick: () => navigate("/"),
+      className: "breadcrumb-item",
+    },
+  ];
 
   return (
     <>
-      <div className='container home-page'>
-        <Breadcrumb style={{ marginBottom: "20px" }}>
-          <Breadcrumb.Item onClick={() => navigate("/")} style={{ cursor: "pointer" }}>Trang chủ</Breadcrumb.Item>
-        </Breadcrumb>
+      <div className="container home-page">
+        <Breadcrumb style={{ marginBottom: "20px" }} items={breadcrumbItems} />
         <div className="row">
           <div className="col-12">
-            <h3 className='hot'>Hot deal</h3>
+            <h3 className="hot">Hot deal</h3>
           </div>
           <div className="col-12">
             <Slider slides={hotDealSlides} /> {/* Pass data to Slider */}
@@ -115,12 +127,24 @@ export default function Body() {
           </div>
 
           {/* Display suitable products */}
-          <div className="row" style={{ justifyContent: "center", marginBottom: "50px", position: "relative" }}>
+          <div
+            className="row"
+            style={{
+              justifyContent: "center",
+              marginBottom: "50px",
+              position: "relative",
+            }}
+          >
             {/* Prev Button */}
             <button
               onClick={handlePrev}
               className="slider-control prev"
-              style={{ position: "absolute", left: "-50px", top: "50%", transform: "translateY(-50%)" }}
+              style={{
+                position: "absolute",
+                left: "-50px",
+                top: "50%",
+                transform: "translateY(-50%)",
+              }}
             >
               &lt;
             </button>
@@ -132,7 +156,7 @@ export default function Body() {
                   product={product}
                   discounts={discounts} // Pass discounts to ProductCard
                   brands={brands} // Truyền brands vào ProductCard
-                  handleAddToCart={handleAddToCart}
+                  // handleAddToCart={handleAddToCart}
                 />
               </div>
             ))}
@@ -141,7 +165,12 @@ export default function Body() {
             <button
               onClick={handleNext}
               className="slider-control next"
-              style={{ position: "absolute", right: "-50px", top: "50%", transform: "translateY(-50%)" }}
+              style={{
+                position: "absolute",
+                right: "-50px",
+                top: "50%",
+                transform: "translateY(-50%)",
+              }}
             >
               &gt;
             </button>
@@ -151,7 +180,10 @@ export default function Body() {
             <h3 className="san">Top sản phẩm bán chạy</h3>
           </div>
 
-          <div className="row" style={{ justifyContent: "center", marginBottom: "50px" }}>
+          <div
+            className="row"
+            style={{ justifyContent: "center", marginBottom: "50px" }}
+          >
             <div className="col-4">
               <img src={s6} alt="Haven SkinLogo" className="sv" />
             </div>
@@ -167,7 +199,10 @@ export default function Body() {
             <h3 className="san">Blog</h3>
           </div>
 
-          <div className="row" style={{ justifyContent: "center", marginBottom: "50px" }}>
+          <div
+            className="row"
+            style={{ justifyContent: "center", marginBottom: "50px" }}
+          >
             <div className="col-4">
               <img src={s3} alt="Haven SkinLogo" className="ss" />
               <br />
@@ -177,8 +212,7 @@ export default function Body() {
             <div className="col-4">
               <img src={s4} alt="Haven SkinLogo" className="ss" />
               <br />
-              <br />
-              7 Cách Sử Dụng Toner 12% Emmié Bạn Đã Biết Chưa?
+              <br />7 Cách Sử Dụng Toner 12% Emmié Bạn Đã Biết Chưa?
             </div>
             <div className="col-4">
               <img src={s5} alt="Haven SkinLogo" className="ss" />
