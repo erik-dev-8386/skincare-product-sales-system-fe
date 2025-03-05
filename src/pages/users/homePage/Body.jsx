@@ -101,6 +101,12 @@ export default function Body() {
     currentSlide + 4
   );
 
+  // Calculate the visible products for the current slide
+  const visibleProductss = suitableProducts.slice(
+    currentSlide,
+    currentSlide + 3
+  );
+
   // Define breadcrumb items
   const breadcrumbItems = [
     {
@@ -177,14 +183,14 @@ export default function Body() {
           </div>
 
           <div className="col-12">
-            <h3 className="san">Top sản phẩm bán chạy</h3>
+            <h3 className="san">Top dòng sản phẩm được tìm kiếm</h3>
           </div>
 
           <div
             className="row"
             style={{ justifyContent: "center", marginBottom: "50px" }}
           >
-            <div className="col-4">
+            {/* <div className="col-4">
               <img src={s6} alt="Haven SkinLogo" className="sv" />
             </div>
             <div className="col-4">
@@ -192,7 +198,17 @@ export default function Body() {
             </div>
             <div className="col-4">
               <img src={s8} alt="Haven SkinLogo" className="sv" />
-            </div>
+            </div> */}
+            {visibleProductss.map((product) => (
+              <div className="col-4" key={product.productId}>
+                <ProductCard
+                  product={product}
+                  discounts={discounts} // Pass discounts to ProductCard
+                  brands={brands} // Truyền brands vào ProductCard
+                  // handleAddToCart={handleAddToCart}
+                />
+              </div>
+            ))}
           </div>
 
           <div className="col-12">
