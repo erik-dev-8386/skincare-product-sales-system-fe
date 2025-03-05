@@ -1,20 +1,175 @@
+// import React, { useState, useEffect, useContext } from "react";
+// import { Link } from "react-router-dom";
+// import "./Header.css";
+// import logo from "../../assets/Logo_01.jpg";
+// import { jwtDecode } from "jwt-decode"; // Import thư viện giải mã JWT
+// import { CartContext } from "../../context/CartContext"; // Import CartContext
+// import { ShoppingCartOutlined } from "@ant-design/icons";
+// import { Badge } from "antd";
+
+// export default function Header() {
+//   const [role, setRole] = useState(null);
+//   const { cart } = useContext(CartContext); // Use CartContext
+
+//   useEffect(() => {
+//     const token = localStorage.getItem("token");
+//     if (token) {
+//       try {
+//         const decoded = jwtDecode(token);
+//         setRole(decoded.role); // Giả sử role có trong payload token
+//       } catch (error) {
+//         console.error("Lỗi khi giải mã token:", error);
+//         setRole(null);
+//       }
+//     }
+//   }, []);
+
+//   const handleLogout = () => {
+//     localStorage.removeItem("token");
+//     window.location.reload();
+//   };
+
+//   return (
+//     <div className="Header">
+//       <div className="col-1">
+//         <Link to="/">
+//           <img src={logo} alt="Haven Skin Logo" className="logo" />
+//         </Link>
+//       </div>
+
+//       <div className="nav col-8">
+//         <ul>
+//           <li>
+//             <Link to="/" className="active">
+//               Trang chủ
+//             </Link>
+//           </li>
+//           <li>
+//             <Link to="/products" className="active">
+//               Sản phẩm
+//             </Link>
+//           </li>
+//           <li>
+//             <Link to="/customer-discounts" className="active">
+//               Giảm giá
+//             </Link>
+//           </li>
+//           <li>
+//             <Link to="/blog" className="active">
+//               Blog
+//             </Link>
+//           </li>
+//           <li>
+//             <Link to="/question" className="active">
+//               Xác định da
+//             </Link>
+//           </li>
+//           <li>
+//             <Link to="#" className="active">
+//               Lộ trình chăm sóc da
+//             </Link>
+//             <ul className="subnav">
+//               <li>
+//                 <Link to="/listskincare/Thuong">Da thường</Link>
+//               </li>
+//               <li>
+//                 <Link to="/listskincare/Nhaycam">Da nhạy cảm</Link>
+//               </li>
+//               <li>
+//                 <Link to="/listskincare/Honhop">Da hỗn hợp</Link>
+//               </li>
+//               <li>
+//                 <Link to="/listskincare/Kho">Da khô</Link>
+//               </li>
+//             </ul>
+//           </li>
+//           <li>
+//             <Link to="/about-me">Giới thiệu & Liên hệ</Link>
+//           </li>
+//         </ul>
+//       </div>
+
+//       <div className="icon col-3">
+//         <div className="search">
+//           <input type="text" placeholder="       " className="searchtt" />
+//           <i className="fas fa-search search-icon"></i>
+//         </div>
+
+//  {/* Display cart count */}
+//         {/* <Link to="/shopping-cart" className="cart">
+//           <i className="fas fa-shopping-cart"><span className="cart-count">{cart.length}</span>{" "}</i>
+          
+         
+//         </Link> */}
+
+//         <Link to="/shopping-cart">
+//         <Badge count={cart.length}>
+//             <ShoppingCartOutlined
+//               style={{ fontSize: "24px", cursor: "pointer", color: "white", borderRadius: "50%", backgroundColor: "none", padding: "7.5px", border: "1px solid white" }}
+//               // onClick={() => navigate("/shopping-cart")}
+//             />
+//           </Badge>
+//         </Link>
+
+//         <div className="user-container">
+//           <Link to="#" className="user">
+//             <i className="fas fa-user"></i>
+//           </Link>
+
+//           <ul className="subnav">
+//             {role ? (
+//               <>
+//                 <li>
+//                   <Link to="/profile">Hồ sơ</Link>
+//                 </li>
+//                 {role === 1 && (
+//                   <li>
+//                     <Link to="/admin">Admin Dashboard</Link>
+//                   </li>
+//                 )}
+//                 <li
+//                   onClick={handleLogout}
+//                   style={{ cursor: "pointer", color: "white" }}
+//                 >
+//                   Đăng xuất
+//                 </li>
+//               </>
+//             ) : (
+//               <>
+//                 <li>
+//                   <Link to="/login-and-signup">Đăng nhập</Link>
+//                 </li>
+//                 <li>
+//                   <Link to="/login-and-signup">Đăng ký</Link>
+//                 </li>
+//               </>
+//             )}
+//           </ul>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }
+
 import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import "./Header.css";
 import logo from "../../assets/Logo_01.jpg";
-import { jwtDecode } from "jwt-decode"; // Import thư viện giải mã JWT
-import { CartContext } from "../../context/CartContext"; // Import CartContext
+import { jwtDecode } from "jwt-decode"; 
+import { CartContext } from "../../context/CartContext"; 
+import { ShoppingCartOutlined } from "@ant-design/icons";
+import { Badge } from "antd";
 
 export default function Header() {
   const [role, setRole] = useState(null);
-  const { cart } = useContext(CartContext); // Use CartContext
+  const { cart } = useContext(CartContext); 
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
       try {
         const decoded = jwtDecode(token);
-        setRole(decoded.role); // Giả sử role có trong payload token
+        setRole(decoded.role); 
       } catch (error) {
         console.error("Lỗi khi giải mã token:", error);
         setRole(null);
@@ -38,52 +193,30 @@ export default function Header() {
       <div className="nav col-8">
         <ul>
           <li>
-            <Link to="/" className="active">
-              Trang chủ
-            </Link>
+            <Link to="/" className="active">Trang chủ</Link>
           </li>
           <li>
-            <Link to="/products" className="active">
-              Sản phẩm
-            </Link>
+            <Link to="/products" className="active">Sản phẩm</Link>
           </li>
           <li>
-            <Link to="/customer-discounts" className="active">
-              Giảm giá
-            </Link>
+            <Link to="/customer-discounts" className="active">Giảm giá</Link>
           </li>
           <li>
-            <Link to="/blog" className="active">
-              Blog
-            </Link>
+            <Link to="/blog" className="active">Blog</Link>
           </li>
           <li>
-            <Link to="/question" className="active">
-              Xác định da
-            </Link>
+            <Link to="/question" className="active">Xác định da</Link>
           </li>
           <li>
-            <Link to="#" className="active">
-              Lộ trình chăm sóc da
-            </Link>
+            <Link to="#" className="active">Lộ trình chăm sóc da</Link>
             <ul className="subnav">
-              <li>
-                <Link to="/listskincare/Thuong">Da thường</Link>
-              </li>
-              <li>
-                <Link to="/listskincare/Nhaycam">Da nhạy cảm</Link>
-              </li>
-              <li>
-                <Link to="/listskincare/Honhop">Da hỗn hợp</Link>
-              </li>
-              <li>
-                <Link to="/listskincare/Kho">Da khô</Link>
-              </li>
+              <li><Link to="/listskincare/Thuong">Da thường</Link></li>
+              <li><Link to="/listskincare/Nhaycam">Da nhạy cảm</Link></li>
+              <li><Link to="/listskincare/Honhop">Da hỗn hợp</Link></li>
+              <li><Link to="/listskincare/Kho">Da khô</Link></li>
             </ul>
           </li>
-          <li>
-            <Link to="/about-me">Giới thiệu & Liên hệ</Link>
-          </li>
+          <li><Link to="/about-me">Giới thiệu & Liên hệ</Link></li>
         </ul>
       </div>
 
@@ -93,10 +226,12 @@ export default function Header() {
           <i className="fas fa-search search-icon"></i>
         </div>
 
-        <Link to="/shopping-cart" className="cart">
-          <i className="fas fa-shopping-cart"></i>
-          <span className="cart-count">{cart.length}</span>{" "}
-          {/* Display cart count */}
+        <Link to="/shopping-cart">
+          <Badge count={cart.length} style={{ backgroundColor: 'yellow', color: "black" }}>
+            <ShoppingCartOutlined
+              style={{ fontSize: "24px", cursor: "pointer", color: "white", borderRadius: "50%", backgroundColor: "none", padding: "7.5px", border: "1px solid white" }}
+            />
+          </Badge>
         </Link>
 
         <div className="user-container">
@@ -107,29 +242,14 @@ export default function Header() {
           <ul className="subnav">
             {role ? (
               <>
-                <li>
-                  <Link to="/profile">Hồ sơ</Link>
-                </li>
-                {role === 1 && (
-                  <li>
-                    <Link to="/admin">Admin Dashboard</Link>
-                  </li>
-                )}
-                <li
-                  onClick={handleLogout}
-                  style={{ cursor: "pointer", color: "white" }}
-                >
-                  Đăng xuất
-                </li>
+                <li><Link to="/profile">Hồ sơ</Link></li>
+                {role === 1 && <li><Link to="/admin">Admin Dashboard</Link></li>}
+                <li onClick={handleLogout} style={{ cursor: "pointer", color: "white" }}>Đăng xuất</li>
               </>
             ) : (
               <>
-                <li>
-                  <Link to="/login-and-signup">Đăng nhập</Link>
-                </li>
-                <li>
-                  <Link to="/login-and-signup">Đăng ký</Link>
-                </li>
+                <li><Link to="/login-and-signup">Đăng nhập</Link></li>
+                <li><Link to="/login-and-signup">Đăng ký</Link></li>
               </>
             )}
           </ul>

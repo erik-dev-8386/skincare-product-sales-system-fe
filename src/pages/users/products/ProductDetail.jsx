@@ -20,6 +20,8 @@ import api from "../../../config/api";
 import "./ProductDetail.css";
 import { MapInteractionCSS } from "react-map-interaction";
 import { CartContext } from "../../../context/CartContext";
+import { toast, ToastContainer } from "react-toastify";
+import { Link } from "react-router-dom"; // Import Link
 
 const { Title } = Typography;
 
@@ -113,7 +115,8 @@ export default function ProductDetail() {
       ...product,
       quantity,
     });
-    alert(`${product.productName} added to cart!`);
+    // alert(`${product.productName} added to cart!`);
+    toast.success(`Đã thêm ${product.productName} vào giỏ hàng thành công!`)
   };
 
   const handleAddToCartAndNavigate = () => {
@@ -121,6 +124,7 @@ export default function ProductDetail() {
       ...product,
       quantity,
     });
+    // toast.success(`Đã thêm ${product.productName} vào giỏ hàng thành công!`)
     navigate("/shopping-cart");
   };
 
@@ -205,6 +209,8 @@ export default function ProductDetail() {
   ];
 
   return (
+    <>
+    <ToastContainer/>
     <div className="container">
       <div style={{ maxWidth: "1200px", margin: "auto", padding: "20px" }}>
         {/* Breadcrumb with `items` prop */}
@@ -343,7 +349,7 @@ export default function ProductDetail() {
               <div className="col-lg-4">
                 <div className="px-0 border rounded-2 shadow-0">
                   <div className="card">
-                    <div className="card-body">
+                    {/* <div className="card-body">
                       <h5 className="card-title">Các sản phẩm tương tự</h5>
                       {similarProducts.map((product) => (
                         <div className="d-flex mb-3" key={product.productId}>
@@ -372,12 +378,36 @@ export default function ProductDetail() {
                           </div>
                         </div>
                       ))}
+                    </div> */}
+
+                    <div className="card-body">
+                      <h5 className="card-title">Các sản phẩm tương tự</h5>
+                      {similarProducts.map((product) => (
+                        <div className="d-flex mb-3" key={product.productId}>
+                          <Link to={`/products/${product.productId}`} className="me-3">
+                            <img
+                              src={product.productImages[0]?.imageURL}
+                              style={{ minWidth: 96, height: 96 }}
+                              className="img-md img-thumbnail"
+                              alt={product.productName}
+                            />
+                          </Link>
+                          <div className="info">
+                            <Link to={`/products/${product.productId}`} className="nav-link mb-1">
+                              {product.productName}
+                            </Link>
+                            <strong className="text-dark">
+                              {product.discountPrice} <p style={{ textDecoration: "underline" }}>đ</p>
+                            </strong>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
                 <div className="px-0 border rounded-2 shadow-0 mt-4">
                   <div className="card">
-                    <div className="card-body">
+                    {/* <div className="card-body">
                       <h5 className="card-title">
                         Gợi ý sản phẩm cùng loại da
                       </h5>
@@ -408,6 +438,29 @@ export default function ProductDetail() {
                           </div>
                         </div>
                       ))}
+                    </div> */}
+                    <div className="card-body">
+                      <h5 className="card-title">Gợi ý sản phẩm cùng loại da</h5>
+                      {sameSkinTypeProducts.map((product) => (
+                        <div className="d-flex mb-3" key={product.productId}>
+                          <Link to={`/products/${product.productId}`} className="me-3">
+                            <img
+                              src={product.productImages[0]?.imageURL}
+                              style={{ minWidth: 96, height: 96 }}
+                              className="img-md img-thumbnail"
+                              alt={product.productName}
+                            />
+                          </Link>
+                          <div className="info">
+                            <Link to={`/products/${product.productId}`} className="nav-link mb-1">
+                              {product.productName}
+                            </Link>
+                            <strong className="text-dark">
+                              {product.discountPrice} <p style={{ textDecoration: "underline" }}>đ</p>
+                            </strong>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -417,5 +470,6 @@ export default function ProductDetail() {
         </section>
       </div>
     </div>
+    </>
   );
 }
