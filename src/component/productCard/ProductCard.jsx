@@ -76,11 +76,20 @@ import { useNavigate } from "react-router-dom";
 const { Meta } = Card;
 
 // const ProductCard = ({ product, discounts = {}, brands = [], handleAddToCart }) => {
-  const ProductCard = ({ product, discounts = {}, brands = [] }) => {
+const ProductCard = ({ product, discounts, brands }) => {
   const navigate = useNavigate();
 
+  // Kiểm tra xem product có tồn tại không
+  if (!product) {
+    return null;
+  }
+
+  // Đảm bảo các giá trị cần thiết tồn tại
+  const brand = brands?.find((b) => b.brandId === product.brandId);
+  const discount = discounts?.[product.discountId];
+
   // Kiểm tra và sử dụng giá trị mặc định nếu discountId không tồn tại
-  const discountPercent = discounts[product.discountId] || 0;
+  const discountPercent = discount || 0;
 
   // Hàm tìm brandName dựa trên brandId
   const findBrandNameById = (brandId) => {
@@ -117,22 +126,33 @@ const { Meta } = Card;
       onClick={() => navigate(`/products/${product.productId}`)}
     >
       <Meta
-   
-        title={<p style={{display: "flex", justifyContent: "center"}}> {product.productName}</p>}
+        title={
+          <p style={{ display: "flex", justifyContent: "center" }}>
+            {" "}
+            {product.productName}
+          </p>
+        }
         description={
           <>
-            <p style={{display: "flex", justifyContent: "center"}}>{findBrandNameById(product.brandId)}</p> {/* Hiển thị brandName thay vì brandId */}
-            <strong style={{display: "flex", justifyContent: "center"}}>{product.discountPrice} <p style={{ textDecoration: "underline"}}>đ</p></strong>
+            <p style={{ display: "flex", justifyContent: "center" }}>
+              {findBrandNameById(product.brandId)}
+            </p>{" "}
+            {/* Hiển thị brandName thay vì brandId */}
+            <strong style={{ display: "flex", justifyContent: "center" }}>
+              {product.discountPrice}{" "}
+              <p style={{ textDecoration: "underline" }}>đ</p>
+            </strong>
             <br />
             <p
               style={{
                 textDecoration: "line-through",
                 color: "red",
                 display: "flex",
-                 justifyContent: "center"
+                justifyContent: "center",
               }}
             >
-              {product.unitPrice} <p style={{ textDecoration: "underline"}}>đ</p>
+              {product.unitPrice}{" "}
+              <p style={{ textDecoration: "underline" }}>đ</p>
             </p>
           </>
         }

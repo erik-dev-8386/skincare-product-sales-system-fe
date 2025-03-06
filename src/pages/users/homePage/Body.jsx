@@ -22,12 +22,37 @@ export default function Body() {
   const [brands, setBrands] = useState([]); // Thêm state brands
   const [currentSlide, setCurrentSlide] = useState(0); // State to track current slide index
   const navigate = useNavigate();
-
+  const [topSearchedProducts, setTopSearchedProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const hotDealSlides = [
     { src: hot, title: "Hot Deal 1" },
     { src: slider01, title: "Hot Deal 2" },
     { src: slider02, title: "Hot Deal 3" },
   ];
+
+  // Thêm state để track slide của top searched products
+  const [topSearchCurrentSlide, setTopSearchCurrentSlide] = useState(0);
+
+  // Thêm handlers cho top searched products slides
+  const handleTopSearchNext = () => {
+    setTopSearchCurrentSlide((prevSlide) =>
+      prevSlide + 3 < topSearchedProducts.length ? prevSlide + 3 : 0
+    );
+  };
+
+  const handleTopSearchPrev = () => {
+    setTopSearchCurrentSlide((prevSlide) =>
+      prevSlide - 3 >= 0
+        ? prevSlide - 3
+        : Math.max(0, topSearchedProducts.length - 3)
+    );
+  };
+
+  // Tính toán sản phẩm hiển thị cho top searched
+  const visibleTopSearchProducts = topSearchedProducts.slice(
+    topSearchCurrentSlide,
+    topSearchCurrentSlide + 3
+  );
 
   // Fetch suitable products from API
   useEffect(() => {
@@ -54,6 +79,75 @@ export default function Body() {
     };
 
     fetchBrands();
+  }, []);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await api.get("/categories");
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+
+    fetchCategories;
+  }, []);
+
+  // Fetch các sản phẩm được tìm kiếm nhiều nhất từ API
+  useEffect(() => {
+    const fetchTopSearchedProducts = async () => {
+      try {
+        // Sửa URL endpoint để khớp với backend
+        const sunscreenResponse = await api.get(
+          "/products/category/Kem chống nắng" // Thay đổi URL
+        );
+        const cleanserResponse = await api.get(
+          "/products/category/Sữa rửa mặt" // Thay đổi URL
+        );
+        const waterResponse = await api.get(
+          "/products/category/Nước tẩy trang" // Thay đổi URL
+        );
+
+        console.log("Sunscreen Response:", sunscreenResponse);
+        console.log("Cleanser Response:", cleanserResponse);
+        console.log("Water Response:", waterResponse);
+
+        // Kiểm tra dữ liệu trả về
+        const sunscreenProducts = sunscreenResponse.data || [];
+        const cleanserProducts = cleanserResponse.data || [];
+        const waterProducts = waterResponse.data || [];
+
+        console.log("Sunscreen Products:", sunscreenProducts);
+        console.log("Cleanser Products:", cleanserProducts);
+        console.log("Water Products:", waterProducts);
+
+        // Thêm một trường để phân biệt sản phẩm
+        const combinedProducts = [
+          ...sunscreenProducts.map((product) => ({
+            ...product,
+            id: `sunscreen-${product.productId}`,
+          })),
+          ...cleanserProducts.map((product) => ({
+            ...product,
+            id: `cleanser-${product.productId}`,
+          })),
+          ...waterProducts.map((product) => ({
+            ...product,
+            id: `water-${product.productId}`,
+          })),
+        ];
+
+        console.log("Combined Products:", combinedProducts);
+        setTopSearchedProducts(combinedProducts);
+      } catch (error) {
+        console.error("Error fetching top searched products:", error);
+        console.error("Error details:", error.response);
+        setTopSearchedProducts([]);
+      }
+    };
+
+    fetchTopSearchedProducts();
   }, []);
 
   // Fetch discounts from API
@@ -188,27 +282,62 @@ export default function Body() {
 
           <div
             className="row"
-            style={{ justifyContent: "center", marginBottom: "50px" }}
+            style={{
+              justifyContent: "center",
+              marginBottom: "50px",
+              position: "relative",
+            }}
           >
-            {/* <div className="col-4">
-              <img src={s6} alt="Haven SkinLogo" className="sv" />
-            </div>
-            <div className="col-4">
-              <img src={s7} alt="Haven SkinLogo" className="sv" />
-            </div>
-            <div className="col-4">
-              <img src={s8} alt="Haven SkinLogo" className="sv" />
-            </div> */}
-            {visibleProductss.map((product) => (
-              <div className="col-4" key={product.productId}>
-                <ProductCard
-                  product={product}
-                  discounts={discounts} // Pass discounts to ProductCard
-                  brands={brands} // Truyền brands vào ProductCard
-                  // handleAddToCart={handleAddToCart}
-                />
+            {/* Prev Button */}
+            <button
+              onClick={handleTopSearchPrev}
+              className="slider-control prev"
+              style={{
+                position: "absolute",
+                left: "-50px",
+                top: "50%",
+                transform: "translateY(-50%)",
+              }}
+            >
+              &lt;
+            </button>
+
+            {/* Top Searched Products */}
+            {topSearchedProducts && topSearchedProducts.length > 0 ? (
+              visibleTopSearchProducts.map((product) => (
+                <div
+                  className="col-4"
+                  key={product.id || `product-${product.productId}`}
+                >
+                  {product && (
+                    <ProductCard
+                      product={product}
+                      discounts={discounts}
+                      brands={brands}
+                      categories={categories}
+                    />
+                  )}
+                </div>
+              ))
+            ) : (
+              <div className="col-12 text-center">
+                <p>Không có sản phẩm nào.</p>
               </div>
-            ))}
+            )}
+
+            {/* Next Button */}
+            <button
+              onClick={handleTopSearchNext}
+              className="slider-control next"
+              style={{
+                position: "absolute",
+                right: "-50px",
+                top: "50%",
+                transform: "translateY(-50%)",
+              }}
+            >
+              &gt;
+            </button>
           </div>
 
           <div className="col-12">
