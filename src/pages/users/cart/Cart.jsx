@@ -112,7 +112,7 @@ export default function Cart() {
 
         <div className="customer-info">
           <h2>Thông tin người nhận</h2>
-          {["name", "email", "phone"].map((field) => (
+          {["Tên", "email", "số điện thoại"].map((field) => (
             <div key={field} className="input-group">
               <label>{field.charAt(0).toUpperCase() + field.slice(1)}</label>
               <input
@@ -139,6 +139,7 @@ export default function Cart() {
           <p><strong>Tích điểm:</strong> {rewardPoints} điểm</p>
 
           <div className="payment-method">
+            <h5 style={{fontWeight: 700}}>Chọn phương thức thanh toán</h5>
             <label>
               <input
                 type="radio"
@@ -162,12 +163,12 @@ export default function Cart() {
           </div>
 
           <div className="total-payment">
-            <strong>Tổng thanh toán:</strong> {finalTotal.toLocaleString()} <span style={{ textDecoration: "underline" }}>đ</span>
+            <p style={{color: "black", fontSize: 20, fontWeight: "bold"}} >Tổng thanh toán:</p> {finalTotal.toLocaleString()} <span style={{ textDecoration: "underline" }}>đ</span>
           </div>
 
           <div className="buttons">
             <button onClick={handleCheckout} className="btn primary">
-              Thanh toán
+              Mua
             </button>
             <button
               onClick={() => navigate("/shopping-cart")}

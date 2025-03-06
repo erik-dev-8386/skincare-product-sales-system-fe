@@ -91,6 +91,7 @@
 
 /* Total Payment Styles */
 .total-payment {
+  font-family:Helvetica, Arial, sans-serif ;
   display: flex;
   justify-content: center;
   font-weight: bold;
@@ -112,16 +113,16 @@
 }
 
 .btn {
-  padding: 10px 15px;
+  padding: 5px 15px;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 17px;
 }
 
 .btn.primary {
-  background-color: #2a9d8f;
-  color: white;
+  background-color: yellow;
+  color: black;
 }
 
 .btn.secondary {

@@ -4,7 +4,7 @@ import { CartContext } from "../../../context/CartContext"; // Import CartContex
 import api from "../../../config/api";
 import { toast, ToastContainer } from "react-toastify";
 import { jwtDecode } from "jwt-decode";
-import { Table, Button, Card, Typography, InputNumber, Space, Image } from "antd";
+import { Table, Button, Card, Typography, InputNumber, Space, Image, Input } from "antd";
 import { MinusOutlined, PlusOutlined, DeleteOutlined } from "@ant-design/icons";
 import './Shopping.css';
 
@@ -118,7 +118,7 @@ export default function CartPage() {
             onClick={() => decreaseQuantity(item.productId)}
             size="small"
           />
-          <InputNumber
+          <Input
             min={1}
             value={item.quantity}
             // changeOnWheel
@@ -136,6 +136,7 @@ export default function CartPage() {
     {
       title: "Tổng",
       key: "total",
+      
       render: (_, item) => (
         <Text>{(item.discountPrice * item.quantity).toLocaleString()} <span style={{ textDecoration: "underline" }}>đ</span></Text>
       ),
