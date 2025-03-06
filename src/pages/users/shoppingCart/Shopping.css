@@ -1,213 +1,227 @@
-.gh{
-    margin-right: 15px;
- }
- 
- .cart-container {
-     width: 90%;
-     max-width: 1500px;
-     margin: 60px auto;
-     padding: 20px;
-     background: #fff;
-     border-radius: 12px;
-     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-     font-family: 'Arial', sans-serif;
- }
- 
- 
- .cart-header {
-     display: flex;
-     justify-content: space-between;
-     align-items: center;
-     font-size: 28px;
-     font-weight: bold;
-     padding-bottom: 15px;
-     border-bottom: 3px solid #ddd;
-     margin-bottom: 20px;
-     margin-top: 15px;
- }
- 
- 
- .cart-header h1 {
-     flex-grow: 1;
- }
- 
- .cart-header .item-count {
-     font-size: 20px;
-     font-weight: normal;
-     color: #555;
-     margin-left: 15px;
- }
- 
- 
- .cart-items {
-     display: flex;
-     flex-direction: column;
-     gap: 30px;
- }
- 
- 
- .select-all {
-     display: flex;
-     align-items: center;
-     gap: 12px;
-     font-size: 18px;
-     font-weight: bold;
-     margin-bottom: 20px;
-     padding: 10px;
-     background: #f2f2f2;
-     border-radius: 8px;
- }
- 
- .select-all input[type="checkbox"] {
-     width: 22px;
-     height: 22px;
-     cursor: pointer;
- }
- 
- .cart-item {
-    display: flex;
-    align-items: flex-start; /* Canh trên cùng */
-    background: #fafafa;
-    padding: 18px;
-    border-radius: 10px;
-    transition: transform 0.2s ease-in-out, background 0.3s;
-    width: 100%;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
+/* Shopping.css */
 
-.cart-item:hover {
-    background: #f2f2f2;
-    transform: translateY(-3px);
-}
-
-/* Căn chỉnh khung chứa hình ảnh và thông tin sản phẩm */
-.product-container {
-    display: flex;
-    flex-direction: column; /* Chuyển thành dạng cột */
-    align-items: center;
-    width: 100%;
+  
+  .cart-container {
+    width: 90%;
+    max-width: 1500px;
+    margin: 60px auto;
+    padding: 20px;
     background: #fff;
-    padding: 15px;
-    border-radius: 8px;
-    text-align: center;
-}
-
-/* Thay đổi kích thước hình ảnh */
-.sss {
-    width: 250px;
-    height: 250px;
-    border-radius: 10px;
-    object-fit: cover;
-    margin-bottom: 10px; /* Tạo khoảng cách với phần thông tin */
-}
-
-/* Chỉnh phần thông tin sản phẩm */
-.product-info {
-    width: 100%;
-}
-
-.product-name {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 6px;
-}
-
-.product-details {
-    font-size: 16px;
-    color: #777;
-    margin-bottom: 10px;
-}
-
-/* Chỉnh lại khung số lượng và nút */
-.quantity-control {
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .cart-header {
     display: flex;
+    justify-content: space-between;.cart-container {
+        width: 95%; /* Increased width */
+        max-width: 1600px; /* Increased max-width */
+        margin: 60px auto;
+        padding: 20px;
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        font-family: 'Arial', sans-serif;
+    }
+    
+    .cart-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 28px;
+        font-weight: bold;
+        padding-bottom: 15px;
+        border-bottom: 3px solid #ddd;
+        margin-bottom: 20px;
+        margin-top: 15px;
+    }
+    
+    .cart-header h1 {
+        flex-grow: 1;
+    }
+    
+    .order-summary {
+        margin-top: 40px;
+        padding: 20px;
+        background: #f7f7f7;
+        border-radius: 12px;
+    }
+    
+    .summary-header h2 {
+        font-size: 22px;
+        margin-bottom: 15px;
+    }
+    
+    .total-price {
+        font-size: 22px;
+        font-weight: bold;
+        color: #900001;
+    }
+    
+    .checkout-btn {
+        width: 100%;
+        padding: 14px;
+        background: #900001;
+        color: white;
+        font-size: 20px;
+        font-weight: bold;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        margin-top: 15px;
+    }
+    
+    .checkout-btn:hover {
+        background: #d9363e;
+    }
+    
+    /* Custom Table Styles */
+    .ant-table {
+        border: 2px solid #000; /* Darker border for the entire table */
+        border-radius: 8px;
+        overflow: hidden; /* Ensure borders are rounded */
+        width: 100%; /* Full width of the container */
+    }
+    
+    .ant-table-thead > tr > th {
+        border: 1px solid #000; /* Border for each header cell */
+        background-color: #f0f0f0; /* Light gray background for header */
+        font-weight: bold;
+        text-align: center; /* Center text horizontally */
+        vertical-align: middle; /* Center text vertically */
+        padding: 12px; /* Add padding for better spacing */
+    }
+    
+    .ant-table-tbody > tr > td {
+        border: 1px solid #000; /* Border for each body cell */
+        text-align: center; /* Center text horizontally */
+        vertical-align: middle; /* Center text vertically */
+        padding: 12px; /* Add padding for better spacing */
+    }
+    
+    .ant-table-tbody > tr:last-child > td {
+        border-bottom: 1px solid #000; /* Ensure last row has a border */
+    }
+    
+    .ant-table-cell {
+        padding: 12px; /* Add more padding for better spacing */
+    }
+    
+    /* Customize the InputNumber and Buttons in the table */
+    .ant-input-number {
+        border: 1px solid #000; /* Darker border for InputNumber */
+    }
+    
+    .ant-btn {
+        border: 1px solid #000; /* Darker border for buttons */
+    }
+    
+    .ant-btn-danger {
+        border-color: #ff4d4f; /* Red border for danger buttons */
+    }
+    
+    /* Customize the Image in the table */
+    .ant-image {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
     align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 8px;
+    font-size: 28px;
+    font-weight: bold;
+    padding-bottom: 15px;
+    border-bottom: 3px solid #ddd;
+    margin-bottom: 20px;
+    margin-top: 15px;
+  }
+  
+  .cart-header h1 {
+    flex-grow: 1;
+  }
+  
+  .order-summary {
+    margin-top: 40px;
+    padding: 20px;
+    background: #f7f7f7;
+    border-radius: 12px;
+  }
+  
+  .summary-header h2 {
+    font-size: 22px;
+    margin-bottom: 15px;
+  }
+  
+  .total-price {
+    font-size: 22px;
+    font-weight: bold;
+    color: #900001;
+  }
+  
+  .checkout-btn {
     width: 100%;
-}
-
-.quantity-control button {
-    width: 35px;
-    height: 35px;
-    border: none;
+    padding: 14px;
     background: #900001;
     color: white;
-    font-size: 18px;
+    font-size: 20px;
     font-weight: bold;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.quantity-control button:hover {
-    background: #d9363e;
-}
-
-/* Chỉnh lại checkbox và nút xoá */
-.quantity-control input[type="checkbox"] {
-    width: 22px;
-    height: 22px;
-    cursor: pointer;
-}
-
-.delete-btn {
-    background: none;
     border: none;
-    font-size: 24px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: color 0.3s;
-}
-
-.delete-btn:hover {
-    color: #ff4d4f;
-}
-
- 
- .order-summary {
-     margin-top: 40px;
-     padding: 20px;
-     background: #f7f7f7;
-     border-radius: 12px;
- }
- 
- 
- .summary-header h2 {
-     font-size: 22px;
-     margin-bottom: 15px;
- }
- 
- 
- .summary-content {
-     font-size: 18px;
- }
- 
- .summary-content div {
-     margin-bottom: 8px;
- }
- 
- .total-price {
-     font-size: 22px;
-     font-weight: bold;
-     color: #900001;
- }
- 
- 
- .checkout-btn {
-     width: 100%;
-     padding: 14px;
-     background:#900001;
-     color: white;
-     font-size: 20px;
-     font-weight: bold;
-     border: none;
-     border-radius: 8px;
-     cursor: pointer;
-     transition: background 0.3s ease-in-out;
-     margin-top: 15px;
- }
- 
- .checkout-btn:hover {
-     background: #d9363e;
- } 
+    margin-top: 15px;
+  }
+  
+  .checkout-btn:hover {
+    background: #d9363e;
+  }
+  
+  /* Custom Table Styles */
+  .ant-table {
+    border: 2px solid #000; /* Darker border for the entire table */
+    border-radius: 8px;
+    overflow: hidden; /* Ensure borders are rounded */
+  }
+  
+  .ant-table-thead > tr > th {
+    border: 1px solid #000; /* Border for each header cell */
+    background-color: #f0f0f0; /* Light gray background for header */
+    font-weight: bold;
+    text-align: center; /* Center text horizontally */
+    vertical-align: middle; /* Center text vertically */
+    padding: 12px; /* Add padding for better spacing */
+  }
+  
+  .ant-table-tbody > tr > td {
+    border: 1px solid #000; /* Border for each body cell */
+    text-align: center; /* Center text horizontally */
+    vertical-align: middle; /* Center text vertically */
+    padding: 12px; /* Add padding for better spacing */
+  }
+  
+  .ant-table-tbody > tr:last-child > td {
+    border-bottom: 1px solid #000; /* Ensure last row has a border */
+  }
+  
+  .ant-table-cell {
+    padding: 12px; /* Add more padding for better spacing */
+  }
+  
+  /* Customize the InputNumber and Buttons in the table */
+  .ant-input-number {
+    border: 1px solid #000; /* Darker border for InputNumber */
+  }
+  
+  .ant-btn {
+    border: 1px solid #000; /* Darker border for buttons */
+  }
+  
+  .ant-btn-danger {
+    border-color: #ff4d4f; /* Red border for danger buttons */
+  }
+  
+  /* Customize the Image in the table */
+  .ant-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
