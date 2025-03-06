@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext  } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { CartContext } from "../../../context/CartContext";
 import { jwtDecode } from "jwt-decode";
 import "./Cart.css";
 import api from "../../../config/api";
@@ -7,10 +8,13 @@ import api from "../../../config/api";
 export default function Cart() {
   const location = useLocation();
   const navigate = useNavigate();
-  const cartItems = location.state?.cartItems || [];
-
+  const { setCart } = useContext(CartContext);
+  const initialCartItems = location.state?.cartItems || [];
+  
+  const [cartItems, setCartItems] = useState(initialCartItems);
   const [formData, setFormData] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     phone: "",
     address: "",
@@ -20,27 +24,27 @@ export default function Cart() {
   // Fetch user information from API
   useEffect(() => {
     const fetchUserData = async () => {
-      const token = localStorage.getItem("token"); // Adjust if you store the token elsewhere
+      const token = localStorage.getItem("token");
       if (!token) {
         console.error("No token found.");
         return;
       }
 
       try {
-        // Decode the token to get user info
         const decodedToken = jwtDecode(token);
-        const userEmail = decodedToken.sub; // Get the email from the token
+        const userEmail = decodedToken.sub;
 
         const response = await api.get(`/users/${userEmail}`, {
           headers: {
-            Authorization: `Bearer ${token}`, // Include the token in the headers
+            Authorization: `Bearer ${token}`,
           },
         });
 
-        const data = response.data; // Adjust based on your API response structure
+        const data = response.data;
         setFormData((prev) => ({
           ...prev,
-          name: data.firstName || prev.firstName,
+          firstName: data.firstName || prev.firstName,
+          lastName: data.lastName || prev.lastName,
           email: data.email || prev.email,
           phone: data.phoneNumber || prev.phoneNumber,
           address: data.address || prev.address,
@@ -70,9 +74,27 @@ export default function Cart() {
   const rewardPoints = Math.floor(subtotal * 0.01);
   const finalTotal = subtotal;
 
-  const handleCheckout = () => {
-    alert("Thanh toán thành công!");
-    navigate("/success");
+  const handleCheckout = async () => {
+    if (formData.paymentMethod === "vnpay") {
+      try {
+        const response = await api.get('/vnpays/pay'); // Call your backend to generate VNPay URL
+        const paymentUrl = response.data; // Assuming your backend returns the payment URL
+        window.location.href = paymentUrl; // Redirect to VNPay payment page
+
+        // Reset cart items after successful payment
+        setCart([]); 
+        setCartItems([]);
+        // Optionally, you may want to navigate to a success page or show a success message
+      } catch (error) {
+        console.error("Error during payment process:", error);
+        alert("Có lỗi xảy ra khi thanh toán. Vui lòng thử lại.");
+      }
+    } else {
+      alert("Thanh toán thành công!");
+      setCart([]); 
+      setCartItems([]); // Reset cart items for COD as well
+      navigate("/");
+    }
   };
 
   return (
@@ -98,7 +120,6 @@ export default function Cart() {
                     src={item.productImages[0]?.imageURL}
                     alt={item.productName}
                     className="product-image"
-
                   />
                 </td>
                 <td>{item.productName}</td>
@@ -112,7 +133,7 @@ export default function Cart() {
 
         <div className="customer-info">
           <h2>Thông tin người nhận</h2>
-          {["Tên", "email", "số điện thoại"].map((field) => (
+          {["firstName", "lastName", "email", "phone"].map((field) => (
             <div key={field} className="input-group">
               <label>{field.charAt(0).toUpperCase() + field.slice(1)}</label>
               <input
