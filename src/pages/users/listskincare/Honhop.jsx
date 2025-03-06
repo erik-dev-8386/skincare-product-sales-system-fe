@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Skin.css";
 import dahh1 from "../../../assets/da/dahh1.jpg";
 import dahh2 from "../../../assets/da/dahh2.jpg";
@@ -11,7 +11,66 @@ import sp11 from "../../../assets/da/sp11.jpg";
 import sp12 from "../../../assets/da/sp12.jpg";
 import Footer from "../../../component/Footer/Footer";
 import Header from "../../../component/Header/Header";
+import { useNavigate } from "react-router-dom";
+import ProductCard from "../../../component/productCard/ProductCard"; // Import ProductCard component
+import api from "../../../config/api";
 export default function Kho() {
+  const [suitableProducts, setSuitableProducts] = useState([]); // State to store suitable products
+  const [discounts, setDiscounts] = useState({}); // State to store discounts
+  const [brands, setBrands] = useState([]); // Thêm state brands
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const navigate = useNavigate();
+  // Calculate the visible products for the current slide
+  const visibleProductss = suitableProducts.slice(
+    currentSlide,
+    currentSlide + 3
+  );
+
+  // Fetch suitable products from API
+  useEffect(() => {
+    const fetchSuitableProducts = async () => {
+      try {
+        const response = await api.get("/products");
+        setSuitableProducts(response.data);
+      } catch (error) {
+        console.error("Error fetching suitable products:", error);
+      }
+    };
+
+    fetchSuitableProducts();
+  }, []);
+
+  useEffect(() => {
+    const fetchBrands = async () => {
+      try {
+        const response = await api.get("/brands");
+        setBrands(response.data);
+      } catch (error) {
+        console.error("Error fetching brands:", error);
+      }
+    };
+
+    fetchBrands();
+  }, []);
+
+  // Fetch discounts from API
+  useEffect(() => {
+    const fetchDiscounts = async () => {
+      try {
+        const response = await api.get("/discounts");
+        const discountMap = response.data.reduce((acc, discount) => {
+          acc[discount.discountId] = discount.discountPercent; // Create map discountId -> discountPercent
+          return acc;
+        }, {});
+        setDiscounts(discountMap);
+      } catch (error) {
+        console.error("Error fetching discounts:", error);
+      }
+    };
+
+    fetchDiscounts();
+  }, []);
+
   {
     return (
       <>
@@ -118,7 +177,7 @@ export default function Kho() {
             </div>
           </div>
           <div className="row">
-            <div className="col-4">
+            {/* <div className="col-4">
               <img src={sp7} alt="Da kho" className="da" />
             </div>
             <div className="col-4">
@@ -126,11 +185,21 @@ export default function Kho() {
             </div>
             <div className="col-4">
               <img src={sp9} alt="Da kho" className="da" />
-            </div>
+            </div> */}
+            {visibleProductss.map((product) => (
+              <div className="col-4" key={product.productId}>
+                <ProductCard
+                  product={product}
+                  discounts={discounts} // Pass discounts to ProductCard
+                  brands={brands} // Truyền brands vào ProductCard
+                  // handleAddToCart={handleAddToCart}
+                />
+              </div>
+            ))}
           </div>
           <br /> <br /> <br />
           <div className="row">
-            <div className="col-4">
+            {/* <div className="col-4">
               <img src={sp10} alt="Da kho" className="da" />
             </div>
             <div className="col-4">
@@ -138,7 +207,17 @@ export default function Kho() {
             </div>
             <div className="col-4">
               <img src={sp12} alt="Da kho" className="da" />
-            </div>
+            </div> */}
+            {visibleProductss.map((product) => (
+              <div className="col-4" key={product.productId}>
+                <ProductCard
+                  product={product}
+                  discounts={discounts} // Pass discounts to ProductCard
+                  brands={brands} // Truyền brands vào ProductCard
+                  // handleAddToCart={handleAddToCart}
+                />
+              </div>
+            ))}
           </div>
         </div>
         {/* <Footer /> */}
