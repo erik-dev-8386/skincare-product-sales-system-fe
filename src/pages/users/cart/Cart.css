@@ -1,179 +1,22 @@
-/* Căn giữa toàn bộ trang, giữ gọn trong màn hình */
-/* .cart-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  padding: 20px;
-  background: linear-gradient(135deg, #ff758c, #ff7eb3);
-} */
 
-/* Bố cục ngang cho thông tin khách hàng và đơn hàng */
-/* .checkout-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: stretch;
-  gap: 25px;
-  width: 100%;
-  max-width: 1100px;
-  flex-wrap: wrap;
-} */
-
-/* Các ô thông tin */
-/* .customer-info, .order-info {
-  flex: 1;
-  max-width: 480px;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-  background: white;
-  text-align: center;
-  transition: all 0.3s ease-in-out;
-  
-  display: flex;
-  flex-direction: column; 
-  min-height: 400px; 
-} */
-
-/* Hiệu ứng khi hover */
-/* .customer-info:hover, .order-info:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-} */
-
-/* Tiêu đề */
-/* .customer-info h2, .order-info h2 {
-  color: #ff416c;
-  font-size: 22px;
-  font-weight: bold;
-  margin-bottom: 15px;
-} */
-
-/* Đảm bảo phần footer luôn ở dưới cùng */
-/* .customer-info .buttons, .order-info .buttons {
-  margin-top: auto; 
-} */
-
-/* Nhãn và input */
-/* .form-group {
-  text-align: left;
-  margin-bottom: 12px;
-} */
-
-/* .form-group label {
-  font-weight: bold;
-  color: #7a3e3e;
-  display: block;
-  margin-bottom: 5px;
-} */
-
-/* Input và textarea */
-/* .customer-info input,
-.customer-info textarea {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 15px;
-  background: #f9f9f9;
-  transition: 0.3s;
-} */
-
-/* .customer-info input:focus,
-.customer-info textarea:focus {
-  border-color: #ff4b2b;
-  background: white;
-  outline: none;
-  box-shadow: 0 0 5px rgba(255, 75, 43, 0.3);
-} */
-
-/* Ô chọn phương thức thanh toán */
-/* .payment-options {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin: 15px 0;
-} */
-
-/* .payment-options label {
-  font-weight: bold;
-  cursor: pointer;
-} */
-
-/* Tổng tiền */
-/* .total-payment {
-  font-size: 18px;
-  font-weight: bold;
-  color: #ff416c;
-  margin: 15px 0;
-} */
-
-/* Nút bấm */
-/* .buttons {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 15px;
-} */
-
-/* .btn {
-  flex: 1;
-  padding: 12px;
-  border: none;
-  border-radius: 8px;
-  font-size: 15px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.3s;
-}
-
-.btn.primary {
-  background: #ff416c;
-  color: white;
-}
-
-.btn.primary:hover {
-  background: #ff2b5e;
-}
-
-.btn.secondary {
-  background: #ddd;
-  color: black;
-}
-
-.btn.secondary:hover {
-  background: #bbb;
-} */
-
-/* Đáp ứng màn hình nhỏ */
-/* @media (max-width: 850px) {
-  .checkout-wrapper {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .customer-info, .order-info {
-    max-width: 95%;
-  }
-} */
 
 /* Cart.css */
 
 /* General Styles */
-body {
+/* body {
   font-family: 'Arial', sans-serif;
   background-color: #f5f5f5;
   color: #333;
-}
+} */
 
-.cart-container {
+/* .cart-container {
   max-width: 800px;
   margin: auto;
   padding: 20px;
-  background: #fff;
+  background: lightgray;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-}
+} */
 
 .title {
   color: #900001;
@@ -186,7 +29,7 @@ body {
   width: 100%;
   border-collapse: collapse;
   margin-bottom: 20px;
-  /* border: 2px solid black; */
+  
 }
 
 .cart-table th,
@@ -205,7 +48,6 @@ body {
 .product-image {
   width: 100px;
   border-radius: 5px;
-  /* margin-right: 10px; */
 }
 
 /* Customer Info Styles */

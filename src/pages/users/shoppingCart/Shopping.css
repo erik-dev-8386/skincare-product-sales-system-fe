@@ -1,132 +1,19 @@
 /* Shopping.css */
 
-  
-  .cart-container {
+.cart-container {
     width: 90%;
-    max-width: 1500px;
+    max-width: 1000px;
     margin: 60px auto;
     padding: 20px;
     background: #fff;
     border-radius: 12px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
     font-family: 'Arial', sans-serif;
-  }
-  
-  .cart-header {
+}
+
+.cart-header {
     display: flex;
-    justify-content: space-between;.cart-container {
-        width: 95%; /* Increased width */
-        max-width: 1600px; /* Increased max-width */
-        margin: 60px auto;
-        padding: 20px;
-        background: #fff;
-        border-radius: 12px;
-        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-        font-family: 'Arial', sans-serif;
-    }
-    
-    .cart-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-size: 28px;
-        font-weight: bold;
-        padding-bottom: 15px;
-        border-bottom: 3px solid #ddd;
-        margin-bottom: 20px;
-        margin-top: 15px;
-    }
-    
-    .cart-header h1 {
-        flex-grow: 1;
-    }
-    
-    .order-summary {
-        margin-top: 40px;
-        padding: 20px;
-        background: #f7f7f7;
-        border-radius: 12px;
-    }
-    
-    .summary-header h2 {
-        font-size: 22px;
-        margin-bottom: 15px;
-    }
-    
-    .total-price {
-        font-size: 22px;
-        font-weight: bold;
-        color: #900001;
-    }
-    
-    .checkout-btn {
-        width: 100%;
-        padding: 14px;
-        background: #900001;
-        color: white;
-        font-size: 20px;
-        font-weight: bold;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        margin-top: 15px;
-    }
-    
-    .checkout-btn:hover {
-        background: #d9363e;
-    }
-    
-    /* Custom Table Styles */
-    .ant-table {
-        border: 2px solid #000; /* Darker border for the entire table */
-        border-radius: 8px;
-        overflow: hidden; /* Ensure borders are rounded */
-        width: 100%; /* Full width of the container */
-    }
-    
-    .ant-table-thead > tr > th {
-        border: 1px solid #000; /* Border for each header cell */
-        background-color: #f0f0f0; /* Light gray background for header */
-        font-weight: bold;
-        text-align: center; /* Center text horizontally */
-        vertical-align: middle; /* Center text vertically */
-        padding: 12px; /* Add padding for better spacing */
-    }
-    
-    .ant-table-tbody > tr > td {
-        border: 1px solid #000; /* Border for each body cell */
-        text-align: center; /* Center text horizontally */
-        vertical-align: middle; /* Center text vertically */
-        padding: 12px; /* Add padding for better spacing */
-    }
-    
-    .ant-table-tbody > tr:last-child > td {
-        border-bottom: 1px solid #000; /* Ensure last row has a border */
-    }
-    
-    .ant-table-cell {
-        padding: 12px; /* Add more padding for better spacing */
-    }
-    
-    /* Customize the InputNumber and Buttons in the table */
-    .ant-input-number {
-        border: 1px solid #000; /* Darker border for InputNumber */
-    }
-    
-    .ant-btn {
-        border: 1px solid #000; /* Darker border for buttons */
-    }
-    
-    .ant-btn-danger {
-        border-color: #ff4d4f; /* Red border for danger buttons */
-    }
-    
-    /* Customize the Image in the table */
-    .ant-image {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
+    justify-content: space-between;
     align-items: center;
     font-size: 28px;
     font-weight: bold;
@@ -134,31 +21,31 @@
     border-bottom: 3px solid #ddd;
     margin-bottom: 20px;
     margin-top: 15px;
-  }
-  
-  .cart-header h1 {
+}
+
+.cart-header h1 {
     flex-grow: 1;
-  }
-  
-  .order-summary {
+}
+
+.order-summary {
     margin-top: 40px;
     padding: 20px;
     background: #f7f7f7;
     border-radius: 12px;
-  }
-  
-  .summary-header h2 {
+}
+
+.summary-header h2 {
     font-size: 22px;
     margin-bottom: 15px;
-  }
-  
-  .total-price {
+}
+
+.total-price {
     font-size: 22px;
     font-weight: bold;
     color: #900001;
-  }
-  
-  .checkout-btn {
+}
+
+.checkout-btn {
     width: 100%;
     padding: 14px;
     background: #900001;
@@ -169,59 +56,89 @@
     border-radius: 8px;
     cursor: pointer;
     margin-top: 15px;
-  }
-  
-  .checkout-btn:hover {
+}
+
+.checkout-btn:hover {
     background: #d9363e;
-  }
-  
-  /* Custom Table Styles */
-  .ant-table {
-    border: 2px solid #000; /* Darker border for the entire table */
+}
+
+/* Custom Table Styles */
+.ant-table {
+    border: 2px solid #000;
     border-radius: 8px;
-    overflow: hidden; /* Ensure borders are rounded */
-  }
-  
-  .ant-table-thead > tr > th {
-    border: 1px solid #000; /* Border for each header cell */
-    background-color: #f0f0f0; /* Light gray background for header */
+    overflow: hidden;
+    width: 100%;
+}
+
+.ant-table-thead>tr>th {
+    border: 1px solid #000;
+    background-color: #f0f0f0;
     font-weight: bold;
-    text-align: center; /* Center text horizontally */
-    vertical-align: middle; /* Center text vertically */
-    padding: 12px; /* Add padding for better spacing */
-  }
-  
-  .ant-table-tbody > tr > td {
-    border: 1px solid #000; /* Border for each body cell */
-    text-align: center; /* Center text horizontally */
-    vertical-align: middle; /* Center text vertically */
-    padding: 12px; /* Add padding for better spacing */
-  }
-  
-  .ant-table-tbody > tr:last-child > td {
-    border-bottom: 1px solid #000; /* Ensure last row has a border */
-  }
-  
-  .ant-table-cell {
-    padding: 12px; /* Add more padding for better spacing */
-  }
-  
-  /* Customize the InputNumber and Buttons in the table */
-  .ant-input-number {
-    border: 1px solid #000; /* Darker border for InputNumber */
-  }
-  
-  .ant-btn {
-    border: 1px solid #000; /* Darker border for buttons */
-  }
-  
-  .ant-btn-danger {
-    border-color: #ff4d4f; /* Red border for danger buttons */
-  }
-  
-  /* Customize the Image in the table */
-  .ant-image {
+    text-align: center;
+    vertical-align: middle;
+    padding: 12px;
+}
+
+.ant-table-tbody>tr>td {
+    border: 1px solid #000;
+    text-align: center;
+    vertical-align: middle;
+    padding: 12px;
+}
+
+.ant-table-tbody>tr:last-child>td {
+    border-bottom: 1px solid #000;
+}
+
+.ant-table-cell {
+    padding: 12px;
+}
+
+/* Customize the InputNumber and Buttons in the table */
+.ant-input-number {
+    border-radius: 6px;
+    background-color: #fff;
+    color: #333;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.ant-input-number:hover {
+    border-color: #d9363e;
+}
+
+.ant-input-number:focus {
+    border-color: #900001;
+    box-shadow: 0 0 0 2px rgba(144, 0, 1, 0.2);
+}
+
+.ant-input-number-handler-wrap {
+    background-color: #f7f7f7;
+    border-left: 1px solid #900001;
+}
+
+.ant-input-number-handler-up,
+.ant-input-number-handler-down {
+    color: #900001;
+}
+
+.ant-input-number-handler-up:hover,
+.ant-input-number-handler-down:hover {
+    background-color: #d9363e;
+    color: #fff;
+}
+
+.ant-btn {
+    border: 1px solid #000;
+}
+
+.ant-btn-danger {
+    border-color: #ff4d4f;
+}
+
+/* Customize the Image in the table */
+.ant-image {
     display: flex;
     justify-content: center;
     align-items: center;
-  }
+}

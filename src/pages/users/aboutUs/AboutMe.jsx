@@ -11,7 +11,7 @@ export default function AboutMe() {
             <section className="about-us-section">
                 <div className="overlay">
                     <div className="content">
-                        <h1 className="title">Giới thiệu về chúng tôi</h1>
+                        <h1 className="title" style={{color: "white"}}>Giới thiệu về chúng tôi</h1>
                         <p className="description">
                             Tại Haven Skin, chúng tôi tin rằng làn da của bạn không chỉ xứng đáng được chăm sóc
                             mà còn cần một chế độ nuôi dưỡng chuyên sâu để luôn duy trì sự rạng rỡ. Được xây dựng
@@ -48,7 +48,7 @@ export default function AboutMe() {
 
                         </p>
                         <br />
-                        <h1 className="title">Liên hệ với chúng tôi</h1>
+                        <h1 className="title" style={{color: "white"}}>Liên hệ với chúng tôi</h1>
                         <div className="contact-container">
                             <p>
                                 <i className="fa-brands fa-facebook"></i>

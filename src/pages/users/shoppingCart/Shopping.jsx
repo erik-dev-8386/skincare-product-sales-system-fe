@@ -113,6 +113,7 @@ export default function CartPage() {
       render: (_, item) => (
         <Space>
           <Button
+            color="primary" variant="solid"
             icon={<MinusOutlined />}
             onClick={() => decreaseQuantity(item.productId)}
             size="small"
@@ -120,10 +121,11 @@ export default function CartPage() {
           <InputNumber
             min={1}
             value={item.quantity}
-            disabled
+            // changeOnWheel
             style={{ width: 60 }}
           />
           <Button
+            color="primary" variant="solid"
             icon={<PlusOutlined />}
             onClick={() => increaseQuantity(item.productId)}
             size="small"
@@ -143,7 +145,7 @@ export default function CartPage() {
       key: "action",
       render: (_, item) => (
         <Button
-          danger
+          color="danger" variant="solid"
           icon={<DeleteOutlined />}
           onClick={() => deleteItem(item.productId)}
         >
@@ -166,10 +168,10 @@ export default function CartPage() {
             rowKey="productId"
           />
           <div className="order-summary">
-            <Title level={4} className="summary-header">Tổng số tiền:</Title>
-            <Text strong style={{ fontSize: 22, color: "#900001" }}>
-              {totalAmount.toLocaleString()} <span style={{ textDecoration: "underline" }}>đ</span>
-            </Text>
+
+            <div style={{ fontSize: 22 }}>
+              <strong>Tổng số tiền:</strong> <span style={{ color: "red" }}>{totalAmount.toLocaleString()} <span style={{ textDecoration: "underline" }}>đ</span></span>
+            </div>
             <Button
               type="primary"
               size="large"
