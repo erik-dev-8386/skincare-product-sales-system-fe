@@ -76,7 +76,7 @@ import { useNavigate } from "react-router-dom";
 const { Meta } = Card;
 
 // const ProductCard = ({ product, discounts = {}, brands = [], handleAddToCart }) => {
-  const ProductCard = ({ product, discounts = {}, brands = [] }) => {
+const ProductCard = ({ product, discounts = {}, brands = [] }) => {
   const navigate = useNavigate();
 
   // Kiểm tra và sử dụng giá trị mặc định nếu discountId không tồn tại
@@ -108,7 +108,8 @@ const { Meta } = Card;
           alt={product.productName}
           src={product.productImages[0]?.imageURL}
           style={{
-            height: "200px",
+            height: "150px",
+            width:"100%",
             objectFit: "contain",
             padding: 2,
           }}
@@ -117,22 +118,21 @@ const { Meta } = Card;
       onClick={() => navigate(`/products/${product.productId}`)}
     >
       <Meta
-   
-        title={<p style={{display: "flex", justifyContent: "center"}}> {product.productName}</p>}
+       
+        title={<p > {product.productName}</p>}
         description={
           <>
-            <p style={{display: "flex", justifyContent: "center"}}>{findBrandNameById(product.brandId)}</p> {/* Hiển thị brandName thay vì brandId */}
-            <strong style={{display: "flex", justifyContent: "center"}}>{product.discountPrice} <p style={{ textDecoration: "underline"}}>đ</p></strong>
+            <p >{findBrandNameById(product.brandId)}</p> {/* Hiển thị brandName thay vì brandId */}
+            <strong >{product.discountPrice} <span style={{ textDecoration: "underline" }}>đ</span></strong>
             <br />
             <p
               style={{
                 textDecoration: "line-through",
                 color: "red",
-                display: "flex",
-                 justifyContent: "center"
+
               }}
             >
-              {product.unitPrice} <p style={{ textDecoration: "underline"}}>đ</p>
+              {product.unitPrice} <span style={{ textDecoration: "underline" }}>đ</span>
             </p>
           </>
         }
