@@ -731,6 +731,12 @@ const ProductManagement = () => {
               dangerouslySetInnerHTML={{ __html: selectedProduct.description }}
             />
             <p>
+              <strong>Hướng dẫn sử dụng: </strong>
+            </p>
+            <div
+              dangerouslySetInnerHTML={{ __html: selectedProduct.usageInstruction }}
+            />
+            <p>
               <strong>Thành phần: </strong> {selectedProduct.ingredients}
             </p>
             <p>

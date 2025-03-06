@@ -39,6 +39,7 @@ import AdminLayout from './component/AdminLayout/AdminLayout.jsx';
 import Products from './pages/users/products/Products.jsx';
 import ProductDetail from './pages/users/products/ProductDetail.jsx';
 import ProductManagement from './pages/admin/ProductManagement/ProductManagement.jsx';
+// import ProfilePage from './pages/users/profile/Profile.jsx';
 
 
 function App() {
@@ -50,6 +51,7 @@ function App() {
       <Route path="/" element={<Layout />} >
 
         <Route index element={<HomePage />} />
+        {/* <Route path='/profile' element={<ProfilePage/>} /> */}
         <Route path='/about-us' element={<AboutUs />} />
         <Route path='/about-me' element={<AboutMe />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
@@ -68,6 +70,7 @@ function App() {
         <Route path='/question' element={<Question />} />
         <Route path='/products' element={<Products/>} />
         <Route path='/products/:id' element={<ProductDetail/>} />
+      
      
 
       </Route>

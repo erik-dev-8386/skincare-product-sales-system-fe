@@ -1,19 +1,57 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 import "./Cart.css";
+import api from "../../../config/api";
 
 export default function Cart() {
   const location = useLocation();
   const navigate = useNavigate();
-  const cartItems = location.state?.cartItems || []; // Nhận dữ liệu giỏ hàng
+  const cartItems = location.state?.cartItems || [];
 
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
     address: "",
-    paymentMethod: "cod",
+    paymentMethod: "",
   });
+
+  // Fetch user information from API
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const token = localStorage.getItem("token"); // Adjust if you store the token elsewhere
+      if (!token) {
+        console.error("No token found.");
+        return;
+      }
+
+      try {
+        // Decode the token to get user info
+        const decodedToken = jwtDecode(token);
+        const userEmail = decodedToken.sub; // Get the email from the token
+
+        const response = await api.get(`/users/${userEmail}`, {
+          headers: {
+            Authorization: `Bearer ${token}`, // Include the token in the headers
+          },
+        });
+
+        const data = response.data; // Adjust based on your API response structure
+        setFormData((prev) => ({
+          ...prev,
+          name: data.firstName || prev.firstName,
+          email: data.email || prev.email,
+          phone: data.phoneNumber || prev.phoneNumber,
+          address: data.address || prev.address,
+        }));
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -25,15 +63,12 @@ export default function Cart() {
   );
 
   const subtotal = cartItems.reduce(
-    (total, item) => total + item.unitPrice * item.quantity,
+    (total, item) => total + item.discountPrice * item.quantity,
     0
   );
 
-  // Giả sử chương trình tích điểm (1% giá trị đơn hàng)
   const rewardPoints = Math.floor(subtotal * 0.01);
-
-  // Tổng thanh toán (có thể thêm phí ship nếu cần)
-  const finalTotal = subtotal; // Nếu có phí ship, thêm vào đây
+  const finalTotal = subtotal;
 
   const handleCheckout = () => {
     alert("Thanh toán thành công!");
@@ -41,96 +76,69 @@ export default function Cart() {
   };
 
   return (
-    <div className="container my-5">
-      <h2>Checkout Page</h2>
-
-      {/* Bảng hiển thị giỏ hàng */}
-      <table className="table table-bordered">
-        <thead>
-          <tr>
-            <th>Product</th>
-            <th>Price</th>
-            <th>Quantity</th>
-            <th>Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          {cartItems.map((item) => (
-            <tr key={item.productId}>
-              <td>
-                <img
-                  src={item.productImages[0]?.imageURL}
-                  alt={item.productName}
-                  width="50"
-                />
-                {item.productName}
-              </td>
-              <td>{item.unitPrice} VND</td>
-              <td>{item.quantity}</td>
-              <td>{item.quantity * item.unitPrice} VND</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-
-      {/* Thông tin người nhận */}
+    <div className="container">
       <div className="cart-container">
+        <h2 className="title">Trang thanh toán</h2>
+
+        <table className="cart-table">
+          <thead>
+            <tr>
+              <th>Ảnh</th>
+              <th>Sản phẩm</th>
+              <th>Giá tiền</th>
+              <th>Số lượng</th>
+              <th>Tổng tiền</th>
+            </tr>
+          </thead>
+          <tbody>
+            {cartItems.map((item) => (
+              <tr key={item.productId}>
+                <td>
+                  <img
+                    src={item.productImages[0]?.imageURL}
+                    alt={item.productName}
+                    className="product-image"
+
+                  />
+                </td>
+                <td>{item.productName}</td>
+                <td>{item.discountPrice} <span style={{ textDecoration: "underline" }}>đ</span></td>
+                <td>{item.quantity}</td>
+                <td>{item.quantity * item.discountPrice} <span style={{ textDecoration: "underline" }}>đ</span></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
         <div className="customer-info">
           <h2>Thông tin người nhận</h2>
-          <label>Tên khách hàng</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-          />
-
-          <label>Email</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-          />
-
-          <label>Số điện thoại</label>
-          <input
-            type="text"
-            name="phone"
-            value={formData.phone}
-            onChange={handleChange}
-          />
-
-          <label>Địa chỉ</label>
-          <textarea
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
-          ></textarea>
-        </div>
-
-        {/* Thông tin đơn hàng */}
-        <div className="order-info">
-          <h2>Thông tin đơn hàng</h2>
-          <p>
-            <strong>Tổng sản phẩm đã chọn:</strong> {totalQuantity}
-          </p>
-          <p>
-            <strong>Tích điểm:</strong> {rewardPoints} điểm
-          </p>
-
-          {/* Phương thức thanh toán */}
-          <div className="payment-method">
-            {/* <label>
+          {["name", "email", "phone"].map((field) => (
+            <div key={field} className="input-group">
+              <label>{field.charAt(0).toUpperCase() + field.slice(1)}</label>
               <input
-                type="radio"
-                name="paymentMethod"
-                value="cod"
-                checked={formData.paymentMethod === "cod"}
+                type={field === "email" ? "email" : "text"}
+                name={field}
+                value={formData[field]}
                 onChange={handleChange}
               />
-              Thanh toán khi nhận hàng
-            </label> */}
+            </div>
+          ))}
+          <div className="input-group">
+            <label>Địa chỉ</label>
+            <textarea
+              name="address"
+              value={formData.address}
+              onChange={handleChange}
+            ></textarea>
+          </div>
+        </div>
+
+        <div className="order-info">
+          <h2>Thông tin đơn hàng</h2>
+          <p><strong>Tổng sản phẩm đã chọn:</strong> {totalQuantity}</p>
+          <p><strong>Tích điểm:</strong> {rewardPoints} điểm</p>
+
+          <div className="payment-method">
             <label>
               <input
                 type="radio"
@@ -141,14 +149,22 @@ export default function Cart() {
               />
               Thanh toán qua VNPay
             </label>
+            <label>
+              <input
+                type="radio"
+                name="paymentMethod"
+                value="cod"
+                checked={formData.paymentMethod === "cod"}
+                onChange={handleChange}
+              />
+              Thanh toán khi nhận hàng
+            </label>
           </div>
 
-          {/* Tổng thanh toán */}
           <div className="total-payment">
-            <strong>Tổng thanh toán: {finalTotal.toLocaleString()} VNĐ</strong>
+            <strong>Tổng thanh toán:</strong> {finalTotal.toLocaleString()} <span style={{ textDecoration: "underline" }}>đ</span>
           </div>
 
-          {/* Nút Thanh toán & Hủy */}
           <div className="buttons">
             <button onClick={handleCheckout} className="btn primary">
               Thanh toán

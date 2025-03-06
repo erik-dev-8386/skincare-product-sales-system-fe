@@ -279,8 +279,8 @@ export default function Products() {
                 >
                   <Option value="a-z">A-Z</Option>
                   <Option value="z-a">Z-A</Option>
-                  <Option value="low-high">Price: Low to High</Option>
-                  <Option value="high-low">Price: High to Low</Option>
+                  <Option value="low-high">Giá: Thấp - cao</Option>
+                  <Option value="high-low">Giá: Cao - thấp</Option>
                 </Select>
               </div>
 

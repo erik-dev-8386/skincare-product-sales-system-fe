@@ -76,7 +76,7 @@ import { useNavigate } from "react-router-dom";
 const { Meta } = Card;
 
 // const ProductCard = ({ product, discounts = {}, brands = [], handleAddToCart }) => {
-const ProductCard = ({ product, discounts, brands }) => {
+const ProductCard = ({ product, discounts = {}, brands = [] }) => {
   const navigate = useNavigate();
 
   // Kiểm tra xem product có tồn tại không
@@ -117,7 +117,8 @@ const ProductCard = ({ product, discounts, brands }) => {
           alt={product.productName}
           src={product.productImages[0]?.imageURL}
           style={{
-            height: "200px",
+            height: "150px",
+            width: "100%",
             objectFit: "contain",
             padding: 2,
           }}

@@ -1,5 +1,5 @@
 .Header {
-    font-family:"Fira Sans Extra Condensed", serif;
+    font-family: "Fira Sans Extra Condensed", serif;
     position: fixed;
     top: 0;
     background-color: #900001;
@@ -29,13 +29,12 @@
 /* .nav {
     display: inline-block;
     /* text-decoration: none; */
-/* } */ */
-
-.nav {
+/* } */
+*/ .nav {
     display: flex;
     align-items: center;
     justify-content: center;
-   
+
 
 }
 
@@ -75,11 +74,17 @@
     margin: 0;
     padding: 0;
 }
-.nav li a:focus,.nav li a:active {
-    background-color: #fff; /* Màu nền trắng khi nhấn */
-    color: #900001; /* Màu chữ đổi sang đỏ đậm */
-    border-radius: 5px; /* Bo góc cho hiệu ứng */
-    outline: none; /* Xóa viền mặc định của trình duyệt */
+
+.nav li a:focus,
+.nav li a:active {
+    background-color: #fff;
+    /* Màu nền trắng khi nhấn */
+    color: #900001;
+    /* Màu chữ đổi sang đỏ đậm */
+    border-radius: 5px;
+    /* Bo góc cho hiệu ứng */
+    outline: none;
+    /* Xóa viền mặc định của trình duyệt */
 }
 
 
@@ -165,14 +170,16 @@
 
 .Header .icon {
     display: flex;
-    align-items: center; /* Căn giữa theo chiều dọc */
+    align-items: center;
+    /* Căn giữa theo chiều dọc */
     justify-content: flex-end;
-    gap: 50px; /* Tạo khoảng cách giữa các icon */
+    gap: 50px;
+    /* Tạo khoảng cách giữa các icon */
     padding-right: 10px;
 }
 
 /* Cố định kích thước và căn giữa các icon */
-.cart, .user {
+.user {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -180,8 +187,17 @@
     height: 40px;
 }
 
+.cart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80px;
+    height: 40px;
+}
+
 /* Căn chỉnh icon user và cart */
-.cart i, .user i {
+
+.user i {
     color: aliceblue;
     display: flex;
     justify-content: center;
@@ -189,6 +205,18 @@
     height: 30px;
     width: 30px;
     border-radius: 50%;
+    border: 1px solid white;
+    background-color: transparent;
+}
+
+.cart i {
+    color: aliceblue;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
+    width: 50px;
+    border-radius: 20%;
     border: 1px solid white;
     background-color: transparent;
 }
@@ -204,7 +232,7 @@
 .user-container .subnav {
     position: absolute;
     top: 100%;
-    right: 0; 
+    right: 0;
     background-color: #900001;
     /* background: linear-gradient(to right,#900001, #c0244e ); */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
@@ -212,7 +240,7 @@
     display: none;
     text-align: left;
     border-radius: 5px;
-    z-index: 9999; 
+    z-index: 9999;
 }
 
 .user-container .subnav li {
@@ -246,4 +274,3 @@
 }
 
 /* Hiệu ứng hover */
-
