@@ -269,12 +269,12 @@ export default function Cart() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const totalQuantity = cartItems.reduce(
+  const totalQuantity = checkoutResponse.cartItems.reduce(
     (total, item) => total + item.quantity,
     0
   );
 
-  const subtotal = cartItems.reduce(
+  const subtotal = checkoutResponse.cartItems.reduce(
     (total, item) => total + item.discountPrice * item.quantity,
     0
   );
@@ -343,7 +343,7 @@ export default function Cart() {
                     <td>{item.productName}</td>
                     <td>{item.discountPrice} <span style={{ textDecoration: "underline" }}>đ</span></td>
                     <td>{item.quantity}</td>
-                    <td>{checkoutResponse.total.toLocaleString()} <span style={{ textDecoration: "underline" }}>đ</span></td>
+                    <td>{item.quantity * item.discountPrice} <span style={{ textDecoration: "underline" }}>đ</span></td>
                   </tr>
                 ))
               ) : (
