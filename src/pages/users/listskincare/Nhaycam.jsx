@@ -1,148 +1,695 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./Skin.css";
 import danc1 from "../../../assets/da/danc1.jpg";
 import danc2 from "../../../assets/da/danc2.jpg";
 import danc3 from "../../../assets/da/danc3.jpg";
-import sp7 from "../../../assets/da/sp7.jpg";
-import sp8 from "../../../assets/da/sp8.jpg";
-import sp9 from "../../../assets/da/sp9.jpg";
-import sp10 from "../../../assets/da/sp10.jpg";
-import sp11 from "../../../assets/da/sp11.jpg";
-import sp12 from "../../../assets/da/sp12.jpg";
-import Footer from "../../../component/Footer/Footer";
-import Header from "../../../component/Header/Header";
-export default function Kho() {
-  {
-    return (
-      <>
-        {/* <Header /> */}
-        <div className="container">
-          <div className="row">
-            <h5 className="trang">
-              {" "}
-              Trang chủ {">"} Lộ trình chăm sóc da {">"} Da nhạy cảm
-            </h5>
-          </div>
-          <div className="row">
-            <div className="col-12">
-              <h3 className="san">Da nhạy cảm</h3>
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-4">
-              <img src={danc1} alt="Da kho" className="da" />
-            </div>
-            <div className="col-4">
-              <img src={danc2} alt="Da kho" className="da" />
-            </div>
-            <div className="col-4">
-              <img src={danc3} alt="Da kho" className="da" />
-            </div>
-          </div>
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <div className="row">
-            <h5 className="dautrang"> Chăm sóc da nhạy cảm</h5>
-          </div>
-          <br />
-          <div className="row">
-            <div className="col-6 list-container">
-              <h5 className="skin">
-                {" "}
-                Các bước chăm sóc da nhạy cảm dành cho ban ngày
-              </h5>
-              <br />
-              <ul className="buoctaytrang">
-                <li className="buoc">Bước 1: Tẩy trang</li>
-                <br />
-                <li className="buoc">Bước 2: Rửa mặt bằng sữa rửa mặt</li>
-                <br />
-                <li className="buoc">Bước 3: Sử dụng Toner cân bằng da</li>
-                <br />
-                <li className="buoc">Bước 4: Thoa sản phẩm đặc trị</li>
-                <br />
-                <li className="buoc">
-                  Bước 5: Thoa Serum hoặc tinh chất dưỡng da
-                </li>
-                <br />
-                <li className="buoc">Bước 6: Bôi kem dưỡng ẩm</li>
-                <br />
-                <li className="buoc">Bước 7: Bôi kem chống nắng</li>
-                <br />
-              </ul>
-            </div>
+import ruamat from "../../../assets/da/ruamat.jpg";
+import toner from "../../../assets/da/toner.jpg";
+import serum from "../../../assets/da/serum.jpg";
+import kem from "../../../assets/da/kem.jpg";
+import sun from "../../../assets/da/sun.jpg";
+import { useNavigate } from "react-router-dom";
+import ProductCard from "../../../component/productCard/ProductCard";
+import api from "../../../config/api";
 
-            <div className="col-6 list-container">
-              <h5 className="skin">
-                Các bước chăm sóc da nhạy cảm dành cho ban đêm
-              </h5>
-              <br />
-              <ul className="buoctaytrang">
-                <li className="buoc">Bước 1: Tẩy trang</li>
-                <br />
-                <li className="buoc">Bước 2: Rửa mặt bằng sữa rửa mặt</li>
-                <br />
-                <li className="buoc">Bước 3: Tẩy tế bào chết</li>
-                <br />
-                <li className="buoc">Bước 4: Dùng toner/ nước hoa hồng</li>
-                <br />
-                <li className="buoc">Bước 5: Đắp mặt nạ</li>
-                <br />
-                <li className="buoc">Bước 6: Dùng sản phẩm đặc trị</li>
-                <br />
-                <li className="buoc">
-                  Bước 7: Thoa Serum hoặc tinh chất dưỡng da
-                </li>
-                <br />
-                <li className="buoc">Bước 8: Thoa lotion</li>
-                <br />
-                <li className="buoc">Bước 9: Dùng kem dưỡng ẩm</li>
-                <br />
-                <li className="buoc">Bước 10: Bôi kem mắt</li>
-                <br />
-                <li className="buoc">Bước 11: Đắp mặt nạ</li>
-                <br />
-              </ul>
-            </div>
-          </div>
-          <br />
-          <br />
-          <div className="row">
-            <div className="col-12">
-              <h3 className="san">Một số sản phẩm dành cho da nhạy cảm</h3>{" "}
-              <br />
-              <br />
-            </div>
-          </div>
-          <div className="row">
-            <div className="col-4">
-              <img src={sp7} alt="Da kho" className="da" />
-            </div>
-            <div className="col-4">
-              <img src={sp8} alt="Da kho" className="da" />
-            </div>
-            <div className="col-4">
-              <img src={sp9} alt="Da kho" className="da" />
-            </div>
-          </div>
-          <br /> <br /> <br />
-          <div className="row">
-            <div className="col-4">
-              <img src={sp10} alt="Da kho" className="da" />
-            </div>
-            <div className="col-4">
-              <img src={sp11} alt="Da kho" className="da" />
-            </div>
-            <div className="col-4">
-              <img src={sp12} alt="Da kho" className="da" />
+export default function Nhaycam() {
+  const [showModal, setShowModal] = useState(false);
+  const [selectedStep, setSelectedStep] = useState(null);
+  const [filteredProducts, setFilteredProducts] = useState([]);
+  const [discounts, setDiscounts] = useState({});
+  const [brands, setBrands] = useState([]);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const navigate = useNavigate();
+  const [sensitiveProducts, setSensitiveProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [skintypes, setSkintypes] = useState([]);
+  const [suitableProducts, setSuitableProducts] = useState([]);
+  const [sensitiveCurrentSlide, setSensitiveCurrentSlide] = useState(0);
+  const [currentRecommendationSlide, setCurrentRecommendationSlide] =
+    useState(0);
+
+  const skinCareSteps = {
+    cleanser: {
+      title: "Sữa Rửa Mặt Dịu Nhẹ Cho Da Nhạy Cảm",
+      description:
+        "Sữa rửa mặt là bước quan trọng nhất để làm sạch da nhẹ nhàng",
+      keyPoints: [
+        "Không chứa xà phòng và chất tẩy rửa mạnh",
+        "Không chứa hương liệu và chất kích ứng",
+        "Duy trì độ ẩm tự nhiên của da",
+      ],
+      recommendations: [
+        {
+          name: "La Roche-Posay Toleriane Gentle Cleanser",
+          description: "Sữa rửa mặt dành riêng cho da nhạy cảm",
+          image: ruamat,
+        },
+        {
+          name: "Avène Extremely Gentle Cleanser",
+          description: "Sữa rửa mặt cực kỳ dịu nhẹ",
+          image: ruamat,
+        },
+      ],
+      usage: "Massage nhẹ nhàng với nước ấm, tránh chà xát mạnh.",
+    },
+    toner: {
+      title: "Toner Làm Dịu Da Nhạy Cảm",
+      description: "Cân bằng độ pH và làm dịu da sau khi rửa mặt",
+      keyPoints: [
+        "Không cồn, không chất kích ứng",
+        "Làm dịu và giảm đỏ",
+        "Tăng cường hàng rào bảo vệ da",
+      ],
+      recommendations: [
+        {
+          name: "Klairs Unscented Preparation Toner",
+          description: "Toner không mùi cho da nhạy cảm",
+          image: toner,
+        },
+        {
+          name: "Avène Thermal Spring Water",
+          description: "Xịt khoáng làm dịu da",
+          image: toner,
+        },
+      ],
+      usage: "Thấm nhẹ lên da bằng bông cotton hoặc xịt trực tiếp.",
+    },
+    serum: {
+      title: "Serum Phục Hồi Da Nhạy Cảm",
+      description: "Cung cấp dưỡng chất và làm dịu da",
+      keyPoints: [
+        "Chứa các thành phần làm dịu như Cica",
+        "Phục hồi hàng rào bảo vệ da",
+        "Giảm thiểu kích ứng",
+      ],
+      recommendations: [
+        {
+          name: "La Roche-Posay Cicaplast Serum",
+          description: "Serum phục hồi da kích ứng",
+          image: serum,
+        },
+        {
+          name: "Dr.Jart+ Cicapair Serum",
+          description: "Serum làm dịu và giảm đỏ",
+          image: serum,
+        },
+      ],
+      usage: "Sử dụng 2-3 giọt, vỗ nhẹ lên da.",
+    },
+    moisturizer: {
+      title: "Kem Dưỡng Ẩm Cho Da Nhạy Cảm",
+      description: "Dưỡng ẩm và bảo vệ da nhạy cảm",
+      keyPoints: [
+        "Không chứa hương liệu",
+        "Tăng cường hàng rào bảo vệ",
+        "Giữ ẩm lâu dài",
+      ],
+      recommendations: [
+        {
+          name: "Avène Tolerance Extreme Cream",
+          description: "Kem dưỡng cho da cực kỳ nhạy cảm",
+          image: kem,
+        },
+        {
+          name: "La Roche-Posay Toleriane Ultra",
+          description: "Kem dưỡng không gây kích ứng",
+          image: kem,
+        },
+      ],
+      usage: "Thoa một lớp mỏng, massage nhẹ nhàng.",
+    },
+    sunscreen: {
+      title: "Kem Chống Nắng Cho Da Nhạy Cảm",
+      description: "Bảo vệ da khỏi tác hại của tia UV",
+      keyPoints: [
+        "Chỉ chứa màng lọc vật lý",
+        "Không gây kích ứng",
+        "Bảo vệ toàn diện",
+      ],
+      recommendations: [
+        {
+          name: "La Roche-Posay Anthelios Mineral",
+          description: "Kem chống nắng khoáng chất",
+          image: sun,
+        },
+        {
+          name: "Avène Mineral Sunscreen",
+          description: "Kem chống nắng dịu nhẹ",
+          image: sun,
+        },
+      ],
+      usage: "Thoa đều lên da 15-30 phút trước khi ra nắng.",
+    },
+    nightCleansing: {
+      title: "Tẩy Trang Cho Da Nhạy Cảm",
+      description: "Làm sạch nhẹ nhàng, không gây kích ứng",
+      keyPoints: [
+        "Loại bỏ nhẹ nhàng lớp trang điểm",
+        "Không cần chà xát mạnh",
+        "Duy trì độ ẩm",
+      ],
+      recommendations: [
+        {
+          name: "Bioderma Sensibio H2O",
+          description: "Nước tẩy trang micellar dịu nhẹ",
+          image: ruamat,
+        },
+        {
+          name: "Avène Extremely Gentle Cleanser Lotion",
+          description: "Sữa tẩy trang dịu nhẹ",
+          image: ruamat,
+        },
+      ],
+      usage: "Thấm nhẹ lên da bằng bông cotton, không chà xát.",
+    },
+    nightCleanser: {
+      title: "Sữa Rửa Mặt Ban Đêm Cho Da Nhạy Cảm",
+      description: "Làm sạch da một cách nhẹ nhàng sau bước tẩy trang",
+      keyPoints: [
+        "Làm sạch sâu nhẹ nhàng",
+        "Không gây kích ứng",
+        "Duy trì độ ẩm tự nhiên",
+      ],
+      recommendations: [
+        {
+          name: "Cetaphil Gentle Skin Cleanser",
+          description: "Sữa rửa mặt dịu nhẹ cho da nhạy cảm",
+          image: ruamat,
+        },
+        {
+          name: "Avène Cleansing Foam",
+          description: "Sữa rửa mặt dạng bọt không xà phòng",
+          image: ruamat,
+        },
+      ],
+      usage: "Massage nhẹ nhàng với nước ấm, tránh chà xát mạnh.",
+    },
+    nightToner: {
+      title: "Toner Ban Đêm Cho Da Nhạy Cảm",
+      description: "Cân bằng và làm dịu da sau khi rửa mặt",
+      keyPoints: [
+        "Không chứa cồn",
+        "Làm dịu da kích ứng",
+        "Chuẩn bị da cho các bước dưỡng tiếp theo",
+      ],
+      recommendations: [
+        {
+          name: "Pyunkang Yul Essence Toner",
+          description: "Toner dưỡng ẩm không kích ứng",
+          image: toner,
+        },
+        {
+          name: "Hada Labo Gokujyun Premium Lotion",
+          description: "Toner cấp ẩm chuyên sâu",
+          image: toner,
+        },
+      ],
+      usage: "Thấm nhẹ lên da bằng bông cotton hoặc dùng tay vỗ nhẹ.",
+    },
+    nightSerum: {
+      title: "Serum Đặc Trị Ban Đêm Cho Da Nhạy Cảm",
+      description: "Phục hồi và làm dịu da trong suốt đêm",
+      keyPoints: [
+        "Chứa thành phần làm dịu và phục hồi",
+        "Không chứa chất kích ứng",
+        "Tăng cường hàng rào bảo vệ da",
+      ],
+      recommendations: [
+        {
+          name: "La Roche-Posay Cicaplast B5 Serum",
+          description: "Serum phục hồi da ban đêm",
+          image: serum,
+        },
+        {
+          name: "Avène Hydrance Intense Serum",
+          description: "Serum dưỡng ẩm chuyên sâu",
+          image: serum,
+        },
+      ],
+      usage: "Sử dụng 2-3 giọt, vỗ nhẹ lên da để thẩm thấu.",
+    },
+    nightMoisturizer: {
+      title: "Kem Dưỡng Ẩm Ban Đêm Cho Da Nhạy Cảm",
+      description: "Nuôi dưỡng và phục hồi da trong giấc ngủ",
+      keyPoints: [
+        "Dưỡng ẩm chuyên sâu",
+        "Phục hồi da ban đêm",
+        "Làm dịu da kích ứng",
+      ],
+      recommendations: [
+        {
+          name: "La Roche-Posay Cicaplast Baume B5",
+          description: "Kem dưỡng phục hồi da ban đêm",
+          image: kem,
+        },
+        {
+          name: "Avène Cicalfate+ Restorative Protective Cream",
+          description: "Kem dưỡng phục hồi da nhạy cảm",
+          image: kem,
+        },
+      ],
+      usage:
+        "Thoa một lớp vừa đủ lên da, massage nhẹ nhàng theo chuyển động tròn.",
+    },
+  };
+
+  const handleStepClick = async (step) => {
+    setSelectedStep(step);
+    setShowModal(true);
+
+    let categoryName = "";
+    switch (step) {
+      case "cleanser":
+      case "nightCleanser":
+        categoryName = "Sữa rửa mặt";
+        break;
+      case "toner":
+      case "nightToner":
+        categoryName = "Toners";
+        break;
+      case "serum":
+      case "nightSerum":
+        categoryName = "Serums";
+        break;
+      case "moisturizer":
+      case "nightMoisturizer":
+        categoryName = "Kem dưỡng ẩm";
+        break;
+      case "sunscreen":
+        categoryName = "Kem chống nắng";
+        break;
+      case "cleansingOil":
+        categoryName = "Nước tẩy trang";
+        break;
+      default:
+        categoryName = "";
+    }
+
+    if (categoryName) {
+      const products = await fetchFilteredProducts(categoryName);
+      setFilteredProducts(products);
+    }
+  };
+
+  const getStepInfo = () => {
+    return skinCareSteps[selectedStep];
+  };
+
+  const handleTopSearchNext = () => {
+    setSensitiveCurrentSlide((prevSlide) =>
+      prevSlide + 3 < sensitiveProducts.length ? prevSlide + 3 : 0
+    );
+  };
+
+  const handleTopSearchPrev = () => {
+    setSensitiveCurrentSlide((prevSlide) =>
+      prevSlide - 3 >= 0
+        ? prevSlide - 3
+        : Math.max(0, sensitiveProducts.length - 3)
+    );
+  };
+
+  const handleRecommendationNext = () => {
+    const slider = document.querySelector(".recommendations-slider");
+    if (slider) {
+      slider.scrollLeft += slider.offsetWidth;
+    }
+  };
+
+  const handleRecommendationPrev = () => {
+    const slider = document.querySelector(".recommendations-slider");
+    if (slider) {
+      slider.scrollLeft -= slider.offsetWidth;
+    }
+  };
+
+  const visibleTopSearchProducts = sensitiveProducts.slice(
+    sensitiveCurrentSlide,
+    sensitiveCurrentSlide + 3
+  );
+
+  useEffect(() => {
+    const fetchSuitableProducts = async () => {
+      try {
+        const response = await api.get("/products");
+        setSuitableProducts(response.data);
+      } catch (error) {
+        console.error("Error fetching suitable products:", error);
+      }
+    };
+    fetchSuitableProducts();
+  }, []);
+
+  useEffect(() => {
+    const fetchBrands = async () => {
+      try {
+        const response = await api.get("/brands");
+        setBrands(response.data);
+      } catch (error) {
+        console.error("Error fetching brands:", error);
+      }
+    };
+    fetchBrands();
+  }, []);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const response = await api.get("/categories");
+        setCategories(response.data);
+      } catch (error) {
+        console.error("Error fetching categories:", error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    const fetchDiscounts = async () => {
+      try {
+        const response = await api.get("/discounts");
+        const discountMap = response.data.reduce((acc, discount) => {
+          acc[discount.discountId] = discount.discountPercent;
+          return acc;
+        }, {});
+        setDiscounts(discountMap);
+      } catch (error) {
+        console.error("Error fetching discounts:", error);
+      }
+    };
+    fetchDiscounts();
+  }, []);
+
+  useEffect(() => {
+    const fetchSkintypes = async () => {
+      try {
+        const response = await api.get("/skin-types");
+        setSkintypes(response.data);
+      } catch (error) {
+        console.error("Error fetching skin-types:", error);
+      }
+    };
+    fetchSkintypes();
+  }, []);
+
+  useEffect(() => {
+    const fetchSensitiveProducts = async () => {
+      try {
+        const response = await api.get("/products/skin-name/Nhạy cảm");
+        if (response.data) {
+          const productsWithIds = response.data.map((product) => ({
+            ...product,
+            id: `sensitive-${product.productId}`,
+          }));
+          setSensitiveProducts(productsWithIds);
+        }
+      } catch (error) {
+        console.error("Error fetching sensitive skin products:", error);
+        setSensitiveProducts([]);
+      }
+    };
+    fetchSensitiveProducts();
+  }, []);
+
+  const fetchFilteredProducts = async (categoryName) => {
+    try {
+      console.log("Fetching products for category:", categoryName);
+      const categoryResponse = await api.get(
+        `/products/category/${categoryName}`
+      );
+      const skinTypeResponse = await api.get(`/products/skin-name/Nhạy cảm`);
+
+      if (!categoryResponse.data || !skinTypeResponse.data) {
+        return [];
+      }
+
+      const filteredProducts = categoryResponse.data.filter((categoryProduct) =>
+        skinTypeResponse.data.some(
+          (skinProduct) => skinProduct.productId === categoryProduct.productId
+        )
+      );
+
+      const productsWithIds = filteredProducts.map((product) => ({
+        ...product,
+        id: `filtered-${product.productId}`,
+      }));
+
+      return productsWithIds;
+    } catch (error) {
+      console.error("Error fetching filtered products:", error);
+      return [];
+    }
+  };
+
+  return (
+    <>
+      <div className="container">
+        <div className="row">
+          <div className="col-12">
+            <h1 className="page-title">Da nhạy cảm là gì?</h1>
+            <div className="definition-box">
+              <p>
+                Da nhạy cảm là loại da dễ bị kích ứng, đỏ và khó chịu khi tiếp
+                xúc với các yếu tố môi trường hoặc mỹ phẩm. Loại da này cần được
+                chăm sóc đặc biệt với các sản phẩm dịu nhẹ và phù hợp.
+              </p>
             </div>
           </div>
         </div>
-        {/* <Footer /> */}
-      </>
-    );
-  }
+
+        <div className="row characteristics-section">
+          <h2>Đặc điểm nhận biết da nhạy cảm</h2>
+          <div className="col-md-4">
+            <div className="characteristic-card">
+              <img src={danc1} alt="Đặc điểm 1" />
+              <h3>Dễ bị đỏ và kích ứng</h3>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="characteristic-card">
+              <img src={danc2} alt="Đặc điểm 2" />
+              <h3>Cảm giác châm chích</h3>
+            </div>
+          </div>
+          <div className="col-md-4">
+            <div className="characteristic-card">
+              <img src={danc3} alt="Đặc điểm 3" />
+              <h3>Da mỏng và nhạy cảm</h3>
+            </div>
+          </div>
+        </div>
+
+        <div className="row skincare-routine">
+          <h2>Quy trình chăm sóc da nhạy cảm</h2>
+          <div className="col-md-6">
+            <div className="routine-card morning">
+              <h3>Ban ngày</h3>
+              <ol>
+                <li
+                  onClick={() => handleStepClick("cleanser")}
+                  className="clickable-step"
+                >
+                  Sữa rửa mặt dịu nhẹ
+                </li>
+                <li
+                  onClick={() => handleStepClick("toner")}
+                  className="clickable-step"
+                >
+                  Toner làm dịu da
+                </li>
+                <li
+                  onClick={() => handleStepClick("serum")}
+                  className="clickable-step"
+                >
+                  Serum phục hồi
+                </li>
+                <li
+                  onClick={() => handleStepClick("moisturizer")}
+                  className="clickable-step"
+                >
+                  Kem dưỡng ẩm
+                </li>
+                <li
+                  onClick={() => handleStepClick("sunscreen")}
+                  className="clickable-step"
+                >
+                  Kem chống nắng
+                </li>
+              </ol>
+            </div>
+          </div>
+
+          <div className="col-md-6">
+            <div className="routine-card evening">
+              <h3>Ban đêm</h3>
+              <ol>
+                <li
+                  onClick={() => handleStepClick("nightCleansing")}
+                  className="clickable-step"
+                >
+                  Tẩy trang
+                </li>
+                <li
+                  onClick={() => handleStepClick("nightCleanser")}
+                  className="clickable-step"
+                >
+                  Sữa rửa mặt
+                </li>
+                <li
+                  onClick={() => handleStepClick("nightToner")}
+                  className="clickable-step"
+                >
+                  Toner
+                </li>
+                <li
+                  onClick={() => handleStepClick("nightSerum")}
+                  className="clickable-step"
+                >
+                  Serum đặc trị
+                </li>
+                <li
+                  onClick={() => handleStepClick("nightMoisturizer")}
+                  className="clickable-step"
+                >
+                  Kem dưỡng ẩm
+                </li>
+              </ol>
+            </div>
+          </div>
+        </div>
+
+        <div className="row tips-section">
+          <h2>Lời khuyên chăm sóc da nhạy cảm</h2>
+          <div className="tips-content">
+            <ul>
+              <li>Luôn test sản phẩm mới trước khi sử dụng</li>
+              <li>Tránh các sản phẩm chứa cồn và hương liệu</li>
+              <li>Bảo vệ da khỏi ánh nắng mặt trời</li>
+              <li>Sử dụng sản phẩm càng đơn giản càng tốt</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="row product-recommendations">
+          <h2>Sản phẩm gợi ý cho da nhạy cảm</h2>
+          <div
+            className="row"
+            style={{
+              justifyContent: "center",
+              marginBottom: "50px",
+              position: "relative",
+            }}
+          >
+            <button
+              onClick={handleTopSearchPrev}
+              className="slider-control prev"
+            >
+              &lt;
+            </button>
+
+            <div className="row">
+              {sensitiveProducts && sensitiveProducts.length > 0 ? (
+                visibleTopSearchProducts.map((product) => (
+                  <div key={`sensitive-${product.productId}`} className="col-4">
+                    <ProductCard
+                      key={`card-${product.productId}`}
+                      product={product}
+                      discounts={discounts}
+                      brands={brands}
+                      categories={categories}
+                      skintypes={skintypes}
+                    />
+                  </div>
+                ))
+              ) : (
+                <div className="col-12 text-center">
+                  <div className="alert alert-info">Không có sản phẩm nào.</div>
+                </div>
+              )}
+            </div>
+
+            <button
+              onClick={handleTopSearchNext}
+              className="slider-control next"
+            >
+              &gt;
+            </button>
+          </div>
+        </div>
+
+        {showModal && selectedStep && (
+          <div className="modal-overlay">
+            <div className="modal-content">
+              <button className="close-btn" onClick={() => setShowModal(false)}>
+                ×
+              </button>
+              <h2>{getStepInfo().title}</h2>
+              <p className="description">{getStepInfo().description}</p>
+
+              <h3>Đặc điểm chính:</h3>
+              <ul>
+                {getStepInfo().keyPoints.map((point, index) => (
+                  <li key={index}>{point}</li>
+                ))}
+              </ul>
+
+              <h3>Cách sử dụng:</h3>
+              <p>{getStepInfo().usage}</p>
+
+              <h3>Sản phẩm gợi ý:</h3>
+              <div className="recommendations">
+                <button
+                  className="slider-control prev"
+                  onClick={handleRecommendationPrev}
+                >
+                  &lt;
+                </button>
+
+                <div className="recommendations-slider">
+                  <div className="recommendations-row">
+                    {filteredProducts.length > 0
+                      ? filteredProducts.map((product) => (
+                          <div
+                            key={`filtered-${product.productId}`}
+                            className="recommendation-item"
+                          >
+                            <ProductCard
+                              product={product}
+                              discounts={discounts}
+                              brands={brands}
+                              categories={categories}
+                              skintypes={skintypes}
+                            />
+                          </div>
+                        ))
+                      : getStepInfo().recommendations.map((product, index) => (
+                          <div
+                            key={`default-${index}`}
+                            className="recommendation-item"
+                          >
+                            <div className="product-card">
+                              <img src={product.image} alt={product.name} />
+                              <h4>{product.name}</h4>
+                              <div className="description">
+                                {product.description}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
+                  </div>
+                </div>
+
+                <button
+                  className="slider-control next"
+                  onClick={handleRecommendationNext}
+                >
+                  &gt;
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </>
+  );
 }
