@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from "react";
 import "./Skin.css";
-import dat1 from "../../../assets/da/dat1.jpg";
-import dat2 from "../../../assets/da/dat2.jpg";
-import dat3 from "../../../assets/da/dat3.jpg";
+import danc1 from "../../../assets/da/danc1.jpg";
+import danc2 from "../../../assets/da/danc2.jpg";
+import danc3 from "../../../assets/da/danc3.jpg";
 import ruamat from "../../../assets/da/ruamat.jpg";
 import toner from "../../../assets/da/toner.jpg";
 import serum from "../../../assets/da/serum.jpg";
 import kem from "../../../assets/da/kem.jpg";
+import sun from "../../../assets/da/sun.jpg";
 import { useNavigate } from "react-router-dom";
 import ProductCard from "../../../component/productCard/ProductCard";
 import api from "../../../config/api";
 
-export default function Thuong() {
+export default function Dau() {
   const [showModal, setShowModal] = useState(false);
   const [selectedStep, setSelectedStep] = useState(null);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -19,165 +20,146 @@ export default function Thuong() {
   const [brands, setBrands] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const navigate = useNavigate();
-  const [normalProducts, setNormalProducts] = useState([]);
+  const [oilyProducts, setOilyProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [skintypes, setSkintypes] = useState([]);
   const [suitableProducts, setSuitableProducts] = useState([]);
-  const [normalCurrentSlide, setNormalCurrentSlide] = useState(0);
+  const [oilyCurrentSlide, setOilyCurrentSlide] = useState(0);
   const [currentRecommendationSlide, setCurrentRecommendationSlide] =
     useState(0);
 
   const skinCareSteps = {
     cleanser: {
-      title: "Sữa Rửa Mặt Cho Da Thường",
-      description: "Làm sạch da nhẹ nhàng, không gây khô căng",
+      title: "Sữa Rửa Mặt Cho Da Dầu",
+      description: "Làm sạch sâu và kiểm soát dầu hiệu quả",
       keyPoints: [
-        "Làm sạch bụi bẩn và bã nhờn",
-        "Duy trì độ ẩm tự nhiên",
-        "Không gây khô da",
+        "Chứa Salicylic Acid giúp làm sạch sâu",
+        "Kiểm soát bã nhờn",
+        "Không gây khô căng da",
       ],
       recommendations: [
         {
-          name: "Cerave Hydrating Cleanser",
-          description: "Sữa rửa mặt dịu nhẹ cho da thường",
+          name: "La Roche-Posay Effaclar Gel",
+          description: "Gel rửa mặt kiểm soát dầu",
           image: ruamat,
         },
         {
-          name: "Simple Kind To Skin Cleanser",
-          description: "Sữa rửa mặt không xà phòng",
+          name: "Cerave Foaming Facial Cleanser",
+          description: "Sữa rửa mặt tạo bọt cho da dầu",
           image: ruamat,
         },
       ],
-      usage: "Massage nhẹ nhàng với nước ấm, rửa sạch với nước.",
+      usage: "Massage nhẹ nhàng với nước ấm, tập trung vào vùng chữ T.",
     },
     toner: {
-      title: "Toner Cân Bằng Da",
-      description: "Cân bằng độ pH và chuẩn bị da cho các bước tiếp theo",
-      keyPoints: ["Cân bằng độ pH", "Cấp ẩm nhẹ nhàng", "Làm sạch sâu"],
-      recommendations: [
-        {
-          name: "Thayers Witch Hazel Toner",
-          description: "Toner không cồn, dịu nhẹ",
-          image: toner,
-        },
-        {
-          name: "Laneige Cream Skin Toner",
-          description: "Toner dưỡng ẩm 2 trong 1",
-          image: toner,
-        },
-      ],
-      usage: "Thấm đều lên da bằng bông cotton hoặc tay.",
-    },
-    nightCleansing: {
-      title: "Tẩy Trang Cho Da Thường",
-      description: "Làm sạch lớp trang điểm và bụi bẩn tích tụ trong ngày",
+      title: "Toner Cân Bằng Da Dầu",
+      description: "Cân bằng độ pH và kiểm soát dầu",
       keyPoints: [
-        "Làm sạch sâu nhưng nhẹ nhàng",
-        "Không gây khô da",
-        "Loại bỏ hoàn toàn lớp trang điểm",
-      ],
-      recommendations: [
-        {
-          name: "Bioderma Sensibio H2O",
-          description: "Nước tẩy trang dịu nhẹ cho mọi loại da",
-          image: ruamat,
-        },
-        {
-          name: "Simple Micellar Water",
-          description: "Nước tẩy trang không gây kích ứng",
-          image: ruamat,
-        },
-      ],
-      usage: "Thấm dung dịch lên bông cotton và lau nhẹ nhàng trên da.",
-    },
-    nightCleanser: {
-      title: "Sữa Rửa Mặt Ban Đêm Cho Da Thường",
-      description: "Làm sạch sâu sau bước tẩy trang",
-      keyPoints: [
+        "Chứa BHA/AHA nhẹ nhàng",
         "Làm sạch sâu lỗ chân lông",
-        "Loại bỏ bã nhờn và tế bào chết",
-        "Không làm mất đi độ ẩm tự nhiên",
+        "Kiểm soát dầu thừa",
       ],
       recommendations: [
         {
-          name: "La Roche-Posay Toleriane",
-          description: "Sữa rửa mặt dịu nhẹ cho da thường",
-          image: ruamat,
-        },
-        {
-          name: "Cetaphil Gentle Cleanser",
-          description: "Sữa rửa mặt không xà phòng",
-          image: ruamat,
-        },
-      ],
-      usage: "Massage nhẹ nhàng với nước ấm, rửa sạch với nước.",
-    },
-    nightToner: {
-      title: "Toner Ban Đêm Cho Da Thường",
-      description: "Cân bằng độ pH và chuẩn bị da cho các bước dưỡng tiếp theo",
-      keyPoints: [
-        "Cân bằng độ pH sau khi rửa mặt",
-        "Cung cấp độ ẩm ban đầu",
-        "Giúp các bước dưỡng sau thẩm thấu tốt hơn",
-      ],
-      recommendations: [
-        {
-          name: "Klairs Supple Preparation Toner",
-          description: "Toner dưỡng ẩm không cồn",
+          name: "Paula's Choice 2% BHA",
+          description: "Toner loại bỏ tế bào chết",
           image: toner,
         },
         {
-          name: "Paula's Choice Skin Balancing Toner",
-          description: "Toner cân bằng độ ẩm",
+          name: "Some By Mi AHA-BHA-PHA Toner",
+          description: "Toner đa tác động",
           image: toner,
         },
       ],
-      usage: "Thấm đều lên da bằng bông cotton hoặc vỗ nhẹ bằng tay.",
+      usage: "Thấm nhẹ lên da bằng bông cotton.",
     },
-    nightSerum: {
-      title: "Serum Ban Đêm Cho Da Thường",
-      description: "Cung cấp dưỡng chất đậm đặc cho da trong giấc ngủ",
+    serum: {
+      title: "Serum Điều Trị Cho Da Dầu",
+      description: "Cung cấp dưỡng chất và kiểm soát dầu",
       keyPoints: [
-        "Chứa các thành phần dưỡng ẩm chuyên sâu",
-        "Hỗ trợ quá trình tái tạo da ban đêm",
-        "Cải thiện kết cấu da",
+        "Chứa Niacinamide giúp kiểm soát dầu",
+        "Làm giảm mụn và thâm",
+        "Không gây bít tắc lỗ chân lông",
       ],
       recommendations: [
         {
-          name: "The Ordinary Niacinamide 10%",
-          description: "Serum cân bằng và làm đều màu da",
+          name: "The Ordinary Niacinamide 10% + Zinc 1%",
+          description: "Serum kiểm soát dầu và mụn",
           image: serum,
         },
         {
           name: "Paula's Choice 10% Niacinamide Booster",
-          description: "Serum làm sáng và thu nhỏ lỗ chân lông",
+          description: "Serum làm giảm lỗ chân lông",
           image: serum,
         },
       ],
-      usage: "Thoa 2-3 giọt lên da và vỗ nhẹ để thẩm thấu.",
+      usage: "Sử dụng 2-3 giọt, vỗ nhẹ lên da.",
     },
-    nightMoisturizer: {
-      title: "Kem Dưỡng Ẩm Ban Đêm Cho Da Thường",
-      description: "Khóa ẩm và nuôi dưỡng da trong suốt đêm",
+    moisturizer: {
+      title: "Kem Dưỡng Ẩm Cho Da Dầu",
+      description: "Cung cấp độ ẩm mà không gây bóng nhờn",
       keyPoints: [
-        "Dưỡng ẩm chuyên sâu",
-        "Hỗ trợ phục hồi da",
-        "Tăng cường hàng rào bảo vệ da",
+        "Kết cấu nhẹ, không dầu",
+        "Kiểm soát bã nhờn",
+        "Cấp ẩm phù hợp",
       ],
       recommendations: [
         {
-          name: "CeraVe PM Facial Moisturizing Lotion",
-          description: "Kem dưỡng ẩm ban đêm không gây bít tắc",
+          name: "Neutrogena Hydro Boost Gel",
+          description: "Gel dưỡng ẩm không dầu",
           image: kem,
         },
         {
-          name: "La Roche-Posay Toleriane Double Repair",
-          description: "Kem dưỡng phục hồi da ban đêm",
+          name: "La Roche-Posay Effaclar Mat",
+          description: "Kem dưỡng kiểm soát dầu",
           image: kem,
         },
       ],
-      usage:
-        "Thoa một lớp mỏng đều lên da, massage nhẹ nhàng theo chuyển động tròn.",
+      usage: "Thoa một lớp mỏng lên da sau serum.",
+    },
+    sunscreen: {
+      title: "Kem Chống Nắng Cho Da Dầu",
+      description: "Bảo vệ da khỏi tác hại của tia UV",
+      keyPoints: [
+        "Kết cấu nhẹ, không gây bít tắc",
+        "Kiểm soát dầu suốt ngày",
+        "Bảo vệ toàn diện",
+      ],
+      recommendations: [
+        {
+          name: "La Roche-Posay Anthelios Anti-Shine",
+          description: "Kem chống nắng kiểm soát dầu",
+          image: sun,
+        },
+        {
+          name: "Bioré UV Perfect Milk",
+          description: "Sữa chống nắng cho da dầu",
+          image: sun,
+        },
+      ],
+      usage: "Thoa đều lên da 15-30 phút trước khi ra nắng.",
+    },
+    nightCleansing: {
+      title: "Tẩy Trang Cho Da Dầu",
+      description: "Làm sạch sâu lớp trang điểm và bã nhờn",
+      keyPoints: [
+        "Làm sạch sâu không gây kích ứng",
+        "Loại bỏ dầu thừa hiệu quả",
+        "Không để lại cảm giác nhờn rít",
+      ],
+      recommendations: [
+        {
+          name: "Bioderma Sébium H2O",
+          description: "Nước tẩy trang cho da dầu",
+          image: ruamat,
+        },
+        {
+          name: "La Roche-Posay Effaclar Micellar Water",
+          description: "Nước tẩy trang kiểm soát dầu",
+          image: ruamat,
+        },
+      ],
+      usage: "Thấm đều lên da bằng bông cotton, lau nhẹ nhàng.",
     },
   };
 
@@ -188,19 +170,15 @@ export default function Thuong() {
     let categoryName = "";
     switch (step) {
       case "cleanser":
-      case "nightCleanser":
         categoryName = "Sữa rửa mặt";
         break;
       case "toner":
-      case "nightToner":
         categoryName = "Toners";
         break;
       case "serum":
-      case "nightSerum":
         categoryName = "Serums";
         break;
       case "moisturizer":
-      case "nightMoisturizer":
         categoryName = "Kem dưỡng ẩm";
         break;
       case "sunscreen":
@@ -224,16 +202,14 @@ export default function Thuong() {
   };
 
   const handleTopSearchNext = () => {
-    setNormalCurrentSlide((prevSlide) =>
-      prevSlide + 3 < normalProducts.length ? prevSlide + 3 : 0
+    setOilyCurrentSlide((prevSlide) =>
+      prevSlide + 3 < oilyProducts.length ? prevSlide + 3 : 0
     );
   };
 
   const handleTopSearchPrev = () => {
-    setNormalCurrentSlide((prevSlide) =>
-      prevSlide - 3 >= 0
-        ? prevSlide - 3
-        : Math.max(0, normalProducts.length - 3)
+    setOilyCurrentSlide((prevSlide) =>
+      prevSlide - 3 >= 0 ? prevSlide - 3 : Math.max(0, oilyProducts.length - 3)
     );
   };
 
@@ -251,9 +227,9 @@ export default function Thuong() {
     }
   };
 
-  const visibleTopSearchProducts = normalProducts.slice(
-    normalCurrentSlide,
-    normalCurrentSlide + 3
+  const visibleTopSearchProducts = oilyProducts.slice(
+    oilyCurrentSlide,
+    oilyCurrentSlide + 3
   );
 
   useEffect(() => {
@@ -321,22 +297,22 @@ export default function Thuong() {
   }, []);
 
   useEffect(() => {
-    const fetchNormalProducts = async () => {
+    const fetchOilyProducts = async () => {
       try {
-        const response = await api.get("/products/skin-name/Thường");
+        const response = await api.get("/products/skin-name/Dầu");
         if (response.data) {
           const productsWithIds = response.data.map((product) => ({
             ...product,
-            id: `normal-${product.productId}`,
+            id: `oily-${product.productId}`,
           }));
-          setNormalProducts(productsWithIds);
+          setOilyProducts(productsWithIds);
         }
       } catch (error) {
-        console.error("Error fetching normal skin products:", error);
-        setNormalProducts([]);
+        console.error("Error fetching oily skin products:", error);
+        setOilyProducts([]);
       }
     };
-    fetchNormalProducts();
+    fetchOilyProducts();
   }, []);
 
   const fetchFilteredProducts = async (categoryName) => {
@@ -345,7 +321,7 @@ export default function Thuong() {
       const categoryResponse = await api.get(
         `/products/category/${categoryName}`
       );
-      const skinTypeResponse = await api.get(`/products/skin-name/Thường`);
+      const skinTypeResponse = await api.get(`/products/skin-name/Dầu`);
 
       if (!categoryResponse.data || !skinTypeResponse.data) {
         return [];
@@ -371,44 +347,44 @@ export default function Thuong() {
 
   return (
     <>
-      {/* <Header /> */}
       <div className="container">
         <div className="row">
           <div className="col-12">
-            <h1 className="page-title">Da thường là gì?</h1>
+            <h1 className="page-title">Da dầu là gì?</h1>
             <div className="definition-box">
               <p>
-                Da thường là loại da cân bằng, không quá khô hay quá nhờn. Da có
-                độ ẩm vừa phải, ít gặp các vấn đề về mụn hay kích ứng.
+                Da dầu là loại da có đặc điểm tiết nhiều bã nhờn, dễ bị mụn và
+                lỗ chân lông to. Loại da này cần được chăm sóc đặc biệt với các
+                sản phẩm kiểm soát dầu và không gây bít tắc lỗ chân lông.
               </p>
             </div>
           </div>
         </div>
 
         <div className="row characteristics-section">
-          <h2>Đặc điểm nhận biết da thường</h2>
+          <h2>Đặc điểm nhận biết da dầu</h2>
           <div className="col-md-4">
             <div className="characteristic-card">
-              <img src={dat1} alt="Đặc điểm 1" />
-              <h3>Độ ẩm cân bằng</h3>
+              <img src={danc1} alt="Đặc điểm 1" />
+              <h3>Da bóng dầu</h3>
             </div>
           </div>
           <div className="col-md-4">
             <div className="characteristic-card">
-              <img src={dat2} alt="Đặc điểm 2" />
-              <h3>Lỗ chân lông nhỏ</h3>
+              <img src={danc2} alt="Đặc điểm 2" />
+              <h3>Lỗ chân lông to</h3>
             </div>
           </div>
           <div className="col-md-4">
             <div className="characteristic-card">
-              <img src={dat3} alt="Đặc điểm 3" />
-              <h3>Ít khuyết điểm</h3>
+              <img src={danc3} alt="Đặc điểm 3" />
+              <h3>Dễ nổi mụn</h3>
             </div>
           </div>
         </div>
 
         <div className="row skincare-routine">
-          <h2>Quy trình chăm sóc da thường</h2>
+          <h2>Quy trình chăm sóc da dầu</h2>
           <div className="col-md-6">
             <div className="routine-card morning">
               <h3>Ban ngày</h3>
@@ -417,31 +393,31 @@ export default function Thuong() {
                   onClick={() => handleStepClick("cleanser")}
                   className="clickable-step"
                 >
-                  Sữa rửa mặt
+                  Sữa rửa mặt kiểm soát dầu
                 </li>
                 <li
                   onClick={() => handleStepClick("toner")}
                   className="clickable-step"
                 >
-                  Toner cân bằng
+                  Toner cân bằng da
                 </li>
                 <li
                   onClick={() => handleStepClick("serum")}
                   className="clickable-step"
                 >
-                  Serum dưỡng da
+                  Serum điều trị
                 </li>
                 <li
                   onClick={() => handleStepClick("moisturizer")}
                   className="clickable-step"
                 >
-                  Kem dưỡng ẩm
+                  Kem dưỡng ẩm nhẹ
                 </li>
                 <li
                   onClick={() => handleStepClick("sunscreen")}
                   className="clickable-step"
                 >
-                  Kem chống nắng
+                  Kem chống nắng kiểm soát dầu
                 </li>
               </ol>
             </div>
@@ -455,31 +431,31 @@ export default function Thuong() {
                   onClick={() => handleStepClick("nightCleansing")}
                   className="clickable-step"
                 >
-                  Tẩy trang
+                  Tẩy trang kỹ
                 </li>
                 <li
-                  onClick={() => handleStepClick("nightCleanser")}
+                  onClick={() => handleStepClick("cleanser")}
                   className="clickable-step"
                 >
-                  Sữa rửa mặt
+                  Sữa rửa mặt làm sạch sâu
                 </li>
                 <li
-                  onClick={() => handleStepClick("nightToner")}
+                  onClick={() => handleStepClick("toner")}
                   className="clickable-step"
                 >
-                  Toner
+                  Toner cân bằng
                 </li>
                 <li
-                  onClick={() => handleStepClick("nightSerum")}
+                  onClick={() => handleStepClick("serum")}
                   className="clickable-step"
                 >
-                  Serum
+                  Serum trị mụn
                 </li>
                 <li
-                  onClick={() => handleStepClick("nightMoisturizer")}
+                  onClick={() => handleStepClick("moisturizer")}
                   className="clickable-step"
                 >
-                  Kem dưỡng ẩm
+                  Kem dưỡng ẩm nhẹ
                 </li>
               </ol>
             </div>
@@ -487,19 +463,22 @@ export default function Thuong() {
         </div>
 
         <div className="row tips-section">
-          <h2>Lời khuyên chăm sóc da thường</h2>
+          <h2>Lời khuyên chăm sóc da dầu</h2>
           <div className="tips-content">
             <ul>
-              <li>Duy trì độ ẩm cân bằng cho da</li>
-              <li>Làm sạch da đều đặn</li>
-              <li>Bảo vệ da khỏi ánh nắng</li>
-              <li>Chọn sản phẩm phù hợp với da</li>
+              <li>Rửa mặt không quá 2-3 lần một ngày</li>
+              <li>Sử dụng sản phẩm không chứa dầu (oil-free)</li>
+              <li>Tránh chạm tay lên mặt thường xuyên</li>
+              <li>Thay vỏ gối thường xuyên</li>
+              <li>Uống đủ nước mỗi ngày</li>
+              <li>Hạn chế ăn đồ cay nóng và nhiều dầu mỡ</li>
+              <li>Tẩy tế bào chết đều đặn 1-2 lần/tuần</li>
             </ul>
           </div>
         </div>
 
         <div className="row product-recommendations">
-          <h2>Sản phẩm gợi ý cho da thường</h2>
+          <h2>Sản phẩm gợi ý cho da dầu</h2>
           <div
             className="row"
             style={{
@@ -516,9 +495,9 @@ export default function Thuong() {
             </button>
 
             <div className="row">
-              {normalProducts && normalProducts.length > 0 ? (
+              {oilyProducts && oilyProducts.length > 0 ? (
                 visibleTopSearchProducts.map((product) => (
-                  <div key={`normal-${product.productId}`} className="col-4">
+                  <div key={`oily-${product.productId}`} className="col-4">
                     <ProductCard
                       key={`card-${product.productId}`}
                       product={product}
@@ -618,7 +597,6 @@ export default function Thuong() {
           </div>
         )}
       </div>
-      {/* <Footer /> */}
     </>
   );
 }
