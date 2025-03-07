@@ -422,7 +422,7 @@ export default function Cart() {
             </div>
 
             <div className="total-payment">
-              <p style={{ color: "black", fontSize: 20, fontWeight: "bold" }}>Tổng thanh toán:</p> {finalTotal.toLocaleString()} <span style={{ textDecoration: "underline" }}>đ</span>
+              <p style={{ color: "black", fontSize: 20, fontWeight: "bold" }}>Tổng thanh toán:</p> {checkoutResponse.total.toLocaleString()} <span style={{ textDecoration: "underline" }}>đ</span>
             </div>
 
             <div className="buttons">

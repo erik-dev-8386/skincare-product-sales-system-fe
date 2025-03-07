@@ -303,6 +303,7 @@ export default function CartPage() {
       render: (_, item) => (
         <Space>
           <Button
+          color="primary" variant="solid"
             icon={<MinusOutlined />}
             onClick={() => decreaseQuantity(item.productId)}
             size="small"
@@ -311,9 +312,10 @@ export default function CartPage() {
             min={1}
             value={item.quantity}
             style={{ width: 60, textAlign: 'center' }}
-            disabled
+          
           />
           <Button
+          color="primary" variant="solid"
             icon={<PlusOutlined />}
             onClick={() => increaseQuantity(item.productId)}
             size="small"
@@ -333,6 +335,7 @@ export default function CartPage() {
       key: "action",
       render: (_, item) => (
         <Button
+        color="danger" variant="solid"
           icon={<DeleteOutlined />}
           onClick={() => deleteItem(item.productId)}
         >
