@@ -213,12 +213,13 @@ import { toast, ToastContainer } from "react-toastify";
 
 export default function Cart() {
   const location = useLocation();
-  const { checkoutResponse } = location.state || {};
+  const { checkoutResponse: initialCheckoutResponse } = location.state || {};
   const navigate = useNavigate();
   const { setCart } = useContext(CartContext);
   const initialCartItems = location.state?.cartItems || [];
 
   const [cartItems, setCartItems] = useState(initialCartItems);
+  const [checkoutResponse, setCheckoutResponse] = useState(initialCheckoutResponse);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -228,13 +229,13 @@ export default function Cart() {
     paymentMethod: "",
   });
 
-
   // Fetch user information from API
   useEffect(() => {
     const fetchUserData = async () => {
       const token = localStorage.getItem("token");
       if (!token) {
         console.error("No token found.");
+        navigate("/login"); // Redirect to login if no token
         return;
       }
 
@@ -254,7 +255,7 @@ export default function Cart() {
           firstName: data.firstName || prev.firstName,
           lastName: data.lastName || prev.lastName,
           email: data.email || prev.email,
-          phone: data.phoneNumber || prev.phoneNumber,
+          phone: data.phoneNumber || prev.phone,
           address: data.address || prev.address,
         }));
       } catch (error) {
@@ -263,57 +264,106 @@ export default function Cart() {
     };
 
     fetchUserData();
-  }, []);
+  }, [navigate]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const totalQuantity = checkoutResponse.cartItems.reduce(
+  const totalQuantity = checkoutResponse?.cartItems?.reduce(
     (total, item) => total + item.quantity,
     0
-  );
+  ) || 0;
 
-  const subtotal = checkoutResponse.cartItems.reduce(
+  const subtotal = checkoutResponse?.cartItems?.reduce(
     (total, item) => total + item.discountPrice * item.quantity,
     0
-  );
+  ) || 0;
 
   const rewardPoints = Math.floor(subtotal * 0.01);
   const finalTotal = subtotal;
 
+
+  //   const handleCheckout = async () => {
+//     if (formData.paymentMethod === "vnpay") {
+//       try {
+//         const response = await api.get('/vnpays/pay'); // Call your backend to generate VNPay URL
+//         const paymentUrl = response.data; // Assuming your backend returns the payment URL
+//         window.location.href = paymentUrl; // Redirect to VNPay payment page
+
+//         // Reset cart items after successful payment
+//         setCart([]); 
+//         setCartItems([]);
+//         // Optionally, you may want to navigate to a success page or show a success message
+//       } catch (error) {
+//         console.error("Error during payment process:", error);
+//         alert("Có lỗi xảy ra khi thanh toán. Vui lòng thử lại.");
+//       }
+//     } else {
+//       alert("Thanh toán thành công!");
+//       setCart([]); 
+//       setCartItems([]); // Reset cart items for COD as well
+//       navigate("/");
+//     }
+//   };
+
   const handleCheckout = async () => {
     const checkoutRequest = {
       email: formData.email,
-      cartItemDTO: cartItems.map(item => ({
+      cartItemDTO: cartItems.map((item) => ({
         productName: item.productName,
         quantity: item.quantity,
         price: item.discountPrice,
       })),
     };
-
-    try {
-      const response = await api.post('/cart/checkout', checkoutRequest);
-      const checkoutResponse = response.data; // Capture the response
-
-      // Store the response in state
-      setCheckoutResponse(checkoutResponse);
-
-      toast.success(`Thanh toán thành công! Tổng tiền: ${checkoutResponse.total.toLocaleString()} đ`);
-
-      // Reset cart items after successful checkout
-      setCart([]);
-      setCartItems([]);
-      navigate("/"); // Redirect to homepage or success page
-    } catch (error) {
-      console.error("Error during checkout:", error);
-      toast.error("Có lỗi xảy ra khi thanh toán. Vui lòng thử lại.");
+  
+    if (formData.paymentMethod === "vnpay") {
+      try {
+        // Gọi API backend để lấy URL thanh toán VNPay
+        const response = await api.get('/vnpays/pay', checkoutRequest);
+  
+        // Kiểm tra xem paymentUrl có tồn tại không
+        const paymentUrl = response.data;
+        if (!paymentUrl) {
+          throw new Error("Không nhận được URL thanh toán từ VNPay.");
+        }
+  
+        // Chuyển hướng đến trang thanh toán VNPay
+        window.location.href = paymentUrl;
+      } catch (error) {
+        console.error("Error during VNPay payment process:", error);
+        toast.error("Có lỗi xảy ra khi thanh toán qua VNPay. Vui lòng thử lại.");
+      }
+    } else {
+      try {
+        const response = await api.post('/cart/checkout', checkoutRequest);
+        const checkoutResponse = response.data;
+  
+        setCheckoutResponse(checkoutResponse); // Update checkout response state
+  
+        // Tính toán total nếu API không trả về
+        const total = checkoutResponse.total || subtotal;
+  
+        toast.success(`Thanh toán thành công! Tổng tiền: ${total.toLocaleString()} đ`);
+  
+        // Reset cart items after successful checkout
+        setCart([]);
+        setCartItems([]);
+  
+        // Delay navigation for 3 seconds
+        setTimeout(() => {
+          navigate("/"); // Redirect to homepage or success page
+        }, 3000); // 3 seconds delay
+      } catch (error) {
+        console.error("Error during checkout:", error);
+        toast.error("Có lỗi xảy ra khi thanh toán. Vui lòng thử lại.");
+      }
     }
   };
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer autoClose={3000} />
       <div className="container">
         <div className="cart-container">
           <h2 className="title">Trang thanh toán</h2>
@@ -330,12 +380,12 @@ export default function Cart() {
               </tr>
             </thead>
             <tbody>
-              {checkoutResponse ? (
+              {checkoutResponse?.cartItems ? (
                 checkoutResponse.cartItems.map((item) => (
                   <tr key={item.productId}>
                     <td>
                       <img
-                        src={item.productImages && item.productImages.length > 0 ? item.productImages[0].imageURL : 'default-image-url.jpg'} // Add a fallback image URL
+                        src={item.productImages?.[0]?.imageURL || ""}
                         alt={item.productName}
                         className="product-image"
                       />
@@ -353,21 +403,6 @@ export default function Cart() {
               )}
             </tbody>
           </table>
-          {/* Render the checkout response if available */}
-          {/* {checkoutResponse && (
-            <div className="checkout-summary">
-              <h2>Thông tin đơn hàng</h2>
-              <p><strong>Tổng tiền:</strong> {checkoutResponse.total.toLocaleString()} đ</p>
-              <h4>Chi tiết sản phẩm:</h4>
-              <ul>
-                {checkoutResponse.cartItems.map((item, index) => (
-                  <li key={index}>
-                    {item.productName} - Số lượng: {item.quantity} - Giá: {item.price.toLocaleString()} đ
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )} */}
 
           <div className="customer-info">
             <h4>Thông tin người nhận</h4>
@@ -422,7 +457,8 @@ export default function Cart() {
             </div>
 
             <div className="total-payment">
-              <p style={{ color: "black", fontSize: 20, fontWeight: "bold" }}>Tổng thanh toán:</p> {checkoutResponse.total.toLocaleString()} <span style={{ textDecoration: "underline" }}>đ</span>
+              <p style={{ color: "black", fontSize: 20, fontWeight: "bold" }}>Tổng thanh toán:</p> 
+              {(checkoutResponse?.total || subtotal).toLocaleString()} <span style={{ textDecoration: "underline" }}>đ</span>
             </div>
 
             <div className="buttons">
