@@ -41,6 +41,11 @@ export default function ProductDetail() {
   const [value, setValue] = useState({ scale: 1, translation: { x: 0, y: 0 } }); // State for zoom and translation
   const { addToCart } = useContext(CartContext);
 
+  const formatPrice = (price) => {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  };
+
+
   useEffect(() => {
     const fetchProduct = async () => {
       try {
@@ -273,11 +278,11 @@ export default function ProductDetail() {
                   <span className="text-success ms-2">Trong kho</span>
                 </div>
                 <div className="mb-3" >
-                  <span className="h5" >{product.discountPrice} <span style={{ textDecoration: "underline" }}>đ</span></span>
+                  <span className="h5" >{formatPrice(product.discountPrice)} <span style={{ textDecoration: "underline" }}>đ</span></span>
                   <span className="text-muted"> /mỗi hộp</span>
                 </div>
                 <p style={{ textDecoration: "line-through", color: "gray" }}>
-                  {product.unitPrice} <span style={{ textDecoration: "underline" }}>đ</span>
+                  {formatPrice(product.unitPrice)} <span style={{ textDecoration: "underline" }}>đ</span>
                 </p>
 
                 <div className="row" style={{ color: "black" }}>

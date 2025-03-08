@@ -82,7 +82,7 @@ const DiscountManagement = () => {
             render: (date) => date ? dayjs(date).format("YYYY-MM-DD") : "",
         },
         {
-            title: 'Phần trăm giảm giá',
+            title: 'Phần trăm giảm giá (%)',
             dataIndex: 'discountPercent',
             key: 'discountPercent',
         },
@@ -271,7 +271,7 @@ const DiscountManagement = () => {
                                 <Input />
                             </Form.Item>
                             <Form.Item
-                                label="Phần trăm giảm giá"
+                                label="Phần trăm giảm giá (%)"
                                 name="discountPercent"
                                 rules={[
                                     { required: true, message: "Phần trăm giảm giá không được để trống!" },
@@ -384,7 +384,7 @@ const DiscountManagement = () => {
                         <p><strong>Ngày tạo: </strong> {selectedDiscount.createdTime ? dayjs(selectedDiscount.createdTime).format("YYYY-MM-DD") : "N/A"}</p>
                         <p><strong>Ngày áp dụng: </strong> {selectedDiscount.actualStartTime ? dayjs(selectedDiscount.actualStartTime).format("YYYY-MM-DD") : "N/A"}</p>
                         <p><strong>Ngày hết hạn: </strong> {selectedDiscount.actualEndTime ? dayjs(selectedDiscount.actualEndTime).format("YYYY-MM-DD") : "N/A"}</p>
-                        <p><strong>Phần trăm giảm giá: </strong> {selectedDiscount.discountPercent}%</p>
+                        <p><strong>Phần trăm giảm giá (%): </strong> {selectedDiscount.discountPercent}%</p>
                         <p><strong>Trạng Thái:</strong>
                             {selectedDiscount.status !== undefined ? (
                                 <Tag color={statusMapping[selectedDiscount.status]?.color}>

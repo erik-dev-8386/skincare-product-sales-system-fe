@@ -128,17 +128,17 @@ const ProductManagement = () => {
     //   render: (date) => (date ? dayjs(date).format("YYYY-MM-DD") : ""),
     // },
     // {
-    //   title: "Khối lượng (g)",
+    //   title: "Dung tích (ml)",
     //   dataIndex: "netWeight",
     //   key: "netWeight",
     // },
     {
-      title: "Giảm giá",
+      title: "Giảm giá (%)",
       dataIndex: "discountId",
       key: "discountId",
       render: (discountId) => {
         const discount = discounts.find((d) => d.discountId === discountId);
-        return discount ? discount.discountName : "N/A";
+        return discount ? discount.discountPercent : "N/A";
       },
     },
     {
@@ -564,12 +564,12 @@ const ProductManagement = () => {
                 </Form.Item>
               )}
               <Form.Item
-                label="Khối lượng (g)"
+                label="Dung tích (ml)"
                 name="netWeight"
                 rules={[
                   {
                     required: true,
-                    message: "Khối lượng không được để trống!",
+                    message: "Dung tích không được để trống!",
                   },
                 ]}
               >
@@ -768,7 +768,7 @@ const ProductManagement = () => {
                 : "N/A"}
             </p>
             <p>
-              <strong>Khối lượng:</strong> {selectedProduct.netWeight} {"(g)"}
+              <strong>Dung tích:</strong> {selectedProduct.netWeight} {"(ml)"}
             </p>
             <p>
               <strong>Giảm giá: </strong>
@@ -793,14 +793,15 @@ const ProductManagement = () => {
                 (s) => s.skinTypeId === selectedProduct.skinTypeId
               )?.skinName || "N/A"}
             </p>
-            <p>
+            <p style={{ display: "flex" }}>
               <strong>Ảnh: </strong>
               {selectedProduct.productImages.map((image, index) => (
-                <img
+                
+                <Image
                   key={index}
                   src={image.imageURL}
                   alt="Skin Type"
-                  style={{ width: 100, marginRight: 8 }}
+                  style={{ width: 100, margin: "0 8px" }}
                 />
               ))}
             </p>
@@ -925,7 +926,7 @@ export default ProductManagement;
 //             render: (date) => date ? dayjs(date).format("YYYY-MM-DD") : "",
 //         },
 //         {
-//             title: 'Khối lượng (g)',
+//             title: 'Dung tích (ml)',
 //             dataIndex: 'netWeight',
 //             key: 'netWeight',
 //         },
@@ -1252,10 +1253,10 @@ export default ProductManagement;
 //                             )}
 
 //                             <Form.Item
-//                                 label="Khối lượng (g)"
+//                                 label="Dung tích (ml)"
 //                                 name="netWeight"
 //                                 rules={[
-//                                     { required: true, message: "Khối lượng không được để trống!" },
+//                                     { required: true, message: "Dung tích không được để trống!" },
 
 //                                 ]}
 //                             >
@@ -1364,7 +1365,7 @@ export default ProductManagement;
 //                         <p><strong>Ngày xóa: </strong> {selectedProduct.deletedTime ? dayjs(selectedProduct.deletedTime).format("YYYY-MM-DD") : "N/A"}</p>
 //                         <p><strong>Ngày sản xuất: </strong> {selectedProduct.mfg ? dayjs(selectedProduct.mfg).format("YYYY-MM-DD") : "N/A"}</p>
 //                         <p><strong>Hạn sử dụng: </strong> {selectedProduct.exp ? dayjs(selectedProduct.exp).format("YYYY-MM-DD") : "N/A"}</p>
-//                         <p><strong>Khối lượng:</strong> {selectedProduct.netWeight} {"(g)"}</p>
+//                         <p><strong>Dung tích:</strong> {selectedProduct.netWeight} {"(ml)"}</p>
 //                         <p><strong>Giảm giá: </strong>
 //                             {discounts.find(d => d.discountId === selectedProduct.discountId)?.discountName || "N/A"}
 //                         </p>

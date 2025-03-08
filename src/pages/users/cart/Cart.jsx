@@ -230,6 +230,10 @@ export default function Cart() {
     paymentMethod: "",
   });
 
+  const formatPrice = (price) => {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  };
+
   // Fetch user information from API
   useEffect(() => {
     const fetchUserData = async () => {
@@ -394,9 +398,9 @@ export default function Cart() {
                       />
                     </td>
                     <td>{item.productName}</td>
-                    <td>{item.discountPrice} <span style={{ textDecoration: "underline" }}>đ</span></td>
+                    <td>{formatPrice(item.discountPrice)} <span style={{ textDecoration: "underline" }}>đ</span></td>
                     <td>{item.quantity}</td>
-                    <td>{item.quantity * item.discountPrice} <span style={{ textDecoration: "underline" }}>đ</span></td>
+                    <td>{formatPrice(item.quantity * item.discountPrice)} <span style={{ textDecoration: "underline" }}>đ</span></td>
                   </tr>
                 ))
               ) : (

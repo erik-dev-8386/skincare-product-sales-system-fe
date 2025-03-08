@@ -75,6 +75,10 @@ import { useNavigate } from "react-router-dom";
 
 const { Meta } = Card;
 
+const formatPrice = (price) => {
+  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+};
+
 // const ProductCard = ({ product, discounts = {}, brands = [], handleAddToCart }) => {
 const ProductCard = ({ product, discounts = {}, brands = [] }) => {
   const navigate = useNavigate();
@@ -140,7 +144,7 @@ const ProductCard = ({ product, discounts = {}, brands = [] }) => {
             </p>
             {/* Hiển thị brandName thay vì brandId */}
             <strong >
-              {product.discountPrice}
+            {formatPrice(product.discountPrice)}
               <span style={{ textDecoration: "underline" }}>đ</span>
             </strong>
             <br />
@@ -151,7 +155,7 @@ const ProductCard = ({ product, discounts = {}, brands = [] }) => {
 
               }}
             >
-              {product.unitPrice}
+              {formatPrice(product.unitPrice)}
               <span style={{ textDecoration: "underline" }}>đ</span>
             </p>
           </div>
