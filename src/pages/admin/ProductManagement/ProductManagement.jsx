@@ -14,7 +14,6 @@ import {
 } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { UploadOutlined } from "@ant-design/icons";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { Select } from "antd";
@@ -43,6 +42,10 @@ const ProductManagement = () => {
     3: { text: "NGỪNG", color: "gray" },
   };
 
+  const formatPrice = (price) => {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  };
+
   const columns = [
     {
       title: "Tên sản phẩm",
@@ -50,88 +53,22 @@ const ProductManagement = () => {
       key: "productName",
     },
     {
-      title: "Giá gốc",
+      title: "Giá gốc (đ)",
       dataIndex: "unitPrice",
       key: "unitPrice",
+      render: (text) => formatPrice(text),
     },
     {
-      title: "Giá giảm",
+      title: "Giá giảm (đ)",
       dataIndex: "discountPrice",
       key: "discountPrice",
+      render: (text) => formatPrice(text),
     },
-    // {
-    //   title: "Mô tả",
-    //   dataIndex: "description",
-    //   key: "description",
-    //   render: (text) => (
-    //     <div
-    //       dangerouslySetInnerHTML={{
-    //         __html:
-    //           text && typeof text === "string"
-    //             ? text.length > 50
-    //               ? text.substring(0, 50) + "..."
-    //               : text
-    //             : "",
-    //       }}
-    //     />
-    //   ),
-    // },
-    // {
-    //   title: "Hướng dẫn sử dụng",
-    //   dataIndex: "usageInstruction",
-    //   key: "usageInstruction",
-    //   render: (text) => (
-    //     <div
-    //       dangerouslySetInnerHTML={{
-    //         __html:
-    //           text && typeof text === "string"
-    //             ? text.length > 50
-    //               ? text.substring(0, 50) + "..."
-    //               : text
-    //             : "",
-    //       }}
-    //     />
-    //   ),
-    // },
-    // {
-    //   title: "Thành phần",
-    //   dataIndex: "ingredients",
-    //   key: "ingredients",
-    // },
     {
       title: "Số lượng",
       dataIndex: "quantity",
       key: "quantity",
     },
-    // {
-    //   title: "Ngày tạo",
-    //   dataIndex: "createdTime",
-    //   key: "createdTime",
-    //   render: (date) => (date ? dayjs(date).format("YYYY-MM-DD") : ""),
-    // },
-    // {
-    //   title: "Ngày xóa",
-    //   dataIndex: "deletedTime",
-    //   key: "deletedTime",
-    //   render: (date) => (date ? dayjs(date).format("YYYY-MM-DD") : ""),
-    // },
-    // {
-    //   title: "Ngày sản xuất",
-    //   dataIndex: "mfg",
-    //   key: "mfg",
-    //   render: (date) => (date ? dayjs(date).format("YYYY-MM-DD") : ""),
-    // },
-    // {
-    //   title: "Hạn sử dụng",
-    //   dataIndex: "exp",
-    //   key: "exp",
-    //   render: (date) => (date ? dayjs(date).format("YYYY-MM-DD") : ""),
-    // },
-    // {
-    //   title: "Dung tích (ml)",
-    //   dataIndex: "netWeight",
-    //   key: "netWeight",
-    // },
     {
       title: "Giảm giá (%)",
       dataIndex: "discountId",
@@ -297,43 +234,19 @@ const ProductManagement = () => {
     setSelectedProduct(null);
   };
 
-  // const handleSubmitForm = async (values) => {
-  //     const formData = new FormData();
-
-  //     // Append product data as JSON
-  //     formData.append("productDTO", new Blob([JSON.stringify(values)], { type: "application/json" }));
-
-  //     // Append image files
-  //     imageFiles.forEach(file => {
-  //         formData.append("images", file);
-  //     });
-
-  //     try {
-  //         if (editingProduct) {
-  //             // Update existing product
-  //             await api.put(`/products/${editingProduct.productId}`, formData, {
-  //                 headers: {
-  //                     'Content-Type': 'multipart/form-data',
-  //                 },
-  //             });
-  //             toast.success("Đã cập nhật sản phẩm thành công!");
-  //         } else {
-  //             // Create new product
-  //             await api.post('/products', formData, {
-  //                 headers: {
-  //                     'Content-Type': 'multipart/form-data',
-  //                 },
-  //             });
-  //             toast.success("Đã thêm sản phẩm mới thành công!");
-  //         }
-  //         fetchProduct();
-  //         handleCloseModal();
-  //     } catch (error) {
-  //         console.error("Error submitting form:", error.response?.data?.message || error.message);
-  //         toast.error("Lỗi khi thêm/cập nhật sản phẩm!");
-  //     }
-  // };
   const handleSubmitForm = async (values) => {
+    // Check for duplicate product name
+    const isDuplicate = ProductList.some(
+      (product) =>
+        product.productName === values.productName &&
+        (!editingProduct || product.productId !== editingProduct.productId) // Allow editing the same product
+    );
+
+    if (isDuplicate) {
+      toast.error("Tên sản phẩm đã tồn tại! Vui lòng nhập tên khác.");
+      return; // Prevent form submission
+    }
+
     const formData = new FormData();
 
     // Append product data as JSON
@@ -452,7 +365,7 @@ const ProductManagement = () => {
                 <Input />
               </Form.Item>
               <Form.Item
-                label="Giá gốc"
+                label="Giá gốc (đ)"
                 name="unitPrice"
                 rules={[
                   { required: true, message: "Giá gốc không được để trống!" },
@@ -460,13 +373,6 @@ const ProductManagement = () => {
               >
                 <Input type="number" />
               </Form.Item>
-              {/* <Form.Item
-                                label="Giá giảm"
-                                name="discountPrice"
-                                rules={[{ required: true, message: "Giá giảm không được để trống!" }]}
-                            >
-                                <Input type="number" />
-                            </Form.Item> */}
               <Form.Item
                 label="Thành phần"
                 name="ingredients"
@@ -693,11 +599,12 @@ const ProductManagement = () => {
               <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
             </Upload>
             {imagePreviews.map((preview, index) => (
-              <img
+              <Image
                 key={index}
                 src={preview}
                 alt="Preview"
-                style={{ width: 100, marginTop: 8, marginRight: 8 }}
+                width={100}
+                style={{ marginTop: 8, marginRight: 8 }}
               />
             ))}
           </Form.Item>
@@ -720,7 +627,7 @@ const ProductManagement = () => {
               <strong>Tên sản phẩm: </strong> {selectedProduct.productName}
             </p>
             <p>
-              <strong>Giá gốc: </strong> {selectedProduct.unitPrice}
+              <strong>Giá gốc: </strong> {formatPrice(selectedProduct.unitPrice)}
             </p>
             <p>
               <strong>Giá giảm: </strong> {selectedProduct.discountPrice}
@@ -796,7 +703,7 @@ const ProductManagement = () => {
             <p style={{ display: "flex" }}>
               <strong>Ảnh: </strong>
               {selectedProduct.productImages.map((image, index) => (
-                
+
                 <Image
                   key={index}
                   src={image.imageURL}
