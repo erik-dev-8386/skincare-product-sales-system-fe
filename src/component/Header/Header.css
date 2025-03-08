@@ -187,13 +187,13 @@
     height: 40px;
 }
 
-.cart {
+/* .cart {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 80px;
     height: 40px;
-}
+} */
 
 /* Căn chỉnh icon user và cart */
 
@@ -209,7 +209,7 @@
     background-color: transparent;
 }
 
-.cart i {
+/* .cart i {
     color: aliceblue;
     display: flex;
     justify-content: center;
@@ -219,44 +219,62 @@
     border-radius: 20%;
     border: 1px solid white;
     background-color: transparent;
-}
+} */
 
 /* Đảm bảo dropdown user không bị lệch */
 /* Đảm bảo vùng chứa user chỉ bọc icon */
 
 .user-container {
     position: relative;
-    display: inline-block;
 }
 
 .user-container .subnav {
     position: absolute;
     top: 100%;
+    /* Ensure it appears below the user icon */
     right: 0;
+    padding: 5px;
+    /* Align to the right */
     background-color: #900001;
-    /* background: linear-gradient(to right,#900001, #c0244e ); */
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     min-width: 120px;
     display: none;
-    text-align: left;
+    /* Initially hidden */
     border-radius: 5px;
-    z-index: 9999;
+    z-index: 1000;
+    /* Ensure it appears above other content */
 }
 
 .user-container .subnav li {
     width: 100%;
+    /* Make sure it takes full width */
+    padding: 0;
+    /* Remove any padding that might cause shifting */
 }
 
 .user-container .subnav li a {
     display: block;
-    padding: 10px;
+    padding-left: 0;
     color: white;
     text-decoration: none;
-    width: 100%;
+}
+
+.user-container .subnav li p:hover {
+    background-color: #fff;
+    color: #900001;
+    /* width: 170px; */
+
 }
 
 .user-container:hover .subnav {
-    display: block;
+    width: 170px;
+    display: flex;
+    /* Show on hover */
+    flex-direction: column;
+    /* Stack the items vertically */
+    justify-content: start;
+    align-items: start;
+    /* Stretch to the width of the parent */
 }
 
 /* Căn chỉnh icon user */

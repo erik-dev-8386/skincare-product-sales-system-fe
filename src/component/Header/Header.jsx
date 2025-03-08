@@ -282,7 +282,7 @@ export default function Header() {
                 </li>
                 {role === 1 && (
                   <li>
-                    <Link to="/admin"><p><DashboardOutlined /> Admin Dashboard</p></Link>
+                    <Link to="/admin"><p><DashboardOutlined /> Bảng điều khiển</p></Link>
                   </li>
                 )}
                 <li
@@ -295,11 +295,11 @@ export default function Header() {
             ) : (
               <>
                 <li>
-                  <Link to="/login-and-signup"> <p><i class="fa-solid fa-right-to-bracket"></i> Đăng nhập</p></Link>
+                  <Link to="/login-and-signup"> <p><i class="fa-solid fa-right-to-bracket"></i> Đăng nhập/Đăng ký</p></Link>
                 </li>
-                <li>
+                {/* <li>
                   <Link to="/login-and-signup">Đăng ký</Link>
-                </li>
+                </li> */}
               </>
             )}
           </ul>
