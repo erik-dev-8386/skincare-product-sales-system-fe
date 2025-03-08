@@ -10,6 +10,7 @@ import {
   Row,
   Tag,
   Upload,
+  Image,
 } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { UploadOutlined } from "@ant-design/icons";
@@ -175,7 +176,7 @@ const ProductManagement = () => {
         <div>
           {images &&
             images.map((image, index) => (
-              <img
+              <Image
                 key={index}
                 src={image.imageURL}
                 alt="Product"

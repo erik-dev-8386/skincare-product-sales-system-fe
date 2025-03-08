@@ -210,6 +210,7 @@ import { jwtDecode } from "jwt-decode";
 import "./Cart.css";
 import api from "../../../config/api";
 import { toast, ToastContainer } from "react-toastify";
+import { Image } from "antd";
 
 export default function Cart() {
   const location = useLocation();
@@ -384,10 +385,12 @@ export default function Cart() {
                 checkoutResponse.cartItems.map((item) => (
                   <tr key={item.productId}>
                     <td>
-                      <img
-                        src={item.productImages?.[0]?.imageURL || ""}
+                      <Image
+                        // src={item.productImages?.[0]?.imageURL || ""}
+                        src={item.imageUrl || ""}
                         alt={item.productName}
                         className="product-image"
+                        style={{ width: 80, height: 50 }}
                       />
                     </td>
                     <td>{item.productName}</td>
