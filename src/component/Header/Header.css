@@ -85,6 +85,7 @@
     /* Bo góc cho hiệu ứng */
     outline: none;
     /* Xóa viền mặc định của trình duyệt */
+    width: 100%;
 }
 
 
@@ -97,6 +98,7 @@
 
 .nav li:hover .subnav {
     display: block;
+    
 
 }
 
@@ -118,7 +120,9 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     /*  bóng đổ cho màu đen mờ */
     min-width: 160px;
-    background-color: #900001;
+    background-color: white;
+    color: #900001;
+    
     /* background: linear-gradient(to right, #900001, #c0244e); */
 }
 
@@ -132,9 +136,10 @@
 }
 
 .nav .subnav li:hover a {
-    background-color: #900001;
+    background-color: white;
     /* background: linear-gradient(to right,#900001, #c0244e ); */
-    color: #fff;
+    color: #900001;
+    width: 100%;
 }
 
 .search {
@@ -267,7 +272,7 @@
 }
 
 .user-container:hover .subnav {
-    width: 170px;
+    width: 150px;
     display: flex;
     /* Show on hover */
     flex-direction: column;
