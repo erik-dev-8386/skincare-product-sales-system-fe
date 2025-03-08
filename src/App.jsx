@@ -39,7 +39,7 @@ import Products from "./pages/users/products/Products.jsx";
 import ProductDetail from "./pages/users/products/ProductDetail.jsx";
 import ProductManagement from "./pages/admin/ProductManagement/ProductManagement.jsx";
 // import ProfilePage from './pages/users/profile/Profile.jsx';
-
+import QuestionManagement from "./pages/admin/QuestionManagement/QuestionManagement.jsx";
 function App() {
   return (
     <Routes>
@@ -98,6 +98,10 @@ function App() {
         <Route
           path="/admin/product-management"
           element={<ProductManagement />}
+        />
+        <Route
+          path="/admin/question-management"
+          element={<QuestionManagement />}
         />
       </Route>
 
