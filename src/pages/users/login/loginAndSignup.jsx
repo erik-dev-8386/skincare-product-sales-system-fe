@@ -80,7 +80,7 @@ export default function LoginAndSignup() {
           setLoading(false);
           return;
         }
-        await api.post("/users", formData);
+        await api.post("/users/add-new-user", formData);
         toast.success("Đăng ký thành công!");
         setTimeout(() => navigate("/login-and-signup"), 1500);
       } else {

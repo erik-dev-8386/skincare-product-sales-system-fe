@@ -27,7 +27,7 @@ import { Editor } from "@tinymce/tinymce-react";
 const MyEditor = ({ value = "", onChange }) => {
   return (
     <Editor
-      apiKey="4252vg9lszf4i9jba7py4l2img6b7z2ljeudq1q8b00hb5h2"
+      apiKey="4npo5g1r2pw2al8kg3ugehxbsbell9jiu4ro31b9kwjd10sx"
       value={value}
       onEditorChange={(newValue) => onChange(newValue)}
       init={{
