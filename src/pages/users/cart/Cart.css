@@ -1,158 +1,135 @@
-/* Căn giữa toàn bộ trang, giữ gọn trong màn hình */
-.cart-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
+
+
+/* Cart.css */
+
+/* General Styles */
+/* body {
+  font-family: 'Arial', sans-serif;
+  background-color: #f5f5f5;
+  color: #333;
+} */
+
+/* .cart-container {
+  max-width: 800px;
+  margin: auto;
   padding: 20px;
-  background: linear-gradient(135deg, #ff758c, #ff7eb3);
-}
-
-/* Bố cục ngang cho thông tin khách hàng và đơn hàng */
-.checkout-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: stretch; /* Đảm bảo cả 2 ô có cùng chiều cao */
-  gap: 25px; /* Khoảng cách giữa các ô */
-  width: 100%;
-  max-width: 1100px;
-  flex-wrap: wrap;
-}
-
-/* Các ô thông tin */
-.customer-info, .order-info {
-  flex: 1;
-  max-width: 480px;
-  padding: 25px;
-  border-radius: 12px;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-  background: white;
-  text-align: center;
-  transition: all 0.3s ease-in-out;
-  
-  display: flex;
-  flex-direction: column; /* Giúp nội dung giãn đều */
-  min-height: 400px; /* Đảm bảo chiều cao tối thiểu bằng nhau */
-}
-
-/* Hiệu ứng khi hover */
-.customer-info:hover, .order-info:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-}
-
-/* Tiêu đề */
-.customer-info h2, .order-info h2 {
-  color: #ff416c;
-  font-size: 22px;
-  font-weight: bold;
-  margin-bottom: 15px;
-}
-
-/* Đảm bảo phần footer luôn ở dưới cùng */
-.customer-info .buttons, .order-info .buttons {
-  margin-top: auto; /* Đẩy nút xuống cuối */
-}
-
-/* Nhãn và input */
-.form-group {
-  text-align: left;
-  margin-bottom: 12px;
-}
-
-.form-group label {
-  font-weight: bold;
-  color: #7a3e3e;
-  display: block;
-  margin-bottom: 5px;
-}
-
-/* Input và textarea */
-.customer-info input,
-.customer-info textarea {
-  width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  font-size: 15px;
-  background: #f9f9f9;
-  transition: 0.3s;
-}
-
-.customer-info input:focus,
-.customer-info textarea:focus {
-  border-color: #ff4b2b;
-  background: white;
-  outline: none;
-  box-shadow: 0 0 5px rgba(255, 75, 43, 0.3);
-}
-
-/* Ô chọn phương thức thanh toán */
-.payment-options {
-  display: flex;
-  justify-content: center;
-  gap: 15px;
-  margin: 15px 0;
-}
-
-.payment-options label {
-  font-weight: bold;
-  cursor: pointer;
-}
-
-/* Tổng tiền */
-.total-payment {
-  font-size: 18px;
-  font-weight: bold;
-  color: #ff416c;
-  margin: 15px 0;
-}
-
-/* Nút bấm */
-.buttons {
-  display: flex;
-  justify-content: space-between;
-  gap: 12px;
-  margin-top: 15px;
-}
-
-.btn {
-  flex: 1;
-  padding: 12px;
-  border: none;
+  background: lightgray;
   border-radius: 8px;
-  font-size: 15px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: 0.3s;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+} */
+
+.title {
+  color: #900001;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
-.btn.primary {
-  background: #ff416c;
-  color: white;
+/* Table Styles */
+.cart-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  
 }
 
-.btn.primary:hover {
-  background: #ff2b5e;
+.cart-table th,
+.cart-table td {
+  padding: 10px;
+  text-align: center;
+  border: 2px solid black;
+
 }
 
-.btn.secondary {
-  background: #ddd;
+.cart-table th {
+  background-color: white;
   color: black;
 }
 
-.btn.secondary:hover {
-  background: #bbb;
+.product-image {
+  width: 100px;
+  border-radius: 5px;
 }
 
-/* Đáp ứng màn hình nhỏ */
-@media (max-width: 850px) {
-  .checkout-wrapper {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .customer-info, .order-info {
-    max-width: 95%;
-  }
+/* Customer Info Styles */
+.customer-info {
+  margin-bottom: 20px;
 }
+
+.input-group {
+  margin-bottom: 15px;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.input-group input,
+.input-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* Order Info Styles */
+.order-info {
+  background-color: #f9f9f9;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+.payment-method {
+  margin: 15px 0;
+  display: flex;
+  justify-content: start;
+  align-items: start;
+  flex-direction: column;
+}
+
+/* Total Payment Styles */
+.total-payment {
+  font-family:Helvetica, Arial, sans-serif ;
+  display: flex;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.2em;
+  color: red;
+}
+
+.total-payment strong {
+  color: black;
+  
+}
+
+
+
+/* Button Styles */
+.buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.btn {
+  padding: 5px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 17px;
+}
+
+.btn.primary {
+  background-color: yellow;
+  color: black;
+}
+
+.btn.secondary {
+  background-color: #e63946;
+  color: white;
+}
+
+.btn:hover {
+  opacity: 0.9;
+} 

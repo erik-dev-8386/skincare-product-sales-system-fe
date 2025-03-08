@@ -22,7 +22,7 @@
 //             borderRadius: "5px",
 //           }}
 //         >
-//           <i className="fa-solid fa-down-long"></i>{" "}
+//           <i className="fa-solid fa-down-long"></i>
 //           {discounts[product.discountId] || 0}%
 //         </p>,
 //         <img
@@ -41,7 +41,7 @@
 //         title={product.productName}
 //         description={
 //           <>
-//             <strong>{product.discountPrice}VND</strong>
+//             <strong>{product.discountPrice}đ</strong>
 //             <br />
 //             <p
 //               style={{
@@ -49,7 +49,7 @@
 //                 color: "red",
 //               }}
 //             >
-//               {product.unitPrice}VND
+//               {product.unitPrice}đ
 //             </p>
 //           </>
 //         }
@@ -75,11 +75,31 @@ import { useNavigate } from "react-router-dom";
 
 const { Meta } = Card;
 
-const ProductCard = ({ product, discounts = {}, handleAddToCart }) => {
+const formatPrice = (price) => {
+  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+};
+
+// const ProductCard = ({ product, discounts = {}, brands = [], handleAddToCart }) => {
+const ProductCard = ({ product, discounts = {}, brands = [] }) => {
   const navigate = useNavigate();
 
+  // Kiểm tra xem product có tồn tại không
+  if (!product) {
+    return null;
+  }
+
+  // Đảm bảo các giá trị cần thiết tồn tại
+  const brand = brands?.find((b) => b.brandId === product.brandId);
+  const discount = discounts?.[product.discountId];
+
   // Kiểm tra và sử dụng giá trị mặc định nếu discountId không tồn tại
-  const discountPercent = discounts[product.discountId] || 0;
+  const discountPercent = discount || 0;
+
+  // Hàm tìm brandName dựa trên brandId
+  const findBrandNameById = (brandId) => {
+    const brand = brands.find((brand) => brand.brandId === brandId);
+    return brand ? brand.brandName : "Unknown Brand";
+  };
 
   return (
     <Card
@@ -101,7 +121,8 @@ const ProductCard = ({ product, discounts = {}, handleAddToCart }) => {
           alt={product.productName}
           src={product.productImages[0]?.imageURL}
           style={{
-            height: "200px",
+            height: "150px",
+            width: "100%",
             objectFit: "contain",
             padding: 2,
           }}
@@ -110,23 +131,37 @@ const ProductCard = ({ product, discounts = {}, handleAddToCart }) => {
       onClick={() => navigate(`/products/${product.productId}`)}
     >
       <Meta
-        title={product.productName}
+        
+        title={
+          <p style={{ display: "flex", justifyContent: "center" }} >
+            {product.productName}
+          </p>
+        }
         description={
-          <>
-            <strong>{product.discountPrice}VND</strong>
+          <div style={{ display: "flex", justifyContent: "space-between", flexDirection: "column", alignItems: "center" }}>
+            <p >
+              {findBrandNameById(product.brandId)}
+            </p>
+            {/* Hiển thị brandName thay vì brandId */}
+            <strong >
+            {formatPrice(product.discountPrice)}
+              <span style={{ textDecoration: "underline" }}>đ</span>
+            </strong>
             <br />
             <p
               style={{
                 textDecoration: "line-through",
                 color: "red",
+
               }}
             >
-              {product.unitPrice}VND
+              {formatPrice(product.unitPrice)}
+              <span style={{ textDecoration: "underline" }}>đ</span>
             </p>
-          </>
+          </div>
         }
       />
-      <Button
+      {/* <Button
         type="primary"
         onClick={(e) => {
           e.stopPropagation();
@@ -134,7 +169,7 @@ const ProductCard = ({ product, discounts = {}, handleAddToCart }) => {
         }}
       >
         Add to Cart
-      </Button>
+      </Button> */}
     </Card>
   );
 };

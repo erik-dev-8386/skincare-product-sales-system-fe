@@ -1,7 +1,19 @@
-import {Button,Form,Input,Modal,Table,Popconfirm, DatePicker,Col,Row,Tag,Upload} from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  Modal,
+  Table,
+  Popconfirm,
+  DatePicker,
+  Col,
+  Row,
+  Tag,
+  Upload,
+  Image,
+} from "antd";
 import { useForm } from "antd/es/form/Form";
 import { UploadOutlined } from "@ant-design/icons";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { Select } from "antd";
@@ -30,6 +42,10 @@ const ProductManagement = () => {
     3: { text: "NGỪNG", color: "gray" },
   };
 
+  const formatPrice = (price) => {
+    return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+  };
+
   const columns = [
     {
       title: "Tên sản phẩm",
@@ -37,36 +53,16 @@ const ProductManagement = () => {
       key: "productName",
     },
     {
-      title: "Giá gốc",
+      title: "Giá gốc (đ)",
       dataIndex: "unitPrice",
       key: "unitPrice",
+      render: (text) => formatPrice(text),
     },
     {
-      title: "Giá giảm",
+      title: "Giá giảm (đ)",
       dataIndex: "discountPrice",
       key: "discountPrice",
-    },
-    {
-      title: "Mô tả",
-      dataIndex: "description",
-      key: "description",
-      render: (text) => (
-        <div
-          dangerouslySetInnerHTML={{
-            __html:
-              text && typeof text === "string"
-                ? text.length > 50
-                  ? text.substring(0, 50) + "..."
-                  : text
-                : "",
-          }}
-        />
-      ),
-    },
-    {
-      title: "Thành phần",
-      dataIndex: "ingredients",
-      key: "ingredients",
+      render: (text) => formatPrice(text),
     },
     {
       title: "Số lượng",
@@ -74,41 +70,12 @@ const ProductManagement = () => {
       key: "quantity",
     },
     {
-      title: "Ngày tạo",
-      dataIndex: "createdTime",
-      key: "createdTime",
-      render: (date) => (date ? dayjs(date).format("YYYY-MM-DD") : ""),
-    },
-    {
-      title: "Ngày xóa",
-      dataIndex: "deletedTime",
-      key: "deletedTime",
-      render: (date) => (date ? dayjs(date).format("YYYY-MM-DD") : ""),
-    },
-    {
-      title: "Ngày sản xuất",
-      dataIndex: "mfg",
-      key: "mfg",
-      render: (date) => (date ? dayjs(date).format("YYYY-MM-DD") : ""),
-    },
-    {
-      title: "Hạn sử dụng",
-      dataIndex: "exp",
-      key: "exp",
-      render: (date) => (date ? dayjs(date).format("YYYY-MM-DD") : ""),
-    },
-    {
-      title: "Khối lượng (g)",
-      dataIndex: "netWeight",
-      key: "netWeight",
-    },
-    {
-      title: "Giảm giá",
+      title: "Giảm giá (%)",
       dataIndex: "discountId",
       key: "discountId",
       render: (discountId) => {
         const discount = discounts.find((d) => d.discountId === discountId);
-        return discount ? discount.discountName : "N/A";
+        return discount ? discount.discountPercent : "N/A";
       },
     },
     {
@@ -146,7 +113,7 @@ const ProductManagement = () => {
         <div>
           {images &&
             images.map((image, index) => (
-              <img
+              <Image
                 key={index}
                 src={image.imageURL}
                 alt="Product"
@@ -267,43 +234,19 @@ const ProductManagement = () => {
     setSelectedProduct(null);
   };
 
-  // const handleSubmitForm = async (values) => {
-  //     const formData = new FormData();
-
-  //     // Append product data as JSON
-  //     formData.append("productDTO", new Blob([JSON.stringify(values)], { type: "application/json" }));
-
-  //     // Append image files
-  //     imageFiles.forEach(file => {
-  //         formData.append("images", file);
-  //     });
-
-  //     try {
-  //         if (editingProduct) {
-  //             // Update existing product
-  //             await api.put(`/products/${editingProduct.productId}`, formData, {
-  //                 headers: {
-  //                     'Content-Type': 'multipart/form-data',
-  //                 },
-  //             });
-  //             toast.success("Đã cập nhật sản phẩm thành công!");
-  //         } else {
-  //             // Create new product
-  //             await api.post('/products', formData, {
-  //                 headers: {
-  //                     'Content-Type': 'multipart/form-data',
-  //                 },
-  //             });
-  //             toast.success("Đã thêm sản phẩm mới thành công!");
-  //         }
-  //         fetchProduct();
-  //         handleCloseModal();
-  //     } catch (error) {
-  //         console.error("Error submitting form:", error.response?.data?.message || error.message);
-  //         toast.error("Lỗi khi thêm/cập nhật sản phẩm!");
-  //     }
-  // };
   const handleSubmitForm = async (values) => {
+    // Check for duplicate product name
+    const isDuplicate = ProductList.some(
+      (product) =>
+        product.productName === values.productName &&
+        (!editingProduct || product.productId !== editingProduct.productId) // Allow editing the same product
+    );
+
+    if (isDuplicate) {
+      toast.error("Tên sản phẩm đã tồn tại! Vui lòng nhập tên khác.");
+      return; // Prevent form submission
+    }
+
     const formData = new FormData();
 
     // Append product data as JSON
@@ -325,7 +268,7 @@ const ProductManagement = () => {
             "Content-Type": "multipart/form-data",
           },
         });
-        toast.success("Đã cập nhật sản phẩm thành công!");
+        toast.success("Đã sửa sản phẩm thành công!");
       } else {
         // Create new product
         await api.post("/products", formData, {
@@ -342,7 +285,15 @@ const ProductManagement = () => {
         "Error submitting form:",
         error.response?.data?.message || error.message
       );
-      toast.error("Lỗi khi thêm/cập nhật sản phẩm!");
+
+      // Customized error messages
+      if (editingProduct) {
+        // Error while editing
+        toast.error("Sửa sản phẩm này không thành công!");
+      } else {
+        // Error while adding
+        toast.error("Thêm sản phẩm này không thành công!");
+      }
     }
   };
 
@@ -414,7 +365,7 @@ const ProductManagement = () => {
                 <Input />
               </Form.Item>
               <Form.Item
-                label="Giá gốc"
+                label="Giá gốc (đ)"
                 name="unitPrice"
                 rules={[
                   { required: true, message: "Giá gốc không được để trống!" },
@@ -422,13 +373,6 @@ const ProductManagement = () => {
               >
                 <Input type="number" />
               </Form.Item>
-              {/* <Form.Item
-                                label="Giá giảm"
-                                name="discountPrice"
-                                rules={[{ required: true, message: "Giá giảm không được để trống!" }]}
-                            >
-                                <Input type="number" />
-                            </Form.Item> */}
               <Form.Item
                 label="Thành phần"
                 name="ingredients"
@@ -526,12 +470,12 @@ const ProductManagement = () => {
                 </Form.Item>
               )}
               <Form.Item
-                label="Khối lượng (g)"
+                label="Dung tích (ml)"
                 name="netWeight"
                 rules={[
                   {
                     required: true,
-                    message: "Khối lượng không được để trống!",
+                    message: "Dung tích không được để trống!",
                   },
                 ]}
               >
@@ -621,6 +565,24 @@ const ProductManagement = () => {
               onChange={(value) => form.setFieldsValue({ description: value })}
             />
           </Form.Item>
+
+          <Form.Item
+            label="Hướng dẫn sử dụng"
+            name="usageInstruction"
+            rules={[
+              {
+                required: true,
+                message: "Hướng dẫn sử dụng không được để trống!",
+              },
+            ]}
+          >
+            <MyEditor
+              value={form.getFieldValue("usageInstruction") || ""}
+              onChange={(value) =>
+                form.setFieldsValue({ usageInstruction: value })
+              }
+            />
+          </Form.Item>
           <Form.Item label="Tải hình ảnh lên">
             <Upload
               multiple
@@ -637,11 +599,12 @@ const ProductManagement = () => {
               <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
             </Upload>
             {imagePreviews.map((preview, index) => (
-              <img
+              <Image
                 key={index}
                 src={preview}
                 alt="Preview"
-                style={{ width: 100, marginTop: 8, marginRight: 8 }}
+                width={100}
+                style={{ marginTop: 8, marginRight: 8 }}
               />
             ))}
           </Form.Item>
@@ -664,7 +627,7 @@ const ProductManagement = () => {
               <strong>Tên sản phẩm: </strong> {selectedProduct.productName}
             </p>
             <p>
-              <strong>Giá gốc: </strong> {selectedProduct.unitPrice}
+              <strong>Giá gốc: </strong> {formatPrice(selectedProduct.unitPrice)}
             </p>
             <p>
               <strong>Giá giảm: </strong> {selectedProduct.discountPrice}
@@ -674,6 +637,12 @@ const ProductManagement = () => {
             </p>
             <div
               dangerouslySetInnerHTML={{ __html: selectedProduct.description }}
+            />
+            <p>
+              <strong>Hướng dẫn sử dụng: </strong>
+            </p>
+            <div
+              dangerouslySetInnerHTML={{ __html: selectedProduct.usageInstruction }}
             />
             <p>
               <strong>Thành phần: </strong> {selectedProduct.ingredients}
@@ -706,7 +675,7 @@ const ProductManagement = () => {
                 : "N/A"}
             </p>
             <p>
-              <strong>Khối lượng:</strong> {selectedProduct.netWeight} {"(g)"}
+              <strong>Dung tích:</strong> {selectedProduct.netWeight} {"(ml)"}
             </p>
             <p>
               <strong>Giảm giá: </strong>
@@ -731,14 +700,15 @@ const ProductManagement = () => {
                 (s) => s.skinTypeId === selectedProduct.skinTypeId
               )?.skinName || "N/A"}
             </p>
-            <p>
+            <p style={{ display: "flex" }}>
               <strong>Ảnh: </strong>
               {selectedProduct.productImages.map((image, index) => (
-                <img
+
+                <Image
                   key={index}
                   src={image.imageURL}
                   alt="Skin Type"
-                  style={{ width: 100, marginRight: 8 }}
+                  style={{ width: 100, margin: "0 8px" }}
                 />
               ))}
             </p>
@@ -863,7 +833,7 @@ export default ProductManagement;
 //             render: (date) => date ? dayjs(date).format("YYYY-MM-DD") : "",
 //         },
 //         {
-//             title: 'Khối lượng (g)',
+//             title: 'Dung tích (ml)',
 //             dataIndex: 'netWeight',
 //             key: 'netWeight',
 //         },
@@ -1190,10 +1160,10 @@ export default ProductManagement;
 //                             )}
 
 //                             <Form.Item
-//                                 label="Khối lượng (g)"
+//                                 label="Dung tích (ml)"
 //                                 name="netWeight"
 //                                 rules={[
-//                                     { required: true, message: "Khối lượng không được để trống!" },
+//                                     { required: true, message: "Dung tích không được để trống!" },
 
 //                                 ]}
 //                             >
@@ -1302,7 +1272,7 @@ export default ProductManagement;
 //                         <p><strong>Ngày xóa: </strong> {selectedProduct.deletedTime ? dayjs(selectedProduct.deletedTime).format("YYYY-MM-DD") : "N/A"}</p>
 //                         <p><strong>Ngày sản xuất: </strong> {selectedProduct.mfg ? dayjs(selectedProduct.mfg).format("YYYY-MM-DD") : "N/A"}</p>
 //                         <p><strong>Hạn sử dụng: </strong> {selectedProduct.exp ? dayjs(selectedProduct.exp).format("YYYY-MM-DD") : "N/A"}</p>
-//                         <p><strong>Khối lượng:</strong> {selectedProduct.netWeight} {"(g)"}</p>
+//                         <p><strong>Dung tích:</strong> {selectedProduct.netWeight} {"(ml)"}</p>
 //                         <p><strong>Giảm giá: </strong>
 //                             {discounts.find(d => d.discountId === selectedProduct.discountId)?.discountName || "N/A"}
 //                         </p>

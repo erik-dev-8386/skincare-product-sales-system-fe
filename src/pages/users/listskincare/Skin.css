@@ -28,3 +28,225 @@
     border-radius: 6px;
   }
   
+
+  -----------------------------------------------------------------------------
+  .page-title {
+    color: #333;
+    margin: 30px 0;
+    text-align: center;
+  }
+
+  .definition-box {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+  }
+
+  .characteristic-card {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 15px;
+  }
+
+  .characteristic-card img {
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 15px;
+  }
+
+  .routine-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+  }
+
+  .tips-content {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+  }
+
+  .product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    margin: 30px 0;
+    padding: 15px;
+  }
+
+  .product-grid .col-4 {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .product-grid img.da {
+    width: 300px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+  }
+
+  .product-grid img.da:hover {
+    transform: scale(1.05);
+  }
+
+  .product-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    text-align: center;
+  }
+
+  .product-card img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin: 0 auto 15px;
+  }
+
+  .description {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #666;
+    margin: 20px 0;
+  }
+
+  .routine-card h3 {
+    color: #343a40;
+    margin-bottom: 20px;
+  }
+
+  .routine-card ol {
+    padding-left: 20px;
+  }
+
+  .routine-card li {
+    margin-bottom: 15px;
+    padding: 5px 0;
+  }
+
+  .clickable-step {
+    cursor: pointer;
+    color: #007bff;
+    transition: color 0.3s;
+  }
+
+  .clickable-step:hover {
+    color: #0056b3;
+    text-decoration: underline;
+  }
+
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  .modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    max-width: 800px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+  }
+
+  .close-btn {
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .recommendations {
+    position: relative;
+    width: 100%;
+    padding: 0 40px;
+    margin: 20px 0;
+  }
+
+  .recommendations-slider {
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+  }
+
+  .recommendations-slider::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
+  }
+
+  .recommendations-row {
+    display: flex;
+    gap: 20px;
+    padding: 10px 0;
+  }
+
+  .recommendation-item {
+    min-width: calc(33.333% - 14px);
+    flex: 0 0 calc(33.333% - 14px);
+  }
+
+  .slider-control {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ddd;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    z-index: 2;
+  }
+
+  .slider-control.prev {
+    left: 0;
+  }
+
+  .slider-control.next {
+    right: 0;
+  }
+
+  .slider-control:hover {
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+
+  .product-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    background: white;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
