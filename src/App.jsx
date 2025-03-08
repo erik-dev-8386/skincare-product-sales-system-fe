@@ -40,6 +40,7 @@ import ProductDetail from "./pages/users/products/ProductDetail.jsx";
 import ProductManagement from "./pages/admin/ProductManagement/ProductManagement.jsx";
 // import ProfilePage from './pages/users/profile/Profile.jsx';
 import QuestionManagement from "./pages/admin/QuestionManagement/QuestionManagement.jsx";
+import AnswerManagement from "./pages/admin/AnswerManagement/AnswerManagement.jsx";
 function App() {
   return (
     <Routes>
@@ -103,6 +104,7 @@ function App() {
           path="/admin/question-management"
           element={<QuestionManagement />}
         />
+        <Route path="/admin/answer-management" element={<AnswerManagement />} />
       </Route>
 
       <Route path="*" element={<NotFound />} />
