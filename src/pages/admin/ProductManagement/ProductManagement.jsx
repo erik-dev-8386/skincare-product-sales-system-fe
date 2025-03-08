@@ -539,7 +539,7 @@ const ProductManagement = () => {
                 label="Giảm giá"
                 name="discountId"
                 rules={[
-                  { required: true, message: "Giảm giá không được để trống!" },
+                  { required: false, message: "Giảm giá không được để trống!" },
                 ]}
               >
                 <Select>
