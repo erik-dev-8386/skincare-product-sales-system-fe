@@ -22,7 +22,7 @@
 //             borderRadius: "5px",
 //           }}
 //         >
-//           <i className="fa-solid fa-down-long"></i>{" "}
+//           <i className="fa-solid fa-down-long"></i>
 //           {discounts[product.discountId] || 0}%
 //         </p>,
 //         <img
@@ -74,6 +74,10 @@ import { Card, Button } from "antd";
 import { useNavigate } from "react-router-dom";
 
 const { Meta } = Card;
+
+const formatPrice = (price) => {
+  return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+};
 
 // const ProductCard = ({ product, discounts = {}, brands = [], handleAddToCart }) => {
 const ProductCard = ({ product, discounts = {}, brands = [] }) => {
@@ -127,35 +131,34 @@ const ProductCard = ({ product, discounts = {}, brands = [] }) => {
       onClick={() => navigate(`/products/${product.productId}`)}
     >
       <Meta
+        
         title={
-          <p style={{ display: "flex", justifyContent: "center" }}>
-            {" "}
+          <p style={{ display: "flex", justifyContent: "center" }} >
             {product.productName}
           </p>
         }
         description={
-          <>
-            <p style={{ display: "flex", justifyContent: "center" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", flexDirection: "column", alignItems: "center" }}>
+            <p >
               {findBrandNameById(product.brandId)}
-            </p>{" "}
+            </p>
             {/* Hiển thị brandName thay vì brandId */}
-            <strong style={{ display: "flex", justifyContent: "center" }}>
-              {product.discountPrice}{" "}
-              <p style={{ textDecoration: "underline" }}>đ</p>
+            <strong >
+            {formatPrice(product.discountPrice)}
+              <span style={{ textDecoration: "underline" }}>đ</span>
             </strong>
             <br />
             <p
               style={{
                 textDecoration: "line-through",
                 color: "red",
-                display: "flex",
-                justifyContent: "center",
+
               }}
             >
-              {product.unitPrice}{" "}
-              <p style={{ textDecoration: "underline" }}>đ</p>
+              {formatPrice(product.unitPrice)}
+              <span style={{ textDecoration: "underline" }}>đ</span>
             </p>
-          </>
+          </div>
         }
       />
       {/* <Button

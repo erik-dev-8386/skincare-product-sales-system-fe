@@ -12,7 +12,7 @@ export default function AboutMe() {
                 <div className="overlay">
                     <div className="content">
                         <h1 className="title" style={{color: "white"}}>Giới thiệu về chúng tôi</h1>
-                        <p className="description">
+                        <p className="description" style={{color: "white"}}>
                             Tại Haven Skin, chúng tôi tin rằng làn da của bạn không chỉ xứng đáng được chăm sóc
                             mà còn cần một chế độ nuôi dưỡng chuyên sâu để luôn duy trì sự rạng rỡ. Được xây dựng
                             trên ba giá trị cốt lõi: chất lượng, minh bạch và bền vững, chúng tôi mang đến những
@@ -21,7 +21,7 @@ export default function AboutMe() {
 
                         </p>
                         <br />
-                        <p className="description">
+                        <p className="description"  style={{color: "white"}}>
                             Hành trình của Haven Skin bắt đầu từ niềm đam mê với những tinh túy từ thiên nhiên
                             và mong muốn mang đến các giải pháp chăm sóc da thực sự phù hợp với mọi loại da.
                             Chúng tôi không chỉ chọn lọc các thành phần tinh khiết và lành tính nhất,
@@ -31,7 +31,7 @@ export default function AboutMe() {
 
                         </p>
                         <br />
-                        <p className="description">
+                        <p className="description"  style={{color: "white"}}>
                             Với sứ mệnh trở thành người bạn đồng hành đáng tin cậy trong hành trình làm đẹp của bạn,
                             Haven Skin cam kết không chỉ cung cấp các sản phẩm chất lượng cao mà còn mang đến
                             những lời khuyên chuyên sâu, giúp bạn xây dựng một chu trình dưỡng da phù hợp và khoa học.
@@ -40,7 +40,7 @@ export default function AboutMe() {
 
                         </p>
                         <br />
-                        <p className="description">
+                        <p className="description"  style={{color: "white"}}>
                             Cảm ơn bạn đã lựa chọn Haven Skin! Hãy để chúng tôi đồng hành cùng bạn trên con đường
                             chinh phục làn da khỏe mạnh, rạng rỡ và tràn đầy sức sống. Chúng tôi mong rằng mỗi sản phẩm
                             bạn sử dụng sẽ không chỉ là một bước dưỡng da, mà còn là một khoảnh khắc thư giãn,

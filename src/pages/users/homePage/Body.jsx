@@ -244,6 +244,7 @@ export default function Body() {
                 left: "-50px",
                 top: "50%",
                 transform: "translateY(-50%)",
+                backgroundColor: "gray",
               }}
             >
               &lt;
@@ -270,6 +271,7 @@ export default function Body() {
                 right: "-50px",
                 top: "50%",
                 transform: "translateY(-50%)",
+                backgroundColor: "gray",
               }}
             >
               &gt;
@@ -297,6 +299,7 @@ export default function Body() {
                 left: "-50px",
                 top: "50%",
                 transform: "translateY(-50%)",
+                backgroundColor: "gray",
               }}
             >
               &lt;
@@ -334,6 +337,7 @@ export default function Body() {
                 right: "-50px",
                 top: "50%",
                 transform: "translateY(-50%)",
+                backgroundColor: "gray",
               }}
             >
               &gt;

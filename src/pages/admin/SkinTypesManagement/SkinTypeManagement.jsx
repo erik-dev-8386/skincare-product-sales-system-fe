@@ -10,6 +10,7 @@ import {
   Col,
   Row,
   Tag,
+  Image,
 } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { UploadOutlined } from "@ant-design/icons";
@@ -17,8 +18,6 @@ import { useEffect, useState, useCallback } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import api from "../../../config/api";
 import MyEditor from "../../../component/TinyMCE/MyEditor";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage } from "../../../config/firebase"; // Import Firebase Storage
 
 const SkinTypeManagement = () => {
   const [skinTypeList, setSkinTypeList] = useState([]);
@@ -39,7 +38,6 @@ const SkinTypeManagement = () => {
   };
 
   const columns = [
-    // { title: 'ID loại da', dataIndex: 'skinTypeId', key: 'skinTypeId' },
     { title: "Tên loại da", dataIndex: "skinName", key: "skinName" },
     {
       title: "Mô tả",
@@ -72,18 +70,6 @@ const SkinTypeManagement = () => {
         return <Tag color={statusData.color}>{statusData.text}</Tag>;
       },
     },
-    // {
-    //     title: 'Ảnh',
-    //     dataIndex: 'skinTypeImages',
-    //     key: 'skinTypeImages',
-    //     render: (images) => (
-    //         <div>
-    //             {images && images.map((image, index) => (
-    //                 <img key={index} src={image.imageURL} alt="Skin Type" style={{ width: 50, height: 50, marginRight: 8 }} />
-    //             ))}
-    //         </div>
-    //     )
-    // },
     {
       title: "Ảnh",
       dataIndex: "skinTypeImages",
@@ -92,7 +78,7 @@ const SkinTypeManagement = () => {
         <div>
           {images &&
             images.map((image, index) => (
-              <img
+              <Image
                 key={index}
                 src={image.imageURL}
                 alt="Skin Type"
@@ -148,7 +134,7 @@ const SkinTypeManagement = () => {
   const fetchSkinTypes = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await api.get("/skin-types"); // Sửa lại đường dẫn API
+      const response = await api.get("/skin-types");
       setSkinTypeList(response.data);
     } catch (error) {
       console.error(
@@ -174,7 +160,7 @@ const SkinTypeManagement = () => {
     form.resetFields();
     setEditingSkinType(null);
     setImageFiles([]);
-    setImagePreviews([]); // Reset ảnh tạm thời khi đóng modal
+    setImagePreviews([]);
   };
 
   const handleViewDetails = (skinType) => {
@@ -187,36 +173,19 @@ const SkinTypeManagement = () => {
     setSelectedSkinType(null);
   };
 
-  // const handleSubmitForm = async (values) => {
-  //     const formData = new FormData();
-
-  //     // Append dữ liệu JSON vào phần "skinTypeDTO"
-  //     formData.append("skinTypeDTO", new Blob([JSON.stringify(values)], { type: "application/json" }));
-
-  //     // Append các file ảnh vào phần "images"
-  //     imageFiles.forEach(file => {
-  //         formData.append("images", file);
-  //     });
-
-  //     try {
-  //         const response = await api.post('/skin-types', formData, {
-  //             headers: {
-  //                 'Content-Type': 'multipart/form-data',
-  //             },
-  //         });
-
-  //         // Thêm dữ liệu mới vào state skinTypeList
-  //         setSkinTypeList(prevList => [...prevList, response.data]);
-
-  //         toast.success("Đã thêm loại da mới thành công!");
-  //         fetchSkinTypes(); // Gọi lại API để cập nhật danh sách
-  //         handleCloseModal();
-  //     } catch (error) {
-  //         console.error("Error adding skin type:", error.response?.data?.message || error.message);
-  //         toast.error("Thêm loại da mới không thành công!");
-  //     }
-  // };
   const handleSubmitForm = async (values) => {
+    // Check for duplicate skin type name
+    const isDuplicate = skinTypeList.some(
+      (skinType) =>
+        skinType.skinName === values.skinName &&
+        (!editingSkinType || skinType.skinTypeId !== editingSkinType.skinTypeId) // Allow editing the same skin type
+    );
+
+    if (isDuplicate) {
+      toast.error("Tên loại da đã tồn tại! Vui lòng nhập tên khác.");
+      return; // Prevent form submission
+    }
+
     const formData = new FormData();
     formData.append(
       "skinTypeDTO",
@@ -239,7 +208,7 @@ const SkinTypeManagement = () => {
             },
           }
         );
-        toast.success("Đã sửa loại da thành công!"); // Show success toast
+        toast.success("Đã sửa loại da thành công!");
       } else {
         // Create new skin type
         response = await api.post("/skin-types", formData, {
@@ -263,7 +232,7 @@ const SkinTypeManagement = () => {
         }
       });
 
-      fetchSkinTypes(); // Gọi lại API để cập nhật danh sách
+      fetchSkinTypes(); // Refresh skin type list
       handleCloseModal();
     } catch (error) {
       console.error(
@@ -273,14 +242,13 @@ const SkinTypeManagement = () => {
 
       // Customized error messages
       if (editingSkinType) {
-        // Error while editing
         toast.error("Sửa loại da này không thành công!");
       } else {
-        // Error while adding
         toast.error("Thêm loại da này không thành công!");
       }
     }
   };
+
   const handleEditSkinType = (skinType) => {
     setEditingSkinType(skinType);
     form.setFieldsValue(skinType);
@@ -372,11 +340,12 @@ const SkinTypeManagement = () => {
                   <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
                 </Upload>
                 {imagePreviews.map((preview, index) => (
-                  <img
+                  <Image
                     key={index}
                     src={preview}
                     alt="Preview"
-                    style={{ width: 100, marginTop: 8, marginRight: 8 }}
+                    width={100}
+                    style={{ marginTop: 8, marginRight: 8 }}
                   />
                 ))}
               </Form.Item>
@@ -385,7 +354,7 @@ const SkinTypeManagement = () => {
                   label="Trạng thái"
                   name="status"
                   rules={[
-                    { required: false, message: "Status can't be empty!" },
+                    { required: false, message: "Trạng thái không được để trống!" },
                   ]}
                 >
                   <Select>

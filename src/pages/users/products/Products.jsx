@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { Input, Select, Layout, Menu, Badge, Row, Col, Breadcrumb } from "antd";
-import { ShoppingCartOutlined } from "@ant-design/icons";
+import { Input, Select, Layout, Menu, Row, Col, Breadcrumb } from "antd";
+// import { ShoppingCartOutlined } from "@ant-design/icons";
 import api from "../../../config/api";
 import { CartContext } from "../../../context/CartContext";
 import ProductCard from "../../../component/productCard/ProductCard";
@@ -21,6 +21,8 @@ export default function Products() {
   const [selectedSkinType, setSelectedSkinType] = useState("");
   const [selectedBrand, setSelectedBrand] = useState("");
   const [discounts, setDiscounts] = useState({});
+  const [selectedDiscount, setSelectedDiscount] = useState("");
+  const [discountList, setDiscountList] = useState([]);
 
   const navigate = useNavigate();
   const { cart } = useContext(CartContext);
@@ -70,6 +72,7 @@ export default function Products() {
         return acc;
       }, {});
       setDiscounts(discountMap);
+      setDiscountList(response.data);
     } catch (error) {
       console.error("Error fetching discounts:", error);
     }
@@ -92,7 +95,8 @@ export default function Products() {
       selectedCategory,
       selectedSkinType,
       selectedBrand,
-      sortOption
+      sortOption,
+      selectedDiscount
     );
   };
 
@@ -103,7 +107,8 @@ export default function Products() {
       selectedCategory,
       selectedSkinType,
       selectedBrand,
-      value
+      value,
+      selectedDiscount
     );
   };
 
@@ -114,7 +119,8 @@ export default function Products() {
       category,
       selectedSkinType,
       selectedBrand,
-      sortOption
+      sortOption,
+      selectedDiscount
     );
   };
 
@@ -125,7 +131,8 @@ export default function Products() {
       selectedCategory,
       selectedSkinType,
       brand,
-      sortOption
+      sortOption,
+      selectedDiscount
     );
   };
 
@@ -136,11 +143,31 @@ export default function Products() {
       selectedCategory,
       skintype,
       selectedBrand,
-      sortOption
+      sortOption,
+      selectedDiscount
     );
   };
 
-  const filterProducts = (search, category, skintype, brand, sort) => {
+  const handleDiscountSelect = (discount) => {
+    setSelectedDiscount(discount);
+    filterProducts(
+      searchTerm,
+      selectedCategory,
+      selectedSkinType,
+      selectedBrand,
+      sortOption,
+      discount
+    );
+  };
+
+  const filterProducts = (
+    search,
+    category,
+    skintype,
+    brand,
+    sort,
+    discount
+  ) => {
     let filtered = [...products];
 
     if (search) {
@@ -159,6 +186,10 @@ export default function Products() {
 
     if (brand) {
       filtered = filtered.filter((product) => product.brandId === brand);
+    }
+
+    if (discount) {
+      filtered = filtered.filter((product) => product.discountId === discount);
     }
 
     switch (sort) {
@@ -225,7 +256,7 @@ export default function Products() {
               selectedKeys={[selectedCategory]}
               onClick={(e) => handleCategorySelect(e.key)}
               items={[
-                { key: "", label: "All" },
+                { key: "", label: "Tất cả" },
                 ...categories.map((category) => ({
                   key: category.categoryId,
                   label: category.categoryName,
@@ -238,7 +269,7 @@ export default function Products() {
               selectedKeys={[selectedSkinType]}
               onClick={(e) => handleSkinTypeSelect(e.key)}
               items={[
-                { key: "", label: "All" },
+                { key: "", label: "Tất cả" },
                 ...skinTypes.map((skinType) => ({
                   key: skinType.skinTypeId,
                   label: skinType.skinName,
@@ -251,10 +282,23 @@ export default function Products() {
               selectedKeys={[selectedBrand]}
               onClick={(e) => handleBrandSelect(e.key)}
               items={[
-                { key: "", label: "All" },
+                { key: "", label: "Tất cả" },
                 ...brands.map((brand) => ({
                   key: brand.brandId,
                   label: brand.brandName,
+                })),
+              ]}
+            />
+            <h4>Giảm giá</h4>
+            <Menu
+              mode="inline"
+              selectedKeys={[selectedDiscount]}
+              onClick={(e) => handleDiscountSelect(e.key)}
+              items={[
+                { key: "", label: "Tất cả" },
+                ...discountList.map((discount) => ({
+                  key: discount.discountId,
+                  label: `Giảm ${discount.discountPercent}%`,
                 })),
               ]}
             />

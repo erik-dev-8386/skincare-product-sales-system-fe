@@ -1,0 +1,36 @@
+.sider-user-profile {
+  background-color: #794842;
+}
+
+.color-menu {
+  background-color: #794842 !important; /* Set the background color for the menu */
+}
+
+.color-menu .ant-menu-item {
+  color: white; /* Set text color for menu items */
+}
+
+.color-menu .ant-menu-item-selected {
+  background-color: #3c1414 !important; /* Change selected item color */
+}
+
+/* Change the color of the sider trigger */
+.sider-user-profile .ant-layout-sider-trigger {
+  background-color: #93744D !important; /* Set the background color */
+  border: none; /* Remove any borders if necessary */
+}
+
+/* Adjust the color of the trigger icon if needed */
+.sider-user-profile .ant-layout-sider-trigger:hover {
+  background-color: #3c1414 !important; /* Change color on hover */
+}
+
+.avarta-profile .ant-image-mask {
+  border-radius: 50%;
+  
+}
+
+.avarta-profile  .image-avarta{
+  border-radius: 50%;
+  padding: 10px;
+}

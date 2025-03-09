@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import api from "../../../config/api";
 import { toast, ToastContainer } from "react-toastify";
 import MyEditor from "../../../component/TinyMCE/MyEditor";
+
 const BrandManagement = () => {
   const { Option } = Select;
   const [brandList, setBrandList] = useState([]);
@@ -23,16 +24,12 @@ const BrandManagement = () => {
   const [selectedBrand, setSelectedBrand] = useState(null);
 
   const statusMapping = {
-    0: { text: "KHÔNG HOẠT ĐỘNG", color: "red" },
+   
     1: { text: "HOẠT ĐỘNG", color: "green" },
+    2: { text: "KHÔNG HOẠT ĐỘNG", color: "red" },
   };
 
   const columns = [
-    // {
-    //   title: "ID thương hiệu",
-    //   dataIndex: "brandId",
-    //   key: "brandId",
-    // },
     {
       title: "Tên thương hiệu",
       dataIndex: "brandName",
@@ -147,19 +144,30 @@ const BrandManagement = () => {
   };
 
   const handleSubmitForm = async (values) => {
+    // Check for duplicate brand name
+    const isDuplicate = brandList.some(
+      (brand) =>
+        brand.brandName === values.brandName &&
+        (!editingBrand || brand.brandId !== editingBrand.brandId) // Allow editing the same brand
+    );
+
+    if (isDuplicate) {
+      toast.error("Tên thương hiệu đã tồn tại! Vui lòng nhập tên khác.");
+      return; // Prevent form submission
+    }
+
     if (editingBrand) {
       try {
         await api.put(`/brands/${editingBrand.brandId}`, values);
-        toast.success("Brand updated successfully!");
+        toast.success("Đã sửa thương hiệu thành công!");
         fetchBrands();
         handleCloseModal();
       } catch (error) {
-        toast.error("Failed to update brand!");
+        toast.error("Cập nhật thương hiệu không thành công!");
       }
     } else {
       try {
-        const { status, ...newBrands } = values;
-        await api.post("/brands", newBrands);
+        await api.post('/brands', values);
         toast.success("Đã thêm thương hiệu mới thành công!");
         fetchBrands();
         handleCloseModal();
@@ -210,7 +218,7 @@ const BrandManagement = () => {
           <Form.Item
             label="Tên thương hiệu"
             name="brandName"
-            rules={[{ required: true, message: "Brand name can't be empty!" }]}
+            rules={[{ required: true, message: "Tên thương hiệu không được bỏ trống!" }]}
           >
             <Input />
           </Form.Item>
@@ -245,7 +253,7 @@ const BrandManagement = () => {
             >
               <Select>
                 <Option value={1}>HOẠT ĐỘNG</Option>
-                <Option value={0}>KHÔNG HOẠT ĐỘNG</Option>
+                <Option value={2}>KHÔNG HOẠT ĐỘNG</Option>
               </Select>
             </Form.Item>
           )}
@@ -254,7 +262,7 @@ const BrandManagement = () => {
 
       {/* Modal Chi Tiết */}
       <Modal
-        title="Chi tiết loại sản phẩm"
+        title="Chi tiết thương hiệu"
         open={isDetailModalOpen}
         onCancel={handleCloseDetailModal}
         footer={null}
