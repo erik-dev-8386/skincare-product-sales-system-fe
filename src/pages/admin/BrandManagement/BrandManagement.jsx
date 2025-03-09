@@ -24,8 +24,9 @@ const BrandManagement = () => {
   const [selectedBrand, setSelectedBrand] = useState(null);
 
   const statusMapping = {
-    0: { text: "KHÔNG HOẠT ĐỘNG", color: "red" },
+   
     1: { text: "HOẠT ĐỘNG", color: "green" },
+    2: { text: "KHÔNG HOẠT ĐỘNG", color: "red" },
   };
 
   const columns = [
@@ -252,7 +253,7 @@ const BrandManagement = () => {
             >
               <Select>
                 <Option value={1}>HOẠT ĐỘNG</Option>
-                <Option value={0}>KHÔNG HOẠT ĐỘNG</Option>
+                <Option value={2}>KHÔNG HOẠT ĐỘNG</Option>
               </Select>
             </Form.Item>
           )}

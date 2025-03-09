@@ -16,6 +16,7 @@ const DiscountManagement = () => {
   const [isDetailModalOpen, setDetailModalOpen] = useState(false);
   const [selectedDiscount, setSelectedDiscount] = useState(null);
 
+
   const statusMapping = {
     0: { text: "HẾT HẠN", color: "red" },
     1: { text: "SẮP TỚI", color: "orange" },
@@ -292,6 +293,20 @@ const DiscountManagement = () => {
               onChange={(value) => form.setFieldsValue({ description: value })}
             />
           </Form.Item>
+          {editingDiscount && (
+            <Form.Item
+              label="Trạng thái"
+              name="status"
+              rules={[{ required: false, message: "Trạng thái không được bỏ trống!" }]}
+            >
+              <Select>
+                <Option value={0}>HẾT HẠN</Option>
+                <Option value={1}>SẮP TỚI</Option>
+                <Option value={2}>HOẠT ĐỘNG</Option>
+                <Option value={3}>BỊ VÔ HIỆU HÓA</Option>
+              </Select>
+            </Form.Item>
+          )}
         </Form>
       </Modal>
       {/* Modal Chi Tiết */}
