@@ -38,16 +38,16 @@ import AdminLayout from "./component/AdminLayout/AdminLayout.jsx";
 import Products from "./pages/users/products/Products.jsx";
 import ProductDetail from "./pages/users/products/ProductDetail.jsx";
 import ProductManagement from "./pages/admin/ProductManagement/ProductManagement.jsx";
-// import ProfilePage from './pages/users/profile/Profile.jsx';
 import QuestionManagement from "./pages/admin/QuestionManagement/QuestionManagement.jsx";
 import AnswerManagement from "./pages/admin/AnswerManagement/AnswerManagement.jsx";
+import Profile from "./pages/users/profile/Profile.jsx";
+import ProfileLayout from "../src/component/ProfileLayout/ProfileLayout.jsx";
 function App() {
   return (
     <Routes>
       {/* user */}
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
-        {/* <Route path='/profile' element={<ProfilePage/>} /> */}
         <Route path="/about-us" element={<AboutUs />} />
         <Route path="/about-me" element={<AboutMe />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
@@ -76,6 +76,12 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/login-and-signup" element={<LoginAndSignup />} />
 
+      {/* profile user */}
+      <Route path='/user' element={<ProfileLayout />}>
+        <Route index element={<Profile />} />
+        {/* <Route path='edit' element={<EditProfile />} /> */}
+      </Route>
+
       {/* admin */}
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<DashBoard />} />
@@ -95,7 +101,7 @@ function App() {
         <Route path="/admin/list-staff" element={<ListStaff />} />
         <Route path="/admin/create-staff" element={<CreateStaff />} />
         <Route path="/admin/list-user" element={<UserManagement />} />
-        {/* <Route path='/admin/list-product' element={<ListProduct />} /> */}
+        
         <Route
           path="/admin/product-management"
           element={<ProductManagement />}

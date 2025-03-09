@@ -233,7 +233,7 @@
 //================================================================================
 
 import React from "react";
-import { Layout, Menu } from "antd";
+import { Image, Layout, Menu } from "antd";
 import {
   UserOutlined,
   DashboardOutlined,
@@ -295,14 +295,14 @@ const AdminLayout = () => {
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Sider collapsible width={200} breakpoint="lg">
+      <Sider collapsible width={200} breakpoint="lg" className="sider-admin">
         <div className="back-to-home" style={{ marginTop: 5, marginLeft: 10 }}>
           <Link to="/">
             <i className="fa-solid fa-arrow-left"></i> Quay lại trang chủ
           </Link>
         </div>
         <div className="avarta">
-          <img
+          <Image
             className="img-avarta"
             src="./src/assets/Logo_01.jpg"
             alt="Avarta"

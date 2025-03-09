@@ -278,7 +278,7 @@ export default function Header() {
             {role ? (
               <>
                 <li>
-                  <Link to="/profile"><p><i className="fa-solid fa-address-card"></i> Hồ sơ</p></Link>
+                  <Link to="/user"><p><i className="fa-solid fa-address-card"></i> Hồ sơ</p></Link>
                 </li>
                 {role === 1 && (
                   <li>
