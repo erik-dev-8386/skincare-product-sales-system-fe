@@ -51,11 +51,12 @@
   
   /* Thiết lập chiều cao và cuộn cho Content */
   .admin-layout .content-container {
-    margin-left: 200px; /* Đảm bảo Content không bị che bởi Sider */
+    /* margin-left: 200px;  */
+    /* Đảm bảo Content không bị che bởi Sider */
     height: 100vh; /* Chiều cao bằng viewport */
     overflow-y: auto; /* Cho phép cuộn dọc */
     padding: 24px; /* Thêm padding để nội dung không dính sát vào viền */
-    
+    transition: margin-left 0.2s;
   }
   
   /* Đảm bảo Menu trong Sider không bị cuộn quá */
