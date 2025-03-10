@@ -36,7 +36,7 @@ export default function Profile() {
           lastName: data.lastName,
           email: data.email,
           gender: data.gender,
-          phoneNumber: data.phoneNumber,
+          phoneNumber: data.phone,
           address: data.address,
           birthDate: data.birthDate ? moment(data.birthDate) : null,
         });
@@ -54,7 +54,7 @@ export default function Profile() {
     formData.append('lastName', values.lastName);
     formData.append('email', values.email);
     formData.append('gender', values.gender);
-    formData.append('phoneNumber', values.phoneNumber);
+    formData.append('phone', values.phone);
     formData.append('address', values.address);
     if (values.birthDate) {
       formData.append('birthDate', values.birthDate.format('YYYY-MM-DD'));
@@ -63,7 +63,7 @@ export default function Profile() {
       formData.append('image', fileList[0].originFileObj);
     }
     try {
-      await api.put('/users', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+      await api.put(`/users/update/${values.email}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
       toast.success('Chỉnh sửa thông tin thành công!');
       setIsEditing(false);
     } catch (error) {
@@ -85,7 +85,7 @@ export default function Profile() {
         </Row>
         <Row gutter={16}>
           <Col span={8}><Form.Item name="email" label="Email"><Input disabled /></Form.Item></Col>
-          <Col span={8}><Form.Item name="phoneNumber" label="Số điện thoại"><Input disabled={!isEditing} /></Form.Item></Col>
+          <Col span={8}><Form.Item name="phone" label="Số điện thoại"><Input disabled={!isEditing} /></Form.Item></Col>
           <Col span={8}><Form.Item name="birthDate" label="Ngày sinh"><DatePicker disabled={!isEditing} /></Form.Item></Col>
         </Row>
         <Row>

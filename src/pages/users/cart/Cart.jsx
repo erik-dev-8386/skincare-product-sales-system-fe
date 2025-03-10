@@ -46,7 +46,7 @@
 //           firstName: data.firstName || prev.firstName,
 //           lastName: data.lastName || prev.lastName,
 //           email: data.email || prev.email,
-//           phone: data.phoneNumber || prev.phoneNumber,
+//           phone: data.phone || prev.phone,
 //           address: data.address || prev.address,
 //         }));
 //       } catch (error) {
@@ -223,6 +223,15 @@ export default function Cart() {
   const [checkoutResponse, setCheckoutResponse] = useState(
     initialCheckoutResponse
   );
+
+  const orderId = checkoutResponse?.orderId; // Extract orderId safely
+
+  if (!orderId) {
+    console.error("Order ID is missing!");
+    toast.error("Lỗi: Không tìm thấy mã đơn hàng.");
+    return;
+  }
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -262,7 +271,7 @@ export default function Cart() {
           firstName: data.firstName || prev.firstName,
           lastName: data.lastName || prev.lastName,
           email: data.email || prev.email,
-          phone: data.phoneNumber || prev.phone,
+          phone: data.phone || prev.phone,
           address: data.address || prev.address,
         }));
       } catch (error) {
@@ -323,15 +332,18 @@ export default function Cart() {
         quantity: item.quantity,
         price: item.discountPrice,
       })),
+      orderId: orderId,
+      total: finalTotal,
     };
 
     if (formData.paymentMethod === "vnpay") {
       try {
         // Gọi API backend để lấy URL thanh toán VNPay
-        const response = await api.get("/vnpays/pay", checkoutRequest);
+        const response = await api.get(`/vnpays/pay/${orderId}`, checkoutRequest);
 
         // Kiểm tra xem paymentUrl có tồn tại không
         const paymentUrl = response.data;
+        console.log("Payment URL:", paymentUrl);
         if (!paymentUrl) {
           throw new Error("Không nhận được URL thanh toán từ VNPay.");
         }
