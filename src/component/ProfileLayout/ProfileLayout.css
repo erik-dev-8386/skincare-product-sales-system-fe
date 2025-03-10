@@ -34,3 +34,21 @@
   border-radius: 50%;
   padding: 10px;
 }
+
+.sider-user-profile {
+  height: 100vh; /* Chiều cao toàn màn hình */
+  position: fixed; /* Giữ cố định */
+  left: 0;
+  top: 0;
+  bottom: 0;
+  overflow: hidden; /* Ngăn chặn cuộn */
+}
+
+.user-profile-layout .content-container {
+  margin-left: 200px; /* Để không bị che bởi sider */
+  padding: 20px;
+  height: 100vh; /* Chiều cao toàn màn hình */
+  overflow-y: auto; /* Cho phép cuộn nội dung */
+  background: #f0f2f5;
+}
+

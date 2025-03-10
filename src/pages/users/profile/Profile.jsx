@@ -1,15 +1,52 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react';
 import "./Profile.css";
-import { Form, Input, DatePicker, Upload, Button, Select, message } from 'antd';
-import axios from 'axios';
+import { Form, Input, DatePicker, Upload, Button, Select, message, Row, Col } from 'antd';
 import api from '../../../config/api';
-
+import { jwtDecode } from 'jwt-decode';
+import { ToastContainer, toast } from 'react-toastify';
 
 const { Option } = Select;
 
 export default function Profile() {
-    const [form] = Form.useForm();
+  const [form] = Form.useForm();
   const [fileList, setFileList] = useState([]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [userData, setUserData] = useState({});
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        message.error("No token found. Please login.");
+        return;
+      }
+
+      try {
+        const decodedToken = jwtDecode(token);
+        const userEmail = decodedToken.sub;
+
+        const response = await api.get(`/users/${userEmail}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const data = response.data;
+        setUserData(data);
+        form.setFieldsValue({
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          gender: data.gender,
+          phoneNumber: data.phoneNumber,
+          address: data.address,
+          birthDate: data.birthDate ? moment(data.birthDate) : null,
+        });
+      } catch (error) {
+        message.error("Failed to fetch user data.");
+      }
+    };
+
+    fetchUserData();
+  }, [form]);
 
   const onFinish = async (values) => {
     const formData = new FormData();
@@ -19,77 +56,59 @@ export default function Profile() {
     formData.append('gender', values.gender);
     formData.append('phoneNumber', values.phoneNumber);
     formData.append('address', values.address);
-    formData.append('birthDate', values.birthDate.format('YYYY-MM-DD'));
-    // formData.append('skin_types', values.skin_types);
+    if (values.birthDate) {
+      formData.append('birthDate', values.birthDate.format('YYYY-MM-DD'));
+    }
     if (fileList.length > 0) {
       formData.append('image', fileList[0].originFileObj);
     }
-
     try {
-      const response = await api.post('/users', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      message.success('Profile updated successfully!');
+      await api.put('/users', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+      toast.success('Chỉnh sửa thông tin thành công!');
+      setIsEditing(false);
     } catch (error) {
-      message.error('Failed to update profile.');
+      toast.error('Chỉnh sửa thông tin không thành công!');
     }
   };
 
-  const handleChange = ({ fileList }) => setFileList(fileList);
-
   return (
-    <Form form={form} layout="vertical" onFinish={onFinish}>
-        <h1>Thông tin khác hàng</h1>
-      <Form.Item name="firstName" label="Tên" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="lastName" label="Họ" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="email" label="Email" rules={[{ required: true, type: 'email' }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="gender" label="Giới tính" rules={[{ required: true }]}>
-      <Select placeholder="Chọn giới tính">
-          <Option value="other">Khác</Option>
-          <Option value="men">Nam</Option>
-          <Option value="women">Nữ</Option>
-          <Option value="unknow">Bí mật</Option>  
-        </Select>
-      </Form.Item>
-      <Form.Item name="phoneNumber" label="Số điện thoại" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="address" label="Địa chỉ" rules={[{ required: true }]}>
-        <Input />
-      </Form.Item>
-      <Form.Item name="birthDate" label="Ngày tháng năm sinh" rules={[{ required: true }]}>
-        <DatePicker />
-      </Form.Item>
-      {/* <Form.Item name="skin_types" label="Loại da" rules={[{ required: true }]}>
-        <Select placeholder="Select skin type">
-          <Option value="oily">Oily</Option>
-          <Option value="dry">Dry</Option>
-          <Option value="combination">Combination</Option>
-          <Option value="sensitive">Sensitive</Option>
-        </Select>
-      </Form.Item> */}
-      <Form.Item label="Profile Picture">
-        <Upload
-          fileList={fileList}
-          onChange={handleChange}
-          beforeUpload={() => false} // Prevent automatic upload
-        >
-          <Button>Upload</Button>
-        </Upload>
-      </Form.Item>
-      <Form.Item>
-        <Button type="primary" htmlType="submit">
-          Submit
-        </Button>
-      </Form.Item>
-    </Form>
+    <div className="profile-container">
+
+      <Form form={form} layout="vertical" onFinish={onFinish} >
+        <h1 >Thông tin tài khoản</h1>
+        <Row gutter={16}>
+          <Col span={8}><Form.Item name="firstName" label="Tên"><Input disabled={!isEditing} /></Form.Item></Col>
+          <Col span={8}><Form.Item name="lastName" label="Họ"><Input disabled={!isEditing} /></Form.Item></Col>
+          <Col span={8}><Form.Item name="gender" label="Giới tính">
+            <Select disabled={!isEditing}><Option value="other">Khác</Option><Option value="men">Nam</Option><Option value="women">Nữ</Option></Select>
+          </Form.Item></Col>
+        </Row>
+        <Row gutter={16}>
+          <Col span={8}><Form.Item name="email" label="Email"><Input disabled /></Form.Item></Col>
+          <Col span={8}><Form.Item name="phoneNumber" label="Số điện thoại"><Input disabled={!isEditing} /></Form.Item></Col>
+          <Col span={8}><Form.Item name="birthDate" label="Ngày sinh"><DatePicker disabled={!isEditing} /></Form.Item></Col>
+        </Row>
+        <Row>
+          <Col span={24}><Form.Item name="address" label="Địa chỉ"><Input disabled={!isEditing} /></Form.Item></Col>
+        </Row>
+        <Row gutter={16}>
+          <Col span={12}>
+            <Upload fileList={fileList} beforeUpload={() => false} disabled={!isEditing}>
+              <Button disabled={!isEditing}>Tải ảnh đại diện lên</Button>
+            </Upload>
+          </Col>
+          <Col span={12} style={{ textAlign: 'right' }}>
+            {isEditing ? (
+              <>
+                <Button type="primary" htmlType="submit" style={{ marginRight: 8 }}>Lưu</Button>
+                <Button type="default" onClick={() => setIsEditing(false)}>Hủy</Button>
+              </>
+            ) : (
+              <Button type="primary" onClick={() => setIsEditing(true)}>Chỉnh sửa thông tin</Button>
+            )}
+          </Col>
+        </Row>
+      </Form>
+      </div>
   );
 }

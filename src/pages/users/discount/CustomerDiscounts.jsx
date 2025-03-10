@@ -41,6 +41,9 @@ const CustomerDiscounts = () => {
             title: "Mô tả",
             dataIndex: "description",
             key: "description",
+            render: (text) => (
+                <div dangerouslySetInnerHTML={{ __html: text && typeof text === "string" ? (text.length > 50 ? text.substring(0, 50) + "..." : text) : "" }} />
+              ),
         },
         {
             title: "Phần trăm giảm giá",
