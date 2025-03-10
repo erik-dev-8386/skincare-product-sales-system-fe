@@ -1,6 +1,16 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import { Input, Select, Layout, Menu, Row, Col, Breadcrumb } from "antd";
+import {
+  Input,
+  Select,
+  Layout,
+  Menu,
+  Row,
+  Col,
+  Breadcrumb,
+  Modal,
+  Table,
+} from "antd";
 // import { ShoppingCartOutlined } from "@ant-design/icons";
 import api from "../../../config/api";
 import { CartContext } from "../../../context/CartContext";
@@ -23,6 +33,8 @@ export default function Products() {
   const [discounts, setDiscounts] = useState({});
   const [selectedDiscount, setSelectedDiscount] = useState("");
   const [discountList, setDiscountList] = useState([]);
+  const [compareProducts, setCompareProducts] = useState([]);
+  const [isCompareModalVisible, setIsCompareModalVisible] = useState(false);
 
   const navigate = useNavigate();
   const { cart } = useContext(CartContext);
@@ -158,6 +170,122 @@ export default function Products() {
       sortOption,
       discount
     );
+  };
+
+  const handleCompareClick = (product) => {
+    if (compareProducts.length < 2) {
+      if (!compareProducts.find((p) => p.productId === product.productId)) {
+        setCompareProducts([...compareProducts, product]);
+        if (compareProducts.length === 1) {
+          setIsCompareModalVisible(true);
+        }
+      }
+    } else {
+      alert("Chỉ có thể so sánh 2 sản phẩm!");
+    }
+  };
+
+  const handleCloseCompare = () => {
+    setIsCompareModalVisible(false);
+    setCompareProducts([]);
+  };
+
+  const compareColumns = [
+    {
+      title: "Thông tin",
+      dataIndex: "info",
+      key: "info",
+      width: "20%",
+    },
+    {
+      title: "Sản phẩm 1",
+      dataIndex: "product1",
+      key: "product1",
+      width: "40%",
+    },
+    {
+      title: "Sản phẩm 2",
+      dataIndex: "product2",
+      key: "product2",
+      width: "40%",
+    },
+  ];
+
+  const getCompareData = () => {
+    const [p1, p2] = compareProducts;
+    if (!p1 || !p2) return [];
+
+    const brand1 = brands.find((b) => b.brandId === p1.brandId)?.brandName;
+    const brand2 = brands.find((b) => b.brandId === p2.brandId)?.brandName;
+    const category1 = categories.find(
+      (c) => c.categoryId === p1.categoryId
+    )?.categoryName;
+    const category2 = categories.find(
+      (c) => c.categoryId === p2.categoryId
+    )?.categoryName;
+
+    return [
+      {
+        key: "1",
+        info: "Hình ảnh",
+        product1: (
+          <img
+            src={p1.productImages[0]?.imageURL}
+            alt={p1.productName}
+            style={{ width: "100px" }}
+          />
+        ),
+        product2: (
+          <img
+            src={p2.productImages[0]?.imageURL}
+            alt={p2.productName}
+            style={{ width: "100px" }}
+          />
+        ),
+      },
+      {
+        key: "2",
+        info: "Tên sản phẩm",
+        product1: p1.productName,
+        product2: p2.productName,
+      },
+      {
+        key: "3",
+        info: "Thương hiệu",
+        product1: brand1,
+        product2: brand2,
+      },
+      {
+        key: "4",
+        info: "Danh mục",
+        product1: category1,
+        product2: category2,
+      },
+      {
+        key: "5",
+        info: "Giá gốc",
+        product1: `${p1.unitPrice.toLocaleString()}đ`,
+        product2: `${p2.unitPrice.toLocaleString()}đ`,
+      },
+      {
+        key: "6",
+        info: "Giá khuyến mãi",
+        product1: `${p1.discountPrice.toLocaleString()}đ`,
+        product2: `${p2.discountPrice.toLocaleString()}đ`,
+      },
+      {
+        key: "7",
+        info: "Mô tả",
+        product1: p1.description,
+        product2: p2.description,
+      },
+      {
+        key: "8",
+        info: "Thành phần",
+        product1: p1.ingredients,
+        product2: p2.ingredients,
+      },
+    ];
   };
 
   const filterProducts = (
@@ -335,10 +463,26 @@ export default function Products() {
                       product={product}
                       discounts={discounts}
                       brands={brands}
+                      onCompareClick={handleCompareClick}
                     />
                   </Col>
                 ))}
               </Row>
+
+              <Modal
+                title="So sánh sản phẩm"
+                open={isCompareModalVisible}
+                onCancel={handleCloseCompare}
+                width={1000}
+                footer={null}
+              >
+                <Table
+                  columns={compareColumns}
+                  dataSource={getCompareData()}
+                  pagination={false}
+                  bordered
+                />
+              </Modal>
             </Content>
           </Layout>
         </Layout>

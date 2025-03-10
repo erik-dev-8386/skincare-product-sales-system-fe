@@ -874,7 +874,8 @@ const AnswerManagement = () => {
               <strong>Điểm:</strong> {selectedAnswer.mark}
             </p>
             <p>
-              <strong>Nội dung câu hỏi:</strong> {selectedAnswer.questionContent}
+              <strong>Nội dung câu hỏi:</strong>{" "}
+              {selectedAnswer.questionContent}
             </p>
           </div>
         )}

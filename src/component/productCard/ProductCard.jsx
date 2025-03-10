@@ -1,74 +1,3 @@
-// import React from "react";
-// import { Card, Button, Badge } from "antd";
-// import { ShoppingCartOutlined } from "@ant-design/icons";
-// import { useNavigate } from "react-router-dom";
-
-// const { Meta } = Card;
-
-// const ProductCard = ({ product, discounts, handleAddToCart }) => {
-//   const navigate = useNavigate();
-
-//   return (
-//     <Card
-//       hoverable
-//       cover={[
-//         <p
-//           style={{
-//             padding: 2,
-//             marginLeft: "79%",
-//             backgroundColor: "red",
-//             color: "white",
-//             width: 50,
-//             borderRadius: "5px",
-//           }}
-//         >
-//           <i className="fa-solid fa-down-long"></i>
-//           {discounts[product.discountId] || 0}%
-//         </p>,
-//         <img
-//           alt={product.productName}
-//           src={product.productImages[0]?.imageURL}
-//           style={{
-//             height: "200px",
-//             objectFit: "contain",
-//             padding: 2,
-//           }}
-//         />,
-//       ]}
-//       onClick={() => navigate(`/products/${product.productId}`)}
-//     >
-//       <Meta
-//         title={product.productName}
-//         description={
-//           <>
-//             <strong>{product.discountPrice}đ</strong>
-//             <br />
-//             <p
-//               style={{
-//                 textDecoration: "line-through",
-//                 color: "red",
-//               }}
-//             >
-//               {product.unitPrice}đ
-//             </p>
-//           </>
-//         }
-//       />
-//       <Button
-//         type="primary"
-//         onClick={(e) => {
-//           e.stopPropagation(); // Ngăn chặn sự kiện click từ Card
-//           handleAddToCart(product);
-//         }}
-//       >
-//         Add to Cart
-//       </Button>
-//     </Card>
-//   );
-// };
-
-// export default ProductCard;
-
 import React from "react";
 import { Card, Button } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -79,8 +8,12 @@ const formatPrice = (price) => {
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 };
 
-// const ProductCard = ({ product, discounts = {}, brands = [], handleAddToCart }) => {
-const ProductCard = ({ product, discounts = {}, brands = [] }) => {
+const ProductCard = ({
+  product,
+  discounts = {},
+  brands = [],
+  onCompareClick,
+}) => {
   const navigate = useNavigate();
 
   // Kiểm tra xem product có tồn tại không
@@ -131,20 +64,24 @@ const ProductCard = ({ product, discounts = {}, brands = [] }) => {
       onClick={() => navigate(`/products/${product.productId}`)}
     >
       <Meta
-        
         title={
-          <p style={{ display: "flex", justifyContent: "center" }} >
+          <p style={{ display: "flex", justifyContent: "center" }}>
             {product.productName}
           </p>
         }
         description={
-          <div style={{ display: "flex", justifyContent: "space-between", flexDirection: "column", alignItems: "center" }}>
-            <p >
-              {findBrandNameById(product.brandId)}
-            </p>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
+            <p>{findBrandNameById(product.brandId)}</p>
             {/* Hiển thị brandName thay vì brandId */}
-            <strong >
-            {formatPrice(product.discountPrice)}
+            <strong>
+              {formatPrice(product.discountPrice)}
               <span style={{ textDecoration: "underline" }}>đ</span>
             </strong>
             <br />
@@ -152,7 +89,6 @@ const ProductCard = ({ product, discounts = {}, brands = [] }) => {
               style={{
                 textDecoration: "line-through",
                 color: "red",
-
               }}
             >
               {formatPrice(product.unitPrice)}
@@ -161,15 +97,27 @@ const ProductCard = ({ product, discounts = {}, brands = [] }) => {
           </div>
         }
       />
-      {/* <Button
-        type="primary"
-        onClick={(e) => {
-          e.stopPropagation();
-          handleAddToCart(product);
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "10px",
         }}
       >
-        Add to Cart
-      </Button> */}
+        <Button
+          type="primary"
+          onClick={(e) => {
+            e.stopPropagation(); // Ngăn chặn sự kiện click từ Card
+            onCompareClick(product);
+          }}
+          style={{
+            backgroundColor: "#1890ff",
+            color: "white",
+          }}
+        >
+          So sánh
+        </Button>
+      </div>
     </Card>
   );
 };

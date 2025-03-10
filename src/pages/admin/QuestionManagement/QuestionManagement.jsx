@@ -779,15 +779,13 @@ const QuestionManagement = () => {
         footer={null}
         destroyOnClose
       >
-        <Form
-          form={formInstance}
-          onFinish={handleSubmitForm}
-          layout="vertical"
-        >
+        <Form form={formInstance} onFinish={handleSubmitForm} layout="vertical">
           <Form.Item
             label="Nội dung câu hỏi"
             name="questionContent"
-            rules={[{ required: true, message: "Vui lòng nhập nội dung câu hỏi!" }]}
+            rules={[
+              { required: true, message: "Vui lòng nhập nội dung câu hỏi!" },
+            ]}
           >
             <Input.TextArea onChange={handleQuestionContentChange} />
           </Form.Item>
@@ -822,7 +820,8 @@ const QuestionManagement = () => {
               <strong>ID:</strong> {selectedQuestion.questionId}
             </p>
             <p>
-              <strong>Nội dung câu hỏi:</strong> {selectedQuestion.questionContent}
+              <strong>Nội dung câu hỏi:</strong>{" "}
+              {selectedQuestion.questionContent}
             </p>
             <p>
               <strong>Điểm tối đa:</strong> {selectedQuestion.maxMark}
