@@ -54,7 +54,7 @@ export default function ProfileLayout() {
           }))}
         />
       </Sider>
-      <Layout>
+      <Layout className='user-profile-layout'>
         <Content className="content-container">
           <Outlet />
         </Content>
