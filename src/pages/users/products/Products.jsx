@@ -223,6 +223,12 @@ export default function Products() {
     const category2 = categories.find(
       (c) => c.categoryId === p2.categoryId
     )?.categoryName;
+    const skinType1 = skinTypes.find(
+      (s) => s.skinTypeId === p1.skinTypeId
+    )?.skinName;
+    const skinType2 = skinTypes.find(
+      (s) => s.skinTypeId === p2.skinTypeId
+    )?.skinName;
 
     return [
       {
@@ -263,24 +269,30 @@ export default function Products() {
       },
       {
         key: "5",
+        info: "Loại da phù hợp",
+        product1: skinType1 || "Chưa có thông tin",
+        product2: skinType2 || "Chưa có thông tin",
+      },
+      {
+        key: "6",
         info: "Giá gốc",
         product1: `${p1.unitPrice.toLocaleString()}đ`,
         product2: `${p2.unitPrice.toLocaleString()}đ`,
       },
       {
-        key: "6",
+        key: "7",
         info: "Giá khuyến mãi",
         product1: `${p1.discountPrice.toLocaleString()}đ`,
         product2: `${p2.discountPrice.toLocaleString()}đ`,
       },
       {
-        key: "7",
+        key: "8",
         info: "Mô tả",
         product1: p1.description,
         product2: p2.description,
       },
       {
-        key: "8",
+        key: "9",
         info: "Thành phần",
         product1: p1.ingredients,
         product2: p2.ingredients,
