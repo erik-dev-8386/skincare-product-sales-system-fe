@@ -385,43 +385,72 @@ export default function Cart() {
     }
   };
 
+  // const handleCancel = async () => {
+  //   const token = localStorage.getItem("token");
+  //   if (!token) {
+  //     console.error("No token found.");
+  //     toast.error("Lỗi: Không tìm thấy mã đơn hàng.");
+  //     return;
+  //   }
+  
+  //   const email = formData.email; // Get the email from form data
+  //   const checkoutRequest = {
+  //     cartItemDTO: cartItems.map((item) => ({
+  //       productName: item.productName,
+  //       quantity: item.quantity,
+  //       price: item.discountPrice,
+  //     })),
+  //   };
+  
+  //   try {
+  //     const response = await api.delete(`/orders/cancel-order/${email}`, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //       data: checkoutRequest,
+  //     });
+  
+  //     if (response.status === 200) {
+  //       toast.success("Đơn hàng đã được hủy thành công.");
+       
+  //       navigate("/shopping-cart"); 
+  //     } else {
+  //       toast.error("Có lỗi xảy ra khi hủy đơn hàng. Vui lòng thử lại.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error during order cancellation:", error);
+  //     toast.error("Có lỗi xảy ra khi hủy đơn hàng. Vui lòng thử lại.");
+  //   }
+  // };
+
   const handleCancel = async () => {
     const token = localStorage.getItem("token");
     if (!token) {
-      console.error("No token found.");
-      toast.error("Lỗi: Không tìm thấy mã đơn hàng.");
-      return;
+        console.error("No token found.");
+        toast.error("Lỗi: Không tìm thấy mã đơn hàng.");
+        return;
     }
   
-    const email = formData.email; // Get the email from form data
-    const checkoutRequest = {
-      cartItemDTO: cartItems.map((item) => ({
-        productName: item.productName,
-        quantity: item.quantity,
-        price: item.discountPrice,
-      })),
-    };
+    const email = formData.email; // Use the email from form data
   
     try {
-      const response = await api.delete(`/orders/cancel-order/${email}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        data: checkoutRequest,
-      });
+        const response = await api.delete(`/orders/cancel-order/${email}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
   
-      if (response.status === 200) {
-        toast.success("Đơn hàng đã được hủy thành công.");
-       
-        navigate("/shopping-cart"); 
-      } else {
-        toast.error("Có lỗi xảy ra khi hủy đơn hàng. Vui lòng thử lại.");
-      }
+        if (response.status === 200) {
+            toast.success("Đơn hàng đã được hủy thành công.");
+            navigate("/shopping-cart"); 
+        } else {
+            toast.error("Có lỗi xảy ra khi hủy đơn hàng. Vui lòng thử lại.");
+        }
     } catch (error) {
-      console.error("Error during order cancellation:", error);
-      toast.error("Có lỗi xảy ra khi hủy đơn hàng. Vui lòng thử lại.");
+        console.error("Error during order cancellation:", error);
+        toast.error("Có lỗi xảy ra khi hủy đơn hàng. Vui lòng thử lại.");
     }
-  };
+};
 
   return (
     <>
