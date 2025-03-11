@@ -8,13 +8,12 @@ import s1 from "../../../assets/home/s1.jpg";
 import s3 from "../../../assets/home/s3.jpg";
 import s4 from "../../../assets/home/s4.jpg";
 import s5 from "../../../assets/home/s5.jpg";
-import s7 from "../../../assets/home/s7.jpg";
-import s8 from "../../../assets/home/s8.jpg";
-import s6 from "../../../assets/home/s6.jpg";
+
 import { Breadcrumb } from "antd";
 import { useNavigate } from "react-router-dom";
 import ProductCard from "../../../component/productCard/ProductCard"; // Import ProductCard component
 import api from "../../../config/api"; // Import API config
+import { Modal, Table } from "antd";
 
 export default function Body() {
   const [suitableProducts, setSuitableProducts] = useState([]); // State to store suitable products
@@ -22,6 +21,7 @@ export default function Body() {
   const [brands, setBrands] = useState([]); // Thêm state brands
   const [currentSlide, setCurrentSlide] = useState(0); // State to track current slide index
   const navigate = useNavigate();
+
   const [topSearchedProducts, setTopSearchedProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const hotDealSlides = [
@@ -32,6 +32,12 @@ export default function Body() {
 
   // Thêm state để track slide của top searched products
   const [topSearchCurrentSlide, setTopSearchCurrentSlide] = useState(0);
+
+  // Thêm các state mới để xử lý so sánh sản phẩm
+  const [compareProducts, setCompareProducts] = useState([]);
+  const [isCompareModalVisible, setIsCompareModalVisible] = useState(false);
+
+  const [skinTypes, setSkinTypes] = useState([]);
 
   // Thêm handlers cho top searched products slides
   const handleTopSearchNext = () => {
@@ -91,7 +97,7 @@ export default function Body() {
       }
     };
 
-    fetchCategories;
+    fetchCategories();
   }, []);
 
   // Fetch các sản phẩm được tìm kiếm nhiều nhất từ API
@@ -168,6 +174,20 @@ export default function Body() {
     fetchDiscounts();
   }, []);
 
+  // Thêm useEffect để fetch skinTypes
+  useEffect(() => {
+    const fetchSkinTypes = async () => {
+      try {
+        const response = await api.get("/skin-types");
+        setSkinTypes(response.data);
+      } catch (error) {
+        console.error("Error fetching skin types:", error);
+      }
+    };
+
+    fetchSkinTypes();
+  }, []);
+
   // Handle adding product to cart
   const handleAddToCart = (product) => {
     // Logic to add product to cart
@@ -209,6 +229,136 @@ export default function Body() {
       className: "breadcrumb-item",
     },
   ];
+
+  // Thêm hàm xử lý so sánh sản phẩm
+  const handleCompareClick = (product) => {
+    if (compareProducts.length < 2) {
+      if (!compareProducts.find((p) => p.productId === product.productId)) {
+        setCompareProducts([...compareProducts, product]);
+        if (compareProducts.length === 1) {
+          setIsCompareModalVisible(true);
+        }
+      }
+    } else {
+      alert("Chỉ có thể so sánh 2 sản phẩm!");
+    }
+  };
+
+  const handleCloseCompare = () => {
+    setIsCompareModalVisible(false);
+    setCompareProducts([]);
+  };
+
+  // Thêm cấu hình cho bảng so sánh
+  const compareColumns = [
+    {
+      title: "Thông tin",
+      dataIndex: "info",
+      key: "info",
+      width: "20%",
+    },
+    {
+      title: "Sản phẩm 1",
+      dataIndex: "product1",
+      key: "product1",
+      width: "40%",
+    },
+    {
+      title: "Sản phẩm 2",
+      dataIndex: "product2",
+      key: "product2",
+      width: "40%",
+    },
+  ];
+
+  const getCompareData = () => {
+    const [p1, p2] = compareProducts;
+    if (!p1 || !p2) return [];
+
+    const brand1 = brands.find((b) => b.brandId === p1.brandId)?.brandName;
+    const brand2 = brands.find((b) => b.brandId === p2.brandId)?.brandName;
+    const category1 = categories.find(
+      (c) => c.categoryId === p1.categoryId
+    )?.categoryName;
+    const category2 = categories.find(
+      (c) => c.categoryId === p2.categoryId
+    )?.categoryName;
+    const skinType1 = skinTypes.find(
+      (s) => s.skinTypeId === p1.skinTypeId
+    )?.skinName;
+    const skinType2 = skinTypes.find(
+      (s) => s.skinTypeId === p2.skinTypeId
+    )?.skinName;
+
+    return [
+      {
+        key: "1",
+        info: "Hình ảnh",
+        product1: (
+          <img
+            src={p1.productImages[0]?.imageURL}
+            alt={p1.productName}
+            style={{ width: "100px" }}
+          />
+        ),
+        product2: (
+          <img
+            src={p2.productImages[0]?.imageURL}
+            alt={p2.productName}
+            style={{ width: "100px" }}
+          />
+        ),
+      },
+      {
+        key: "2",
+        info: "Tên sản phẩm",
+        product1: p1.productName,
+        product2: p2.productName,
+      },
+      {
+        key: "3",
+        info: "Thương hiệu",
+        product1: brand1,
+        product2: brand2,
+      },
+      {
+        key: "4",
+        info: "Danh mục",
+        product1: category1,
+        product2: category2,
+      },
+      {
+        key: "5",
+        info: "Loại da phù hợp",
+        product1: skinType1 || "Chưa có thông tin",
+        product2: skinType2 || "Chưa có thông tin",
+      },
+      {
+        key: "6",
+        info: "Giá gốc",
+        product1: `${p1.unitPrice.toLocaleString()}đ`,
+        product2: `${p2.unitPrice.toLocaleString()}đ`,
+      },
+      {
+        key: "7",
+        info: "Giá khuyến mãi",
+        product1: `${p1.discountPrice.toLocaleString()}đ`,
+        product2: `${p2.discountPrice.toLocaleString()}đ`,
+      },
+      {
+        key: "8",
+        info: "Mô tả",
+        product1: p1.description,
+        product2: p2.description,
+      },
+      {
+        key: "9",
+        info: "Thành phần",
+        product1: p1.ingredients,
+        product2: p2.ingredients,
+      },
+    ];
+  };
 
   return (
     <>
@@ -255,9 +405,9 @@ export default function Body() {
               <div className="col-3" key={product.productId}>
                 <ProductCard
                   product={product}
-                  discounts={discounts} // Pass discounts to ProductCard
-                  brands={brands} // Truyền brands vào ProductCard
-                  // handleAddToCart={handleAddToCart}
+                  discounts={discounts}
+                  brands={brands}
+                  onCompareClick={handleCompareClick}
                 />
               </div>
             ))}
@@ -318,6 +468,7 @@ export default function Body() {
                       discounts={discounts}
                       brands={brands}
                       categories={categories}
+                      onCompareClick={handleCompareClick}
                     />
                   )}
                 </div>
@@ -372,6 +523,22 @@ export default function Body() {
           </div>
         </div>
       </div>
+
+      {/* Thêm Modal so sánh */}
+      <Modal
+        title="So sánh sản phẩm"
+        open={isCompareModalVisible}
+        onCancel={handleCloseCompare}
+        width={1000}
+        footer={null}
+      >
+        <Table
+          columns={compareColumns}
+          dataSource={getCompareData()}
+          pagination={false}
+          bordered
+        />
+      </Modal>
     </>
   );
 }
