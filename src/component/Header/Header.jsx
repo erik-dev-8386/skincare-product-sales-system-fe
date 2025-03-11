@@ -289,13 +289,13 @@ export default function Header() {
                   onClick={handleLogout}
                   style={{ cursor: "pointer", color: "white" }}
                 >
-                 <p><i class="fa-solid fa-right-from-bracket"></i> Đăng xuất</p>
+                 <p><i className="fa-solid fa-right-from-bracket"></i> Đăng xuất</p>
                 </li>
               </>
             ) : (
               <>
                 <li>
-                  <Link to="/login-and-signup"> <p><i class="fa-solid fa-right-to-bracket"></i> Đăng nhập/Đăng ký</p></Link>
+                  <Link to="/login-and-signup"> <p><i className="fa-solid fa-right-to-bracket"></i> Đăng nhập/Đăng ký</p></Link>
                 </li>
                 {/* <li>
                   <Link to="/login-and-signup">Đăng ký</Link>
