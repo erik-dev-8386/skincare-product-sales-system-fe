@@ -77,7 +77,7 @@ const StaffManagement = () => {
 
   const fetchStaff = async () => {
     try {
-      const response = await api.get('/users');
+      const response = await api.get('/users/admin-staff');
       setStaffList(response.data);
     } catch (error) {
       console.error("Error fetching staff:", error);

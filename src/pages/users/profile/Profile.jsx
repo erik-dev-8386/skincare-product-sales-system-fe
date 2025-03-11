@@ -36,7 +36,7 @@ export default function Profile() {
           lastName: data.lastName,
           email: data.email,
           gender: data.gender,
-          phoneNumber: data.phone,
+          phone: data.phone,
           address: data.address,
           birthDate: data.birthDate ? moment(data.birthDate) : null,
         });
@@ -50,26 +50,69 @@ export default function Profile() {
 
   const onFinish = async (values) => {
     const formData = new FormData();
-    formData.append('firstName', values.firstName);
-    formData.append('lastName', values.lastName);
-    formData.append('email', values.email);
-    formData.append('gender', values.gender);
-    formData.append('phone', values.phone);
-    formData.append('address', values.address);
-    if (values.birthDate) {
-      formData.append('birthDate', values.birthDate.format('YYYY-MM-DD'));
-    }
+  
+    // Append user data as JSON string
+    formData.append('users', JSON.stringify({
+      firstName: values.firstName,
+      lastName: values.lastName,
+      email: values.email,
+      gender: values.gender,
+      phone: values.phone,
+      address: values.address,
+      birthDate: values.birthDate ? values.birthDate.format('YYYY-MM-DD') : null,
+    }));
+  
+    // Append the image or null
     if (fileList.length > 0) {
-      formData.append('image', fileList[0].originFileObj);
+      formData.append('images', fileList[0].originFileObj);
+    } else {
+      formData.append('images', null); // Explicitly set null if no image is uploaded
     }
+  
     try {
-      await api.put(`/users/update/${values.email}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+      await api.put(`/users/update/${values.email}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data', // This should be correct for file uploads
+        },
+      });
       toast.success('Chỉnh sửa thông tin thành công!');
       setIsEditing(false);
     } catch (error) {
       toast.error('Chỉnh sửa thông tin không thành công!');
     }
   };
+
+  // const onFinish = async (values) => {
+  //   const formData = new FormData();
+    
+  //   // Append user data as JSON string
+  //   formData.append('users', JSON.stringify({
+  //     firstName: values.firstName,
+  //     lastName: values.lastName,
+  //     email: values.email,
+  //     gender: values.gender,
+  //     phone: values.phone,
+  //     address: values.address,
+  //     birthDate: values.birthDate ? values.birthDate.format('YYYY-MM-DD') : null,
+  //   }));
+    
+  //   // Append the image with the correct key
+  //   if (fileList.length > 0) {
+  //     formData.append('images', fileList[0].originFileObj);
+  //   }
+    
+  //   try {
+  //     await api.put(`/users/update/${values.email}`, formData, {
+  //       headers: {
+  //         'Content-Type': 'multipart/form-data', // This line may not be needed
+  //       },
+  //     });
+  //     toast.success('Chỉnh sửa thông tin thành công!');
+  //     setIsEditing(false);
+  //   } catch (error) {
+  //     toast.error('Chỉnh sửa thông tin không thành công!');
+  //   }
+  // };
 
   return (
     <div className="profile-container">
@@ -80,7 +123,10 @@ export default function Profile() {
           <Col span={8}><Form.Item name="firstName" label="Tên"><Input disabled={!isEditing} /></Form.Item></Col>
           <Col span={8}><Form.Item name="lastName" label="Họ"><Input disabled={!isEditing} /></Form.Item></Col>
           <Col span={8}><Form.Item name="gender" label="Giới tính">
-            <Select disabled={!isEditing}><Option value="other">Khác</Option><Option value="men">Nam</Option><Option value="women">Nữ</Option></Select>
+            <Select disabled={!isEditing}>
+              <Option value="other">Khác</Option>
+              <Option value="men">Nam</Option>
+              <Option value="women">Nữ</Option></Select>
           </Form.Item></Col>
         </Row>
         <Row gutter={16}>
