@@ -25,9 +25,15 @@ const AdminLayout = () => {
     { key: "/admin/list-staff", icon: <i className="fa-solid fa-user-tie"></i>, label: "Nhân viên" },
     {
       key: "/admin/product-management",
-      icon: <InboxOutlined />,
+      icon: <i className="fa-solid fa-box"></i>,
       label: "Sản phẩm",
     },
+    {
+      key: "/admin/order-management",
+      icon:  <i className="fa-solid fa-cart-flatbed"></i>,
+      label: "Đơn hàng",
+    },
+   
     {
       key: "/admin/brand-management",
       icon: <i className="fa-brands fa-font-awesome"></i>,
@@ -50,7 +56,7 @@ const AdminLayout = () => {
     },
     {
       key: "/admin/question-management",
-      icon: <QuestionOutlined />,
+      icon: <i className="fa-solid fa-question"></i>,
       label: "Câu hỏi",
     },
     {

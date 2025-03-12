@@ -52,9 +52,14 @@ const ProductManagement = () => {
       render: (text) => formatPrice(text),
     },
     {
-      title: "Số lượng",
+      title: "Số lượng tồn kho",
       dataIndex: "quantity",
       key: "quantity",
+    },
+    {
+      title: "Số lượng đã bán",
+      dataIndex: "soldQuantity",
+      key: "soldQuantity",
     },
     {
       title: "Giảm giá (%)",
@@ -381,6 +386,7 @@ const ProductManagement = () => {
               >
                 <Input type="number" />
               </Form.Item>
+             
             </Col>
             {/* Cột 2 */}
             <Col span={12}>
@@ -635,7 +641,10 @@ const ProductManagement = () => {
               <strong>Thành phần: </strong> {selectedProduct.ingredients}
             </p>
             <p>
-              <strong>Số lượng: </strong> {selectedProduct.quantity}
+              <strong>Số lượng tồn kho: </strong> {selectedProduct.quantity}
+            </p>
+            <p>
+              <strong>Số lượng đã bán: </strong> {selectedProduct.soldQuantity}
             </p>
             <p>
               <strong>Ngày tạo: </strong>{" "}

@@ -36,6 +36,13 @@ const ProductCard = ({
 
   return (
     <Card
+    style={{
+      display: "flex",
+      justifyContent: "center",
+      flexDirection: "column",
+      alignItems: "center",
+      textAlign: "center",
+    }}
       hoverable
       cover={[
         <p
@@ -64,23 +71,24 @@ const ProductCard = ({
       onClick={() => navigate(`/products/${product.productId}`)}
     >
       <Meta
+      
         title={
-          <p style={{ display: "flex", justifyContent: "center" }}>
+          <p>
             {product.productName}
           </p>
         }
         description={
           <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              flexDirection: "column",
-              alignItems: "center",
-            }}
+            // style={{
+            //   display: "flex",
+            //   justifyContent: "space-between",
+            //   flexDirection: "column",
+            //   alignItems: "center",
+            // }}
           >
             <p>{findBrandNameById(product.brandId)}</p>
             {/* Hiển thị brandName thay vì brandId */}
-            <strong>
+            <strong style={{ color: "green" }}>
               {formatPrice(product.discountPrice)}
               <span style={{ textDecoration: "underline" }}>đ</span>
             </strong>
@@ -98,11 +106,11 @@ const ProductCard = ({
         }
       />
       <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          marginTop: "10px",
-        }}
+        // style={{
+        //   display: "flex",
+        //   justifyContent: "center",
+        //   marginTop: "10px",
+        // }}
       >
         <Button
           type="primary"
