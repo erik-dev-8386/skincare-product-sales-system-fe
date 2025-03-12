@@ -39,6 +39,10 @@ export default function Body() {
 
   const [skinTypes, setSkinTypes] = useState([]);
 
+  // Thêm state mới cho best seller products
+  const [bestSellerProducts, setBestSellerProducts] = useState([]);
+  const [bestSellerCurrentSlide, setBestSellerCurrentSlide] = useState(0);
+
   // Thêm handlers cho top searched products slides
   const handleTopSearchNext = () => {
     setTopSearchCurrentSlide((prevSlide) =>
@@ -54,10 +58,31 @@ export default function Body() {
     );
   };
 
+  // Thêm handlers cho best seller slides
+  const handleBestSellerNext = () => {
+    setBestSellerCurrentSlide((prevSlide) =>
+      prevSlide + 3 < bestSellerProducts.length ? prevSlide + 3 : 0
+    );
+  };
+
+  const handleBestSellerPrev = () => {
+    setBestSellerCurrentSlide((prevSlide) =>
+      prevSlide - 3 >= 0
+        ? prevSlide - 3
+        : Math.max(0, bestSellerProducts.length - 3)
+    );
+  };
+
   // Tính toán sản phẩm hiển thị cho top searched
   const visibleTopSearchProducts = topSearchedProducts.slice(
     topSearchCurrentSlide,
     topSearchCurrentSlide + 3
+  );
+
+  // Tính toán sản phẩm hiển thị cho best seller
+  const visibleBestSellerProducts = bestSellerProducts.slice(
+    bestSellerCurrentSlide,
+    bestSellerCurrentSlide + 3
   );
 
   // Fetch suitable products from API
@@ -186,6 +211,21 @@ export default function Body() {
     };
 
     fetchSkinTypes();
+  }, []);
+
+  // Thêm useEffect để fetch best seller products
+  useEffect(() => {
+    const fetchBestSellerProducts = async () => {
+      try {
+        const response = await api.get("/products/best-seller");
+        setBestSellerProducts(response.data);
+      } catch (error) {
+        console.error("Error fetching best seller products:", error);
+        setBestSellerProducts([]);
+      }
+    };
+
+    fetchBestSellerProducts();
   }, []);
 
   // Handle adding product to cart
@@ -494,6 +534,71 @@ export default function Body() {
               &gt;
             </button>
           </div>
+
+          {/* ============================================ */}
+          <div className="col-12">
+            <h3 className="san">Top Best Seller</h3>
+          </div>
+
+          <div
+            className="row"
+            style={{
+              justifyContent: "center",
+              marginBottom: "50px",
+              position: "relative",
+            }}
+          >
+            {/* Prev Button */}
+            <button
+              onClick={handleBestSellerPrev}
+              className="slider-control prev"
+              style={{
+                position: "absolute",
+                left: "-50px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                backgroundColor: "gray",
+              }}
+            >
+              &lt;
+            </button>
+
+            {/* Best Seller Products */}
+            {bestSellerProducts && bestSellerProducts.length > 0 ? (
+              visibleBestSellerProducts.map((product) => (
+                <div className="col-4" key={`bestseller-${product.productId}`}>
+                  <ProductCard
+                    product={product}
+                    discounts={discounts}
+                    brands={brands}
+                    categories={categories}
+                    onCompareClick={handleCompareClick}
+                  />
+                </div>
+              ))
+            ) : (
+              <div className="col-12 text-center">
+                <p>Không có sản phẩm nào.</p>
+              </div>
+            )}
+
+            {/* Next Button */}
+            <button
+              onClick={handleBestSellerNext}
+              className="slider-control next"
+              style={{
+                position: "absolute",
+                right: "-50px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                backgroundColor: "gray",
+              }}
+            >
+              &gt;
+            </button>
+          </div>
+
+          {/* ==================================================== */}
 
           <div className="col-12">
             <h3 className="san">Blog</h3>
