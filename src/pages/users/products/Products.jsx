@@ -380,7 +380,7 @@ export default function Products() {
             justifyContent: "space-between",
           }}
         >
-          <h1 style={{ color: "#333" }}>Sản phẩm của Haven Skin</h1>
+          <h1>Sản phẩm của Haven Skin</h1>
           {/* <Badge count={cart.length}>
             <ShoppingCartOutlined
               style={{ fontSize: "24px", cursor: "pointer" }}

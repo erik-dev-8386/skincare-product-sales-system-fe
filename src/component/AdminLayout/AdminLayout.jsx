@@ -22,7 +22,7 @@ const AdminLayout = () => {
   const menuItems = [
     { key: "/admin", icon: <DashboardOutlined />, label: "Bảng điều khiển" },
     { key: "/admin/list-user", icon: <UserOutlined />, label: "Khách hàng" },
-    { key: "/admin/list-staff", icon: <UserOutlined />, label: "Nhân viên" },
+    { key: "/admin/list-staff", icon: <i className="fa-solid fa-user-tie"></i>, label: "Nhân viên" },
     {
       key: "/admin/product-management",
       icon: <InboxOutlined />,
@@ -30,7 +30,7 @@ const AdminLayout = () => {
     },
     {
       key: "/admin/brand-management",
-      icon: <InboxOutlined />,
+      icon: <i className="fa-brands fa-font-awesome"></i>,
       label: "Thương hiệu",
     },
     {

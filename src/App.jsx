@@ -42,6 +42,9 @@ import QuestionManagement from "./pages/admin/QuestionManagement/QuestionManagem
 import AnswerManagement from "./pages/admin/AnswerManagement/AnswerManagement.jsx";
 import Profile from "./pages/users/profile/Profile.jsx";
 import ProfileLayout from "../src/component/ProfileLayout/ProfileLayout.jsx";
+import History from "./pages/users/profile/History.jsx";
+
+
 function App() {
   return (
     <Routes>
@@ -79,7 +82,9 @@ function App() {
       {/* profile user */}
       <Route path='/user' element={<ProfileLayout />}>
         <Route index element={<Profile />} />
-        {/* <Route path='edit' element={<EditProfile />} /> */}
+        <Route path='/user/history' element={<History />} />
+        
+        
       </Route>
 
       {/* admin */}
