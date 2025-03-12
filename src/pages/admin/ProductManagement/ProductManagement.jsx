@@ -1,17 +1,4 @@
-import {
-  Button,
-  Form,
-  Input,
-  Modal,
-  Table,
-  Popconfirm,
-  DatePicker,
-  Col,
-  Row,
-  Tag,
-  Upload,
-  Image,
-} from "antd";
+import {Button, Form, Input, Modal, Table, Popconfirm, DatePicker, Col, Row, Tag, Upload, Image} from "antd";
 import { useForm } from "antd/es/form/Form";
 import { UploadOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";

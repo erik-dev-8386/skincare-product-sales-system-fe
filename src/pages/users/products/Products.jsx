@@ -290,6 +290,7 @@ export default function Products() {
         info: "Mô tả",
         product1: p1.description,
         product2: p2.description,
+        
       },
       {
         key: "9",

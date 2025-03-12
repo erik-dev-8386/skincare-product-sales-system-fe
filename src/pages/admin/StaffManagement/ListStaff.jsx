@@ -77,7 +77,7 @@ const StaffManagement = () => {
 
   const fetchStaff = async () => {
     try {
-      const response = await api.get('/users');
+      const response = await api.get('/users/admin-staff');
       setStaffList(response.data);
     } catch (error) {
       console.error("Error fetching staff:", error);
@@ -212,7 +212,7 @@ const StaffManagement = () => {
       >
         {selectedStaff && (
           <div>
-            <p><strong>ID: </strong> {selectedStaff.id}</p>
+            <p><strong>ID: </strong> {selectedStaff.userId}</p>
             <p><strong>Họ: </strong> {selectedStaff.firstName}</p>
             <p><strong>Tên: </strong> {selectedStaff.lastName}</p>
             <p><strong>Giới tính: </strong> {selectedStaff.gender}</p>
