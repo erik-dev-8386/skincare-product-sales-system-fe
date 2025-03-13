@@ -280,7 +280,7 @@ export default function Header() {
                 <li>
                   <Link to="/user"><p><i className="fa-solid fa-address-card"></i> Hồ sơ</p></Link>
                 </li>
-                {role === 1 && (
+                {(role === 1 || role === 2)  && (
                   <li>
                     <Link to="/admin"><p><DashboardOutlined /> Bảng điều khiển</p></Link>
                   </li>

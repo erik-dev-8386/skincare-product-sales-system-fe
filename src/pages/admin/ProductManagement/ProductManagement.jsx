@@ -22,6 +22,7 @@ const ProductManagement = () => {
   const [discounts, setDiscounts] = useState([]);
   const [imageFiles, setImageFiles] = useState([]); // State for image files
   const [imagePreviews, setImagePreviews] = useState([]); // State for image previews
+  const [searchText, setSearchText] = useState("");
 
   const statusMapping = {
     1: { text: "CÓ SẴN", color: "green" },
@@ -204,6 +205,16 @@ const ProductManagement = () => {
     fetchProduct();
   }, []);
 
+  const handleSearch = async () => {
+    try {
+      const response = await api.get(`/products/search/${searchText}`);
+      setProductList(response.data);
+    } catch (error) {
+      console.error("Error searching discounts:", error);
+      toast.error("Tìm kiếm sản phẩm không thành công!");
+    }
+  };
+
   const handleOpenModal = () => {
     setModalOpen(true);
   };
@@ -316,10 +327,30 @@ const ProductManagement = () => {
     <div>
       <ToastContainer />
       <h1>Quản lý sản phẩm</h1>
+      <div style={{ marginBottom: 16 }}>
+        <Input
+          placeholder="Nhập tên sản phẩm để tìm kiếm"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          style={{ width: 300, marginRight: 8 }}
+        />
+        <Button type="primary" onClick={handleSearch}>
+          Tìm kiếm
+        </Button>
+        <Button
+          onClick={() => {
+            setSearchText("");
+            fetchProduct();
+          }}
+          style={{ margin: 8 }}
+        >
+          Reset
+        </Button>
       <Button type="primary" onClick={handleOpenModal}>
         <i className="fa-solid fa-plus"></i>
         Thêm sản phẩm mới
       </Button>
+      </div>
       <Table
         dataSource={ProductList}
         columns={columns}
