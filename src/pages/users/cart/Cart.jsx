@@ -46,7 +46,7 @@
 //           firstName: data.firstName || prev.firstName,
 //           lastName: data.lastName || prev.lastName,
 //           email: data.email || prev.email,
-//           phone: data.phoneNumber || prev.phoneNumber,
+//           phone: data.phone || prev.phone,
 //           address: data.address || prev.address,
 //         }));
 //       } catch (error) {
@@ -82,7 +82,7 @@
 //         window.location.href = paymentUrl; // Redirect to VNPay payment page
 
 //         // Reset cart items after successful payment
-//         setCart([]); 
+//         setCart([]);
 //         setCartItems([]);
 //         // Optionally, you may want to navigate to a success page or show a success message
 //       } catch (error) {
@@ -91,7 +91,7 @@
 //       }
 //     } else {
 //       alert("Thanh toán thành công!");
-//       setCart([]); 
+//       setCart([]);
 //       setCartItems([]); // Reset cart items for COD as well
 //       navigate("/");
 //     }
@@ -220,7 +220,18 @@ export default function Cart() {
   const initialCartItems = location.state?.cartItems || [];
 
   const [cartItems, setCartItems] = useState(initialCartItems);
-  const [checkoutResponse, setCheckoutResponse] = useState(initialCheckoutResponse);
+  const [checkoutResponse, setCheckoutResponse] = useState(
+    initialCheckoutResponse
+  );
+
+ const orderId = checkoutResponse?.orderId; // Extract orderId safely
+
+  if (!orderId) {
+    console.error("Order ID is missing!");
+    toast.error("Lỗi: Không tìm thấy mã đơn hàng.");
+    return;
+  }
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -260,7 +271,7 @@ export default function Cart() {
           firstName: data.firstName || prev.firstName,
           lastName: data.lastName || prev.lastName,
           email: data.email || prev.email,
-          phone: data.phoneNumber || prev.phone,
+          phone: data.phone || prev.phone,
           address: data.address || prev.address,
         }));
       } catch (error) {
@@ -275,42 +286,43 @@ export default function Cart() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const totalQuantity = checkoutResponse?.cartItems?.reduce(
-    (total, item) => total + item.quantity,
-    0
-  ) || 0;
+  const totalQuantity =
+    checkoutResponse?.cartItems?.reduce(
+      (total, item) => total + item.quantity,
+      0
+    ) || 0;
 
-  const subtotal = checkoutResponse?.cartItems?.reduce(
-    (total, item) => total + item.discountPrice * item.quantity,
-    0
-  ) || 0;
+  const subtotal =
+    checkoutResponse?.cartItems?.reduce(
+      (total, item) => total + item.discountPrice * item.quantity,
+      0
+    ) || 0;
 
   const rewardPoints = Math.floor(subtotal * 0.01);
   const finalTotal = subtotal;
 
-
   //   const handleCheckout = async () => {
-//     if (formData.paymentMethod === "vnpay") {
-//       try {
-//         const response = await api.get('/vnpays/pay'); // Call your backend to generate VNPay URL
-//         const paymentUrl = response.data; // Assuming your backend returns the payment URL
-//         window.location.href = paymentUrl; // Redirect to VNPay payment page
+  //     if (formData.paymentMethod === "vnpay") {
+  //       try {
+  //         const response = await api.get('/vnpays/pay'); // Call your backend to generate VNPay URL
+  //         const paymentUrl = response.data; // Assuming your backend returns the payment URL
+  //         window.location.href = paymentUrl; // Redirect to VNPay payment page
 
-//         // Reset cart items after successful payment
-//         setCart([]); 
-//         setCartItems([]);
-//         // Optionally, you may want to navigate to a success page or show a success message
-//       } catch (error) {
-//         console.error("Error during payment process:", error);
-//         alert("Có lỗi xảy ra khi thanh toán. Vui lòng thử lại.");
-//       }
-//     } else {
-//       alert("Thanh toán thành công!");
-//       setCart([]); 
-//       setCartItems([]); // Reset cart items for COD as well
-//       navigate("/");
-//     }
-//   };
+  //         // Reset cart items after successful payment
+  //         setCart([]);
+  //         setCartItems([]);
+  //         // Optionally, you may want to navigate to a success page or show a success message
+  //       } catch (error) {
+  //         console.error("Error during payment process:", error);
+  //         alert("Có lỗi xảy ra khi thanh toán. Vui lòng thử lại.");
+  //       }
+  //     } else {
+  //       alert("Thanh toán thành công!");
+  //       setCart([]);
+  //       setCartItems([]); // Reset cart items for COD as well
+  //       navigate("/");
+  //     }
+  //   };
 
   const handleCheckout = async () => {
     const checkoutRequest = {
@@ -320,41 +332,48 @@ export default function Cart() {
         quantity: item.quantity,
         price: item.discountPrice,
       })),
+      orderId: orderId,
+      total: finalTotal,
     };
-  
+
     if (formData.paymentMethod === "vnpay") {
       try {
         // Gọi API backend để lấy URL thanh toán VNPay
-        const response = await api.get('/vnpays/pay', checkoutRequest);
-  
+        const response = await api.get(`/vnpays/pay/${orderId}`, checkoutRequest);
+
         // Kiểm tra xem paymentUrl có tồn tại không
         const paymentUrl = response.data;
+        console.log("Payment URL:", paymentUrl);
         if (!paymentUrl) {
           throw new Error("Không nhận được URL thanh toán từ VNPay.");
         }
-  
+
         // Chuyển hướng đến trang thanh toán VNPay
         window.location.href = paymentUrl;
       } catch (error) {
         console.error("Error during VNPay payment process:", error);
-        toast.error("Có lỗi xảy ra khi thanh toán qua VNPay. Vui lòng thử lại.");
+        toast.error(
+          "Có lỗi xảy ra khi thanh toán qua VNPay. Vui lòng thử lại."
+        );
       }
     } else {
       try {
-        const response = await api.post('/cart/checkout', checkoutRequest);
+        const response = await api.post("/cart/checkout", checkoutRequest);
         const checkoutResponse = response.data;
-  
+
         setCheckoutResponse(checkoutResponse); // Update checkout response state
-  
+
         // Tính toán total nếu API không trả về
         const total = checkoutResponse.total || subtotal;
-  
-        toast.success(`Thanh toán thành công! Tổng tiền: ${total.toLocaleString()} đ`);
-  
+
+        toast.success(
+          `Thanh toán thành công! Tổng tiền: ${total.toLocaleString()} đ`
+        );
+
         // Reset cart items after successful checkout
         setCart([]);
         setCartItems([]);
-  
+
         // Delay navigation for 3 seconds
         setTimeout(() => {
           navigate("/"); // Redirect to homepage or success page
@@ -365,6 +384,74 @@ export default function Cart() {
       }
     }
   };
+
+  // const handleCancel = async () => {
+  //   const token = localStorage.getItem("token");
+  //   if (!token) {
+  //     console.error("No token found.");
+  //     toast.error("Lỗi: Không tìm thấy mã đơn hàng.");
+  //     return;
+  //   }
+  
+  //   const email = formData.email; // Get the email from form data
+  //   const checkoutRequest = {
+  //     cartItemDTO: cartItems.map((item) => ({
+  //       productName: item.productName,
+  //       quantity: item.quantity,
+  //       price: item.discountPrice,
+  //     })),
+  //   };
+  
+  //   try {
+  //     const response = await api.delete(`/orders/cancel-order/${email}`, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //       data: checkoutRequest,
+  //     });
+  
+  //     if (response.status === 200) {
+  //       toast.success("Đơn hàng đã được hủy thành công.");
+       
+  //       navigate("/shopping-cart"); 
+  //     } else {
+  //       toast.error("Có lỗi xảy ra khi hủy đơn hàng. Vui lòng thử lại.");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error during order cancellation:", error);
+  //     toast.error("Có lỗi xảy ra khi hủy đơn hàng. Vui lòng thử lại.");
+  //   }
+  // };
+
+  const handleCancel = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+        console.error("No token found.");
+        toast.error("Lỗi: Không tìm thấy mã đơn hàng.");
+        return;
+    }
+  
+    const email = formData.email; // Use the email from form data
+    //const orderId = orderId; // Use the orderId from form data
+  
+    try {
+        const response = await api.delete(`/orders/cancel-order/${email}/${orderId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+  
+        if (response.status === 200) {
+            toast.success("Đơn hàng đã được hủy thành công.");
+            navigate("/shopping-cart"); 
+        } else {
+            toast.error("Có lỗi xảy ra khi hủy đơn hàng. Vui lòng thử lại.");
+        }
+    } catch (error) {
+        console.error("Error during order cancellation:", error);
+        toast.error("Có lỗi xảy ra khi hủy đơn hàng. Vui lòng thử lại.");
+    }
+};
 
   return (
     <>
@@ -398,14 +485,22 @@ export default function Cart() {
                       />
                     </td>
                     <td>{item.productName}</td>
-                    <td>{formatPrice(item.discountPrice)} <span style={{ textDecoration: "underline" }}>đ</span></td>
+                    <td>
+                      {formatPrice(item.discountPrice)}{" "}
+                      <span style={{ textDecoration: "underline" }}>đ</span>
+                    </td>
                     <td>{item.quantity}</td>
-                    <td>{formatPrice(item.quantity * item.discountPrice)} <span style={{ textDecoration: "underline" }}>đ</span></td>
+                    <td>
+                      {formatPrice(item.quantity * item.discountPrice)}{" "}
+                      <span style={{ textDecoration: "underline" }}>đ</span>
+                    </td>
                   </tr>
                 ))
               ) : (
                 <tr>
-                  <td colSpan="5" style={{ textAlign: "center" }}>Không có sản phẩm nào trong giỏ hàng.</td>
+                  <td colSpan="5" style={{ textAlign: "center" }}>
+                    Không có sản phẩm nào trong giỏ hàng.
+                  </td>
                 </tr>
               )}
             </tbody>
@@ -436,8 +531,12 @@ export default function Cart() {
 
           <div className="order-info">
             <h2>Thông tin đơn hàng</h2>
-            <p><strong>Tổng sản phẩm đã chọn:</strong> {totalQuantity}</p>
-            <p><strong>Tích điểm:</strong> {rewardPoints} điểm</p>
+            <p>
+              <strong>Tổng sản phẩm đã chọn:</strong> {totalQuantity}
+            </p>
+            <p>
+              <strong>Tích điểm:</strong> {rewardPoints} điểm
+            </p>
 
             <div className="payment-method">
               <h5 style={{ fontWeight: 700 }}>Chọn phương thức thanh toán</h5>
@@ -464,8 +563,11 @@ export default function Cart() {
             </div>
 
             <div className="total-payment">
-              <p style={{ color: "black", fontSize: 20, fontWeight: "bold" }}>Tổng thanh toán:</p> 
-              {(checkoutResponse?.total || subtotal).toLocaleString()} <span style={{ textDecoration: "underline" }}>đ</span>
+              <p style={{ color: "black", fontSize: 20, fontWeight: "bold" }}>
+                Tổng thanh toán:
+              </p>
+              {(checkoutResponse?.total || subtotal).toLocaleString()}{" "}
+              <span style={{ textDecoration: "underline" }}>đ</span>
             </div>
 
             <div className="buttons">
@@ -473,7 +575,7 @@ export default function Cart() {
                 Mua
               </button>
               <button
-                onClick={() => navigate("/shopping-cart")}
+                onClick={handleCancel}
                 className="btn secondary"
               >
                 Hủy

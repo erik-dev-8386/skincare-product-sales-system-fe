@@ -1,8 +1,7 @@
-import { Button, Form, Input, Modal, Table, Popconfirm, DatePicker, Col, Row, Tag } from "antd";
+import { Button, Form, Input, Modal, Table, Popconfirm, DatePicker, Col, Row, Tag, Select } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
-import { Select } from "antd";
 import api from "../../../config/api";
 import dayjs from "dayjs";
 import MyEditor from "../../../component/TinyMCE/MyEditor";
@@ -15,6 +14,7 @@ const DiscountManagement = () => {
   const [editingDiscount, setEditingDiscount] = useState(null);
   const [isDetailModalOpen, setDetailModalOpen] = useState(false);
   const [selectedDiscount, setSelectedDiscount] = useState(null);
+  const [searchText, setSearchText] = useState("");
 
   const statusMapping = {
     0: { text: "HẾT HẠN", color: "red" },
@@ -119,6 +119,16 @@ const DiscountManagement = () => {
     fetchDiscount();
   }, []);
 
+  const handleSearch = async () => {
+    try {
+      const response = await api.get(`/discounts/search/${searchText}`);
+      setDiscountList(response.data);
+    } catch (error) {
+      console.error("Error searching discounts:", error);
+      toast.error("Tìm kiếm giảm giá không thành công!");
+    }
+  };
+
   const handleOpenModal = () => {
     setModalOpen(true);
   };
@@ -140,19 +150,17 @@ const DiscountManagement = () => {
   };
 
   const handleSubmitForm = async (values) => {
-    // Check for duplicate discount name
     const isDuplicate = discountList.some(
       (discount) =>
         discount.discountName === values.discountName &&
-        (!editingDiscount || discount.discountId !== editingDiscount.discountId) // Allow editing the same discount
+        (!editingDiscount || discount.discountId !== editingDiscount.discountId)
     );
 
     if (isDuplicate) {
       toast.error("Tên giảm giá đã tồn tại! Vui lòng nhập tên khác.");
-      return; // Prevent form submission
+      return;
     }
 
-    // Convert date to YYYY-MM-DD format
     const formattedValues = {
       ...values,
       createdTime: values.createdTime?.format('YYYY-MM-DD'),
@@ -162,7 +170,6 @@ const DiscountManagement = () => {
     };
 
     if (editingDiscount) {
-      // Update existing discount
       formattedValues.discountId = editingDiscount.discountId;
       try {
         await api.put(`/discounts/${editingDiscount.discountId}`, formattedValues);
@@ -173,7 +180,6 @@ const DiscountManagement = () => {
         toast.error("Cập nhật giảm giá không thành công!");
       }
     } else {
-      // Add new Discount
       try {
         await api.post('/discounts', formattedValues);
         toast.success("Đã thêm giảm giá mới thành công!");
@@ -211,9 +217,29 @@ const DiscountManagement = () => {
     <div>
       <ToastContainer />
       <h1>Quản lý giảm giá</h1>
-      <Button type="primary" onClick={handleOpenModal}>
-        <i className="fa-solid fa-plus"></i> Thêm giảm giá mới
-      </Button>
+      <div style={{ marginBottom: 16 }}>
+        <Input
+          placeholder="Nhập tên giảm giá để tìm kiếm"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          style={{ width: 300, marginRight: 8 }}
+        />
+        <Button type="primary" onClick={handleSearch}>
+          Tìm kiếm
+        </Button>
+        <Button
+          onClick={() => {
+            setSearchText("");
+            fetchDiscount();
+          }}
+          style={{ marginLeft: 8 }}
+        >
+          Reset
+        </Button>
+        <Button type="primary" onClick={handleOpenModal} style={{ marginLeft: 8 }}>
+          <i className="fa-solid fa-plus"></i> Thêm giảm giá mới
+        </Button>
+      </div>
       <Table dataSource={discountList} columns={columns} rowKey="discountId" style={{ marginTop: 16 }} />
       <Modal
         title={editingDiscount ? "Chỉnh sửa giảm giá" : "Tạo giảm giá mới"}
@@ -292,9 +318,22 @@ const DiscountManagement = () => {
               onChange={(value) => form.setFieldsValue({ description: value })}
             />
           </Form.Item>
+          {editingDiscount && (
+            <Form.Item
+              label="Trạng thái"
+              name="status"
+              rules={[{ required: false, message: "Trạng thái không được bỏ trống!" }]}
+            >
+              <Select>
+                <Option value={0}>HẾT HẠN</Option>
+                <Option value={1}>SẮP TỚI</Option>
+                <Option value={2}>HOẠT ĐỘNG</Option>
+                <Option value={3}>BỊ VÔ HIỆU HÓA</Option>
+              </Select>
+            </Form.Item>
+          )}
         </Form>
       </Modal>
-      {/* Modal Chi Tiết */}
       <Modal
         title={<h2>Chi tiết giảm giá</h2>}
         open={isDetailModalOpen}

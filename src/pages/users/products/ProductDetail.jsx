@@ -276,7 +276,10 @@ export default function ProductDetail() {
                     {product.quantity}
                   </span>
                   <span className="text-success ms-2">Trong kho</span>
+                  
+                  
                 </div>
+                <p style={{color: "red"}}><strong style={{color: "black"}}>Đã bán: </strong> {product.soldQuantity}</p>
                 <div className="mb-3" >
                   <span className="h5" >{formatPrice(product.discountPrice)} <span style={{ textDecoration: "underline" }}>đ</span></span>
                   <span className="text-muted"> /mỗi hộp</span>

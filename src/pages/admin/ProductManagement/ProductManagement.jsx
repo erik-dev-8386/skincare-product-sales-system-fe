@@ -1,17 +1,4 @@
-import {
-  Button,
-  Form,
-  Input,
-  Modal,
-  Table,
-  Popconfirm,
-  DatePicker,
-  Col,
-  Row,
-  Tag,
-  Upload,
-  Image,
-} from "antd";
+import {Button, Form, Input, Modal, Table, Popconfirm, DatePicker, Col, Row, Tag, Upload, Image} from "antd";
 import { useForm } from "antd/es/form/Form";
 import { UploadOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
@@ -35,6 +22,7 @@ const ProductManagement = () => {
   const [discounts, setDiscounts] = useState([]);
   const [imageFiles, setImageFiles] = useState([]); // State for image files
   const [imagePreviews, setImagePreviews] = useState([]); // State for image previews
+  const [searchText, setSearchText] = useState("");
 
   const statusMapping = {
     1: { text: "CÓ SẴN", color: "green" },
@@ -65,9 +53,14 @@ const ProductManagement = () => {
       render: (text) => formatPrice(text),
     },
     {
-      title: "Số lượng",
+      title: "Số lượng tồn kho",
       dataIndex: "quantity",
       key: "quantity",
+    },
+    {
+      title: "Số lượng đã bán",
+      dataIndex: "soldQuantity",
+      key: "soldQuantity",
     },
     {
       title: "Giảm giá (%)",
@@ -212,6 +205,16 @@ const ProductManagement = () => {
     fetchProduct();
   }, []);
 
+  const handleSearch = async () => {
+    try {
+      const response = await api.get(`/products/search/${searchText}`);
+      setProductList(response.data);
+    } catch (error) {
+      console.error("Error searching discounts:", error);
+      toast.error("Tìm kiếm sản phẩm không thành công!");
+    }
+  };
+
   const handleOpenModal = () => {
     setModalOpen(true);
   };
@@ -324,10 +327,30 @@ const ProductManagement = () => {
     <div>
       <ToastContainer />
       <h1>Quản lý sản phẩm</h1>
+      <div style={{ marginBottom: 16 }}>
+        <Input
+          placeholder="Nhập tên sản phẩm để tìm kiếm"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          style={{ width: 300, marginRight: 8 }}
+        />
+        <Button type="primary" onClick={handleSearch}>
+          Tìm kiếm
+        </Button>
+        <Button
+          onClick={() => {
+            setSearchText("");
+            fetchProduct();
+          }}
+          style={{ margin: 8 }}
+        >
+          Reset
+        </Button>
       <Button type="primary" onClick={handleOpenModal}>
         <i className="fa-solid fa-plus"></i>
         Thêm sản phẩm mới
       </Button>
+      </div>
       <Table
         dataSource={ProductList}
         columns={columns}
@@ -394,6 +417,7 @@ const ProductManagement = () => {
               >
                 <Input type="number" />
               </Form.Item>
+             
             </Col>
             {/* Cột 2 */}
             <Col span={12}>
@@ -539,7 +563,7 @@ const ProductManagement = () => {
                 label="Giảm giá"
                 name="discountId"
                 rules={[
-                  { required: true, message: "Giảm giá không được để trống!" },
+                  { required: false, message: "Giảm giá không được để trống!" },
                 ]}
               >
                 <Select>
@@ -648,7 +672,10 @@ const ProductManagement = () => {
               <strong>Thành phần: </strong> {selectedProduct.ingredients}
             </p>
             <p>
-              <strong>Số lượng: </strong> {selectedProduct.quantity}
+              <strong>Số lượng tồn kho: </strong> {selectedProduct.quantity}
+            </p>
+            <p>
+              <strong>Số lượng đã bán: </strong> {selectedProduct.soldQuantity}
             </p>
             <p>
               <strong>Ngày tạo: </strong>{" "}

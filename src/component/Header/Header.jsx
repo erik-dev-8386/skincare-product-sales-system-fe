@@ -156,7 +156,7 @@ import "./Header.css";
 import logo from "../../assets/Logo_01.jpg";
 import { jwtDecode } from "jwt-decode";
 import { CartContext } from "../../context/CartContext";
-import { ShoppingCartOutlined } from "@ant-design/icons";
+import { ShoppingCartOutlined, DashboardOutlined  } from "@ant-design/icons";
 import { Badge } from "antd";
 
 export default function Header() {
@@ -278,28 +278,28 @@ export default function Header() {
             {role ? (
               <>
                 <li>
-                  <Link to="/profile">Hồ sơ</Link>
+                  <Link to="/user"><p><i className="fa-solid fa-address-card"></i> Hồ sơ</p></Link>
                 </li>
-                {role === 1 && (
+                {(role === 1 || role === 2)  && (
                   <li>
-                    <Link to="/admin">Admin Dashboard</Link>
+                    <Link to="/admin"><p><DashboardOutlined /> Bảng điều khiển</p></Link>
                   </li>
                 )}
                 <li
                   onClick={handleLogout}
                   style={{ cursor: "pointer", color: "white" }}
                 >
-                  Đăng xuất
+                 <p><i className="fa-solid fa-right-from-bracket"></i> Đăng xuất</p>
                 </li>
               </>
             ) : (
               <>
                 <li>
-                  <Link to="/login-and-signup">Đăng nhập</Link>
+                  <Link to="/login-and-signup"> <p><i className="fa-solid fa-right-to-bracket"></i> Đăng nhập/Đăng ký</p></Link>
                 </li>
-                <li>
+                {/* <li>
                   <Link to="/login-and-signup">Đăng ký</Link>
-                </li>
+                </li> */}
               </>
             )}
           </ul>

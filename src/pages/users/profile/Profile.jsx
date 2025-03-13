@@ -1,207 +1,549 @@
-// import React, { useEffect, useState } from 'react';
-// import { Card, Button, Select, Spin, Form, Input, Modal, notification, Upload, DatePicker, Row, Col } from 'antd';
-// import { UploadOutlined } from '@ant-design/icons';
+// import React, { useState, useEffect } from 'react';
+// import "./Profile.css";
+// import { Form, Input, DatePicker, Upload, Button, Select, message, Row, Col } from 'antd';
 // import api from '../../../config/api';
-// import moment from 'moment';
-// import './ProfilePage.css'; // Import your CSS file
+// import { jwtDecode } from 'jwt-decode';
+// import { ToastContainer, toast } from 'react-toastify';
+// import dayjs from 'dayjs'; // Sử dụng dayjs thay vì moment
 
 // const { Option } = Select;
 
-// const ProfilePage = () => {
-//     const [users, setUsers] = useState([]);
-//     const [user, setUser] = useState(null);
-//     const [loading, setLoading] = useState(true);
-//     const [isModalVisible, setIsModalVisible] = useState(false);
-//     const [form] = Form.useForm();
+// export default function Profile() {
+//   const [form] = Form.useForm();
+//   const [fileList, setFileList] = useState([]);
+//   const [isEditing, setIsEditing] = useState(false);
+//   const [userData, setUserData] = useState({});
 
-//     useEffect(() => {
-//         fetchUsers();
-//     }, []);
+//   useEffect(() => {
+//     const fetchUserData = async () => {
+//       const token = localStorage.getItem("token");
+//       if (!token) {
+//         message.error("No token found. Please login.");
+//         return;
+//       }
 
-//     const fetchUsers = async () => {
-//         setLoading(true);
-//         try {
-//             const response = await api.get('/users');
-//             setUsers(response.data);
-//             if (response.data.length > 0) {
-//                 setUser(response.data[0]);
-//             }
-//         } catch (error) {
-//             console.error("Error fetching users:", error);
-//         } finally {
-//             setLoading(false);
-//         }
-//     };
+//       try {
+//         const decodedToken = jwtDecode(token);
+//         const userEmail = decodedToken.sub;
 
-//     const handleUserChange = async (userId) => {
-//         setLoading(true);
-//         try {
-//             const response = await api.get(`/users/${userId}`);
-//             setUser(response.data);
-//         } catch (error) {
-//             console.error("Error fetching user data:", error);
-//         } finally {
-//             setLoading(false);
-//         }
-//     };
+//         const response = await api.get(`/users/${userEmail}`, {
+//           headers: { Authorization: `Bearer ${token}` },
+//         });
 
-//     const handleEdit = () => {
+//         const data = response.data;
+//         setUserData({
+//           ...data,
+//           birthDate: data.birthDate ? dayjs(data.birthDate) : null, // Chuyển đổi birthDate sang dayjs
+//         });
 //         form.setFieldsValue({
-//             ...user,
-//             birthDate: user.birthDate ? moment(user.birthDate) : null,
+//           firstName: data.firstName,
+//           lastName: data.lastName,
+//           email: data.email,
+//           gender: data.gender,
+//           phone: data.phone,
+//           address: data.address,
+//           birthDate: data.birthDate ? dayjs(data.birthDate) : null, // Chỉ chuyển đổi nếu birthDate tồn tại
 //         });
-//         setIsModalVisible(true);
+//       } catch (error) {
+//         message.error("Failed to fetch user data.");
+//         console.error("Error fetching user data:", error);
+//       }
 //     };
 
-//     const handleDelete = () => {
-//         Modal.confirm({
-//             title: 'Confirm Deletion',
-//             content: 'Do you want to delete your account?',
-//             onOk: async () => {
-//                 setLoading(true);
-//                 try {
-//                     await api.delete(`/users/${user.userId}`);
-//                     notification.success({ message: 'User deleted successfully!' });
-//                     fetchUsers();
-//                     setUser(null);
-//                 } catch (error) {
-//                     console.error("Error deleting user:", error);
-//                     notification.error({ message: 'Error deleting user!' });
-//                 } finally {
-//                     setLoading(false);
-//                 }
-//             },
-//         });
-//     };
+//     fetchUserData();
+//   }, [form]);
 
-//     const handleFinish = async (values) => {
-//         setLoading(true);
-//         try {
-//             if (values.avatar && values.avatar.fileList.length > 0) {
-//                 const formData = new FormData();
-//                 formData.append('file', values.avatar.fileList[0].originFileObj);
-//                 await api.post(`/users/${user.userId}/upload-avatar`, formData);
-//             }
+//   const handleSubmit = async () => {
+//     try {
+//       const values = await form.validateFields();
 
-//             await api.put(`/users/${user.userId}`, {
-//                 ...values,
-//                 birthDate: values.birthDate ? values.birthDate.format('YYYY-MM-DD') : null,
-//             });
-//             notification.success({ message: 'User updated successfully!' });
-//             fetchUsers();
-//             setIsModalVisible(false);
-//         } catch (error) {
-//             console.error("Error updating user:", error);
-//             notification.error({ message: 'Error updating user!' });
-//         } finally {
-//             setLoading(false);
-//         }
-//     };
+//       const formData = new FormData();
+//       const userData = {
+//         firstName: values.firstName,
+//         lastName: values.lastName,
+//         email: values.email,
+//         gender: values.gender,
+//         phone: values.phone,
+//         address: values.address,
+//         birthDate: values.birthDate ? values.birthDate.format('YYYY-MM-DD') : null, // Sử dụng dayjs để định dạng
+//       };
 
-//     if (loading) {
-//         return <Spin size="large" />;
+//       formData.append('users', new Blob([JSON.stringify(userData)], { type: 'application/json' }));
+
+//       if (fileList.length > 0) {
+//         formData.append('image', fileList[0].originFileObj);
+//       }
+
+//       await api.put(`/users/update/${values.email}`, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+//       toast.success('Chỉnh sửa thông tin thành công!');
+//       setIsEditing(false);
+//     } catch (error) {
+//       toast.error('Chỉnh sửa thông tin không thành công!');
+//       console.error("Error updating user data:", error);
 //     }
+//   };
 
-//     return (
-//         <div className="profile-container">
-//             <Select 
-//                 defaultValue={user ? user.userId : ''} 
-//                 onChange={handleUserChange} 
-//                 className="user-select"
-//             >
-//                 {users.map((u) => (
-//                     <Option key={u.userId} value={u.userId}>
-//                         {u.firstName} {u.lastName}
-//                     </Option>
-//                 ))}
-//             </Select>
-//             {user && (
-//                 <Card title="User Profile" className="profile-card">
-//                     <Row gutter={16}>
-//                         <Col span={12}><strong>Avatar:</strong></Col>
-//                         <Col span={12}>
-//                             <img src={user.image || 'default-avatar.png'} alt="Avatar" className="avatar" />
-//                         </Col>
-//                         <Col span={12}><strong>First Name:</strong></Col>
-//                         <Col span={12}>{user.firstName}</Col>
-//                         <Col span={12}><strong>Last Name:</strong></Col>
-//                         <Col span={12}>{user.lastName}</Col>
-//                         <Col span={12}><strong>Email:</strong></Col>
-//                         <Col span={12}>{user.email}</Col>
-//                         <Col span={12}><strong>Gender:</strong></Col>
-//                         <Col span={12}>{user.gender || "N/A"}</Col>
-//                         <Col span={12}><strong>Address:</strong></Col>
-//                         <Col span={12}>{user.address || "N/A"}</Col>
-//                         <Col span={12}><strong>Birth Date:</strong></Col>
-//                         <Col span={12}>{user.birthDate ? moment(user.birthDate).format('YYYY-MM-DD') : "N/A"}</Col>
-//                         <Col span={12}><strong>Rating:</strong></Col>
-//                         <Col span={12}>{user.rating}</Col>
-//                         <Col span={12}><strong>Role:</strong></Col>
-//                         <Col span={12}>{user.role === 1 ? "Admin" : "User"}</Col>
-//                         <Col span={12}><strong>Status:</strong></Col>
-//                         <Col span={12}>{user.status === 0 ? "Inactive" : "Active"}</Col>
-//                     </Row>
-//                     <div className="button-group">
-//                         <Button type="primary" onClick={handleEdit}>Edit Profile</Button>
-//                         <Button type="danger" onClick={handleDelete}>Delete User</Button>
-//                     </div>
-//                 </Card>
+//   const handleEditClick = () => {
+//     setIsEditing(true);
+//   };
+
+//   const handleCancelClick = () => {
+//     setIsEditing(false);
+//     form.setFieldsValue({
+//       ...userData,
+//       birthDate: userData.birthDate ? dayjs(userData.birthDate) : null, // Đảm bảo birthDate là dayjs
+//     });
+//   };
+
+//   return (
+//     <div className="profile-container">
+//       <Form form={form} layout="vertical">
+//         <h1>Thông tin tài khoản</h1>
+//         <Row gutter={16}>
+//           <Col span={8}><Form.Item name="firstName" label="Tên"><Input disabled={!isEditing} /></Form.Item></Col>
+//           <Col span={8}><Form.Item name="lastName" label="Họ"><Input disabled={!isEditing} /></Form.Item></Col>
+//           <Col span={8}><Form.Item name="gender" label="Giới tính">
+//             <Select disabled={!isEditing}><Option value="other">Khác</Option><Option value="men">Nam</Option><Option value="women">Nữ</Option></Select>
+//           </Form.Item></Col>
+//         </Row>
+//         <Row gutter={16}>
+//           <Col span={8}><Form.Item name="email" label="Email"><Input disabled /></Form.Item></Col>
+//           <Col span={8}><Form.Item name="phone" label="Số điện thoại"><Input disabled={!isEditing} /></Form.Item></Col>
+//           <Col span={8}><Form.Item name="birthDate" label="Ngày sinh">
+//             <DatePicker disabled={!isEditing} format="YYYY-MM-DD" />
+//           </Form.Item></Col>
+//         </Row>
+//         <Row>
+//           <Col span={24}><Form.Item name="address" label="Địa chỉ"><Input disabled={!isEditing} /></Form.Item></Col>
+//         </Row>
+//         <Row gutter={16}>
+//           <Col span={12}>
+//             <Upload fileList={fileList} beforeUpload={() => false} disabled={!isEditing}>
+//               <Button disabled={!isEditing}>Tải ảnh đại diện lên</Button>
+//             </Upload>
+//           </Col>
+//           <Col span={12} style={{ textAlign: 'right' }}>
+//             {isEditing ? (
+//               <>
+//                 <Button type="primary" onClick={handleSubmit} style={{ marginRight: 8 }}>Lưu</Button>
+//                 <Button type="default" onClick={handleCancelClick}>Hủy</Button>
+//               </>
+//             ) : (
+//               <Button type="primary" onClick={handleEditClick}>Chỉnh sửa thông tin</Button>
 //             )}
+//           </Col>
+//         </Row>
+//       </Form>
+//       <ToastContainer />
+//     </div>
+//   );
+// }
 
-//             <Modal
-//                 title="Edit User"
-//                 visible={isModalVisible}
-//                 onCancel={() => setIsModalVisible(false)}
-//                 footer={[
-//                     <Button key="back" onClick={() => setIsModalVisible(false)}>
-//                         Close
-//                     </Button>,
-//                     <Button key="submit" type="primary" onClick={() => form.submit()}>
-//                         Update User
-//                     </Button>,
-//                 ]}
-//             >
-//                 <Form form={form} onFinish={handleFinish} layout="vertical">
-//                     <Form.Item name="avatar" label="Upload Avatar">
-//                         <Upload beforeUpload={() => false} accept="image/*">
-//                             <Button icon={<UploadOutlined />}>Click to upload</Button>
-//                         </Upload>
-//                     </Form.Item>
-//                     <Form.Item name="firstName" label="First Name" rules={[{ required: true }]}>
-//                         <Input />
-//                     </Form.Item>
-//                     <Form.Item name="lastName" label="Last Name" rules={[{ required: true }]}>
-//                         <Input />
-//                     </Form.Item>
-//                     <Form.Item name="email" label="Email" rules={[{ required: true, type: 'email' }]}>
-//                         <Input />
-//                     </Form.Item>
-//                     <Form.Item name="gender" label="Gender">
-//                         <Select>
-//                             <Option value="male">Male</Option>
-//                             <Option value="female">Female</Option>
-//                             <Option value="other">Other</Option>
-//                         </Select>
-//                     </Form.Item>
-//                     <Form.Item name="address" label="Address">
-//                         <Input />
-//                     </Form.Item>
-//                     <Form.Item name="birthDate" label="Birth Date">
-//                         <DatePicker style={{ width: '100%' }} />
-//                     </Form.Item>
-//                     <Form.Item name="rating" label="Rating">
-//                         <Input type="number" />
-//                     </Form.Item>
-//                     <Form.Item name="role" label="Role" initialValue={user.role}>
-//                         <Select>
-//                             <Option value={1}>Admin</Option>
-//                             <Option value={0}>User</Option>
-//                         </Select>
-//                     </Form.Item>
-//                 </Form>
-//             </Modal>
-//         </div>
-//     );
-// };
+//==========================================================================
+// import React, { useState, useEffect } from 'react';
+// import "./Profile.css";
+// import { Form, Input, DatePicker, Upload, Button, Select, message, Row, Col, Image } from 'antd';
+// import api from '../../../config/api';
+// import { jwtDecode } from 'jwt-decode';
+// import { ToastContainer, toast } from 'react-toastify';
+// import dayjs from 'dayjs'; // Sử dụng dayjs thay vì moment
+// import { UploadOutlined } from '@ant-design/icons'; // Thêm icon UploadOutlined
 
-// export default ProfilePage;
+// const { Option } = Select;
+
+// export default function Profile() {
+//   const [form] = Form.useForm();
+//   const [fileList, setFileList] = useState([]); // State để lưu trữ file ảnh
+//   const [imagePreviews, setImagePreviews] = useState([]); // State để lưu trữ preview ảnh
+//   const [isEditing, setIsEditing] = useState(false);
+//   const [userData, setUserData] = useState({});
+
+//   useEffect(() => {
+//     const fetchUserData = async () => {
+//       const token = localStorage.getItem("token");
+//       if (!token) {
+//         message.error("No token found. Please login.");
+//         return;
+//       }
+
+//       try {
+//         const decodedToken = jwtDecode(token);
+//         const userEmail = decodedToken.sub;
+
+//         const response = await api.get(`/users/${userEmail}`, {
+//           headers: { Authorization: `Bearer ${token}` },
+//         });
+
+//         const data = response.data;
+//         setUserData({
+//           ...data,
+//           birthDate: data.birthDate ? dayjs(data.birthDate) : null, // Chuyển đổi birthDate sang dayjs
+//         });
+//         form.setFieldsValue({
+//           firstName: data.firstName,
+//           lastName: data.lastName,
+//           email: data.email,
+//           gender: data.gender,
+//           phone: data.phone,
+//           address: data.address,
+//           birthDate: data.birthDate ? dayjs(data.birthDate) : null, // Chỉ chuyển đổi nếu birthDate tồn tại
+//         });
+
+//         // Nếu có ảnh đại diện, set preview ảnh
+//         if (data.image) {
+//           setImagePreviews([data.image]);
+//         }
+//       } catch (error) {
+//         message.error("Failed to fetch user data.");
+//         console.error("Error fetching user data:", error);
+//       }
+//     };
+
+//     fetchUserData();
+//   }, [form]);
+
+//   const handleSubmit = async () => {
+//     try {
+//       const values = await form.validateFields();
+
+//       const formData = new FormData();
+//       const userData = {
+//         firstName: values.firstName,
+//         lastName: values.lastName,
+//         email: values.email,
+//         gender: values.gender,
+//         phone: values.phone,
+//         address: values.address,
+//         birthDate: values.birthDate ? values.birthDate.format('YYYY-MM-DD') : null, // Sử dụng dayjs để định dạng
+//       };
+
+//       formData.append('users', new Blob([JSON.stringify(userData)], { type: 'application/json' }));
+
+//       // Append image file if it exists
+//       if (fileList.length > 0) {
+//         formData.append('image', fileList[0].originFileObj);
+//       }
+
+//       await api.put(`/users/update/${values.email}`, formData,
+//         {
+//           headers: {
+//             'Content-Type': 'multipart/form-data',
+//             'Authorization': `Bearer ${localStorage.getItem("token")}`
+//           }
+//         });
+
+
+//       toast.success('Chỉnh sửa thông tin thành công!');
+//       setIsEditing(false);
+//     } catch (error) {
+//       toast.error('Chỉnh sửa thông tin không thành công!');
+//       console.error("Error updating user data:", error);
+//     }
+//   };
+
+//   const handleEditClick = () => {
+//     setIsEditing(true);
+//   };
+
+//   const handleCancelClick = () => {
+//     setIsEditing(false);
+//     form.setFieldsValue({
+//       ...userData,
+//       birthDate: userData.birthDate ? dayjs(userData.birthDate) : null, // Đảm bảo birthDate là dayjs
+//     });
+//     setFileList([]); // Reset fileList
+//     setImagePreviews(userData.image ? [userData.image] : []); // Reset image previews
+//   };
+
+//   return (
+//     <div className="profile-container">
+//       <Form form={form} layout="vertical">
+//         <h1>Thông tin tài khoản</h1>
+//         <Row gutter={16}>
+//           <Col span={8}><Form.Item name="firstName" label="Tên"><Input disabled={!isEditing} /></Form.Item></Col>
+//           <Col span={8}><Form.Item name="lastName" label="Họ"><Input disabled={!isEditing} /></Form.Item></Col>
+//           <Col span={8}><Form.Item name="gender" label="Giới tính">
+//             <Select disabled={!isEditing}><Option value="other">Khác</Option><Option value="men">Nam</Option><Option value="women">Nữ</Option></Select>
+//           </Form.Item></Col>
+//         </Row>
+//         <Row gutter={16}>
+//           <Col span={8}><Form.Item name="email" label="Email"><Input disabled /></Form.Item></Col>
+//           <Col span={8}><Form.Item name="phone" label="Số điện thoại"><Input disabled={!isEditing} /></Form.Item></Col>
+//           <Col span={8}><Form.Item name="birthDate" label="Ngày sinh">
+//             <DatePicker disabled={!isEditing} format="YYYY-MM-DD" />
+//           </Form.Item></Col>
+//         </Row>
+//         <Row>
+//           <Col span={24}><Form.Item name="address" label="Địa chỉ"><Input disabled={!isEditing} /></Form.Item></Col>
+//         </Row>
+//         <Row gutter={16}>
+//           <Col span={12}>
+//             <Form.Item label="Ảnh đại diện">
+//               <Upload
+//                 fileList={fileList}
+//                 beforeUpload={(file) => {
+//                   setFileList([file]); // Chỉ cho phép upload 1 ảnh
+//                   setImagePreviews([URL.createObjectURL(file)]); // Tạo preview ảnh
+//                   return false; // Ngăn chặn upload tự động
+//                 }}
+//                 onRemove={() => {
+//                   setFileList([]); // Xóa file ảnh
+//                   setImagePreviews([]); // Xóa preview ảnh
+//                 }}
+//                 disabled={!isEditing}
+//               >
+//                 <Button icon={<UploadOutlined />} disabled={!isEditing}>Tải ảnh lên</Button>
+//               </Upload>
+//               {imagePreviews.length > 0 && (
+//                 <Image
+//                   src={imagePreviews[0]}
+//                   alt="image Preview"
+//                   width={100}
+//                   style={{ marginTop: 8 }}
+//                 />
+//               )}
+//             </Form.Item>
+//           </Col>
+//           <Col span={12} style={{ textAlign: 'right' }}>
+//             {isEditing ? (
+//               <>
+//                 <Button type="primary" onClick={handleSubmit} style={{ marginRight: 8 }}>Lưu</Button>
+//                 <Button type="default" onClick={handleCancelClick}>Hủy</Button>
+//               </>
+//             ) : (
+//               <Button type="primary" onClick={handleEditClick}>Chỉnh sửa thông tin</Button>
+//             )}
+//           </Col>
+//         </Row>
+//       </Form>
+//       <ToastContainer />
+//     </div>
+//   );
+// }
+
+//==========================================================================
+import React, { useState, useEffect } from 'react';
+import { Form, Input, DatePicker, Upload, Button, Select, message, Row, Col, Image } from 'antd';
+import { UploadOutlined } from '@ant-design/icons';
+import api from '../../../config/api';
+import { jwtDecode } from 'jwt-decode';
+import { ToastContainer, toast } from 'react-toastify';
+import dayjs from 'dayjs';
+import './Profile.css'; // Đảm bảo import file CSS
+
+const { Option } = Select;
+
+export default function Profile() {
+  const [form] = Form.useForm();
+  const [fileList, setFileList] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [userData, setUserData] = useState({});
+
+  // Fetch user data on component mount
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        message.error("No token found. Please login.");
+        return;
+      }
+
+      try {
+        const decodedToken = jwtDecode(token);
+        const userEmail = decodedToken.sub;
+
+        const response = await api.get(`/users/${userEmail}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        const data = response.data;
+        setUserData(data);
+        form.setFieldsValue({
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          gender: data.gender,
+          phone: data.phone,
+          address: data.address,
+          birthDate: data.birthDate ? dayjs(data.birthDate) : null,
+        });
+
+        // Nếu có ảnh đại diện, set preview ảnh
+        if (data.image) {
+          setImagePreviews([data.image]);
+        }
+      } catch (error) {
+        message.error("Failed to fetch user data.");
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [form]);
+
+  // Handle form submission
+  const handleSubmit = async () => {
+    try {
+      const values = await form.validateFields();
+
+      const formData = new FormData();
+      const userData = {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        email: values.email,
+        gender: values.gender,
+        phone: values.phone,
+        address: values.address,
+        birthDate: values.birthDate ? values.birthDate.format('YYYY-MM-DD') : null,
+      };
+
+      formData.append('users', new Blob([JSON.stringify(userData)], { type: 'application/json' }));
+
+      if (fileList.length > 0) {
+        formData.append('image', fileList[0].originFileObj); // Append the image file
+      }
+
+      const response = await api.put(`/users/update/${values.email}`, formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+
+      toast.success('Chỉnh sửa thông tin thành công!');
+      setIsEditing(false);
+      setUserData(response.data); // Update user data with the new data from the server
+    } catch (error) {
+      toast.error('Chỉnh sửa thông tin không thành công!');
+      console.error("Error updating user data:", error);
+    }
+  };
+
+  // Handle edit button click
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  // Handle cancel button click
+  const handleCancelClick = () => {
+    setIsEditing(false);
+    form.setFieldsValue({
+      ...userData,
+      birthDate: userData.birthDate ? dayjs(userData.birthDate) : null, // Đảm bảo birthDate là dayjs
+    });
+    setFileList([]); // Clear the file list
+    setImagePreviews(userData.image ? [userData.image] : []); // Reset image previews
+  };
+
+  //   const handleCancelClick = () => {
+  //     setIsEditing(false);
+  //     form.setFieldsValue({
+  //       ...userData,
+  //       birthDate: userData.birthDate ? dayjs(userData.birthDate) : null, // Đảm bảo birthDate là dayjs
+  //     });
+  //     setFileList([]); // Reset fileList
+  //     setImagePreviews(userData.image ? [userData.image] : []); // Reset image previews
+  //   };
+
+  // Handle file upload
+  const handleFileChange = ({ fileList }) => {
+    setFileList(fileList);
+    if (fileList.length > 0) {
+      setImagePreviews([URL.createObjectURL(fileList[0].originFileObj)]);
+    } else {
+      setImagePreviews([]);
+    }
+  };
+
+  return (
+    <div className="profile-container">
+      <Form form={form} layout="vertical">
+        <h1>Thông tin tài khoản</h1>
+        <Row gutter={16}>
+          <Col span={8}>
+            <Form.Item name="firstName" label="Tên">
+              <Input disabled={!isEditing} />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item name="lastName" label="Họ">
+              <Input disabled={!isEditing} />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item name="gender" label="Giới tính">
+              <Select disabled={!isEditing}>
+                <Option value="other">Khác</Option>
+                <Option value="men">Nam</Option>
+                <Option value="women">Nữ</Option>
+              </Select>
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col span={8}>
+            <Form.Item name="email" label="Email">
+              <Input disabled />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item name="phone" label="Số điện thoại">
+              <Input disabled={!isEditing} />
+            </Form.Item>
+          </Col>
+          <Col span={8}>
+            <Form.Item name="birthDate" label="Ngày sinh">
+              <DatePicker disabled={!isEditing} format="YYYY-MM-DD" />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row>
+          <Col span={24}>
+            <Form.Item name="address" label="Địa chỉ">
+              <Input disabled={!isEditing} />
+            </Form.Item>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col span={12}>
+            <Form.Item label="Ảnh đại diện">
+              <Upload
+                fileList={fileList}
+                beforeUpload={() => false} // Prevent auto-upload
+                onChange={handleFileChange} // Handle file selection
+                disabled={!isEditing}
+              >
+                <Button icon={<UploadOutlined />} disabled={!isEditing}>
+                  Tải ảnh đại diện lên
+                </Button>
+              </Upload>
+              {imagePreviews.length > 0 && (
+                <Image
+                  src={imagePreviews[0]}
+                  alt="image Preview"
+                  width={100}
+                  style={{ marginTop: 8 }}
+                />
+              )}
+            </Form.Item>
+          </Col>
+          <Col span={12} style={{ textAlign: 'right' }}>
+            {isEditing ? (
+              <>
+                <Button type="primary" onClick={handleSubmit} style={{ marginRight: 8 }}>
+                  Lưu
+                </Button>
+                <Button type="default" onClick={handleCancelClick}>
+                  Hủy
+                </Button>
+              </>
+            ) : (
+              <Button type="primary" onClick={handleEditClick}>
+                Chỉnh sửa thông tin
+              </Button>
+            )}
+          </Col>
+        </Row>
+      </Form>
+      <ToastContainer />
+    </div>
+  );
+}

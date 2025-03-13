@@ -22,10 +22,12 @@ const BrandManagement = () => {
   const [editingBrand, setEditingBrand] = useState(null);
   const [isDetailModalOpen, setDetailModalOpen] = useState(false);
   const [selectedBrand, setSelectedBrand] = useState(null);
+  const [searchText, setSearchText] = useState("");
 
   const statusMapping = {
-    0: { text: "KHÔNG HOẠT ĐỘNG", color: "red" },
+
     1: { text: "HOẠT ĐỘNG", color: "green" },
+    2: { text: "KHÔNG HOẠT ĐỘNG", color: "red" },
   };
 
   const columns = [
@@ -122,6 +124,16 @@ const BrandManagement = () => {
     fetchBrands();
   }, []);
 
+  const handleSearch = async () => {
+    try {
+      const response = await api.get(`/brands/search/${searchText}`);
+      setBrandList(response.data);
+    } catch (error) {
+      console.error("Error searching brands:", error);
+      toast.error("Tìm kiếm thương hiệu  không thành công!");
+    }
+  };
+
   const handleOpenModal = () => {
     setModalOpen(true);
   };
@@ -196,9 +208,29 @@ const BrandManagement = () => {
     <div>
       <ToastContainer />
       <h1>Quản lý thương hiệu</h1>
-      <Button type="primary" onClick={handleOpenModal}>
-        <i className="fa-solid fa-plus"></i> Thêm thương hiệu mới
-      </Button>
+      <div style={{ marginBottom: 16 }}>
+        <Input
+          placeholder="Nhập tên thương hiệu để tìm kiếm"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          style={{ width: 300, marginRight: 8 }}
+        />
+        <Button type="primary" onClick={handleSearch}>
+          Tìm kiếm
+        </Button>
+        <Button
+          onClick={() => {
+            setSearchText("");
+            fetchBrands();
+          }}
+          style={{ margin: 8 }}
+        >
+          Reset
+        </Button>
+        <Button type="primary" onClick={handleOpenModal}>
+          <i className="fa-solid fa-plus"></i> Thêm thương hiệu mới
+        </Button>
+      </div>
       <Table
         dataSource={brandList}
         columns={columns}
@@ -252,7 +284,7 @@ const BrandManagement = () => {
             >
               <Select>
                 <Option value={1}>HOẠT ĐỘNG</Option>
-                <Option value={0}>KHÔNG HOẠT ĐỘNG</Option>
+                <Option value={2}>KHÔNG HOẠT ĐỘNG</Option>
               </Select>
             </Form.Item>
           )}

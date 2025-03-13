@@ -1,75 +1,140 @@
-.containerr {
-    margin-top: 90px;
+/* Question.css */
+.haven-skin-question {
+  max-width: 1000px;  /* Mở rộng chiều rộng */
+  margin: 0 auto;
+  /* padding: 2rem; */
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+}
+
+.test-title {
+  text-align: center;
+}
+
+.question-container {
+  background-color: #ffffff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 12px black;
+  /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); */
+  transition: transform 0.3s ease;
+}
+
+.question-container:hover {
+  transform: translateY(-2px);
 }
 
 .question-title {
-    font-size: 20px;
-    background-color: #900001 ;
-    color: white;
-    margin-bottom: 10px;
-    font-weight: bold;
+  color: black;  /* Màu cho tiêu đề câu hỏi */
+  font-size: 1.5rem;  /* Tăng cỡ chữ */
+  margin-bottom: 1rem;
+  font-weight: 500;
 }
 
-
-
 .options-list {
-    list-style: none;
-    padding: 0;
+  list-style-type: none;
+  padding: 0;
 }
 
 .options-list li {
-    cursor: pointer;
-    margin-left: 50px;
-    align-items: center;
+  padding: 0.8rem;
+  margin-bottom: 0.5rem;
+  border-radius: 6px;
+  background-color: #e3f2fd;  /* Màu nền cho các tùy chọn */
+  display: flex;
+  align-items: center;
+  transition: background-color 0.2s ease;
 }
 
+.options-list li:hover {
+  background-color: #bbdefb;  /* Màu khi hover */
+}
 
+.options-list input[type="radio"] {
+  margin-right: 12px;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
 
-
-
-/* Điểm */
 .points {
-    font-weight: bold;
-    margin-left: auto;
-    color: #a61e4d;
-    font-size: 14px;
+  margin-left: auto;
+  color: #333;  /* Màu cho điểm số */
+  font-size: 0.9rem;
+}
+.answer-content{
+  color: black;
+}
+.submit-btn {
+  display: block;
+  margin: 2rem auto;
+  padding: 1rem 2.5rem;
+  background-color: #4a90e2;  /* Màu nền nút */
+  color: white;
+  border: none;
+  border-radius: 30px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(74, 144, 226, 0.2);
 }
 
-.options-list li input[type="radio"] {
-    margin-left: 80px;
-    margin-top: 30px;
-    transform: scale(1.2);
+.submit-btn:hover {
+  background-color: #3672c9;  /* Màu khi hover */
 }
 
-/* Radio button */
-/* .options-list input {
-    margin-right: 10px;
-    transform: scale(1.2);
-  } */
+.result-message {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: #e8f5e9;  /* Màu nền cho kết quả */
+  border-left: 4px solid #4caf50;
+  border-radius: 4px;
+  font-size: 1.1rem;
+  text-align: center;
+}
 
+.loading-container {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+  color: #666;
+}
 
+.error-container {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1.2rem;
+  color: #d32f2f;
+  background-color: #ffebee;  /* Màu nền cho lỗi */
+  border-radius: 8px;
+  margin: 2rem auto;
+  max-width: 800px;
+}
+.answer-label{
+  color: black;
+}
 
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .haven-skin-question {
+    padding: 1.5rem;
+    margin: 0 1rem;
+  }
+  
+  .test-title {
+    font-size: 1.6rem;
+  }
+  
+  .question-title {
+    font-size: 1.1rem;
+  }
+  
   .submit-btn {
-    background-color: #ff66b2;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 5px;
-    display: block;
-    margin: 20px auto;
+    width: 100%;
+    padding: 0.8rem;
   }
   
-  .submit-btn:hover {
-    background-color: #e05599;
-  }
-  
-  .result-message {
-    text-align: center;
-    font-size: 18px;
-    font-weight: bold;
-    color: #a61e4d;
-    margin-top: 20px;
-  }
-  
+}

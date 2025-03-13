@@ -1,17 +1,4 @@
-import {
-  Button,
-  Form,
-  Input,
-  Modal,
-  Table,
-  Popconfirm,
-  Upload,
-  Select,
-  Col,
-  Row,
-  Tag,
-  Image,
-} from "antd";
+import { Button, Form, Input, Modal, Table, Popconfirm, Upload, Select, Col, Row, Tag, Image } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { UploadOutlined } from "@ant-design/icons";
 import { useEffect, useState, useCallback } from "react";
@@ -29,6 +16,7 @@ const SkinTypeManagement = () => {
   const [imagePreviews, setImagePreviews] = useState([]); // Danh sách URL ảnh tạm thời
   const [isDetailModalOpen, setDetailModalOpen] = useState(false);
   const [selectedSkinType, setSelectedSkinType] = useState(null);
+  const [searchText, setSearchText] = useState("");
   const { Option } = Select;
 
   const statusColors = {
@@ -150,6 +138,38 @@ const SkinTypeManagement = () => {
   useEffect(() => {
     fetchSkinTypes();
   }, [fetchSkinTypes]);
+
+  const handleSearch = async () => {
+    try {
+      const response = await api.get(`/skin-types/search/${searchText}`);
+      setSkinTypeList(response.data);
+    } catch (error) {
+      console.error("Error searching discounts:", error);
+      toast.error("Tìm kiếm loại da không thành công!");
+    }
+  };
+
+  // const handleSearch = async () => {
+  //   if (!searchText.trim()) {
+  //     fetchSkinTypes(); // Nếu ô tìm kiếm trống, hiển thị toàn bộ danh sách
+  //     return;
+  //   }
+  
+  //   setLoading(true);
+  //   try {
+  //     const response = await api.get(`/skin-types/search/${searchText}`); // Gọi API với đúng đường dẫn
+  //     setSkinTypeList(response.data);
+  //   } catch (error) {
+  //     console.error(
+  //       "Error searching skin types:",
+  //       error.response?.data?.message || error.message
+  //     );
+  //     toast.error("Tìm kiếm loại da không thành công!");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
 
   const handleOpenModal = () => {
     setModalOpen(true);
@@ -274,10 +294,30 @@ const SkinTypeManagement = () => {
     <div>
       <ToastContainer />
       <h1>Quản lý loại da</h1>
-      <Button type="primary" onClick={handleOpenModal}>
-        <i className="fa-solid fa-plus"></i>
-        Thêm loại da mới
-      </Button>
+      <div style={{ marginBottom: 16 }}>
+        <Input
+          placeholder="Nhập tên loại da để tìm kiếm"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          style={{ width: 300, marginRight: 8 }}
+        />
+        <Button type="primary" onClick={handleSearch}>
+          Tìm kiếm
+        </Button>
+        <Button
+          onClick={() => {
+            setSearchText("");
+            fetchSkinTypes();
+          }}
+          style={{ marginLeft: 8, margin: 8 }}
+        >
+          Reset
+        </Button>
+        <Button type="primary" onClick={handleOpenModal}>
+          <i className="fa-solid fa-plus"></i>
+          Thêm loại da mới
+        </Button>
+      </div>
       <Table
         loading={loading}
         dataSource={skinTypeList}
