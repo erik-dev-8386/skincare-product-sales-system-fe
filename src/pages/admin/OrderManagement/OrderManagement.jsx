@@ -13,10 +13,7 @@ const OrderManagement = () => {
   const [loading, setLoading] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState(null); // Trạng thái được chọn
 
-  useEffect(() => {
-    fetchOrders();
-  }, []);
-
+ 
   const fetchOrders = async () => {
     try {
       const response = await api.get("/orders"); // Thay thế bằng API thực tế của bạn
@@ -34,6 +31,11 @@ const OrderManagement = () => {
       console.error("Error fetching orders:", error);
     }
   };
+
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+
 
   const handleViewDetails = (order) => {
     setSelectedOrder(order);
