@@ -45,7 +45,6 @@ import ProfileLayout from "../src/component/ProfileLayout/ProfileLayout.jsx";
 import History from "./pages/users/profile/History.jsx";
 import OrderManagement from "./pages/admin/OrderManagement/OrderManagement.jsx";
 
-
 function App() {
   return (
     <Routes>
@@ -81,11 +80,9 @@ function App() {
       <Route path="/login-and-signup" element={<LoginAndSignup />} />
 
       {/* profile user */}
-      <Route path='/user' element={<ProfileLayout />}>
+      <Route path="/user" element={<ProfileLayout />}>
         <Route index element={<Profile />} />
-        <Route path='/user/history' element={<History />} />
-
-
+        <Route path="/user/history" element={<History />} />
       </Route>
 
       {/* admin */}
@@ -113,10 +110,7 @@ function App() {
           element={<ProductManagement />}
         />
 
-        <Route
-          path="/admin/order-management"
-          element={<OrderManagement />}
-        />
+        <Route path="/admin/order-management" element={<OrderManagement />} />
 
         <Route
           path="/admin/question-management"
@@ -125,11 +119,8 @@ function App() {
         <Route path="/admin/answer-management" element={<AnswerManagement />} />
       </Route>
 
-      
       {/* <Route path="/product-management" element={<ProductManagement />} /> */}
     </Routes>
-
-    
   );
 }
 

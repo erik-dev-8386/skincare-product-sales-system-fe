@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, Button } from "antd";
 import { useNavigate } from "react-router-dom";
+import { jwtDecode } from "jwt-decode";
 
 const { Meta } = Card;
 
@@ -36,16 +37,17 @@ const ProductCard = ({
 
   return (
     <Card
-    style={{
-      display: "flex",
-      justifyContent: "center",
-      flexDirection: "column",
-      alignItems: "center",
-      textAlign: "center",
-    }}
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        flexDirection: "column",
+        alignItems: "center",
+        textAlign: "center",
+      }}
       hoverable
       cover={[
         <p
+          key="discount-badge"
           style={{
             padding: 2,
             marginLeft: "79%",
@@ -58,6 +60,7 @@ const ProductCard = ({
           <i className="fa-solid fa-down-long"></i> {discountPercent}%
         </p>,
         <img
+          key="product-image"
           alt={product.productName}
           src={product.productImages[0]?.imageURL}
           style={{
@@ -71,21 +74,9 @@ const ProductCard = ({
       onClick={() => navigate(`/products/${product.productId}`)}
     >
       <Meta
-      
-        title={
-          <p>
-            {product.productName}
-          </p>
-        }
+        title={<p>{product.productName}</p>}
         description={
-          <div
-            // style={{
-            //   display: "flex",
-            //   justifyContent: "space-between",
-            //   flexDirection: "column",
-            //   alignItems: "center",
-            // }}
-          >
+          <div>
             <p>{findBrandNameById(product.brandId)}</p>
             {/* Hiển thị brandName thay vì brandId */}
             <strong style={{ color: "green" }}>
@@ -105,13 +96,7 @@ const ProductCard = ({
           </div>
         }
       />
-      <div
-        // style={{
-        //   display: "flex",
-        //   justifyContent: "center",
-        //   marginTop: "10px",
-        // }}
-      >
+      <div>
         <Button
           type="primary"
           onClick={(e) => {
