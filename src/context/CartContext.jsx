@@ -84,7 +84,7 @@ export const CartProvider = ({ children }) => {
 
   // Lưu giỏ hàng vào localStorage mỗi khi giỏ hàng thay đổi
   useEffect(() => {
-    if (userEmail && cart.length > 0) {
+    if (userEmail) {
       const cartKey = `cart_${userEmail}`;
       localStorage.setItem(cartKey, JSON.stringify(cart));
       console.log(
