@@ -332,7 +332,7 @@ export default function Question() {
                                         value={answer.answerId}
                                         onChange={() => handleChange(question.questionId, answer.answerId, answer.mark)}
                                     />
-                                    <span className="answer-label">{answerLabels[ansIndex]}. </span>
+                                    <span className="answer-label"> <strong>{answerLabels[ansIndex]}.</strong> </span>
                                     <span className="answer-content">
                                         {removeHtmlTags(decodeHtmlEntities(answer.answerContent))}
                                     </span>

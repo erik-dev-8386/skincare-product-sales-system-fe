@@ -22,15 +22,21 @@ const AdminLayout = () => {
   const menuItems = [
     { key: "/admin", icon: <DashboardOutlined />, label: "Bảng điều khiển" },
     { key: "/admin/list-user", icon: <UserOutlined />, label: "Khách hàng" },
-    { key: "/admin/list-staff", icon: <UserOutlined />, label: "Nhân viên" },
+    { key: "/admin/list-staff", icon: <i className="fa-solid fa-user-tie"></i>, label: "Nhân viên" },
     {
       key: "/admin/product-management",
-      icon: <InboxOutlined />,
+      icon: <i className="fa-solid fa-box"></i>,
       label: "Sản phẩm",
     },
     {
+      key: "/admin/order-management",
+      icon:  <i className="fa-solid fa-cart-flatbed"></i>,
+      label: "Đơn hàng",
+    },
+   
+    {
       key: "/admin/brand-management",
-      icon: <InboxOutlined />,
+      icon: <i className="fa-brands fa-font-awesome"></i>,
       label: "Thương hiệu",
     },
     {
@@ -50,7 +56,7 @@ const AdminLayout = () => {
     },
     {
       key: "/admin/question-management",
-      icon: <QuestionOutlined />,
+      icon: <i className="fa-solid fa-question"></i>,
       label: "Câu hỏi",
     },
     {

@@ -15,6 +15,7 @@ const CategoryManagement = () => {
   const [editingCategory, setEditingCategory] = useState(null);
   const [isDetailModalOpen, setDetailModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [searchText, setSearchText] = useState("");
 
   const statusMapping = {
     0: { text: "KHÔNG HOẠT ĐỘNG", color: "red" },
@@ -84,6 +85,16 @@ const CategoryManagement = () => {
   useEffect(() => {
     fetchCategories();
   }, []);
+
+  const handleSearch = async () => {
+    try {
+      const response = await api.get(`/categories/search/${searchText}`);
+      setCategoryList(response.data);
+    } catch (error) {
+      console.error("Error searching categories:", error);
+      toast.error("Tìm kiếm danh mục không thành công!");
+    }
+  };
 
   const handleOpenModal = () => {
     setModalOpen(true);
@@ -159,9 +170,29 @@ const CategoryManagement = () => {
     <div>
       <ToastContainer />
       <h1>Quản lý danh mục</h1>
+      <div style={{ marginBottom: 16 }}>
+        <Input
+          placeholder="Nhập tên danh mục để tìm kiếm"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          style={{ width: 300, marginRight: 8 }}
+        />
+        <Button type="primary" onClick={handleSearch}>
+          Tìm kiếm
+        </Button>
+        <Button
+          onClick={() => {
+            setSearchText("");
+            fetchCategories();
+          }}
+          style={{ margin: 8 }}
+        >
+          Reset
+        </Button>
       <Button type="primary" onClick={handleOpenModal}>
         <i className="fa-solid fa-plus"></i> Thêm danh mục mới
       </Button>
+      </div>
       <Table dataSource={categoryList} columns={columns} rowKey="categoryId" style={{ marginTop: 16 }} />
       <Modal
         title={editingCategory ? "Chỉnh sửa danh mục" : "Tạo danh mục mới"}

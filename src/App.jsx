@@ -42,6 +42,9 @@ import QuestionManagement from "./pages/admin/QuestionManagement/QuestionManagem
 import AnswerManagement from "./pages/admin/AnswerManagement/AnswerManagement.jsx";
 import Profile from "./pages/users/profile/Profile.jsx";
 import ProfileLayout from "../src/component/ProfileLayout/ProfileLayout.jsx";
+import History from "./pages/users/profile/History.jsx";
+import OrderManagement from "./pages/admin/OrderManagement/OrderManagement.jsx";
+
 function App() {
   return (
     <Routes>
@@ -77,9 +80,9 @@ function App() {
       <Route path="/login-and-signup" element={<LoginAndSignup />} />
 
       {/* profile user */}
-      <Route path='/user' element={<ProfileLayout />}>
+      <Route path="/user" element={<ProfileLayout />}>
         <Route index element={<Profile />} />
-        {/* <Route path='edit' element={<EditProfile />} /> */}
+        <Route path="/user/history" element={<History />} />
       </Route>
 
       {/* admin */}
@@ -101,11 +104,14 @@ function App() {
         <Route path="/admin/list-staff" element={<ListStaff />} />
         <Route path="/admin/create-staff" element={<CreateStaff />} />
         <Route path="/admin/list-user" element={<UserManagement />} />
-        
+
         <Route
           path="/admin/product-management"
           element={<ProductManagement />}
         />
+
+        <Route path="/admin/order-management" element={<OrderManagement />} />
+
         <Route
           path="/admin/question-management"
           element={<QuestionManagement />}
@@ -113,8 +119,7 @@ function App() {
         <Route path="/admin/answer-management" element={<AnswerManagement />} />
       </Route>
 
-      <Route path="*" element={<NotFound />} />
-      <Route path="/product-management" element={<ProductManagement />} />
+      {/* <Route path="/product-management" element={<ProductManagement />} /> */}
     </Routes>
   );
 }

@@ -22,6 +22,7 @@ import { MapInteractionCSS } from "react-map-interaction";
 import { CartContext } from "../../../context/CartContext";
 import { toast, ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom"; // Import Link
+import { jwtDecode } from "jwt-decode"; // Sửa cách import jwt-decode
 
 const { Title } = Typography;
 
@@ -44,7 +45,6 @@ export default function ProductDetail() {
   const formatPrice = (price) => {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
-
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -109,27 +109,117 @@ export default function ProductDetail() {
     );
     return item
       ? item.brandName ||
-      item.skinName ||
-      item.categoryName ||
-      item.discountPercent
+          item.skinName ||
+          item.categoryName ||
+          item.discountPercent
       : "Loading...";
   };
 
   const handleAddToCart = () => {
+    console.log("Đang thêm sản phẩm vào giỏ hàng:", product);
+
+    // Kiểm tra token trước khi thêm vào giỏ hàng
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
+      return;
+    }
+
+    // Thêm sản phẩm vào giỏ hàng
     addToCart({
       ...product,
       quantity,
     });
-    // alert(`${product.productName} added to cart!`);
-    toast.success(`Đã thêm ${product.productName} vào giỏ hàng thành công!`)
+
+    // Lưu trực tiếp vào localStorage để đảm bảo dữ liệu được lưu
+    try {
+      const decoded = jwtDecode(token);
+      const email = decoded.sub;
+      if (email) {
+        const cartKey = `cart_${email}`;
+        const savedCart = localStorage.getItem(cartKey);
+        let updatedCart = [];
+
+        if (savedCart) {
+          const parsedCart = JSON.parse(savedCart);
+          const existingProduct = parsedCart.find(
+            (item) => item.productId === product.productId
+          );
+
+          if (existingProduct) {
+            updatedCart = parsedCart.map((item) =>
+              item.productId === product.productId
+                ? { ...item, quantity: item.quantity + quantity }
+                : item
+            );
+          } else {
+            updatedCart = [...parsedCart, { ...product, quantity }];
+          }
+        } else {
+          updatedCart = [{ ...product, quantity }];
+        }
+
+        localStorage.setItem(cartKey, JSON.stringify(updatedCart));
+        console.log("Đã lưu giỏ hàng trực tiếp vào localStorage:", updatedCart);
+      }
+    } catch (error) {
+      console.error("Lỗi khi lưu giỏ hàng vào localStorage:", error);
+    }
+
+    toast.success(`Đã thêm ${product.productName} vào giỏ hàng thành công!`);
   };
 
   const handleAddToCartAndNavigate = () => {
+    console.log("Đang thêm sản phẩm vào giỏ hàng và chuyển hướng:", product);
+
+    // Kiểm tra token trước khi thêm vào giỏ hàng
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
+      return;
+    }
+
+    // Thêm sản phẩm vào giỏ hàng
     addToCart({
       ...product,
       quantity,
     });
-    // toast.success(`Đã thêm ${product.productName} vào giỏ hàng thành công!`)
+
+    // Lưu trực tiếp vào localStorage để đảm bảo dữ liệu được lưu
+    try {
+      const decoded = jwtDecode(token);
+      const email = decoded.sub;
+      if (email) {
+        const cartKey = `cart_${email}`;
+        const savedCart = localStorage.getItem(cartKey);
+        let updatedCart = [];
+
+        if (savedCart) {
+          const parsedCart = JSON.parse(savedCart);
+          const existingProduct = parsedCart.find(
+            (item) => item.productId === product.productId
+          );
+
+          if (existingProduct) {
+            updatedCart = parsedCart.map((item) =>
+              item.productId === product.productId
+                ? { ...item, quantity: item.quantity + quantity }
+                : item
+            );
+          } else {
+            updatedCart = [...parsedCart, { ...product, quantity }];
+          }
+        } else {
+          updatedCart = [{ ...product, quantity }];
+        }
+
+        localStorage.setItem(cartKey, JSON.stringify(updatedCart));
+        console.log("Đã lưu giỏ hàng trực tiếp vào localStorage:", updatedCart);
+      }
+    } catch (error) {
+      console.error("Lỗi khi lưu giỏ hàng vào localStorage:", error);
+    }
+
     navigate("/shopping-cart");
   };
 
@@ -204,10 +294,7 @@ export default function ProductDetail() {
       label: "Cách dùng",
       children: (
         <div className="tabContentStyle">
-
           <p dangerouslySetInnerHTML={{ __html: product.usageInstruction }} />
-
-
         </div>
       ),
     },
@@ -219,7 +306,10 @@ export default function ProductDetail() {
       <div className="container">
         <div style={{ maxWidth: "1200px", margin: "auto", padding: "20px" }}>
           {/* Breadcrumb with `items` prop */}
-          <Breadcrumb style={{ marginBottom: "20px" }} items={breadcrumbItems} />
+          <Breadcrumb
+            style={{ marginBottom: "20px" }}
+            items={breadcrumbItems}
+          />
 
           <Row gutter={32}>
             {/* Product Image */}
@@ -247,8 +337,9 @@ export default function ProductDetail() {
                 {product.productImages.map((image, index) => (
                   <div
                     key={index}
-                    className={`border mx-1 rounded-2 ${mainImage === image.imageURL ? "thumbnail-active" : ""
-                      }`}
+                    className={`border mx-1 rounded-2 ${
+                      mainImage === image.imageURL ? "thumbnail-active" : ""
+                    }`}
                     onClick={() => handleThumbnailClick(image.imageURL)}
                     style={{ cursor: "pointer" }}
                   >
@@ -277,12 +368,20 @@ export default function ProductDetail() {
                   </span>
                   <span className="text-success ms-2">Trong kho</span>
                 </div>
-                <div className="mb-3" >
-                  <span className="h5" >{formatPrice(product.discountPrice)} <span style={{ textDecoration: "underline" }}>đ</span></span>
+                <p style={{ color: "red" }}>
+                  <strong style={{ color: "black" }}>Đã bán: </strong>{" "}
+                  {product.soldQuantity}
+                </p>
+                <div className="mb-3">
+                  <span className="h5">
+                    {formatPrice(product.discountPrice)}{" "}
+                    <span style={{ textDecoration: "underline" }}>đ</span>
+                  </span>
                   <span className="text-muted"> /mỗi hộp</span>
                 </div>
                 <p style={{ textDecoration: "line-through", color: "gray" }}>
-                  {formatPrice(product.unitPrice)} <span style={{ textDecoration: "underline" }}>đ</span>
+                  {formatPrice(product.unitPrice)}{" "}
+                  <span style={{ textDecoration: "underline" }}>đ</span>
                 </p>
 
                 <div className="row" style={{ color: "black" }}>
@@ -315,20 +414,29 @@ export default function ProductDetail() {
                   onClick={handleAddToCartAndNavigate}
                   style={{ padding: 5 }}
                   icon={<DollarOutlined />}
-                > Mua ngay</Button>
+                >
+                  {" "}
+                  Mua ngay
+                </Button>
                 <Button
                   type="default"
                   className="btn btn-primary shadow-0 ms-2"
                   onClick={handleAddToCart}
                   style={{ padding: 5 }}
                   icon={<ShoppingCartOutlined />}
-                > Thêm vào giỏ hàng</Button>
+                >
+                  {" "}
+                  Thêm vào giỏ hàng
+                </Button>
                 <Button
                   type="default"
                   className="btn btn-light border border-secondary py-2 icon-hover px-3 ms-2"
                   style={{ padding: 5 }}
                   icon={<HeartOutlined style={{ color: "red" }} />}
-                > Yêu thích</Button>
+                >
+                  {" "}
+                  Yêu thích
+                </Button>
               </div>
             </Col>
           </Row>
@@ -349,7 +457,10 @@ export default function ProductDetail() {
                         <h5 className="card-title">Các sản phẩm tương tự</h5>
                         {similarProducts.map((product) => (
                           <div className="d-flex mb-3" key={product.productId}>
-                            <Link to={`/products/${product.productId}`} className="me-3">
+                            <Link
+                              to={`/products/${product.productId}`}
+                              className="me-3"
+                            >
                               <img
                                 src={product.productImages[0]?.imageURL}
                                 style={{ width: 150, height: 100 }}
@@ -358,11 +469,17 @@ export default function ProductDetail() {
                               />
                             </Link>
                             <div className="info">
-                              <Link to={`/products/${product.productId}`} className="nav-link mb-1">
+                              <Link
+                                to={`/products/${product.productId}`}
+                                className="nav-link mb-1"
+                              >
                                 {product.productName}
                               </Link>
                               <strong className="text-dark">
-                                {product.discountPrice} <span style={{ textDecoration: "underline" }}>đ</span>
+                                {product.discountPrice}{" "}
+                                <span style={{ textDecoration: "underline" }}>
+                                  đ
+                                </span>
                               </strong>
                             </div>
                           </div>
@@ -373,10 +490,15 @@ export default function ProductDetail() {
                   <div className="px-0 border rounded-2 shadow-0 mt-4">
                     <div className="card">
                       <div className="card-body">
-                        <h5 className="card-title">Gợi ý sản phẩm cùng loại da</h5>
+                        <h5 className="card-title">
+                          Gợi ý sản phẩm cùng loại da
+                        </h5>
                         {sameSkinTypeProducts.map((product) => (
                           <div className="d-flex mb-3" key={product.productId}>
-                            <Link to={`/products/${product.productId}`} className="me-3">
+                            <Link
+                              to={`/products/${product.productId}`}
+                              className="me-3"
+                            >
                               <img
                                 src={product.productImages[0]?.imageURL}
                                 style={{ width: 150, height: 100 }}
@@ -385,11 +507,17 @@ export default function ProductDetail() {
                               />
                             </Link>
                             <div className="info">
-                              <Link to={`/products/${product.productId}`} className="nav-link mb-1">
+                              <Link
+                                to={`/products/${product.productId}`}
+                                className="nav-link mb-1"
+                              >
                                 {product.productName}
                               </Link>
                               <strong className="text-dark">
-                                {product.discountPrice} <span style={{ textDecoration: "underline" }}>đ</span>
+                                {product.discountPrice}{" "}
+                                <span style={{ textDecoration: "underline" }}>
+                                  đ
+                                </span>
                               </strong>
                             </div>
                           </div>
