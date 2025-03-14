@@ -44,7 +44,9 @@ import Profile from "./pages/users/profile/Profile.jsx";
 import ProfileLayout from "../src/component/ProfileLayout/ProfileLayout.jsx";
 import History from "./pages/users/profile/History.jsx";
 import OrderManagement from "./pages/admin/OrderManagement/OrderManagement.jsx";
-
+import BlogManage from "./pages/admin/BlogManagement/Blogmanage.jsx";
+import BlogHashtag from "./pages/admin/BlogManagement/Bloghastag.jsx";
+import BlogCategory from "./pages/admin/BlogManagement/Blogcategory.jsx";
 function App() {
   return (
     <Routes>
@@ -117,6 +119,9 @@ function App() {
           element={<QuestionManagement />}
         />
         <Route path="/admin/answer-management" element={<AnswerManagement />} />
+        <Route path="/admin/blog-management" element={<BlogManage />} />
+        <Route path="/admin/blog-hastag" element={<BlogHashtag />} />
+        <Route path="/admin/blog-category" element={<BlogCategory />} />
       </Route>
 
       {/* <Route path="/product-management" element={<ProductManagement />} /> */}

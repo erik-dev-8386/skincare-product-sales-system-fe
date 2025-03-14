@@ -14,27 +14,26 @@ import api from "../../../config/api";
 import { toast, ToastContainer } from "react-toastify";
 import MyEditor from "../../../component/TinyMCE/MyEditor";
 
-const BrandManagement = () => {
+const BlogHashtag = () => {
   const { Option } = Select;
-  const [brandList, setBrandList] = useState([]);
+  const [hashtagList, setHashtagList] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
   const [form] = useForm();
-  const [editingBrand, setEditingBrand] = useState(null);
+  const [editingHashtag, setEditingHashtag] = useState(null);
   const [isDetailModalOpen, setDetailModalOpen] = useState(false);
-  const [selectedBrand, setSelectedBrand] = useState(null);
+  const [selectedHashtag, setSelectedHashtag] = useState(null);
   const [searchText, setSearchText] = useState("");
 
   const statusMapping = {
-
     1: { text: "HOẠT ĐỘNG", color: "green" },
-    2: { text: "KHÔNG HOẠT ĐỘNG", color: "red" },
+    0: { text: "KHÔNG HOẠT ĐỘNG", color: "red" },
   };
 
   const columns = [
     {
-      title: "Tên thương hiệu",
-      dataIndex: "brandName",
-      key: "brandName",
+      title: "Tên hashtag",
+      dataIndex: "blogHashtagName",
+      key: "blogHashtagName",
     },
     {
       title: "Mô tả",
@@ -54,11 +53,6 @@ const BrandManagement = () => {
       ),
     },
     {
-      title: "Quốc gia",
-      dataIndex: "country",
-      key: "country",
-    },
-    {
       title: "Trạng thái",
       dataIndex: "status",
       key: "status",
@@ -74,12 +68,20 @@ const BrandManagement = () => {
       title: "Nút điều khiển",
       key: "actions",
       render: (text, record) => (
-        <div className="button" style={{display: "flex", justifyContent: "center", flexDirection: "column", width: 100}}> 
+        <div
+          className="button"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column",
+            width: 100,
+          }}
+        >
           <Button
             color="orange"
             variant="filled"
-            onClick={() => handleEditBrand(record)}
-            style={{ margin: 3, border: "2px solid " }}
+            onClick={() => handleEditHashtag(record)}
+            style={{ margin: 3, border: "2px solid" }}
           >
             <i className="fa-solid fa-pen-to-square"></i> Sửa
           </Button>
@@ -88,20 +90,20 @@ const BrandManagement = () => {
             variant="filled"
             type="default"
             onClick={() => handleViewDetails(record)}
-            style={{ margin: 3, border: "2px solid " }}
+            style={{ margin: 3, border: "2px solid" }}
           >
             <i className="fa-solid fa-eye"></i> Chi tiết
           </Button>
           <Popconfirm
-            title="Bạn có muốn xóa thương hiệu này không?"
-            onConfirm={() => handleDeleteBrand(record.brandId)}
+            title="Bạn có muốn xóa hashtag này không?"
+            onConfirm={() => handleDeleteHashtag(record.blogHashtagName)}
             okText="Có"
             cancelText="Không"
           >
             <Button
               color="red"
               variant="filled"
-              style={{ margin: 3, border: "2px solid " }}
+              style={{ margin: 3, border: "2px solid" }}
             >
               <i className="fa-solid fa-trash"></i> Xóa
             </Button>
@@ -111,106 +113,125 @@ const BrandManagement = () => {
     },
   ];
 
-  const fetchBrands = async () => {
+  const fetchHashtags = async () => {
     try {
-      const response = await api.get("/brands");
-      setBrandList(response.data);
+      const response = await api.get("/blog-hashtag");
+      setHashtagList(response.data);
     } catch (error) {
-      console.error("Error fetching brands:", error);
+      console.error("Error fetching hashtags:", error);
+      toast.error("Không thể tải danh sách hashtag!");
     }
   };
 
   useEffect(() => {
-    fetchBrands();
+    fetchHashtags();
   }, []);
 
   const handleSearch = async () => {
     try {
-      const response = await api.get(`/brands/search/${searchText}`);
-      setBrandList(response.data);
+      const response = await api.get(`/blog-hashtag/name/${searchText}`);
+      if (response.data) {
+        setHashtagList([response.data]);
+      } else {
+        setHashtagList([]);
+      }
     } catch (error) {
-      console.error("Error searching brands:", error);
-      toast.error("Tìm kiếm thương hiệu  không thành công!");
+      console.error("Error searching hashtags:", error);
+      toast.error("Tìm kiếm hashtag không thành công!");
     }
   };
 
   const handleOpenModal = () => {
+    form.resetFields();
     setModalOpen(true);
   };
 
   const handleCloseModal = () => {
-    setModalOpen(false);
     form.resetFields();
-    setEditingBrand(null);
+    setModalOpen(false);
+    setEditingHashtag(null);
   };
 
-  const handleViewDetails = (brand) => {
-    setSelectedBrand(brand);
+  const handleViewDetails = (hashtag) => {
+    setSelectedHashtag(hashtag);
     setDetailModalOpen(true);
   };
 
   const handleCloseDetailModal = () => {
     setDetailModalOpen(false);
-    setSelectedBrand(null);
+    setSelectedHashtag(null);
   };
 
   const handleSubmitForm = async (values) => {
-    // Check for duplicate brand name
-    const isDuplicate = brandList.some(
-      (brand) =>
-        brand.brandName === values.brandName &&
-        (!editingBrand || brand.brandId !== editingBrand.brandId) // Allow editing the same brand
+    const isDuplicate = hashtagList.some(
+      (hashtag) =>
+        hashtag.blogHashtagName === values.blogHashtagName &&
+        (!editingHashtag ||
+          hashtag.blogHashtagId !== editingHashtag.blogHashtagId)
     );
 
     if (isDuplicate) {
-      toast.error("Tên thương hiệu đã tồn tại! Vui lòng nhập tên khác.");
-      return; // Prevent form submission
+      toast.error("Tên hashtag đã tồn tại! Vui lòng nhập tên khác.");
+      return;
     }
 
-    if (editingBrand) {
+    if (editingHashtag) {
       try {
-        await api.put(`/brands/${editingBrand.brandId}`, values);
-        toast.success("Đã sửa thương hiệu thành công!");
-        fetchBrands();
+        await api.put(
+          `/blog-hashtag/${editingHashtag.blogHashtagName}`,
+          values
+        );
+        toast.success("Đã sửa hashtag thành công!");
+        fetchHashtags();
         handleCloseModal();
       } catch (error) {
-        toast.error("Cập nhật thương hiệu không thành công!");
+        toast.error("Cập nhật hashtag không thành công!");
       }
     } else {
       try {
-        await api.post('/brands', values);
-        toast.success("Đã thêm thương hiệu mới thành công!");
-        fetchBrands();
+        const newHashtag = {
+          ...values,
+          status: 1,
+        };
+        await api.post("/blog-hashtag", newHashtag);
+        toast.success("Đã thêm hashtag mới thành công!");
+        fetchHashtags();
         handleCloseModal();
       } catch (error) {
-        toast.error("Thêm thương hiệu mới không thành công!");
+        toast.error("Thêm hashtag mới không thành công!");
       }
     }
   };
 
-  const handleEditBrand = (brand) => {
-    setEditingBrand(brand);
-    form.setFieldsValue(brand);
-    handleOpenModal();
+  const handleEditHashtag = (hashtag) => {
+    setEditingHashtag(hashtag);
+    setModalOpen(true);
+    setTimeout(() => {
+      form.setFieldsValue({
+        blogHashtagName: hashtag.blogHashtagName,
+        description: hashtag.description,
+        status: hashtag.status,
+      });
+    }, 100);
   };
 
-  const handleDeleteBrand = async (brandId) => {
+  const handleDeleteHashtag = async (blogHashtagName) => {
     try {
-      await api.delete(`/brands/${brandId}`);
-      toast.success("Đã xóa thương hiệu này thành công!");
-      fetchBrands();
+      await api.delete(`/blog-hashtag/${blogHashtagName}`);
+      toast.success("Đã xóa hashtag này thành công!");
+      fetchHashtags();
     } catch (error) {
-      toast.error("Xóa thương hiệu này không thành công!");
+      toast.error("Xóa hashtag này không thành công!");
     }
   };
 
   return (
     <div>
       <ToastContainer />
-      <h1>Quản lý thương hiệu</h1>
+      <h1>Quản lý Hashtag Blog</h1>
       <div style={{ marginBottom: 16 }}>
         <Input
-          placeholder="Nhập tên thương hiệu để tìm kiếm"
+          placeholder="Nhập tên hashtag để tìm kiếm"
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
           style={{ width: 300, marginRight: 8 }}
@@ -221,35 +242,43 @@ const BrandManagement = () => {
         <Button
           onClick={() => {
             setSearchText("");
-            fetchBrands();
+            fetchHashtags();
           }}
           style={{ margin: 8 }}
         >
           Reset
         </Button>
         <Button type="primary" onClick={handleOpenModal}>
-          <i className="fa-solid fa-plus"></i> Thêm thương hiệu mới
+          <i className="fa-solid fa-plus"></i> Thêm hashtag mới
         </Button>
       </div>
       <Table
-        dataSource={brandList}
+        dataSource={hashtagList}
         columns={columns}
-        rowKey="brandId"
+        rowKey="blogHashtagId"
         style={{ marginTop: 16 }}
       />
       <Modal
-        title={editingBrand ? "Chỉnh sửa thương hiệu" : "Tạo thương hiệu mới"}
+        title={editingHashtag ? "Chỉnh sửa hashtag" : "Tạo hashtag mới"}
         open={isModalOpen}
         onCancel={handleCloseModal}
         onOk={() => form.submit()}
-        okText={editingBrand ? "Lưu thay đổi" : "Tạo"}
+        okText={editingHashtag ? "Lưu thay đổi" : "Tạo"}
         cancelText="Hủy"
+        destroyOnClose={true}
       >
-        <Form form={form} labelCol={{ span: 24 }} onFinish={handleSubmitForm}>
+        <Form
+          form={form}
+          labelCol={{ span: 24 }}
+          onFinish={handleSubmitForm}
+          preserve={false}
+        >
           <Form.Item
-            label="Tên thương hiệu"
-            name="brandName"
-            rules={[{ required: true, message: "Tên thương hiệu không được bỏ trống!" }]}
+            label="Tên hashtag"
+            name="blogHashtagName"
+            rules={[
+              { required: true, message: "Tên hashtag không được bỏ trống!" },
+            ]}
           >
             <Input />
           </Form.Item>
@@ -264,17 +293,7 @@ const BrandManagement = () => {
             />
           </Form.Item>
 
-          <Form.Item
-            label="Quốc gia"
-            name="country"
-            rules={[
-              { required: true, message: "Quốc gia không được để trống" },
-            ]}
-          >
-            <Input />
-          </Form.Item>
-
-          {editingBrand && (
+          {editingHashtag && (
             <Form.Item
               label="Trạng thái"
               name="status"
@@ -284,7 +303,7 @@ const BrandManagement = () => {
             >
               <Select>
                 <Option value={1}>HOẠT ĐỘNG</Option>
-                <Option value={2}>KHÔNG HOẠT ĐỘNG</Option>
+                <Option value={0}>KHÔNG HOẠT ĐỘNG</Option>
               </Select>
             </Form.Item>
           )}
@@ -293,34 +312,31 @@ const BrandManagement = () => {
 
       {/* Modal Chi Tiết */}
       <Modal
-        title="Chi tiết thương hiệu"
+        title="Chi tiết hashtag"
         open={isDetailModalOpen}
         onCancel={handleCloseDetailModal}
         footer={null}
         width={800}
       >
-        {selectedBrand && (
+        {selectedHashtag && (
           <div>
             <p>
-              <strong>BrandID: </strong> {selectedBrand.brandId}
+              <strong>ID: </strong> {selectedHashtag.blogHashtagId}
             </p>
             <p>
-              <strong>Tên thương hiệu: </strong> {selectedBrand.brandName}
+              <strong>Tên hashtag: </strong> {selectedHashtag.blogHashtagName}
             </p>
             <p>
               <strong>Mô tả: </strong>
             </p>
             <div
-              dangerouslySetInnerHTML={{ __html: selectedBrand.description }}
+              dangerouslySetInnerHTML={{ __html: selectedHashtag.description }}
             />
             <p>
-              <strong>Quốc gia: </strong> {selectedBrand.country}
-            </p>
-            <p>
-              <strong>Trạng Thái:</strong>
-              {selectedBrand.status !== undefined ? (
-                <Tag color={statusMapping[selectedBrand.status]?.color}>
-                  {statusMapping[selectedBrand.status]?.text}
+              <strong>Trạng Thái: </strong>
+              {selectedHashtag.status !== undefined ? (
+                <Tag color={statusMapping[selectedHashtag.status]?.color}>
+                  {statusMapping[selectedHashtag.status]?.text}
                 </Tag>
               ) : (
                 "Không xác định"
@@ -333,4 +349,4 @@ const BrandManagement = () => {
   );
 };
 
-export default BrandManagement;
+export default BlogHashtag;

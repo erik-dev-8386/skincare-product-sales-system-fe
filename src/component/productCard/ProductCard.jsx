@@ -43,6 +43,7 @@ const ProductCard = ({
         flexDirection: "column",
         alignItems: "center",
         textAlign: "center",
+        border: "1px solid lightgray"
       }}
       hoverable
       cover={[

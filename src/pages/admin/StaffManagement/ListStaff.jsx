@@ -26,7 +26,7 @@ const StaffManagement = () => {
     { title: 'Địa chỉ', dataIndex: 'address', key: 'address' },
     { title: 'Ngày sinh', dataIndex: 'birthDate', key: 'birthDate', render: (date) => moment(date).format("YYYY-MM-DD") },
     { title: 'Email', dataIndex: 'email', key: 'email' },
-    { title: 'Số điện thoại', dataIndex: 'phoneNumber', key: 'phoneNumber' },
+    { title: 'Số điện thoại', dataIndex: 'phone', key: 'phone' },
     { title: 'Đánh giá', dataIndex: 'rating', key: 'rating' },
     {
       title: 'Ảnh đại diện',
@@ -53,11 +53,11 @@ const StaffManagement = () => {
       title: 'Thao tác',
       key: 'actions',
       render: (_, record) => (
-        <div className="button">
-          <Button color="orange" variant="filled" onClick={() => handleEditStaff(record)} style={{ marginRight: 8, border: "2px solid " }}>
+        <div className="button" style={{display: "flex", justifyContent: "center", flexDirection: "column", width: 100}}>
+          <Button color="orange" variant="filled" onClick={() => handleEditStaff(record)} style={{ margin: 3, border: "2px solid " }}>
             <i className="fa-solid fa-pen-to-square"></i> Sửa
           </Button>
-          <Button color="primary" variant="filled" type="default" onClick={() => handleViewDetails(record)} style={{ marginRight: 8, border: "2px solid " }}>
+          <Button color="primary" variant="filled" type="default" onClick={() => handleViewDetails(record)} style={{ margin: 3, border: "2px solid " }}>
             <i className="fa-solid fa-eye"></i> Chi tiết
           </Button>
           <Popconfirm
@@ -66,7 +66,7 @@ const StaffManagement = () => {
             okText="Có"
             cancelText="Không"
           >
-            <Button color="red" variant="filled" style={{ marginRight: 8, border: "2px solid " }}>
+            <Button color="red" variant="filled" style={{ margin: 3, border: "2px solid " }}>
               <i className="fa-solid fa-trash"></i> Xóa
             </Button>
           </Popconfirm>
@@ -179,7 +179,7 @@ const StaffManagement = () => {
           <Form.Item label="Email" name="email" rules={[{ required: true, message: "Không được để trống!" }, { type: "email", message: "Email không hợp lệ!" }]}>
             <Input />
           </Form.Item>
-          <Form.Item label="Số điện thoại" name="phoneNumber" rules={[{ required: true, message: "Không được để trống!" }]}>
+          <Form.Item label="Số điện thoại" name="phone" rules={[{ required: true, message: "Không được để trống!" }]}>
             <Input />
           </Form.Item>
           <Form.Item label="Địa chỉ" name="address" rules={[{ required: true, message: "Không được để trống!" }]}>

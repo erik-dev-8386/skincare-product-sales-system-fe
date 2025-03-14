@@ -35,7 +35,8 @@ export default function DashBoard() {
   const [loading, setLoading] = useState(true);
   const [questions, setQuestions] = useState([]);
   const [selectedMenu, setSelectedMenu] = useState("users");
-  const [answers, , setAnswers] = useState([]);
+  const [answers, setAnswers] = useState([]);
+  const [blogs, setBlogs] = useState([]);
   const [form] = Form.useForm();
 
   useEffect(() => {
@@ -126,6 +127,15 @@ export default function DashBoard() {
       })
       .catch((error) => console.error("Error fetching discount data:", error));
   }, []);
+  useEffect(() => {
+    api
+      .get("/blogs")
+      .then((response) => {
+        setBlogs(response.data);
+        setLoading(false);
+      })
+      .catch((error) => console.error("Error fetching discount data:", error));
+  }, []);
   const userColumns = [
     { title: "ID", dataIndex: "id", key: "id" },
     { title: "Name", dataIndex: "name", key: "name" },
@@ -178,6 +188,11 @@ export default function DashBoard() {
         <div className="col-md-3">
           <Card>
             <Statistic title="Total Answers" value={answers.length} />
+          </Card>
+        </div>
+        <div className="col-md-3">
+          <Card>
+            <Statistic title="Total Blogs" value={blogs.length} />
           </Card>
         </div>
       </div>

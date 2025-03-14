@@ -15,6 +15,7 @@ import {
 import api from "../../../config/api";
 import { CartContext } from "../../../context/CartContext";
 import ProductCard from "../../../component/productCard/ProductCard";
+import { SpaceContext } from "antd/es/space";
 
 const { Option } = Select;
 const { Sider, Content, Header } = Layout;
@@ -290,7 +291,7 @@ export default function Products() {
         info: "Mô tả",
         product1: p1.description,
         product2: p2.description,
-        
+
       },
       {
         key: "9",
@@ -390,9 +391,10 @@ export default function Products() {
         </Header>
 
         <Layout>
-          <Sider width={250} style={{ background: "#fff", padding: "20px" }}>
-            <h4>Danh mục</h4>
+          <Sider width={250} style={{ background: "#fff", padding: "20px", border: "1px solid lightgray", paddingBottom: 50 }}>
+            <h5 style={{ textAlign: "center", margin: 3 }}>Danh mục</h5>
             <Menu
+              style={{ border: "1px solid lightgray" }}
               mode="inline"
               selectedKeys={[selectedCategory]}
               onClick={(e) => handleCategorySelect(e.key)}
@@ -404,8 +406,9 @@ export default function Products() {
                 })),
               ]}
             />
-            <h4>Loại da</h4>
+            <h5 style={{ textAlign: "center", margin: 3 }}>Loại da</h5>
             <Menu
+              style={{ border: "1px solid lightgray" }}
               mode="inline"
               selectedKeys={[selectedSkinType]}
               onClick={(e) => handleSkinTypeSelect(e.key)}
@@ -417,8 +420,9 @@ export default function Products() {
                 })),
               ]}
             />
-            <h4>Thương hiệu</h4>
+            <h5 style={{ textAlign: "center", margin: 3 }}>Thương hiệu</h5>
             <Menu
+              style={{ border: "1px solid lightgray" }}
               mode="inline"
               selectedKeys={[selectedBrand]}
               onClick={(e) => handleBrandSelect(e.key)}
@@ -430,8 +434,9 @@ export default function Products() {
                 })),
               ]}
             />
-            <h4>Giảm giá</h4>
+            <h5 style={{ textAlign: "center", margin: 3 }}>Giảm giá</h5>
             <Menu
+              style={{ border: "1px solid lightgray" }}
               mode="inline"
               selectedKeys={[selectedDiscount]}
               onClick={(e) => handleDiscountSelect(e.key)}
@@ -451,16 +456,17 @@ export default function Products() {
                 style={{ display: "flex", gap: "10px", marginBottom: "20px" }}
               >
                 <Input
-                  placeholder="Search for products..."
+                  placeholder="Tìm sản phẩm..."
                   value={searchTerm}
                   onChange={handleSearch}
                   style={{ width: "300px" }}
+                  suffix={<i className="fa-solid fa-magnifying-glass"></i>}
                 />
                 <Select
-                  placeholder="Sort by"
+                  placeholder={<span><i className="fa-solid fa-filter"></i> Lọc sản phẩm theo...</span>}
                   style={{ width: "200px" }}
                   onChange={handleSort}
-                  value={sortOption}
+                  value={sortOption || undefined} // Đảm bảo value là undefined nếu sortOption rỗng
                 >
                   <Option value="a-z">A-Z</Option>
                   <Option value="z-a">Z-A</Option>

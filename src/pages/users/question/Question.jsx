@@ -1,131 +1,13 @@
-// import React from 'react'
-// import Footer from "../../../component/Footer/Footer";
-// import Header from '../../../component/Header/Header';
-// import '../question/Question.css';
-// import { useState } from "react";
-
-// export default function Question() {
-
-//     const [answers, setAnswers] = useState({});
-//     const [result, setResult] = useState("");
-
-//     const handleChange = (e) => {
-//         setAnswers({ ...answers, [e.target.name]: parseInt(e.target.value) });
-//     };
-
-//     const handleSubmit = () => {
-//         const totalScore = Object.values(answers).reduce((acc, val) => acc + val, 0);
-
-//         let skinType = "";
-//         if (totalScore <= 10) {
-//             skinType = "Da dầu";
-//         } else if (totalScore <= 20) {
-//             skinType = "Da hỗn hợp";
-//         } else if (totalScore <= 30) {
-//             skinType = "Da thường";
-//         } else if (totalScore <= 40) {
-//             skinType = "Da khô";
-//         } else {
-//             skinType = "Da nhạy cảm";
-//         }
-
-//         setResult(`Loại da của bạn là: ${skinType}`);
-//     };
-
-
-//     return (
-//         <>
-//             {/* <Header /> */}
-//             <div className="containerr">
-//                 <h2 className="question-title">Q1: Da của bạn thường trông ra sao vào buổi chiều?</h2>
-//                 <ul className="options-list">
-//                     <li><input type="radio" name="q1" value="1" onChange={handleChange}/> Trán, mũi và cằm bị bóng dầu nhưng phần còn lại trên mặt lại bình thường hoặc khô. <span className="points">(1 điểm)</span></li>
-//                     <li><input type="radio" name="q1" value="5" onChange={handleChange}/> Da của tôi không bị bóng, khá khô và có cảm giác căng ở một số khu vực. <span className="points">(5 điểm)</span> </li>
-//                     <li><input type="radio" name="q1" value="2" onChange={handleChange}/> Toàn bộ khuôn mặt tôi bị bóng, có cảm giác nhờn dầu và dễ bị mụn đầu đen và mụn trứng cá<span className="points">(2 điểm)</span></li>
-//                     <li><input type="radio" name="q1" value="3" onChange={handleChange}/> Da của tôi mềm mại và thấy dễ chịu khi chạm vào  <span className="points">(3 điểm)</span></li>
-//                     <li><input type="radio" name="q1" value="4" onChange={handleChange}/> Da của tôi bị khô và tôi có thể nhận thấy một số nếp nhăn  <span className="points">(4 điểm)</span></li>
-//                 </ul>
-
-//                 <h2 className="question-title">Q2: Vùng trán của bạn trông như thế nào?</h2>
-//                 <ul className="options-list">
-//                     <li><input type="radio" name="q2" value="4" onChange={handleChange}/> Da khá phẳng mịn, với một vài nếp nhăn nhẹ.  <span className="points">(4 điểm)</span></li>
-//                     <li><input type="radio" name="q2" value="2" onChange={handleChange}/> Tôi nhận thấy một vài vết bong tróc dọc theo đường chân tóc, lông mày và giữa hai bên lông mày.  <span className="points">(2 điểm)</span></li>
-//                     <li><input type="radio" name="q2" value="1" onChange={handleChange}/> Da bóng nhờn và không được mịn. Có những nốt mụn nhỏ và một số mụn đầu đen.  <span className="points">(1 điểm)</span></li>
-//                     <li><input type="radio" name="q2" value="3" onChange={handleChange}/> Da mịn và láng mượt. Không có dấu hiệu bong tróc.  <span className="points">(3 điểm)</span></li>
-//                     <li><input type="radio" name="q2" value="5" onChange={handleChange}/> Điều đầu tiên tôi nhận thấy là các nếp nhăn.  <span className="points">(5 điểm)</span></li>
-//                 </ul>
-
-//                 <h2 className="question-title">Q3: Hãy mô tả phần má và vùng dưới mắt của bạn.</h2>
-//                 <ul className="options-list">
-//                     <li><input type="radio" name="q3" value="2" onChange={handleChange}/>Hầu như không có vết nhăn dễ thấy nào. Chỉ có một số vùng da khô có thể nhìn ra.  <span className="points">(2 điểm)</span></li>
-//                     <li><input type="radio" name="q3" value="5" onChange={handleChange}/>Da bị kích ứng và khô. Có cảm giác da bị căng.  <span className="points">(5 điểm)</span></li>
-//                     <li><input type="radio" name="q3" value="1" onChange={handleChange}/>Lỗ chân lông nở rộng và có khuyết điểm dưới dạng mụn đầu đen hay đốm mụn trắng.  <span className="points">(1 điểm)</span></li>
-//                     <li><input type="radio" name="q3" value="5" onChange={handleChange}/>Da nhẵn mịn với lỗ chân lông se khít.  <span className="points">(3 điểm)</span></li>
-//                     <li><input type="radio" name="q3" value="4" onChange={handleChange}/>Có các nếp nhăn rõ rệt. Da khá khô.  <span className="points">(4 điểm)</span></li>
-//                 </ul>
-
-//                 <h2 className="question-title">Q4: Da của bạn có dễ gặp phải các vấn đề về thâm, hay đỏ rát không?</h2>
-//                 <ul className="options-list">
-//                     <li><input type="radio" name="q4" value="2" onChange={handleChange}/>Có, nhưng chỉ ở vùng chữ T (trán, mũi và cằm).  <span className="points">(2 điểm)</span></li>
-//                     <li><input type="radio" name="q4" value="5" onChange={handleChange}/>Da tôi hơi đỏ, có chút tấy, và có chỗ không đồng đều về độ ẩm.  <span className="points">(5 điểm)</span></li>
-//                     <li><input type="radio" name="q4" value="1" onChange={handleChange}/>Có. Tôi thường gặp phải các vấn đề trên.  <span className="points">(1 điểm)</span></li>
-//                     <li><input type="radio" name="q4" value="4" onChange={handleChange}/>Đôi khi.  <span className="points">(4 điểm)</span></li>
-//                     <li><input type="radio" name="q4" value="3" onChange={handleChange}/>Hầu như không bao giờ.  <span className="points">(3 điểm)</span></li>
-//                 </ul>
-
-//                 <h2 className="question-title">Q5: Hiện giờ điều gì là quan trọng nhất với bạn khi lựa chọn một sản phẩm chăm sóc da?</h2>
-//                 <ul className="options-list">
-//                     <li><input type="radio" name="q5" value="2" onChange={handleChange}/>Sản phẩm giúp tôi đối phó với sự bóng dầu nhưng vẫn có tác dụng dưỡng ẩm.    <span className="points">(2 điểm)</span></li>
-//                     <li><input type="radio" name="q5" value="5" onChange={handleChange}/>Sản phẩm giúp làm dịu và nuôi dưỡng làm da của tôi sâu từ bên trong.  <span className="points">(5 điểm)</span></li>
-//                     <li><input type="radio" name="q5" value="1" onChange={handleChange}/>Sản phẩm có khả năng thẩm thấu nhanh và cải thiện làn da của tôi một cách nhanh chóng. <span className="points">(1 điểm)</span></li>
-//                     <li><input type="radio" name="q5" value="3" onChange={handleChange}/>Sản phẩm giữ cho da tôi mịn màng và mềm mại như hiện tại. <span className="points">(3 điểm)</span></li>
-//                     <li><input type="radio" name="q5" value="4" onChange={handleChange}/>Sản phẩm giúp nuôi dưỡng sâu làn da của tôi và giúp ngăn ngừa các dấu hiệu lão hóa sớm. <span className="points">(4 điểm)</span></li>
-//                 </ul>
-
-//                 <h2 className="question-title">Q6: Da của bạn có dễ hình thành các vết hằn và nếp nhăn?</h2>
-//                 <ul className="options-list">
-//                     <li><input type="radio" name="q6" value="4" onChange={handleChange}/>Tôi bị một vài vết hằn do da khô.    <span className="points">(4 điểm)</span></li>
-//                     <li><input type="radio" name="q6" value="2" onChange={handleChange}/>Có. Tôi bị các nếp nhăn quanh vùng mắt và/hoặc ở khóe miệng.  <span className="points">(2 điểm)</span></li>
-//                     <li><input type="radio" name="q6" value="1" onChange={handleChange}/>Không, tôi hầu như không có nếp nhăn. <span className="points">(1 điểm)</span></li>
-//                     <li><input type="radio" name="q6" value="3" onChange={handleChange}/>Không hẳn, da của tôi lão hóa tương đối chậm <span className="points">(3 điểm)</span></li>
-//                 </ul>
-
-//                 <h2 className="question-title">Q7: Da mặt bạn đã thay đổi ra sao trong 5 năm trở lại đây?</h2>
-//                 <ul className="options-list">
-//                     <li><input type="radio" name="q7" value="2" onChange={handleChange}/>Da tôi bị bóng dầu nhiều hơn ở vùng chữ T (trán, mũi và cằm).    <span className="points">(2 điểm)</span></li>
-//                     <li><input type="radio" name="q7" value="5" onChange={handleChange}/>Da tôi dễ bong tróc hơn và thường cảm thấy căng.  <span className="points">(5 điểm)</span></li>
-//                     <li><input type="radio" name="q7" value="1" onChange={handleChange}/>Da có nhiều khuyết điểm hơn so với trước đây. <span className="points">(1 điểm)</span></li>
-//                     <li><input type="radio" name="q7" value="3" onChange={handleChange}/>Da tôi vẫn ở tình trạng tốt và dễ dàng chăm sóc. <span className="points">(3 điểm)</span></li>
-//                     <li><input type="radio" name="q7" value="4" onChange={handleChange}/>Da tôi có vẻ mỏng đi và kém đàn hồi hơn, và thêm các nếp nhăn và vết hằn. <span className="points">(4 điểm)</span></li>
-//                 </ul>
-
-//                 <h2 className="question-title">Q8: Giới tính của bạn là</h2>
-//                 <ul className="options-list">
-//                     <li><input type="radio" name="q8" value="3" onChange={handleChange}/>Nam <span className="points">(3 điểm)</span></li>
-//                     <li><input type="radio" name="q8" value="3" onChange={handleChange}/>Nữ <span className="points">(3 điểm)</span></li>
-//                 </ul>
-
-//                 <h2 className="question-title">Q9: Độ tuổi của bạn là</h2>
-//                 <ul className="options-list">
-//                     <li><input type="radio" name="q9" value="1" onChange={handleChange}/>Dưới 25 <span className="points">(3 điểm)</span></li>
-//                     <li><input type="radio" name="q9" value="3" onChange={handleChange}/>Từ 25 tới 40 <span className="points">(3 điểm)</span></li>
-//                     <li><input type="radio" name="q9" value="4" onChange={handleChange}/>Từ 40 tới 50 <span className="points">(4 điểm)</span></li>
-//                     <li><input type="radio" name="q9" value="5" onChange={handleChange}/>Trên 50 <span className="points">(5 điểm)</span></li>
-//                 </ul>
-
-//                 <button className="submit-btn" onClick={handleSubmit}>Submit</button>
-
-//                 {result && <div className="result-message">{result}</div>}
-//             </div>
-//             {/* <Footer /> */}
-//         </>
-//     )
-// }
 
 // import React, { useState, useEffect } from 'react';
 // import axios from 'axios';
 // import './Question.css';
 // import api from '../../../config/api';
+// import { jwtDecode } from 'jwt-decode';
+// // import Modal from 'react-modal'; // Import thư viện react-modal
+
+// // // Thiết lập root element cho modal (thường là #root trong ứng dụng React)
+// // Modal.setAppElement('#root');
 
 // export default function Question() {
 //     const [questions, setQuestions] = useState([]);
@@ -133,19 +15,24 @@
 //     const [result, setResult] = useState("");
 //     const [loading, setLoading] = useState(true);
 //     const [error, setError] = useState(null);
+//     const [isPopupOpen, setIsPopupOpen] = useState(false); // State để điều khiển pop-up
+//     const [skinTypeInfo, setSkinTypeInfo] = useState(null); // State để lưu thông tin loại da
+//     const [totalMark, setTotalMark] = useState(0); // State để lưu tổng điểm
 
-//     const decodeHtmlEntities = (html) => { //chuyển đổi các HTML entities thành các ký tự tương ứng.
-//         // Đảm bảo rằng tất cả các nội dung có chứa HTML entities đều được giải mã trước khi hiển thị.
-//         // chứ ko 1 số chữ dịch ko được
+//     // Hàm giải mã HTML entities
+//     const decodeHtmlEntities = (html) => {
 //         const txt = document.createElement("textarea");
 //         txt.innerHTML = html;
 //         return txt.value;
 //     };
 
+//     // Hàm loại bỏ các thẻ HTML
 //     const removeHtmlTags = (html) => {
-//                 if (!html) return '';
-//                 return html.replace(/<\/?[^>]+(>|$)/g, "");
-//             };
+//         if (!html) return '';
+//         return html.replace(/<\/?[^>]+(>|$)/g, "");
+//     };
+
+//     // Fetch danh sách câu hỏi khi component được mount
 //     useEffect(() => {
 //         const fetchQuestions = async () => {
 //             try {
@@ -162,6 +49,7 @@
 //         fetchQuestions();
 //     }, []);
 
+//     // Hàm xử lý khi người dùng chọn đáp án
 //     const handleChange = (questionId, answerId, mark) => {
 //         setAnswers({
 //             ...answers,
@@ -172,30 +60,63 @@
 //         });
 //     };
 
+//     // Hàm xử lý khi người dùng nhấn nút "Gửi bài"
 //     const handleSubmit = async () => {
+//         const token = localStorage.getItem('token'); // Lấy token từ localStorage
+
+//         if (!token) {
+//             console.log("Không tìm thấy token.");
+//             return;
+//         }
+
 //         try {
+//             const decodedToken = jwtDecode(token); // Giải mã token
+//             const userEmail = decodedToken.sub; // Lấy email từ trường "sub"
+
+//             // Chuẩn bị dữ liệu để gửi lên server
 //             const answerList = Object.entries(answers).map(([questionId, answer]) => ({
 //                 questionId: questionId,
 //                 answerId: answer.answerId
 //             }));
 
 //             const submitData = {
-//                 userId: "user123",
-//                 answerList: answerList
+//                 email: userEmail, // Sử dụng email thay vì userId
+//                 answers: answerList // Sử dụng answers thay vì answerList
 //             };
 
+//             // Gọi API submitTest
 //             const response = await api.post('/skin-tests/1/submitTest', submitData);
-//             setResult(`Kết quả của bạn: ${response.data.resultContent || 'Đã nhận được kết quả'}`);
+
+//             // Xử lý response từ server
+//             if (response.data) {
+//                 setResult(`Kết quả của bạn: ${response.data.resultContent || 'Đã nhận được kết quả'}`);
+//                 setTotalMark(response.data.totalMark); // Lưu tổng điểm
+
+//                 // Lấy thông tin loại da từ API
+//                 const skinTypeResponse = await api.get(`/skin-types/${response.data.skinTypeId}`);
+//                 setSkinTypeInfo(skinTypeResponse.data); // Lưu thông tin loại da
+//                 setIsPopupOpen(true); // Mở pop-up
+//             } else {
+//                 setResult("Không thể gửi bài kiểm tra. Vui lòng thử lại.");
+//             }
 //         } catch (err) {
+//             // Xử lý lỗi nếu có
 //             setResult("Không thể gửi bài kiểm tra. Vui lòng thử lại.");
 //             console.error("Lỗi khi gửi bài kiểm tra:", err);
 //         }
 //     };
 
+//     // Hàm đóng pop-up
+//     const closePopup = () => {
+//         setIsPopupOpen(false);
+//     };
+
+//     // Hiển thị loading nếu đang tải dữ liệu
 //     if (loading) {
 //         return <div className="loading-container">Đang tải bài kiểm tra...</div>;
 //     }
 
+//     // Hiển thị lỗi nếu có
 //     if (error) {
 //         return <div className="error-container">Lỗi: {error}</div>;
 //     }
@@ -203,9 +124,10 @@
 //     return (
 //         <div className="container haven-skin-question">
 //             <h1 className="test-title">Bài kiểm tra loại da</h1>
-            
+
+//             {/* Hiển thị danh sách câu hỏi */}
 //             {questions.map((question, index) => {
-//                 const answerLabels = ['A', 'B', 'C', 'D']; // Có thể mở rộng nếu có nhiều hơn 4 đáp án
+//                 const answerLabels = ['A', 'B', 'C', 'D']; // Nhãn cho các đáp án
 //                 return (
 //                     <div key={question.questionId} className="question-container">
 //                         <h2 className="question-title">Q{index + 1}: {decodeHtmlEntities(question.questionContent)}</h2>
@@ -218,8 +140,10 @@
 //                                         value={answer.answerId}
 //                                         onChange={() => handleChange(question.questionId, answer.answerId, answer.mark)}
 //                                     />
-//                                     <span className="answer-label">{answerLabels[ansIndex]}. </span>
-//                                     <span className="answer-content">{decodeHtmlEntities(answer.answerContent),removeHtmlTags(answer.answerContent)}</span>
+//                                     <span className="answer-label"> <strong>{answerLabels[ansIndex]}.</strong> </span>
+//                                     <span className="answer-content">
+//                                         {removeHtmlTags(decodeHtmlEntities(answer.answerContent))}
+//                                     </span>
 //                                     <span className="points">({answer.mark} điểm)</span>
 //                                 </li>
 //                             ))}
@@ -227,18 +151,47 @@
 //                     </div>
 //                 );
 //             })}
-            
+
+//             {/* Nút "Gửi bài" */}
 //             <button className="submit-btn" onClick={handleSubmit}>Gửi bài</button>
-            
+
+//             {/* Hiển thị kết quả */}
 //             {result && <div className="result-message">{result}</div>}
+
+//             {/* Pop-up hiển thị thông tin loại da */}
+//             <Modal
+//                 isOpen={isPopupOpen}
+//                 onRequestClose={closePopup}
+//                 contentLabel="Thông tin loại da"
+//                 className="modal"
+//                 overlayClassName="overlay"
+//             >
+//                 <h2>Kết quả bài kiểm tra loại da</h2>
+//                 {skinTypeInfo && (
+//                     <>
+//                         <p><strong>Loại da của bạn:</strong> {skinTypeInfo.skinName}</p>
+//                         <p><strong>Mô tả:</strong> {removeHtmlTags(skinTypeInfo.description)}</p>
+//                         <p><strong>Điểm số:</strong> {totalMark}</p>
+//                         {skinTypeInfo.skinTypeImages && skinTypeInfo.skinTypeImages.length > 0 && (
+//                             <img
+//                                 src={skinTypeInfo.skinTypeImages[0].imageURL}
+//                                 alt="Hình ảnh loại da"
+//                                 style={{ width: '100%', maxWidth: '300px', marginTop: '10px' }}
+//                             />
+//                         )}
+//                     </>
+//                 )}
+//                 <button onClick={closePopup}>Đóng</button>
+//             </Modal>
 //         </div>
 //     );
 // }
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Question.css';
 import api from '../../../config/api';
+import { jwtDecode } from 'jwt-decode';
+import { Modal } from 'antd'; // Import Modal từ antd
 
 export default function Question() {
     const [questions, setQuestions] = useState([]);
@@ -246,20 +199,17 @@ export default function Question() {
     const [result, setResult] = useState("");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [isPopupOpen, setIsPopupOpen] = useState(false); // State để điều khiển pop-up
+    const [skinTypeInfo, setSkinTypeInfo] = useState(null); // State để lưu thông tin loại da
+    const [totalMark, setTotalMark] = useState(0); // State để lưu tổng điểm
 
-    const decodeHtmlEntities = (html) => {
-        // Giải mã các ký tự HTML entities
-        const txt = document.createElement("textarea");
-        txt.innerHTML = html;
-        return txt.value;
-    };
-
+    // Hàm loại bỏ các thẻ HTML
     const removeHtmlTags = (html) => {
-        // Loại bỏ các thẻ HTML
         if (!html) return '';
         return html.replace(/<\/?[^>]+(>|$)/g, "");
     };
 
+    // Fetch danh sách câu hỏi khi component được mount
     useEffect(() => {
         const fetchQuestions = async () => {
             try {
@@ -276,6 +226,7 @@ export default function Question() {
         fetchQuestions();
     }, []);
 
+    // Hàm xử lý khi người dùng chọn đáp án
     const handleChange = (questionId, answerId, mark) => {
         setAnswers({
             ...answers,
@@ -286,30 +237,81 @@ export default function Question() {
         });
     };
 
+    // Hàm xử lý khi người dùng nhấn nút "Gửi bài"
     const handleSubmit = async () => {
+        const token = localStorage.getItem('token'); // Lấy token từ localStorage
+
+        if (!token) {
+            console.log("Không tìm thấy token.");
+            return;
+        }
+
         try {
+            const decodedToken = jwtDecode(token); // Giải mã token
+            const userEmail = decodedToken.sub; // Lấy email từ trường "sub"
+
+            // Chuẩn bị dữ liệu để gửi lên server
             const answerList = Object.entries(answers).map(([questionId, answer]) => ({
                 questionId: questionId,
                 answerId: answer.answerId
             }));
 
             const submitData = {
-                userId: "user123",
-                answerList: answerList
+                email: userEmail, // Sử dụng email thay vì userId
+                answers: answerList // Sử dụng answers thay vì answerList
             };
 
+            // Gọi API submitTest
             const response = await api.post('/skin-tests/1/submitTest', submitData);
-            setResult(`Kết quả của bạn: ${response.data.resultContent || 'Đã nhận được kết quả'}`);
+
+            // Xử lý response từ server
+            if (response.data) {
+                setResult(`Kết quả của bạn: ${response.data.resultContent || 'Đã nhận được kết quả'}`);
+                setTotalMark(response.data.totalMark); // Lưu tổng điểm
+
+                // Lấy thông tin loại da từ API
+                const skinTypeResponse = await api.get(`/skin-types/${response.data.skinTypeId}`);
+                setSkinTypeInfo(skinTypeResponse.data); // Lưu thông tin loại da
+                setIsPopupOpen(true); // Mở pop-up
+            } else {
+                setResult("Không thể gửi bài kiểm tra. Vui lòng thử lại.");
+            }
         } catch (err) {
+            // Xử lý lỗi nếu có
             setResult("Không thể gửi bài kiểm tra. Vui lòng thử lại.");
             console.error("Lỗi khi gửi bài kiểm tra:", err);
         }
     };
 
+    // Hàm đóng pop-up
+    const closePopup = () => {
+        setIsPopupOpen(false);
+    };
+
+    // Hàm tạo liên kết dựa trên loại da
+    const getSkinCareLink = (skinName) => {
+        switch (skinName) {
+            case 'Khô':
+                return 'http://localhost:5173/listskincare/Kho';
+            case 'Thường':
+                return 'http://localhost:5173/listskincare/Thuong';
+            case 'Nhạy cảm':
+                return 'http://localhost:5173/listskincare/Nhaycam';
+            case 'Hỗn hợp':
+                return 'http://localhost:5173/listskincare/Honhop';
+            case 'Dầu':
+                return 'http://localhost:5173/listskincare/Dau';
+            default:
+                return '#';
+        }
+    };
+
+    // Hiển thị loading nếu đang tải dữ liệu
     if (loading) {
         return <div className="loading-container">Đang tải bài kiểm tra...</div>;
     }
 
+    // Hiển thị lỗi nếu có
     if (error) {
         return <div className="error-container">Lỗi: {error}</div>;
     }
@@ -317,12 +319,13 @@ export default function Question() {
     return (
         <div className="container haven-skin-question">
             <h1 className="test-title">Bài kiểm tra loại da</h1>
-            
+
+            {/* Hiển thị danh sách câu hỏi */}
             {questions.map((question, index) => {
-                const answerLabels = ['A', 'B', 'C', 'D']; // Có thể mở rộng nếu có nhiều hơn 4 đáp án
+                const answerLabels = ['A', 'B', 'C', 'D']; // Nhãn cho các đáp án
                 return (
                     <div key={question.questionId} className="question-container">
-                        <h2 className="question-title">Q{index + 1}: {decodeHtmlEntities(question.questionContent)}</h2>
+                        <h2 className="question-title">Q{index + 1}: {removeHtmlTags(question.questionContent)}</h2>
                         <ul className="options-list">
                             {question.answers.map((answer, ansIndex) => (
                                 <li key={answer.answerId}>
@@ -334,7 +337,7 @@ export default function Question() {
                                     />
                                     <span className="answer-label"> <strong>{answerLabels[ansIndex]}.</strong> </span>
                                     <span className="answer-content">
-                                        {removeHtmlTags(decodeHtmlEntities(answer.answerContent))}
+                                        {removeHtmlTags(answer.answerContent)}
                                     </span>
                                     <span className="points">({answer.mark} điểm)</span>
                                 </li>
@@ -343,10 +346,51 @@ export default function Question() {
                     </div>
                 );
             })}
-            
+
+            {/* Nút "Gửi bài" */}
             <button className="submit-btn" onClick={handleSubmit}>Gửi bài</button>
-            
+
+            {/* Hiển thị kết quả */}
             {result && <div className="result-message">{result}</div>}
+
+            {/* Modal hiển thị thông tin loại da */}
+            <Modal
+                title="Kết quả bài kiểm tra loại da"
+                visible={isPopupOpen}
+                onOk={closePopup}
+                onCancel={closePopup}
+                footer={[
+                    <button key="close" onClick={closePopup} style={{padding: 5, borderRadius: 5, color: "white", backgroundColor: "red"}}>
+                        Đóng
+                    </button>
+                ]}
+            >
+                {skinTypeInfo && (
+                    <>
+                        <p><strong>Loại da của bạn:</strong> Da {skinTypeInfo.skinName}</p>
+                        <p><strong>Mô tả:</strong> {removeHtmlTags(skinTypeInfo.description)}</p>
+                        <p><strong>Điểm số:</strong> {totalMark}</p>
+                        {skinTypeInfo.skinTypeImages && skinTypeInfo.skinTypeImages.length > 0 && (
+                            <img
+                                src={skinTypeInfo.skinTypeImages[0].imageURL}
+                                alt="Hình ảnh loại da"
+                                style={{ width: '100%', maxWidth: '300px', marginTop: '10px' }}
+                            />
+                        )}
+                        {/* Nút "Bấm vào đây để xem lộ trình chăm sóc da" */}
+                        <a
+                            href={getSkinCareLink(skinTypeInfo.skinName)}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{ display: 'block', marginTop: '20px', textAlign: 'center' }}
+                        >
+                            <button type="primary" style={{padding: 5, borderRadius: 5, color: "black", backgroundColor: "yellow"}}>
+                                Bấm vào đây để xem lộ trình chăm sóc da
+                            </button>
+                        </a>
+                    </>
+                )}
+            </Modal>
         </div>
     );
 }

@@ -149,7 +149,8 @@ export default function Header() {
                   style={{ cursor: "pointer", color: "white" }}
                 >
                   <p>
-                    <i className="fa-solid fa-right-from-bracket"></i> Đăng xuất
+                    <i className="fa-solid fa-right-from-bracket"></i>  Đăng xuất
+                   
                   </p>
                 </li>
               </>
@@ -159,14 +160,12 @@ export default function Header() {
                   <Link to="/login-and-signup">
                     {" "}
                     <p>
-                      <i className="fa-solid fa-right-to-bracket"></i> Đăng
-                      nhập/Đăng ký
+                      <i className="fa-solid fa-right-to-bracket"></i>  Đăng nhập/Đăng ký
+                     
                     </p>
                   </Link>
                 </li>
-                {/* <li>
-                  <Link to="/login-and-signup">Đăng ký</Link>
-                </li> */}
+                
               </>
             )}
           </ul>

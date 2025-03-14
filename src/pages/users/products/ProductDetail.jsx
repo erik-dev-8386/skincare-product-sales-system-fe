@@ -176,6 +176,10 @@ export default function ProductDetail() {
     const token = localStorage.getItem("token");
     if (!token) {
       toast.error("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
+      // navigate("/login-and-signup")
+      setTimeout(() => {
+        navigate("/login-and-signup");
+      }, 3000);
       return;
     }
 
@@ -221,6 +225,9 @@ export default function ProductDetail() {
     }
 
     navigate("/shopping-cart");
+    // setTimeout(() => {
+    //   navigate("/shopping-cart");
+    // }, 3000);
   };
 
   const handleThumbnailClick = (imageURL) => {
@@ -369,18 +376,18 @@ export default function ProductDetail() {
                   <span className="text-success ms-2">Trong kho</span>
                 </div>
                 <p style={{ color: "red" }}>
-                  <strong style={{ color: "black" }}>Đã bán: </strong>{" "}
+                  <strong style={{ color: "black" }}>Đã bán: </strong>
                   {product.soldQuantity}
                 </p>
                 <div className="mb-3">
                   <span className="h5">
-                    {formatPrice(product.discountPrice)}{" "}
+                    {formatPrice(product.discountPrice)}
                     <span style={{ textDecoration: "underline" }}>đ</span>
                   </span>
                   <span className="text-muted"> /mỗi hộp</span>
                 </div>
                 <p style={{ textDecoration: "line-through", color: "gray" }}>
-                  {formatPrice(product.unitPrice)}{" "}
+                  {formatPrice(product.unitPrice)}
                   <span style={{ textDecoration: "underline" }}>đ</span>
                 </p>
 
@@ -415,7 +422,7 @@ export default function ProductDetail() {
                   style={{ padding: 5 }}
                   icon={<DollarOutlined />}
                 >
-                  {" "}
+                  
                   Mua ngay
                 </Button>
                 <Button
@@ -425,7 +432,7 @@ export default function ProductDetail() {
                   style={{ padding: 5 }}
                   icon={<ShoppingCartOutlined />}
                 >
-                  {" "}
+                  
                   Thêm vào giỏ hàng
                 </Button>
                 <Button
@@ -434,7 +441,7 @@ export default function ProductDetail() {
                   style={{ padding: 5 }}
                   icon={<HeartOutlined style={{ color: "red" }} />}
                 >
-                  {" "}
+                  
                   Yêu thích
                 </Button>
               </div>
@@ -476,7 +483,7 @@ export default function ProductDetail() {
                                 {product.productName}
                               </Link>
                               <strong className="text-dark">
-                                {product.discountPrice}{" "}
+                                {product.discountPrice}
                                 <span style={{ textDecoration: "underline" }}>
                                   đ
                                 </span>
@@ -514,7 +521,7 @@ export default function ProductDetail() {
                                 {product.productName}
                               </Link>
                               <strong className="text-dark">
-                                {product.discountPrice}{" "}
+                                {product.discountPrice}
                                 <span style={{ textDecoration: "underline" }}>
                                   đ
                                 </span>
