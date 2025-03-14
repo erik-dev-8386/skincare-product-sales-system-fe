@@ -26,7 +26,7 @@ const StaffManagement = () => {
     { title: 'Địa chỉ', dataIndex: 'address', key: 'address' },
     { title: 'Ngày sinh', dataIndex: 'birthDate', key: 'birthDate', render: (date) => moment(date).format("YYYY-MM-DD") },
     { title: 'Email', dataIndex: 'email', key: 'email' },
-    { title: 'Số điện thoại', dataIndex: 'phoneNumber', key: 'phoneNumber' },
+    { title: 'Số điện thoại', dataIndex: 'phone', key: 'phone' },
     { title: 'Đánh giá', dataIndex: 'rating', key: 'rating' },
     {
       title: 'Ảnh đại diện',
@@ -179,7 +179,7 @@ const StaffManagement = () => {
           <Form.Item label="Email" name="email" rules={[{ required: true, message: "Không được để trống!" }, { type: "email", message: "Email không hợp lệ!" }]}>
             <Input />
           </Form.Item>
-          <Form.Item label="Số điện thoại" name="phoneNumber" rules={[{ required: true, message: "Không được để trống!" }]}>
+          <Form.Item label="Số điện thoại" name="phone" rules={[{ required: true, message: "Không được để trống!" }]}>
             <Input />
           </Form.Item>
           <Form.Item label="Địa chỉ" name="address" rules={[{ required: true, message: "Không được để trống!" }]}>
