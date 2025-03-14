@@ -117,11 +117,11 @@
 
 
 //=========================================================================
-import React, { useState, useEffect } from 'react'; // Thêm useEffect vào đây
-import { Card, Image, List, Tag, Typography, Button, Modal } from 'antd';
+import React, { useState, useEffect } from 'react';
+import { Card, Image, List, Tag, Typography, Button, Modal, message, Popconfirm } from 'antd';
 import { CheckCircleOutlined, CloseCircleOutlined, ClockCircleOutlined, SyncOutlined, CarOutlined, ShoppingCartOutlined, RedoOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom'; // Import Link từ react-router-dom
-import axios from 'axios'; // Import axios
+import { Link } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 import api from '../../config/api';
 
 const { Text } = Typography;
@@ -154,16 +154,17 @@ const formatPrice = (price) => {
 const fetchProducts = async (productName) => {
   try {
     const response = await api.get(`/products/search/${encodeURIComponent(productName)}`);
-    return response.data; // Trả về danh sách sản phẩm phù hợp
+    return response.data;
   } catch (error) {
     console.error('Error fetching products:', error);
     return null;
   }
 };
 
-const OrderCard = ({ order }) => {
+const OrderCard = ({ order, onOrderCancelled }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [productIds, setProductIds] = useState({});
+  const [cancelling, setCancelling] = useState(false);
 
   useEffect(() => {
     const fetchProductIds = async () => {
@@ -171,7 +172,7 @@ const OrderCard = ({ order }) => {
       for (const item of order.items) {
         const products = await fetchProducts(item.productName);
         if (products && products.length > 0) {
-          ids[item.productName] = products[0].productId; // Lấy productId của sản phẩm đầu tiên phù hợp
+          ids[item.productName] = products[0].productId;
         }
       }
       setProductIds(ids);
@@ -192,6 +193,42 @@ const OrderCard = ({ order }) => {
     setIsModalVisible(false);
   };
 
+  // Function to check if order can be cancelled
+  // Generally orders can be cancelled when they are in "Chờ xác nhận" (1) or "Đang chuẩn bị" (2) state
+  const canBeCancelled = () => {
+    return order.status === 1 || order.status === 2;
+  };
+
+  // Function to handle order cancellation
+  const handleCancelOrder = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      message.error("Vui lòng đăng nhập để hủy đơn hàng");
+      return;
+    }
+
+    try {
+      setCancelling(true);
+      const decodedToken = jwtDecode(token);
+      const email = decodedToken.sub;
+      
+      // Call the cancel order API endpoint
+      await api.delete(`/orders/cancel-order/${email}/${order.orderId}`);
+      
+      message.success("Đơn hàng đã được hủy thành công");
+      
+      // If there's a callback function for updating the parent component
+      if (onOrderCancelled) {
+        onOrderCancelled(order.orderId);
+      }
+    } catch (error) {
+      console.error("Error cancelling order:", error);
+      message.error("Không thể hủy đơn hàng. Vui lòng thử lại sau!");
+    } finally {
+      setCancelling(false);
+    }
+  };
+
   return (
     <Card style={{ width: '100%', marginBottom: 16, borderRadius: 8, boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }} >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
@@ -207,7 +244,7 @@ const OrderCard = ({ order }) => {
             <List.Item.Meta
               avatar={<Image src={item.image} alt={item.productName} style={{ width: 50, height: 50, borderRadius: 4 }} />}
               title={
-                <Link to={`/products/${productIds[item.productName]}`}> {/* Sử dụng Link để chuyển hướng */}
+                <Link to={`/products/${productIds[item.productName]}`}>
                   <Text>{item.productName}</Text>
                 </Link>
               }
@@ -217,9 +254,31 @@ const OrderCard = ({ order }) => {
         )}
       />
       <Text strong style={{ fontSize: 16, color: '#d0021b' }}>Tổng tiền: {formatPrice(order.totalAmount)}đ</Text>
-      <Button type="primary" onClick={showModal} style={{ marginTop: 16 }}>
-        Xem chi tiết đơn hàng
-      </Button>
+      
+      <div style={{ display: 'flex', gap: '10px', marginTop: 16 }}>
+        <Button type="primary" onClick={showModal}>
+          Xem chi tiết đơn hàng
+        </Button>
+        
+        {canBeCancelled() && (
+          <Popconfirm
+            title="Hủy đơn hàng"
+            description="Bạn có chắc chắn muốn hủy đơn hàng này không?"
+            onConfirm={handleCancelOrder}
+            okText="Đồng ý"
+            cancelText="Hủy bỏ"
+          >
+            <Button 
+              type="danger" 
+              danger 
+              loading={cancelling}
+              icon={<CloseCircleOutlined />}
+            >
+              Hủy đơn hàng
+            </Button>
+          </Popconfirm>
+        )}
+      </div>
 
       <Modal
         title={`Chi tiết đơn hàng #${order.orderId}`}
@@ -227,10 +286,23 @@ const OrderCard = ({ order }) => {
         onOk={handleOk}
         onCancel={handleCancel}
         footer={[
+          canBeCancelled() && (
+            <Button 
+              key="cancel" 
+              danger 
+              onClick={() => {
+                handleCancel();
+                handleCancelOrder();
+              }}
+              loading={cancelling}
+            >
+              Hủy đơn hàng
+            </Button>
+          ),
           <Button key="back" onClick={handleCancel}>
             Đóng
           </Button>,
-        ]}
+        ].filter(Boolean)}
       >
         <Text strong>Ngày đặt hàng: {new Date(order.orderTime).toLocaleString()}</Text>
         <br />
@@ -245,7 +317,7 @@ const OrderCard = ({ order }) => {
               <List.Item.Meta
                 avatar={<Image src={item.image} alt={item.productName} style={{ width: 50, height: 50, borderRadius: 4 }} />}
                 title={
-                  <Link to={`/products/${productIds[item.productName]}`}> {/* Sử dụng Link để chuyển hướng */}
+                  <Link to={`/products/${productIds[item.productName]}`}>
                     <Text>{item.productName}</Text>
                   </Link>
                 }

@@ -176,6 +176,10 @@ export default function ProductDetail() {
     const token = localStorage.getItem("token");
     if (!token) {
       toast.error("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
+      // navigate("/login-and-signup")
+      setTimeout(() => {
+        navigate("/login-and-signup");
+      }, 3000);
       return;
     }
 
@@ -221,6 +225,9 @@ export default function ProductDetail() {
     }
 
     navigate("/shopping-cart");
+    // setTimeout(() => {
+    //   navigate("/shopping-cart");
+    // }, 3000);
   };
 
   const handleThumbnailClick = (imageURL) => {

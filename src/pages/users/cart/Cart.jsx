@@ -339,12 +339,12 @@ export default function Cart() {
       }
     } else {
       try {
-        const response = await api.post("/cart/checkout", checkoutRequest);
-        const checkoutResponse = response.data;
+        const response = await api.get(`/cart/pay/${orderId}`, checkoutRequest);
+        // const checkoutResponse = response.data;
 
-        setCheckoutResponse(checkoutResponse); // Update checkout response state
+        // setCheckoutResponse(checkoutResponse); // Update checkout response state
 
-        // Tính toán total nếu API không trả về
+        // // Tính toán total nếu API không trả về
         const total = checkoutResponse.total || subtotal;
 
         toast.success(
