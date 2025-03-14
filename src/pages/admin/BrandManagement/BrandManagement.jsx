@@ -74,12 +74,12 @@ const BrandManagement = () => {
       title: "Nút điều khiển",
       key: "actions",
       render: (text, record) => (
-        <div className="button">
+        <div className="button" style={{display: "flex", justifyContent: "center", flexDirection: "column", width: 100}}> 
           <Button
             color="orange"
             variant="filled"
             onClick={() => handleEditBrand(record)}
-            style={{ marginRight: 8, border: "2px solid " }}
+            style={{ margin: 3, border: "2px solid " }}
           >
             <i className="fa-solid fa-pen-to-square"></i> Sửa
           </Button>
@@ -88,7 +88,7 @@ const BrandManagement = () => {
             variant="filled"
             type="default"
             onClick={() => handleViewDetails(record)}
-            style={{ marginRight: 8, border: "2px solid " }}
+            style={{ margin: 3, border: "2px solid " }}
           >
             <i className="fa-solid fa-eye"></i> Chi tiết
           </Button>
@@ -101,7 +101,7 @@ const BrandManagement = () => {
             <Button
               color="red"
               variant="filled"
-              style={{ marginRight: 8, border: "2px solid " }}
+              style={{ margin: 3, border: "2px solid " }}
             >
               <i className="fa-solid fa-trash"></i> Xóa
             </Button>

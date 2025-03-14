@@ -110,7 +110,7 @@ const ProductManagement = () => {
                 key={index}
                 src={image.imageURL}
                 alt="Product"
-                style={{ width: 50, height: 50, marginRight: 8 }}
+                style={{ width: 50, height: 50, marginRight:  8 }}
               />
             ))}
         </div>
@@ -132,12 +132,12 @@ const ProductManagement = () => {
       title: "Nút điều khiển",
       key: "actions",
       render: (text, record) => (
-        <div className="button">
+        <div className="button" style={{display: "flex", justifyContent: "center", flexDirection: "column", width: 100}}>
           <Button
             color="orange"
             variant="filled"
             onClick={() => handleEditProduct(record)}
-            style={{ marginRight: 8, border: "2px solid " }}
+            style={{ margin: 3, border: "2px solid " }}
           >
             <i className="fa-solid fa-pen-to-square"></i> Sửa
           </Button>
@@ -146,7 +146,7 @@ const ProductManagement = () => {
             variant="filled"
             type="default"
             onClick={() => handleViewDetails(record)}
-            style={{ marginRight: 8, border: "2px solid " }}
+            style={{ margin: 3, border: "2px solid " }}
           >
             <i className="fa-solid fa-eye"></i> Chi tiết
           </Button>
@@ -159,7 +159,7 @@ const ProductManagement = () => {
             <Button
               color="red"
               variant="filled"
-              style={{ marginRight: 8, border: "2px solid " }}
+              style={{ margin: 3, border: "2px solid " }}
             >
               <i className="fa-solid fa-trash"></i> Xóa
             </Button>
@@ -332,7 +332,7 @@ const ProductManagement = () => {
           placeholder="Nhập tên sản phẩm để tìm kiếm"
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
-          style={{ width: 300, marginRight: 8 }}
+          style={{ width: 300, marginRight:  8 }}
         />
         <Button type="primary" onClick={handleSearch}>
           Tìm kiếm
@@ -628,7 +628,7 @@ const ProductManagement = () => {
                 src={preview}
                 alt="Preview"
                 width={100}
-                style={{ marginTop: 8, marginRight: 8 }}
+                style={{ marginTop: 8, marginRight:  8 }}
               />
             ))}
           </Form.Item>
@@ -917,10 +917,10 @@ export default ProductManagement;
 //             key: 'actions',
 //             render: (text, record) => (
 //                 <div className="button">
-//                     <Button color="orange" variant="filled" onClick={() => handleEditProduct(record)} style={{ marginRight: 8, border: "2px solid " }}>
+//                     <Button color="orange" variant="filled" onClick={() => handleEditProduct(record)} style={{ margin: 3, border: "2px solid " }}>
 //                         <i className="fa-solid fa-pen-to-square"></i> Sửa
 //                     </Button>
-//                     <Button color="primary" variant="filled" type="default" onClick={() => handleViewDetails(record)} style={{ marginRight: 8, border: "2px solid " }}>
+//                     <Button color="primary" variant="filled" type="default" onClick={() => handleViewDetails(record)} style={{ margin: 3, border: "2px solid " }}>
 //                         <i className="fa-solid fa-eye"></i> Chi tiết
 //                     </Button>
 //                     <Popconfirm
@@ -929,7 +929,7 @@ export default ProductManagement;
 //                         okText="Có"
 //                         cancelText="Không"
 //                     >
-//                         <Button color="red" variant="filled" style={{ marginRight: 8, border: "2px solid " }} >
+//                         <Button color="red" variant="filled" style={{ margin: 3, border: "2px solid " }} >
 //                             <i className="fa-solid fa-trash"></i> Xóa
 //                         </Button>
 //                     </Popconfirm>

@@ -51,11 +51,11 @@ const CategoryManagement = () => {
       title: 'Nút điều khiển',
       key: 'actions',
       render: (text, record) => (
-        <div className="button">
-          <Button color="orange" variant="filled" onClick={() => handleEditCategory(record)} style={{ marginRight: 8, border: "2px solid " }}>
+        <div className="button" style={{display: "flex", justifyContent: "center", flexDirection: "column", width: 100}}>
+          <Button color="orange" variant="filled" onClick={() => handleEditCategory(record)} style={{ margin: 3, border: "2px solid " }}>
             <i className="fa-solid fa-pen-to-square"></i> Sửa
           </Button>
-          <Button color="primary" variant="filled" type="default" onClick={() => handleViewDetails(record)} style={{ marginRight: 8, border: "2px solid " }}>
+          <Button color="primary" variant="filled" type="default" onClick={() => handleViewDetails(record)} style={{ margin: 3, border: "2px solid " }}>
             <i className="fa-solid fa-eye"></i> Chi tiết
           </Button>
           <Popconfirm
@@ -64,7 +64,7 @@ const CategoryManagement = () => {
             okText="Có"
             cancelText="Không"
           >
-            <Button color="red" variant="filled" style={{ marginRight: 8, border: "2px solid " }}>
+            <Button color="red" variant="filled" style={{ margin: 3, border: "2px solid " }}>
               <i className="fa-solid fa-trash"></i> Xóa
             </Button>
           </Popconfirm>
