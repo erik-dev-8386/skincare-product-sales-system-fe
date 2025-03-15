@@ -18,17 +18,10 @@ const OrderManagement = () => {
     try {
       const response = await api.get("/orders"); // Thay thế bằng API thực tế của bạn
       const data = response.data;
-
-      // Đảm bảo data là một mảng
-      if (!Array.isArray(data)) {
-        console.error("API response is not an array:", data);
-        setOrders([]); // Đặt orders là một mảng rỗng nếu dữ liệu không hợp lệ
-        return;
-      }
-
       setOrders(data);
     } catch (error) {
       console.error("Error fetching orders:", error);
+      toast.error("Không thể tải danh sách đơn hàng!");
     }
   };
 

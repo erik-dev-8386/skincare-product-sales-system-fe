@@ -75,11 +75,11 @@
 // //   const finalTotal = subtotal;
 
 // //   const handleCheckout = async () => {
-// //     if (formData.paymentMethod === "vnpay") {
+// //     if (formData.paymentMethod === "Momo") {
 // //       try {
-// //         const response = await api.get('/vnpays/pay'); // Call your backend to generate VNPay URL
-// //         const paymentUrl = response.data; // Assuming your backend returns the payment URL
-// //         window.location.href = paymentUrl; // Redirect to VNPay payment page
+// //         const response = await api.get('/Momos/pay'); // Call your backend to generate Momo URL
+// //         const payUrl = response.data; // Assuming your backend returns the payment URL
+// //         window.location.href = payUrl; // Redirect to Momo payment page
 
 // //         // Reset cart items after successful payment
 // //         setCart([]);
@@ -165,11 +165,11 @@
 // //               <input
 // //                 type="radio"
 // //                 name="paymentMethod"
-// //                 value="vnpay"
-// //                 checked={formData.paymentMethod === "vnpay"}
+// //                 value="Momo"
+// //                 checked={formData.paymentMethod === "Momo"}
 // //                 onChange={handleChange}
 // //               />
-// //               Thanh toán qua VNPay
+// //               Thanh toán qua Momo
 // //             </label>
 // //             <label>
 // //               <input
@@ -317,29 +317,29 @@ export default function Cart() {
       total: finalTotal,
     };
 
-    if (formData.paymentMethod === "vnpay") {
+    if (formData.paymentMethod === "Momo") {
       try {
-        // Gọi API backend để lấy URL thanh toán VNPay
-        const response = await api.get(`/vnpays/pay/${orderId}`, checkoutRequest);
+        // Gọi API backend để lấy URL thanh toán Momo
+        const response = await api.post(`/momo/create/${orderId}`, checkoutRequest);
 
-        // Kiểm tra xem paymentUrl có tồn tại không
-        const paymentUrl = response.data;
-        console.log("Payment URL:", paymentUrl);
-        if (!paymentUrl) {
-          throw new Error("Không nhận được URL thanh toán từ VNPay.");
+        // Kiểm tra xem payUrl có tồn tại không
+        const payUrl = response.data;
+        console.log("Payment URL:", payUrl.payUrl);
+        if (!payUrl.payUrl) {
+          throw new Error("Không nhận được URL thanh toán từ Momo.");
         }
 
-        // Chuyển hướng đến trang thanh toán VNPay
-        window.location.href = paymentUrl;
+        // Chuyển hướng đến trang thanh toán Momo
+        window.location.href = payUrl.payUrl;
       } catch (error) {
-        console.error("Error during VNPay payment process:", error);
+        console.error("Error during Momo payment process:", error);
         toast.error(
-          "Có lỗi xảy ra khi thanh toán qua VNPay. Vui lòng thử lại."
+          "Có lỗi xảy ra khi thanh toán qua Momo. Vui lòng thử lại."
         );
       }
     } else {
       try {
-        const response = await api.get(`/cart/pay/${orderId}`, checkoutRequest);
+        const response = await api.post(`/momo/create/${orderId}`, checkoutRequest);
         // const checkoutResponse = response.data;
 
         // setCheckoutResponse(checkoutResponse); // Update checkout response state
@@ -489,11 +489,11 @@ export default function Cart() {
                 <input
                   type="radio"
                   name="paymentMethod"
-                  value="vnpay"
-                  checked={formData.paymentMethod === "vnpay"}
+                  value="Momo"
+                  checked={formData.paymentMethod === "Momo"}
                   onChange={handleChange}
                 />
-                Thanh toán qua VNPay
+                Thanh toán qua Momo
               </label>
               <label>
                 <input
@@ -645,18 +645,18 @@ export default function Cart() {
 //       total: finalTotal,
 //     };
 
-//     if (formData.paymentMethod === "vnpay") {
+//     if (formData.paymentMethod === "Momo") {
 //       try {
-//         const response = await api.get(`/vnpays/pay/${orderId}`, checkoutRequest);
-//         const paymentUrl = response.data;
-//         console.log("Payment URL:", paymentUrl);
-//         if (!paymentUrl) {
-//           throw new Error("Không nhận được URL thanh toán từ VNPay.");
+//         const response = await api.get(`/Momos/pay/${orderId}`, checkoutRequest);
+//         const payUrl = response.data;
+//         console.log("Payment URL:", payUrl);
+//         if (!payUrl) {
+//           throw new Error("Không nhận được URL thanh toán từ Momo.");
 //         }
-//         window.location.href = paymentUrl;
+//         window.location.href = payUrl;
 //       } catch (error) {
-//         console.error("Error during VNPay payment process:", error);
-//         toast.error("Có lỗi xảy ra khi thanh toán qua VNPay. Vui lòng thử lại.");
+//         console.error("Error during Momo payment process:", error);
+//         toast.error("Có lỗi xảy ra khi thanh toán qua Momo. Vui lòng thử lại.");
 //       }
 //     } else {
 //       try {
@@ -801,11 +801,11 @@ export default function Cart() {
 //                 <input
 //                   type="radio"
 //                   name="paymentMethod"
-//                   value="vnpay"
-//                   checked={formData.paymentMethod === "vnpay"}
+//                   value="Momo"
+//                   checked={formData.paymentMethod === "Momo"}
 //                   onChange={handleChange}
 //                 />
-//                 Thanh toán qua VNPay
+//                 Thanh toán qua Momo
 //               </label>
 //               <label>
 //                 <input
