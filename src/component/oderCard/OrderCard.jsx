@@ -123,6 +123,7 @@ import { CheckCircleOutlined, CloseCircleOutlined, ClockCircleOutlined, SyncOutl
 import { Link } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import api from '../../config/api';
+import './OrderCard.css'
 
 const { Text } = Typography;
 
@@ -211,12 +212,12 @@ const OrderCard = ({ order, onOrderCancelled }) => {
       setCancelling(true);
       const decodedToken = jwtDecode(token);
       const email = decodedToken.sub;
-      
+
       // Call the cancel order API endpoint
       await api.delete(`/orders/cancel-order/${email}/${order.orderId}`);
-      
+
       message.success("Đơn hàng đã được hủy thành công");
-      
+
       // If there's a callback function for updating the parent component
       if (onOrderCancelled) {
         onOrderCancelled(order.orderId);
@@ -254,12 +255,17 @@ const OrderCard = ({ order, onOrderCancelled }) => {
         )}
       />
       <Text strong style={{ fontSize: 16, color: '#d0021b' }}>Tổng tiền: {formatPrice(order.totalAmount)}đ</Text>
-      
-      <div style={{ display: 'flex', gap: '10px', marginTop: 16 }}>
-        <Button type="primary" onClick={showModal}>
-          Xem chi tiết đơn hàng
+
+      <div className='button-order-card' >
+        <Button
+        className='button-detail'
+          color='primary'
+          variant="solid" 
+          onClick={showModal}
+         >
+          <i className="fa-solid fa-eye"></i> Chi tiết đơn hàng
         </Button>
-        
+
         {canBeCancelled() && (
           <Popconfirm
             title="Hủy đơn hàng"
@@ -268,9 +274,10 @@ const OrderCard = ({ order, onOrderCancelled }) => {
             okText="Đồng ý"
             cancelText="Hủy bỏ"
           >
-            <Button 
-              type="danger" 
-              danger 
+            <Button
+              className='button-cancel'
+              color='danger'
+              variant="solid"
               loading={cancelling}
               icon={<CloseCircleOutlined />}
             >
@@ -282,14 +289,15 @@ const OrderCard = ({ order, onOrderCancelled }) => {
 
       <Modal
         title={`Chi tiết đơn hàng #${order.orderId}`}
+        width={"150vh"}
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
         footer={[
           canBeCancelled() && (
-            <Button 
-              key="cancel" 
-              danger 
+            <Button
+              key="cancel"
+              danger
               onClick={() => {
                 handleCancel();
                 handleCancelOrder();

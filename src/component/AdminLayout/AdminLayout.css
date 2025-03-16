@@ -1,15 +1,3 @@
-/* .avarta{
-    display: flex;
-    background-color: aqua;
-    width: 150px;
-    height: 150px;
-    text-align: center;
-    border-radius: 50%;
-    justify-content: center;
-    align-items: center;
-    margin: 25px;
-} */
-
 
 
 
@@ -161,27 +149,12 @@
 }
 
 /* Style cho phần logo và welcome */
-.avarta {
-  padding: 8px;
-  text-align: center;
-}
 
-.avarta .img-avarta {
-  width: 120px !important;  /* Tăng kích thước logo từ 60px lên 80px */
-  height: 120px !important;
-  border-radius: 50%;
-  object-fit: cover;
-  padding: 5px !important; /* Giảm padding của ảnh để tối ưu không gian */
-}
-
-.avarta .ant-image-mask {
-  border-radius: 50%;
-}
 
 .logo {
   padding: 5px 0 !important;
-  font-size: 14px;
-  margin-bottom: 8px; /* Giảm margin bottom một chút */
+  font-size:20px;
+  margin-bottom: 8px; 
 }
 
 /* Style cho nút quay lại trang chủ */

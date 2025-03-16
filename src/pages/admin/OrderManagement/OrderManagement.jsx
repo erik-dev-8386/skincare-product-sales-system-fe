@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Table, Modal, Tag, Button, Descriptions, Select, message } from "antd";
+import { Table, Modal, Tag, Button, Descriptions, Select, message, Input } from "antd";
 import axios from "axios";
 import api from "../../../config/api";
 import { ToastContainer, toast } from "react-toastify";
@@ -12,7 +12,7 @@ const OrderManagement = () => {
   const [editingOrder, setEditingOrder] = useState(null);
   const [loading, setLoading] = useState(false);
   const [selectedStatus, setSelectedStatus] = useState(null); // Trạng thái được chọn
-
+  const [searchText, setSearchText] = useState("");
  
   const fetchOrders = async () => {
     try {
@@ -28,6 +28,16 @@ const OrderManagement = () => {
   useEffect(() => {
     fetchOrders();
   }, []);
+
+  const handleSearch = async () => {
+    try {
+      const response = await api.get(`/orders/${searchText}`);
+      setOrders(response.data);
+    } catch (error) {
+      console.error("Error searching orders:", error);
+      toast.error("Tìm kiếm đơn hàng không thành công!");
+    }
+  };
 
 
   const handleViewDetails = (order) => {
@@ -138,6 +148,27 @@ const OrderManagement = () => {
     <ToastContainer />
     <div>
       <h1>Quản lý đơn hàng</h1>
+      <div style={{ marginBottom: 16 }}>
+        <Input
+          placeholder="Nhập mã đơn hàng để tìm kiếm"
+          value={searchText}
+          onChange={(e) => setSearchText(e.target.value)}
+          style={{ width: 300, marginRight: 8 }}
+        />
+        <Button type="primary" onClick={handleSearch}>
+          Tìm kiếm
+        </Button>
+        <Button
+          onClick={() => {
+            setSearchText("");
+            fetchOrders();
+          }}
+          style={{ marginLeft: 8 }}
+        >
+          Reset
+        </Button>
+        
+      </div>
       <Table
         dataSource={orders}
         columns={columns}

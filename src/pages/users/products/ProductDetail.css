@@ -21,3 +21,47 @@
   border-radius: 5px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
+
+.button-buy{
+  background-color: gold;
+  color: black;
+  margin: 5px;
+  padding: 5px;
+  border: 2px solid gold
+}
+
+
+.button-buy:hover{
+  background-color: white !important;
+  color: black !important;
+  border: 2px solid black !important;
+}
+
+.button-add-to-card{
+  background-color: #4096FF;
+  color: white;
+  margin: 5px;
+  padding: 5px;
+  border: 2px solid #4096FF ;
+}
+
+
+.button-add-to-card:hover{
+  background-color: white !important;
+  color: #4096FF !important;
+  border: 2px solid #4096FF !important;
+}
+
+.button-like{
+  background-color: white;
+  color: black;
+  margin: 5px;
+  padding: 5px;
+  border: 2px solid black ;
+}
+
+.button-like:hover{
+  background-color: red !important;
+  color: white !important;
+  border: 2px solid red !important;
+}
