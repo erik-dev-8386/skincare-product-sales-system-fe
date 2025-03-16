@@ -158,7 +158,7 @@ export default function Header() {
               <>
                 <li>
                   <Link to="/login-and-signup">
-                    {" "}
+                    
                     <p>
                       <i className="fa-solid fa-right-to-bracket"></i>  Đăng nhập/Đăng ký
                      
