@@ -416,18 +416,18 @@ export default function ProductDetail() {
                   </div>
                 </div>
                 <Button
-                  type="primary"
-                  className="btn btn-warning shadow-0"
+                  
+                  className="button-buy"
                   onClick={handleAddToCartAndNavigate}
-                  style={{ padding: 5 }}
+           
                   icon={<DollarOutlined />}
                 >
                   
                   Mua ngay
                 </Button>
                 <Button
-                  type="default"
-                  className="btn btn-primary shadow-0 ms-2"
+                
+                  className="button-add-to-card"
                   onClick={handleAddToCart}
                   style={{ padding: 5 }}
                   icon={<ShoppingCartOutlined />}
@@ -436,10 +436,9 @@ export default function ProductDetail() {
                   Thêm vào giỏ hàng
                 </Button>
                 <Button
-                  type="default"
-                  className="btn btn-light border border-secondary py-2 icon-hover px-3 ms-2"
+                  className="button-like"
                   style={{ padding: 5 }}
-                  icon={<HeartOutlined style={{ color: "red" }} />}
+                  icon={<HeartOutlined  />}
                 >
                   
                   Yêu thích

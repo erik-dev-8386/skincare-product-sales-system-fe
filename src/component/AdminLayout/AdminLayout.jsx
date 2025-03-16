@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Image, Layout, Menu } from "antd";
 import {
   UserOutlined,
@@ -10,14 +10,34 @@ import {
   FireOutlined,
 } from "@ant-design/icons";
 import { Link, useNavigate, Outlet, useLocation } from "react-router-dom";
+import api from "../../config/api";
 import "./AdminLayout.css";
+import { jwtDecode } from "jwt-decode";
 
 const { Content, Sider } = Layout;
 
 const AdminLayout = () => {
   const [collapsed, setCollapsed] = useState(false);
+  const [user, setUser] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
+
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const fetchUser = async () => {
+      try {
+        const decoded = jwtDecode(token);
+        const email = decoded.sub;
+        const userData = await api.get(`users/${email}`);
+        setUser(userData.data);
+      } catch (error) {
+        console.error('Failed to fetch user data:', error);
+      }
+    };
+
+    fetchUser();
+  }, []);
 
   const menuItems = [
     { key: "/admin", icon: <DashboardOutlined />, label: "Bảng điều khiển" },
@@ -64,7 +84,6 @@ const AdminLayout = () => {
         },
       ],
     },
-
     {
       key: "qa-group",
       icon: <i className="fa-solid fa-comments"></i>,
@@ -126,15 +145,17 @@ const AdminLayout = () => {
             </Link>
           </div>
           <div className="avarta">
-            <Image
-              className="img-avarta"
-              src="./src/assets/Logo_01.jpg"
-              alt="Avarta"
-            />
+            {user?.image ? (
+              <Image className="img-avarta" size={64} src={user.image} />
+            ) : (
+              <Image className="img-avarta" size={64} src="./src/assets/Logo_01.jpg" />
+            )}
           </div>
+
           <div className="logo text-center text-white py-3">
-            Chào mừng Admin!
+            Chào mừng {user ? user.firstName : "Admin"}!
           </div>
+
           <Menu
             className="sider-menu"
             theme="dark"

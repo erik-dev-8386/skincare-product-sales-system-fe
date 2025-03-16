@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import api from "../../../config/api";
 import { toast, ToastContainer } from "react-toastify";
 import MyEditor from "../../../component/TinyMCE/MyEditor";
+import { TextAlignment } from "@cloudinary/url-gen/qualifiers";
 
 const BrandManagement = () => {
   const { Option } = Select;
@@ -32,12 +33,12 @@ const BrandManagement = () => {
 
   const columns = [
     {
-      title: "Tên thương hiệu",
+      title: <p className="title-product-management">Tên thương hiệu</p>,
       dataIndex: "brandName",
       key: "brandName",
     },
     {
-      title: "Mô tả",
+      title: <p className="title-product-management">Mô tả</p>,
       dataIndex: "description",
       key: "description",
       render: (text) => (
@@ -54,12 +55,12 @@ const BrandManagement = () => {
       ),
     },
     {
-      title: "Quốc gia",
+      title: <p className="title-product-management">Quốc gia</p>,
       dataIndex: "country",
       key: "country",
     },
     {
-      title: "Trạng thái",
+      title: <p className="title-product-management">Trạng thái</p>,
       dataIndex: "status",
       key: "status",
       render: (status) => {
@@ -71,7 +72,7 @@ const BrandManagement = () => {
       },
     },
     {
-      title: "Nút điều khiển",
+      title: <p className="title-product-management">Nút điều khiển</p>,
       key: "actions",
       render: (text, record) => (
         <div className="button" style={{display: "flex", justifyContent: "center", flexDirection: "column", width: 100}}> 
