@@ -279,6 +279,16 @@ const OrderCard = ({ order, onOrderCancelled }) => {
     }
   };
 
+  const fetchProducts = async (productName) => {
+  try {
+    const response = await api.get(`/products/search/${encodeURIComponent(productName)}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    return null;
+  }
+};
+
   useEffect(() => {
     const fetchProductIds = async () => {
       const ids = {};
