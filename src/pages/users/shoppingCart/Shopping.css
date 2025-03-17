@@ -12,7 +12,7 @@
     color: black;
 }
 
-.cart-header {
+/* .cart-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -26,7 +26,7 @@
 
 .cart-header h1 {
     flex-grow: 1;
-}
+} */
 
 .order-summary {
     margin-top: 40px;
@@ -60,7 +60,9 @@
 }
 
 .checkout-btn:hover {
-    background: #d9363e;
+    background-color: #fff !important;
+    color: #900001 !important;
+    border: 2px solid #900001 !important;
 }
 
 /* Custom Table Styles */
@@ -69,26 +71,34 @@
     border-radius: 8px;
     overflow: hidden;
     width: 100%;
+    
 }
 
 .ant-table-thead>tr>th {
-    border: 1px solid #000;
-    background-color: #f0f0f0;
-    font-weight: bold;
-    text-align: center;
+    border: 2px solid #000;
+
+    font-weight: bold !important;
+    text-align: center !important;
+    color: #fff !important;
     vertical-align: middle;
-    padding: 12px;
+   
+    background-color: #900001 !important;
+    
 }
 
+
+
 .ant-table-tbody>tr>td {
-    border: 1px solid #000;
+    border: 2px solid #000;
     text-align: center;
     vertical-align: middle;
     padding: 12px;
+    
 }
 
 .ant-table-tbody>tr:last-child>td {
-    border-bottom: 1px solid #000;
+    border-bottom: 2px solid #000;
+   
 }
 
 .ant-table-cell {
@@ -96,12 +106,13 @@
 }
 
 /* Customize the InputNumber and Buttons in the table */
-.ant-input-number {
+.quantity-product .ant-input-number {
     border-radius: 6px;
     background-color: #fff;
-    color: #333;
+    color: black;
     font-size: 16px;
     transition: border-color 0.3s ease;
+
 }
 
 .ant-input-number:hover {
@@ -142,4 +153,27 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.btn-decrease,
+.btn-increase {
+    background-color: #900001;
+    color: white;
+    border: 2px solid #900001;
+}
+
+.btn-decrease:hover,
+.btn-increase:hover {
+    background-color: white !important;
+    color: #900001 !important;
+    border: 2px solid #900001 !important;
+}
+
+.title-cart {
+    background-color: #900001;
+    width: 100%;
+    text-align: center;
+    color: white;
+    font-size: 18px;
+    
 }

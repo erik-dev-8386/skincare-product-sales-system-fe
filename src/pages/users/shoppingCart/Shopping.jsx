@@ -172,7 +172,7 @@ export default function CartPage() {
 
   const columns = [
     {
-      title: "Ảnh",
+      title: <p className="title-cart">Ảnh</p>,
       dataIndex: "productImages",
       key: "image",
       render: (images) => (
@@ -185,12 +185,12 @@ export default function CartPage() {
       ),
     },
     {
-      title: "Sản phẩm",
+      title: <p className="title-cart">Sản phẩm</p>,
       dataIndex: "productName",
       key: "productName",
     },
     {
-      title: "Giá tiền",
+      title: <p className="title-cart">Giá tiền</p>,
       dataIndex: "discountPrice",
       key: "price",
       render: (price) => (
@@ -201,25 +201,26 @@ export default function CartPage() {
       ),
     },
     {
-      title: "Số lượng",
+      title: <p className="title-cart">Số lượng</p>,
       key: "quantity",
       render: (_, item) => (
         <Space>
           <Button
-            color="primary"
-            variant="solid"
+          className="btn-decrease"
+            
             icon={<MinusOutlined />}
             onClick={() => decreaseQuantity(item.productId)}
             size="small"
           />
           <Input
+          className="quantity-product"
             min={1}
             value={item.quantity}
             style={{ width: 60, textAlign: "center" }}
           />
           <Button
-            color="primary"
-            variant="solid"
+          className="btn-increase"
+           
             icon={<PlusOutlined />}
             onClick={() => increaseQuantity(item.productId)}
             size="small"
@@ -228,7 +229,7 @@ export default function CartPage() {
       ),
     },
     {
-      title: "Tổng",
+      title: <p className="title-cart">Tổng</p>,
       key: "total",
       render: (_, item) => (
         <Text>
@@ -238,12 +239,13 @@ export default function CartPage() {
       ),
     },
     {
-      title: "Nút điều khiển",
+      title: <p className="title-cart">Nút điều khiển</p>,
       key: "action",
       render: (_, item) => (
         <Button
           color="danger"
           variant="solid"
+          style={{border: "2px solid #ff4d4f"}}
           icon={<DeleteOutlined />}
           onClick={() => deleteItem(item.productId)}
         >
@@ -260,10 +262,12 @@ export default function CartPage() {
      
       <div className="cart-container">
         <Card>
-          <Title level={2} className="cart-header">
+          {/* <Title level={2} className="cart-header">
             Giỏ hàng
-          </Title>
+          </Title> */}
+          <h1>Giỏ hàng</h1>
           <Table
+          className="table-cart"
             dataSource={cart}
             columns={columns}
             pagination={false}
@@ -278,7 +282,7 @@ export default function CartPage() {
               </span>
             </div>
             <Button
-              type="primary"
+              
               size="large"
               className="checkout-btn"
               onClick={handleCheckout}
@@ -378,7 +382,7 @@ export default function CartPage() {
 
 //   const columns = [
 //     {
-//       title: "Ảnh",
+//       title: <p className="title-cart">Ảnh</p>,
 //       dataIndex: "productImages",
 //       key: "image",
 //       render: (images) => (
@@ -391,12 +395,12 @@ export default function CartPage() {
 //       ),
 //     },
 //     {
-//       title: "Sản phẩm",
+//       title: <p className="title-cart">Sản phẩm</p>,
 //       dataIndex: "productName",
 //       key: "productName",
 //     },
 //     {
-//       title: "Giá tiền",
+//       title: <p className="title-cart">Giá tiền</p>,
 //       dataIndex: "discountPrice",
 //       key: "price",
 //       render: (price) => (
@@ -407,7 +411,7 @@ export default function CartPage() {
 //       ),
 //     },
 //     {
-//       title: "Số lượng",
+//       title: <p className="title-cart">Số lượng</p>,
 //       key: "quantity",
 //       render: (_, item) => (
 //         <Space>
@@ -434,7 +438,7 @@ export default function CartPage() {
 //       ),
 //     },
 //     {
-//       title: "Tổng",
+//       title: <p className="title-cart">Tổng</p>,
 //       key: "total",
 //       render: (_, item) => (
 //         <Text>
@@ -444,7 +448,7 @@ export default function CartPage() {
 //       ),
 //     },
 //     {
-//       title: "Nút điều khiển",
+//       title: <p className="title-cart">Nút điều khiển</p>,
 //       key: "action",
 //       render: (_, item) => (
 //         <Button

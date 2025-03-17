@@ -151,6 +151,8 @@
 .searchtt {
     background-color: aliceblue;
     color: black;
+    width: 300px;
+    padding: 5px;
 }
 
 .search input[type="text"] {
@@ -232,6 +234,20 @@
 .user-container {
     position: relative;
 }
+
+.user-container .user i:hover {
+background-color: white;
+border-radius: 50%;
+color: #900001;
+
+}
+/* 
+.cart .anticon-shopping-cart:hover {
+    background-color: white; 
+    color: #900001; 
+    border-radius: 50%; 
+    transition: background-color 0.3s ease, color 0.3s ease; 
+} */
 
 .user-container .subnav {
     position: absolute;

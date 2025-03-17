@@ -96,27 +96,29 @@ export default function Header() {
       </div>
 
       <div className="icon col-3">
-        <div className="search">
-          <input type="text" placeholder="       " className="searchtt" />
+        <div className="search" >
+          <input type="text" placeholder="Tìm kiếm sản phẩm..." className="searchtt" />
           <i className="fas fa-search search-icon"></i>
         </div>
 
-        <Link to="/shopping-cart">
+        <Link to="/shopping-cart" className="cart">
           <Badge
             count={cart.length}
             style={{ backgroundColor: "yellow", color: "black" }}
           >
-            <ShoppingCartOutlined
-              style={{
-                fontSize: "24px",
-                cursor: "pointer",
-                color: "white",
-                borderRadius: "50%",
-                backgroundColor: "none",
-                padding: "7.5px",
-                border: "1px solid white",
-              }}
-            />
+          
+          <ShoppingCartOutlined
+            style={{
+              fontSize: "24px",
+              cursor: "pointer",
+              color: "white",
+              borderRadius: "50%",
+              backgroundColor: "none",
+              padding: "7.5px",
+              border: "1px solid white",
+            }}
+          />
+          
           </Badge>
         </Link>
 
