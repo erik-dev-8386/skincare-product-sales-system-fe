@@ -1,4 +1,17 @@
-import {Button, Form, Input, Modal, Table, Popconfirm, DatePicker, Col, Row, Tag, Upload, Image} from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  Modal,
+  Table,
+  Popconfirm,
+  DatePicker,
+  Col,
+  Row,
+  Tag,
+  Upload,
+  Image,
+} from "antd";
 import { useForm } from "antd/es/form/Form";
 import { UploadOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
@@ -7,7 +20,7 @@ import { Select } from "antd";
 import api from "../../../config/api";
 import dayjs from "dayjs";
 import MyEditor from "../../../component/TinyMCE/MyEditor";
-import './Pro.css'
+import "./Pro.css";
 
 const ProductManagement = () => {
   const { Option } = Select;
@@ -111,7 +124,7 @@ const ProductManagement = () => {
                 key={index}
                 src={image.imageURL}
                 alt="Product"
-                style={{ width: 50, height: 50, marginRight:  8 }}
+                style={{ width: 50, height: 50, marginRight: 8 }}
               />
             ))}
         </div>
@@ -133,9 +146,17 @@ const ProductManagement = () => {
       title: "Nút điều khiển",
       key: "actions",
       render: (text, record) => (
-        <div className="button" style={{display: "flex", justifyContent: "center", flexDirection: "column", width: 100, alignItems: "center"}}>
+        <div
+          className="button"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column",
+            width: 100,
+            alignItems: "center",
+          }}
+        >
           <Button
-        
             color="orange"
             variant="filled"
             onClick={() => handleEditProduct(record)}
@@ -334,7 +355,7 @@ const ProductManagement = () => {
           placeholder="Nhập tên sản phẩm để tìm kiếm"
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
-          style={{ width: 300, marginRight:  8 }}
+          style={{ width: 300, marginRight: 8 }}
         />
         <Button type="primary" onClick={handleSearch}>
           Tìm kiếm
@@ -348,10 +369,10 @@ const ProductManagement = () => {
         >
           Reset
         </Button>
-      <Button type="primary" onClick={handleOpenModal}>
-        <i className="fa-solid fa-plus"></i>
-        Thêm sản phẩm mới
-      </Button>
+        <Button type="primary" onClick={handleOpenModal}>
+          <i className="fa-solid fa-plus"></i>
+          Thêm sản phẩm mới
+        </Button>
       </div>
       <Table
         dataSource={ProductList}
@@ -419,7 +440,6 @@ const ProductManagement = () => {
               >
                 <Input type="number" />
               </Form.Item>
-             
             </Col>
             {/* Cột 2 */}
             <Col span={12}>
@@ -630,7 +650,7 @@ const ProductManagement = () => {
                 src={preview}
                 alt="Preview"
                 width={100}
-                style={{ marginTop: 8, marginRight:  8 }}
+                style={{ marginTop: 8, marginRight: 8 }}
               />
             ))}
           </Form.Item>
@@ -653,7 +673,8 @@ const ProductManagement = () => {
               <strong>Tên sản phẩm: </strong> {selectedProduct.productName}
             </p>
             <p>
-              <strong>Giá gốc: </strong> {formatPrice(selectedProduct.unitPrice)}
+              <strong>Giá gốc: </strong>{" "}
+              {formatPrice(selectedProduct.unitPrice)}
             </p>
             <p>
               <strong>Giá giảm: </strong> {selectedProduct.discountPrice}
@@ -668,7 +689,9 @@ const ProductManagement = () => {
               <strong>Hướng dẫn sử dụng: </strong>
             </p>
             <div
-              dangerouslySetInnerHTML={{ __html: selectedProduct.usageInstruction }}
+              dangerouslySetInnerHTML={{
+                __html: selectedProduct.usageInstruction,
+              }}
             />
             <p>
               <strong>Thành phần: </strong> {selectedProduct.ingredients}
@@ -732,7 +755,6 @@ const ProductManagement = () => {
             <p style={{ display: "flex" }}>
               <strong>Ảnh: </strong>
               {selectedProduct.productImages.map((image, index) => (
-
                 <Image
                   key={index}
                   src={image.imageURL}
@@ -761,4 +783,3 @@ const ProductManagement = () => {
 export default ProductManagement;
 
 //=========================================================================================================
-
