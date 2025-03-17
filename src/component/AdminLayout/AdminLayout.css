@@ -28,8 +28,8 @@
 
 /* Khi Sider thu nhỏ */
 .sider-admin.ant-layout-sider-collapsed .avarta .img-avarta {
-    width: 70px; /* Kích thước nhỏ hơn */
-    height: 70px;
+    width: 80px; /* Kích thước nhỏ hơn */
+    height: 80px;
 }
 
 /* Thiết lập chiều cao và cuộn cho Sider */

@@ -20,7 +20,7 @@ import { Select } from "antd";
 import api from "../../../config/api";
 import dayjs from "dayjs";
 import MyEditor from "../../../component/TinyMCE/MyEditor";
-import "./Pro.css";
+import "./ProductManagement.css";
 
 const ProductManagement = () => {
   const { Option } = Select;

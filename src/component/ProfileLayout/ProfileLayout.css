@@ -33,6 +33,17 @@
 .avarta-profile  .image-avarta{
   border-radius: 50%;
   padding: 10px;
+  transition: all 0.2s ease;
+}
+
+.sider-user-profile:not(.ant-layout-sider-collapsed) .avarta-profile .image-avarta {
+  width: 200px; /* Kích thước lớn hơn */
+  height: 200px;
+}
+
+.sider-user-profile.ant-layout-sider-collapsed .avarta-profile .image-avarta {
+  width: 90px; /* Kích thước nhỏ hơn */
+  height: 90px;
 }
 
 .sider-user-profile {

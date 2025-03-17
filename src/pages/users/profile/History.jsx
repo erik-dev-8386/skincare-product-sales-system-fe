@@ -69,6 +69,7 @@ import { List, Spin, message } from 'antd';
 import OrderCard from '../../../component/oderCard/OrderCard';
 import api from '../../../config/api';
 import { jwtDecode } from 'jwt-decode';
+import { toast, ToastContainer } from 'react-toastify';
 
 const OrderHistory = () => {
   const [orders, setOrders] = useState([]);
@@ -77,7 +78,7 @@ const OrderHistory = () => {
   const fetchOrders = async () => {
     const token = localStorage.getItem("token");
     if (!token) {
-      message.error("No token found. Please login.");
+      toast.error("Không tìm thấy token. Làm ơn hãy đăng nhập.");
       return;
     }
     try {
@@ -100,7 +101,7 @@ const OrderHistory = () => {
 
       setOrders(formattedOrders);
     } catch (error) {
-      message.error('Failed to fetch order history');
+      toast.error('Failed to fetch order history');
     } finally {
       setLoading(false);
     }
@@ -128,6 +129,7 @@ const OrderHistory = () => {
 
   return (
     <>
+    <ToastContainer/>
       <h1>Lịch sử mua hàng</h1>
       <div style={{ padding: '24px' }}>
         <List

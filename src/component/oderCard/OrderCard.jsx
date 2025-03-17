@@ -1,6 +1,6 @@
 
 // import React, { useState, useEffect } from 'react';
-// import { Card, Image, List, Tag, Typography, Button, Modal, message, Popconfirm } from 'antd';
+// import { Card, Image, List, Tag, Typography, Button, Modal, toast, Popconfirm } from 'antd';
 // import { CheckCircleOutlined, CloseCircleOutlined, ClockCircleOutlined, SyncOutlined, CarOutlined, ShoppingCartOutlined, RedoOutlined } from '@ant-design/icons';
 // import { Link } from 'react-router-dom';
 // import { jwtDecode } from 'jwt-decode';
@@ -86,7 +86,7 @@
 //   const handleCancelOrder = async () => {
 //     const token = localStorage.getItem("token");
 //     if (!token) {
-//       message.error("Vui lòng đăng nhập để hủy đơn hàng");
+//       toast.error("Vui lòng đăng nhập để hủy đơn hàng");
 //       return;
 //     }
 
@@ -98,7 +98,7 @@
 //       // Call the cancel order API endpoint
 //       await api.delete(`/orders/cancel-order/${email}/${order.orderId}`);
 
-//       message.success("Đơn hàng đã được hủy thành công");
+//       toast.success("Đơn hàng đã được hủy thành công");
 
 //       // If there's a callback function for updating the parent component
 //       if (onOrderCancelled) {
@@ -106,7 +106,7 @@
 //       }
 //     } catch (error) {
 //       console.error("Error cancelling order:", error);
-//       message.error("Không thể hủy đơn hàng. Vui lòng thử lại sau!");
+//       toast.error("Không thể hủy đơn hàng. Vui lòng thử lại sau!");
 //     } finally {
 //       setCancelling(false);
 //     }
@@ -227,12 +227,13 @@
 //============================================================================
 
 import React, { useState, useEffect } from 'react';
-import { Card, Image, List, Tag, Typography, Button, Modal, message, Popconfirm } from 'antd';
+import { Card, Image, List, Tag, Typography, Button, Modal, Popconfirm } from 'antd';
 import { CheckCircleOutlined, CloseCircleOutlined, ClockCircleOutlined, SyncOutlined, CarOutlined, ShoppingCartOutlined, RedoOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode'; // Thư viện giải mã token
 import api from '../../config/api'; // Import API service
 import './OrderCard.css';
+import { toast, ToastContainer } from 'react-toastify';
 
 const { Text } = Typography;
 
@@ -330,7 +331,7 @@ const OrderCard = ({ order, onOrderCancelled }) => {
   const handleCancelOrder = async () => {
     const token = localStorage.getItem("token");
     if (!token) {
-      message.error("Vui lòng đăng nhập để hủy đơn hàng");
+      toast.error("Vui lòng đăng nhập để hủy đơn hàng");
       return;
     }
 
@@ -341,20 +342,22 @@ const OrderCard = ({ order, onOrderCancelled }) => {
 
       await api.delete(`/orders/cancel-order/${email}/${order.orderId}`);
 
-      message.success("Đơn hàng đã được hủy thành công");
+      toast.success("Đơn hàng đã được hủy thành công");
 
       if (onOrderCancelled) {
         onOrderCancelled(order.orderId);
       }
     } catch (error) {
       console.error("Error cancelling order:", error);
-      message.error("Không thể hủy đơn hàng. Vui lòng thử lại sau!");
+      toast.error("Không thể hủy đơn hàng. Vui lòng thử lại sau!");
     } finally {
       setCancelling(false);
     }
   };
 
   return (
+    <>
+    <ToastContainer/>
     <Card style={{ width: '100%', marginBottom: 16, borderRadius: 8, boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }} >
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
         <Text strong style={{ fontSize: 16 }}>Mã đơn hàng: {order.orderId}</Text>
@@ -485,6 +488,7 @@ const OrderCard = ({ order, onOrderCancelled }) => {
         <Text strong style={{ fontSize: 16, color: '#d0021b' }}>Tổng tiền: {formatPrice(order.totalAmount)}đ</Text>
       </Modal>
     </Card>
+    </>
   );
 };
 

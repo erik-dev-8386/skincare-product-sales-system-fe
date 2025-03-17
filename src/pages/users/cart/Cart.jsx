@@ -124,6 +124,15 @@ export default function Cart() {
 
         // Chuyển hướng đến trang thanh toán Momo
         window.location.href = payUrl.payUrl;
+        
+        // Reset cart items after successful checkout
+        setCart([]);
+        setCartItems([]);
+
+        // Delay navigation for 3 seconds
+        setTimeout(() => {
+          navigate("/"); // Redirect to homepage or success page
+        }, 3000); // 3 seconds delay
       } catch (error) {
         console.error("Error during Momo payment process:", error);
         toast.error(
@@ -132,7 +141,7 @@ export default function Cart() {
       }
     } else {
       try {
-        const response = await api.post(`/momo/create/${orderId}`, checkoutRequest);
+        const response = await api.get(`/cart/pay/${orderId}`, checkoutRequest);
         // const checkoutResponse = response.data;
 
         // setCheckoutResponse(checkoutResponse); // Update checkout response state

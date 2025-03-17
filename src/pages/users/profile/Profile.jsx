@@ -471,9 +471,9 @@ export default function Profile() {
           <Col span={8}>
             <Form.Item name="gender" label="Giới tính">
               <Select disabled={!isEditing}>
-                <Option value="other">Khác</Option>
-                <Option value="men">Nam</Option>
-                <Option value="women">Nữ</Option>
+                <Option value="khác">Khác</Option>
+                <Option value="nam">Nam</Option>
+                <Option value="nữ">Nữ</Option>
               </Select>
             </Form.Item>
           </Col>
