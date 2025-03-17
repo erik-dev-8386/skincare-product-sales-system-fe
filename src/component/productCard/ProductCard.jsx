@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Card, Button } from "antd";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import './ProductCard.css'
 
 const { Meta } = Card;
 
@@ -99,14 +100,16 @@ const ProductCard = ({
       />
       <div>
         <Button
+        className="button-compare"
           type="primary"
           onClick={(e) => {
             e.stopPropagation(); // Ngăn chặn sự kiện click từ Card
             onCompareClick(product);
           }}
           style={{
-            backgroundColor: "#1890ff",
+            backgroundColor: "#900001",
             color: "white",
+            border: "2px solid #900001"
           }}
         >
           So sánh
