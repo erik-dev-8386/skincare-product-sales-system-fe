@@ -146,21 +146,12 @@ const ProductManagement = () => {
       title: "Nút điều khiển",
       key: "actions",
       render: (text, record) => (
-        <div
-          className="button"
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            flexDirection: "column",
-            width: 100,
-            alignItems: "center",
-          }}
-        >
+        <div className="button" style={{ display: "flex", justifyContent: "center", flexDirection: "column", width: 100, alignItems: "center" }}>
           <Button
             color="orange"
             variant="filled"
             onClick={() => handleEditProduct(record)}
-            style={{ margin: 3, border: "2px solid " }}
+            style={{ margin: 3, border: "2px solid", width: 100 }}
           >
             <i className="fa-solid fa-pen-to-square"></i> Sửa
           </Button>
@@ -169,7 +160,7 @@ const ProductManagement = () => {
             variant="filled"
             type="default"
             onClick={() => handleViewDetails(record)}
-            style={{ margin: 3, border: "2px solid " }}
+            style={{ margin: 3, border: "2px solid", width: 100 }}
           >
             <i className="fa-solid fa-eye"></i> Chi tiết
           </Button>
@@ -182,7 +173,7 @@ const ProductManagement = () => {
             <Button
               color="red"
               variant="filled"
-              style={{ margin: 3, border: "2px solid " }}
+              style={{ margin: 3, border: "2px solid", width: 100 }}
             >
               <i className="fa-solid fa-trash"></i> Xóa
             </Button>

@@ -412,7 +412,7 @@ const OrderCard = ({ order, onOrderCancelled }) => {
       </div>
 
       <Modal
-        title={`Chi tiết đơn hàng #${order.orderId}`}
+        title={<p style={{backgroundColor: "#900001", width: "100%", color: "white", padding: 10, fontSize: 20}}>Chi tiết đơn hàng #{order.orderId}</p>}
         width={"150vh"}
         visible={isModalVisible}
         onOk={handleOk}
@@ -436,18 +436,18 @@ const OrderCard = ({ order, onOrderCancelled }) => {
           </Button>,
         ].filter(Boolean)}
       >
-        <div style={{marginBottom: 10, padding: 10, borderBottom: "2px solid black"}}>
+        <div style={{marginBottom: 10, padding: 10, borderBottom: "2px solid #900001"}}>
         <Text strong>Ngày đặt hàng: {new Date(order.orderTime).toLocaleString()}</Text>
         <br />
         <Text strong>Trạng thái: </Text>{getStatusTag(order.status)}
         </div>
         <br />
         <div style={{display: "flex", flexDirection: "column"}}>
-          <div style={{marginBottom: 10, borderBottom: "2px solid black", padding: 10}}>
+          <div style={{marginBottom: 10, borderBottom: "2px solid #900001", padding: 10}}>
             <Text strong>Thông tin người nhận:</Text>
             {userInfo && (
               <div>
-                <Text>Họ tên: {userInfo.firstName} {userInfo.lastName}</Text>
+                <Text>Họ và tên: {userInfo.lastName} {userInfo.firstName} </Text>
                 <br />
                 <Text>Số điện thoại: {userInfo.phone}</Text>
                 <br />
