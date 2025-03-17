@@ -182,7 +182,7 @@ export default function Cart() {
     //const orderId = orderId; // Use the orderId from form data
   
     try {
-        const response = await api.delete(`/orders/cancel-order/${email}/${orderId}`, {
+        const response = await api.delete(`/cart/delete/${email}/${orderId}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

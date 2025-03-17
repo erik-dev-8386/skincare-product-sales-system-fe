@@ -156,12 +156,17 @@ export default function CartPage() {
 
     try {
       const response = await api.post("/cart/checkout", checkoutRequestDTO);
-      toast.success("Checkout successfully!");
+  
+      toast.success("Bạn đã đặt hàng thành công!");
       // setCart([]); // Clear cart after successful checkout
-      navigate("/cart", { state: { checkoutResponse: response.data } }); // Redirect to homepage or order confirmation page
+
+      setTimeout(() => {
+        navigate("/cart", { state: { checkoutResponse: response.data } })
+      }, 3000);
+      // navigate("/cart", { state: { checkoutResponse: response.data } }); // Redirect to homepage or order confirmation page
     } catch (error) {
       console.error("Error during checkout:", error);
-      toast.error("Checkout failed! Please try again.");
+      toast.error("Đặt hàng không thành công! Hãy thử lại.");
     }
   };
 
@@ -249,8 +254,10 @@ export default function CartPage() {
   ];
 
   return (
+    <>
+    <ToastContainer />
     <div className="container">
-      <ToastContainer />
+     
       <div className="cart-container">
         <Card>
           <Title level={2} className="cart-header">
@@ -282,6 +289,7 @@ export default function CartPage() {
         </Card>
       </div>
     </div>
+    </>
   );
 }
 
