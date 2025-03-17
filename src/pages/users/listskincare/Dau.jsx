@@ -11,7 +11,7 @@ import sun from "../../../assets/da/sun.jpg";
 import { useNavigate } from "react-router-dom";
 import ProductCard from "../../../component/productCard/ProductCard";
 import api from "../../../config/api";
-import { Modal, Table } from "antd";
+import { Modal, Table, Button } from "antd";
 
 export default function Dau() {
   const [showModal, setShowModal] = useState(false);
@@ -372,18 +372,26 @@ export default function Dau() {
       dataIndex: "info",
       key: "info",
       width: "20%",
+      className: "compare-info-column",
+      render: (text) => (
+        <div className="compare-info-cell">
+          <strong>{text}</strong>
+        </div>
+      ),
     },
     {
       title: "Sản phẩm 1",
       dataIndex: "product1",
       key: "product1",
       width: "40%",
+      className: "compare-product-column",
     },
     {
       title: "Sản phẩm 2",
       dataIndex: "product2",
       key: "product2",
       width: "40%",
+      className: "compare-product-column",
     },
   ];
 
@@ -411,67 +419,95 @@ export default function Dau() {
         key: "1",
         info: "Hình ảnh",
         product1: (
-          <img
-            src={p1.productImages[0]?.imageURL}
-            alt={p1.productName}
-            style={{ width: "100px" }}
-          />
+          <div className="compare-image-container">
+            <img
+              src={p1.productImages[0]?.imageURL}
+              alt={p1.productName}
+              className="compare-product-image"
+            />
+          </div>
         ),
         product2: (
-          <img
-            src={p2.productImages[0]?.imageURL}
-            alt={p2.productName}
-            style={{ width: "100px" }}
-          />
+          <div className="compare-image-container">
+            <img
+              src={p2.productImages[0]?.imageURL}
+              alt={p2.productName}
+              className="compare-product-image"
+            />
+          </div>
         ),
       },
       {
         key: "2",
         info: "Tên sản phẩm",
-        product1: p1.productName,
-        product2: p2.productName,
+        product1: <div className="compare-product-name">{p1.productName}</div>,
+        product2: <div className="compare-product-name">{p2.productName}</div>,
       },
       {
         key: "3",
         info: "Thương hiệu",
-        product1: brand1,
-        product2: brand2,
+        product1: <div className="compare-brand">{brand1}</div>,
+        product2: <div className="compare-brand">{brand2}</div>,
       },
       {
         key: "4",
         info: "Danh mục",
-        product1: category1,
-        product2: category2,
+        product1: <div className="compare-category">{category1}</div>,
+        product2: <div className="compare-category">{category2}</div>,
       },
       {
         key: "5",
         info: "Loại da phù hợp",
-        product1: skinType1 || "Chưa có thông tin",
-        product2: skinType2 || "Chưa có thông tin",
+        product1: (
+          <div className="compare-skin-type">
+            {skinType1 || "Chưa có thông tin"}
+          </div>
+        ),
+        product2: (
+          <div className="compare-skin-type">
+            {skinType2 || "Chưa có thông tin"}
+          </div>
+        ),
       },
       {
         key: "6",
         info: "Giá gốc",
-        product1: `${p1.unitPrice.toLocaleString()}đ`,
-        product2: `${p2.unitPrice.toLocaleString()}đ`,
+        product1: (
+          <div className="compare-original-price">
+            {p1.unitPrice.toLocaleString()}đ
+          </div>
+        ),
+        product2: (
+          <div className="compare-original-price">
+            {p2.unitPrice.toLocaleString()}đ
+          </div>
+        ),
       },
       {
         key: "7",
         info: "Giá khuyến mãi",
-        product1: `${p1.discountPrice.toLocaleString()}đ`,
-        product2: `${p2.discountPrice.toLocaleString()}đ`,
+        product1: (
+          <div className="compare-discount-price">
+            {p1.discountPrice.toLocaleString()}đ
+          </div>
+        ),
+        product2: (
+          <div className="compare-discount-price">
+            {p2.discountPrice.toLocaleString()}đ
+          </div>
+        ),
       },
       {
         key: "8",
         info: "Mô tả",
-        product1: p1.description,
-        product2: p2.description,
+        product1: <div className="compare-description">{p1.description}</div>,
+        product2: <div className="compare-description">{p2.description}</div>,
       },
       {
         key: "9",
         info: "Thành phần",
-        product1: p1.ingredients,
-        product2: p2.ingredients,
+        product1: <div className="compare-ingredients">{p1.ingredients}</div>,
+        product2: <div className="compare-ingredients">{p2.ingredients}</div>,
       },
     ];
   };
@@ -731,17 +767,35 @@ export default function Dau() {
         )}
 
         <Modal
-          title="So sánh sản phẩm"
+          title={
+            <div className="compare-modal-title">
+              <i
+                className="fa-solid fa-scale-balanced"
+                style={{ marginRight: "10px" }}
+              ></i>
+              So sánh sản phẩm
+            </div>
+          }
           open={isCompareModalVisible}
           onCancel={handleCloseCompare}
           width={1000}
-          footer={null}
+          footer={[
+            <Button key="close" onClick={handleCloseCompare}>
+              <i
+                className="fa-solid fa-xmark"
+                style={{ marginRight: "8px" }}
+              ></i>
+              Đóng
+            </Button>,
+          ]}
+          className="compare-modal"
         >
           <Table
             columns={compareColumns}
             dataSource={getCompareData()}
             pagination={false}
             bordered
+            className="compare-table"
           />
         </Modal>
       </div>
