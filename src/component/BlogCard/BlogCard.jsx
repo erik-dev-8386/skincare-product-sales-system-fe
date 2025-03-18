@@ -7,7 +7,7 @@ import "./BlogCard.css";
 
 const { Meta } = Card;
 
-const BlogCard = ({ blog, featured = false }) => {
+const BlogCard = ({ blog, featured = false, onClick }) => {
   const navigate = useNavigate();
 
   const handleBlogClick = () => {
@@ -103,6 +103,7 @@ BlogCard.propTypes = {
     hashtags: PropTypes.array,
   }).isRequired,
   featured: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 export default BlogCard;

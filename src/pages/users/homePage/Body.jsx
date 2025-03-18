@@ -449,7 +449,7 @@ export default function Body() {
           </div>
 
           <div className="col-12">
-            <h3 className="san">Sản phẩm phù hợp với da</h3>
+            <h3 className="san">Dòng sản phẩm</h3>
           </div>
 
           {/* Display suitable products */}

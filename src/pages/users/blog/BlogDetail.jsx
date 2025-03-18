@@ -12,8 +12,8 @@ import {
 } from "antd";
 import api from "../../../config/api";
 import "./BlogDetail.css";
-import Footer from "../../../component/Footer/Footer.jsx";
-import Header from "../../../component/Header/Header.jsx";
+// import Footer from "../../../component/Footer/Footer.jsx";
+// import Header from "../../../component/Header/Header.jsx";
 
 const { Title } = Typography;
 
@@ -29,54 +29,46 @@ const BlogDetail = () => {
     const fetchBlogDetail = async () => {
       try {
         setLoading(true);
-        console.log(`Fetching blog with ID: ${id}, type: ${typeof id}`);
+        console.log(`Fetching blog with ID: ${id}`);
 
-        // Chuyển đổi id thành số
-        const numericId = parseInt(id, 10);
-        console.log(`Converted ID: ${numericId}, type: ${typeof numericId}`);
-
-        // Lấy danh sách tất cả blogs
-        const allBlogsResponse = await api.get("/blogs");
-        console.log("All blogs response:", allBlogsResponse);
-
-        // Log tất cả ID của blogs để kiểm tra
-        console.log(
-          "Available blog IDs:",
-          allBlogsResponse.data.map((b) => `${b.blogId} (${typeof b.blogId})`)
-        );
-
-        // Tìm blog có ID phù hợp - sử dụng == thay vì === để so sánh giá trị mà không quan tâm kiểu
-        const foundBlog = allBlogsResponse.data.find(
-          (blog) => blog.blogId == numericId
-        );
-
-        console.log("Found blog:", foundBlog);
-
-        if (!foundBlog) {
+        // Check if the ID is a UUID (contains hyphens)
+        const isUUID = id.includes('-');
+        
+        let blogData;
+        
+        if (isUUID) {
+          // Try to get all blogs and find the one with matching ID
+          const allBlogsResponse = await api.get("/blogs");
+          blogData = allBlogsResponse.data.find(blog => blog.blogId === id);
+        } else {
+          // If it's not a UUID, try direct API call
+          const response = await api.get(`/blogs/${id}`);
+          blogData = response.data;
+        }
+        
+        if (!blogData) {
           setError(`Không tìm thấy bài viết với ID: ${id}`);
           setLoading(false);
           return;
         }
-
-        setBlog(foundBlog);
-
+        
+        setBlog(blogData);
+        
         // Fetch related blogs from the same category
-        if (foundBlog && foundBlog.blogCategory) {
-          const categoryName = foundBlog.blogCategory.blogCategoryName;
+        if (blogData && blogData.blogCategory) {
+          const categoryId = blogData.blogCategory.blogCategoryId;
           try {
-            const relatedResponse = await api.get(
-              `/blogs/category/${categoryName}`
-            );
+            const relatedResponse = await api.get(`/blogs/category/${categoryId}`);
             // Filter out the current blog and limit to 3 related blogs
             const filtered = relatedResponse.data
-              .filter((b) => b.blogId != numericId) // Sử dụng != thay vì !==
+              .filter((b) => b.blogId !== id)
               .slice(0, 3);
             setRelatedBlogs(filtered);
           } catch (relatedError) {
             console.error("Error fetching related blogs:", relatedError);
           }
         }
-
+        
         setLoading(false);
       } catch (error) {
         console.error("Error fetching blog detail:", error);
@@ -137,8 +129,7 @@ const BlogDetail = () => {
   }
 
   return (
-    <div className="blog-detail-container">
-      <Header />
+    <div className="blog-detail-container full-width">
       <Breadcrumb
         className="blog-detail-breadcrumb"
         items={[
@@ -166,31 +157,10 @@ const BlogDetail = () => {
         ]}
       />
 
-      <div className="blog-detail-content">
-        <Title level={1} className="blog-detail-title">
+      <div className="blog-detail-content full-width">
+        <Title level={1} className="blog-detail-title" style={{ fontSize: '2.5rem', fontWeight: 'bold', marginBottom: '1.5rem', textAlign: 'center' }}>
           {blog.blogTitle}
         </Title>
-
-        <div className="blog-detail-meta">
-          <span className="blog-detail-date">
-            <i className="fa-solid fa-calendar-days"></i>{" "}
-            {new Date(blog.postedTime).toLocaleDateString("vi-VN")}
-          </span>
-          <span className="blog-detail-category">
-            <i className="fa-solid fa-folder"></i>{" "}
-            {blog.blogCategory?.blogCategoryName || "Không có danh mục"}
-          </span>
-        </div>
-
-        {blog.hashtags && blog.hashtags.length > 0 && (
-          <div className="blog-detail-tags">
-            {blog.hashtags.map((tag) => (
-              <Tag key={tag.blogHashtagId} color="blue">
-                <i className="fa-solid fa-hashtag"></i> {tag.blogHashtagName}
-              </Tag>
-            ))}
-          </div>
-        )}
 
         {blog.blogImages && blog.blogImages.length > 0 && (
           <div className="blog-detail-main-image">
@@ -198,14 +168,42 @@ const BlogDetail = () => {
               src={blog.blogImages[0].imageURL}
               alt={blog.blogTitle}
               preview={false}
+              style={{ width: '100%', borderRadius: '8px' }}
             />
           </div>
         )}
 
         <div
-          className="blog-detail-body"
+          className="blog-detail-body full-width"
           dangerouslySetInnerHTML={{ __html: blog.blogContent }}
         />
+
+        <div className="blog-detail-meta" style={{ marginTop: '2rem', padding: '1rem', backgroundColor: '#f9f9f9', borderRadius: '8px', width: '100%' }}>
+          <div style={{ marginBottom: '0.5rem' }}>
+            <span className="blog-detail-date">
+              <i className="fa-solid fa-calendar-days"></i>{" "}
+              <strong>Ngày đăng:</strong> {new Date(blog.postedTime).toLocaleDateString("vi-VN")}
+            </span>
+          </div>
+          
+          <div style={{ marginBottom: '0.5rem' }}>
+            <span className="blog-detail-category">
+              <i className="fa-solid fa-folder"></i>{" "}
+              <strong>Danh mục:</strong> {blog.blogCategory?.blogCategoryName || "Không có danh mục"}
+            </span>
+          </div>
+          
+          {blog.hashtags && blog.hashtags.length > 0 && (
+            <div className="blog-detail-tags">
+              <strong><i className="fa-solid fa-hashtag"></i> Hashtags:</strong>{" "}
+              {blog.hashtags.map((tag) => (
+                <Tag key={tag.blogHashtagId} color="blue">
+                  {tag.blogHashtagName}
+                </Tag>
+              ))}
+            </div>
+          )}
+        </div>
 
         {blog.blogImages && blog.blogImages.length > 1 && (
           <div className="blog-detail-gallery">
@@ -258,7 +256,6 @@ const BlogDetail = () => {
           </div>
         )}
       </div>
-      <Footer />
     </div>
   );
 };

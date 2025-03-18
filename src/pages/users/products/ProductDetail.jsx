@@ -41,6 +41,11 @@ export default function ProductDetail() {
   const [mainImage, setMainImage] = useState("");
   const [value, setValue] = useState({ scale: 1, translation: { x: 0, y: 0 } }); // State for zoom and translation
   const { addToCart } = useContext(CartContext);
+  const [showAllSimilar, setShowAllSimilar] = useState(false);
+  const [showAllSkinType, setShowAllSkinType] = useState(false);
+  
+  // Số lượng sản phẩm hiển thị ban đầu
+  const initialDisplayCount = 2;
 
   const formatPrice = (price) => {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -461,7 +466,7 @@ export default function ProductDetail() {
                     <div className="card">
                       <div className="card-body">
                         <h5 className="card-title">Các sản phẩm tương tự</h5>
-                        {similarProducts.map((product) => (
+                        {(showAllSimilar ? similarProducts : similarProducts.slice(0, initialDisplayCount)).map((product) => (
                           <div className="d-flex mb-3" key={product.productId}>
                             <Link
                               to={`/products/${product.productId}`}
@@ -490,6 +495,15 @@ export default function ProductDetail() {
                             </div>
                           </div>
                         ))}
+                        {similarProducts.length > initialDisplayCount && (
+                          <Button 
+                            type="link" 
+                            onClick={() => setShowAllSimilar(!showAllSimilar)}
+                            style={{ width: '100%', marginTop: '10px' }}
+                          >
+                            {showAllSimilar ? 'Thu gọn' : 'Xem thêm'}
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -499,7 +513,7 @@ export default function ProductDetail() {
                         <h5 className="card-title">
                           Gợi ý sản phẩm cùng loại da
                         </h5>
-                        {sameSkinTypeProducts.map((product) => (
+                        {(showAllSkinType ? sameSkinTypeProducts : sameSkinTypeProducts.slice(0, initialDisplayCount)).map((product) => (
                           <div className="d-flex mb-3" key={product.productId}>
                             <Link
                               to={`/products/${product.productId}`}
@@ -528,6 +542,15 @@ export default function ProductDetail() {
                             </div>
                           </div>
                         ))}
+                        {sameSkinTypeProducts.length > initialDisplayCount && (
+                          <Button 
+                            type="link" 
+                            onClick={() => setShowAllSkinType(!showAllSkinType)}
+                            style={{ width: '100%', marginTop: '10px' }}
+                          >
+                            {showAllSkinType ? 'Thu gọn' : 'Xem thêm'}
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </div>

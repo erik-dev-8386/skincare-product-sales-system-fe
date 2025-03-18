@@ -1,15 +1,16 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
 import "./Header.css";
 import logo from "../../assets/Logo_01.jpg";
 import { jwtDecode } from "jwt-decode";
 import { CartContext } from "../../context/CartContext";
-import { ShoppingCartOutlined, DashboardOutlined } from "@ant-design/icons";
+import { ShoppingCartOutlined, DashboardOutlined, MenuOutlined } from "@ant-design/icons";
 import { Badge } from "antd";
 
 export default function Header() {
   const [role, setRole] = useState(null);
   const { cart } = useContext(CartContext);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -25,11 +26,12 @@ export default function Header() {
   }, []);
 
   const handleLogout = () => {
-    // Chỉ xóa token, không làm gì với giỏ hàng
     localStorage.removeItem("token");
-
-    // Sử dụng window.location.href thay vì reload để đảm bảo trang được tải lại hoàn toàn
     window.location.href = "/";
+  };
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
   };
 
   return (
@@ -40,7 +42,11 @@ export default function Header() {
         </Link>
       </div>
 
-      <div className="nav col-8">
+      <button className="mobile-menu-button" onClick={toggleMobileMenu}>
+        <MenuOutlined />
+      </button>
+
+      <div className={`nav col-8 ${mobileMenuOpen ? 'active' : ''}`}>
         <ul>
           <li>
             <Link to="/" className="active">
@@ -96,8 +102,8 @@ export default function Header() {
       </div>
 
       <div className="icon col-3">
-        <div className="search" >
-          <input type="text" placeholder="Tìm kiếm sản phẩm..." className="searchtt" />
+        <div className="search">
+          <input type="text" placeholder="Tìm kiếm..." className="searchtt" />
           <i className="fas fa-search search-icon"></i>
         </div>
 
@@ -106,19 +112,17 @@ export default function Header() {
             count={cart.length}
             style={{ backgroundColor: "yellow", color: "black" }}
           >
-          
-          <ShoppingCartOutlined
-            style={{
-              fontSize: "24px",
-              cursor: "pointer",
-              color: "white",
-              borderRadius: "50%",
-              backgroundColor: "none",
-              padding: "7.5px",
-              border: "1px solid white",
-            }}
-          />
-          
+            <ShoppingCartOutlined
+              style={{
+                fontSize: "24px",
+                cursor: "pointer",
+                color: "white",
+                borderRadius: "50%",
+                backgroundColor: "none",
+                padding: "7.5px",
+                border: "1px solid white",
+              }}
+            />
           </Badge>
         </Link>
 
@@ -151,8 +155,7 @@ export default function Header() {
                   style={{ cursor: "pointer", color: "white" }}
                 >
                   <p>
-                    <i className="fa-solid fa-right-from-bracket"></i>  Đăng xuất
-                   
+                    <i className="fa-solid fa-right-from-bracket"></i> Đăng xuất
                   </p>
                 </li>
               </>
@@ -160,14 +163,11 @@ export default function Header() {
               <>
                 <li>
                   <Link to="/login-and-signup">
-                    
                     <p>
-                      <i className="fa-solid fa-right-to-bracket"></i>  Đăng nhập/Đăng ký
-                     
+                      <i className="fa-solid fa-right-to-bracket"></i> Đăng nhập/Đăng ký
                     </p>
                   </Link>
                 </li>
-                
               </>
             )}
           </ul>
