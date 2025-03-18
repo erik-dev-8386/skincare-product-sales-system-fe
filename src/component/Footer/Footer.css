@@ -75,14 +75,15 @@
 
 }
 
+.footer .payment p{
+padding-right: 30px;
+}
+
 .footer .payment .icon {
   display: flex;
   align-items: center;
   flex-direction: row;
-  
-
-  
-  
+  justify-content: center;
 }
 /* 
 .footer .payment .cod {
@@ -96,9 +97,27 @@
   height: 65px;
 } */
 
-.footer .payment .icon .vnpay {
+/* .footer .payment .icon .vnpay {
   width: 120px;
   height: 100px;
   border-radius: 20px;
  
+} */
+
+.footer .payment .icon .momo {
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+  background-color: white;
+  padding: 10px;
+ 
+ 
+}
+
+.footer .payment .icon .cod {
+  width: 100px;
+  height: 100px;
+  border-radius: 20px;
+  background-color: white;
+  margin: 10px;
 }
