@@ -177,6 +177,7 @@ export default function CartPage() {
       key: "image",
       render: (images) => (
         <Image
+        className="image-product"
           src={images[0]?.imageURL}
           alt="product"
           width={100}

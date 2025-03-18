@@ -53,8 +53,10 @@ const ProductCard = ({
           style={{
             padding: 2,
             marginLeft: "79%",
-            backgroundColor: "red",
-            color: "white",
+            // backgroundColor: "gold",
+           
+            background: "linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(255,226,0,1) 0%, rgba(255,149,0,1) 100%, rgba(253,29,29,1) 100%)",
+            color: "black",
             width: 50,
             borderRadius: "5px",
           }}
@@ -100,7 +102,7 @@ const ProductCard = ({
       />
       <div>
         <Button
-        className="button-compare"
+          className="button-compare"
           type="primary"
           onClick={(e) => {
             e.stopPropagation(); // Ngăn chặn sự kiện click từ Card

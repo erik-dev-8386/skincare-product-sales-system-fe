@@ -36,7 +36,7 @@
 .cart-table td {
   padding: 10px;
   text-align: center;
-  border: 2px solid black;
+  border: 1px solid black;
 
 }
 
@@ -51,7 +51,7 @@
 }
 
 /* Customer Info Styles */
-.customer-info {
+.customer-info {  
   margin-bottom: 20px;
 }
 
