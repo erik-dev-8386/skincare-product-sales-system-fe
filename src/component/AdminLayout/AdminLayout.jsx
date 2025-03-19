@@ -41,9 +41,9 @@ const AdminLayout = () => {
 
   const menuItems = [
     { key: "/admin", icon: <DashboardOutlined />, label: "Bảng điều khiển" },
-    { key: "/admin/list-user", icon: <UserOutlined />, label: "Khách hàng" },
+    { key: "/admin/customer-management", icon: <UserOutlined />, label: "Khách hàng" },
     {
-      key: "/admin/list-staff",
+      key: "/admin/staff-management",
       icon: <i className="fa-solid fa-user-tie"></i>,
       label: "Nhân viên",
     },
