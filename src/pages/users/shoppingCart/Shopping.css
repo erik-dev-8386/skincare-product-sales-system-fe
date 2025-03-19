@@ -67,15 +67,15 @@
 
 /* Custom Table Styles */
 .ant-table {
-    border: 1px solid gray;
-    border-radius: 8px;
+    /* border: 1px solid gray; */
+    /* border-radius: 8px; */
     overflow: hidden;
     width: 100%;
     
 }
 
 .ant-table-thead>tr>th {
-    border: 1px solid gray;
+    border: 1px solid lightgray;
 
     font-weight: bold !important;
     text-align: center !important;
@@ -89,20 +89,20 @@
 
 
 .ant-table-tbody>tr>td {
-    border: 1px solid gray;
+    border: 1px solid lightgray;
     text-align: start;
     vertical-align: middle;
-    padding: 12px;
+    /* padding: 12px; */
     
 }
 
 .ant-table-tbody>tr:last-child>td {
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid lightgray;
    
 }
 
 .ant-table-cell {
-    padding: 12px;
+    /* padding: 12px; */
 }
 
 /* Customize the InputNumber and Buttons in the table */
