@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import "./Body.css";
 import hot from "../../../assets/home/hotdeal.jpg";
@@ -46,43 +47,43 @@ export default function Body() {
   // Thêm handlers cho top searched products slides
   const handleTopSearchNext = () => {
     setTopSearchCurrentSlide((prevSlide) =>
-      prevSlide + 3 < topSearchedProducts.length ? prevSlide + 3 : 0
+      prevSlide + 5 < topSearchedProducts.length ? prevSlide + 5 : 0
     );
   };
 
   const handleTopSearchPrev = () => {
     setTopSearchCurrentSlide((prevSlide) =>
-      prevSlide - 3 >= 0
-        ? prevSlide - 3
-        : Math.max(0, topSearchedProducts.length - 3)
+      prevSlide - 5 >= 0
+        ? prevSlide - 5
+        : Math.max(0, topSearchedProducts.length - 5)
     );
   };
 
   // Thêm handlers cho best seller slides
   const handleBestSellerNext = () => {
     setBestSellerCurrentSlide((prevSlide) =>
-      prevSlide + 3 < bestSellerProducts.length ? prevSlide + 3 : 0
+      prevSlide + 5 < bestSellerProducts.length ? prevSlide + 5 : 0
     );
   };
 
   const handleBestSellerPrev = () => {
     setBestSellerCurrentSlide((prevSlide) =>
-      prevSlide - 3 >= 0
-        ? prevSlide - 3
-        : Math.max(0, bestSellerProducts.length - 3)
+      prevSlide - 5 >= 0
+        ? prevSlide - 5
+        : Math.max(0, bestSellerProducts.length - 5)
     );
   };
 
   // Tính toán sản phẩm hiển thị cho top searched
   const visibleTopSearchProducts = topSearchedProducts.slice(
     topSearchCurrentSlide,
-    topSearchCurrentSlide + 3
+    topSearchCurrentSlide + 5
   );
 
   // Tính toán sản phẩm hiển thị cho best seller
   const visibleBestSellerProducts = bestSellerProducts.slice(
     bestSellerCurrentSlide,
-    bestSellerCurrentSlide + 3
+    bestSellerCurrentSlide + 5
   );
 
   // Fetch suitable products from API
@@ -237,28 +238,22 @@ export default function Body() {
   // Handle "Next" button click
   const handleNext = () => {
     setCurrentSlide((prevSlide) =>
-      prevSlide + 4 < suitableProducts.length ? prevSlide + 4 : 0
+      prevSlide + 5 < suitableProducts.length ? prevSlide + 5 : 0
     );
   };
   // Handle "Prev" button click
   const handlePrev = () => {
     setCurrentSlide((prevSlide) =>
-      prevSlide - 4 >= 0
-        ? prevSlide - 4
-        : Math.max(0, suitableProducts.length - 4)
+      prevSlide - 5 >= 0
+        ? prevSlide - 5
+        : Math.max(0, suitableProducts.length - 5)
     );
   };
 
   // Calculate the visible products for the current slide
   const visibleProducts = suitableProducts.slice(
     currentSlide,
-    currentSlide + 4
-  );
-
-  // Calculate the visible products for the current slide
-  const visibleProductss = suitableProducts.slice(
-    currentSlide,
-    currentSlide + 3
+    currentSlide + 5
   );
 
   // Define breadcrumb items
@@ -454,8 +449,9 @@ export default function Body() {
 
           {/* Display suitable products */}
           <div
-            className="row"
+            className="row "
             style={{
+
               justifyContent: "center",
               marginBottom: "50px",
               position: "relative",
@@ -478,7 +474,9 @@ export default function Body() {
 
             {/* Visible Products */}
             {visibleProducts.map((product) => (
-              <div className="col-3" key={product.productId}>
+              <div className="col-2"
+                style={{ margin: 20 }}
+                key={product.productId}>
                 <ProductCard
                   product={product}
                   discounts={discounts}
@@ -602,7 +600,7 @@ export default function Body() {
             {/* Best Seller Products */}
             {bestSellerProducts && bestSellerProducts.length > 0 ? (
               visibleBestSellerProducts.map((product) => (
-                <div className="col-4" key={`bestseller-${product.productId}`}>
+                <div className="col-2" style={{ margin: 20 }} key={`bestseller-${product.productId}`}>
                   <ProductCard
                     product={product}
                     discounts={discounts}
@@ -687,222 +685,7 @@ export default function Body() {
         ]}
         className="compare-modal"
       >
-        <style jsx="true">{`
-          .compare-modal .ant-modal-content {
-            border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-          }
 
-          .compare-modal .ant-modal-header {
-            background: linear-gradient(135deg, #a3d9ff, #7ec2ff);
-            border-bottom: none;
-            padding: 16px 24px;
-          }
-
-          .compare-modal .ant-modal-title {
-            color: white !important;
-          }
-
-          .compare-modal .ant-modal-body {
-            padding: 24px;
-            background-color: #fafcff;
-          }
-
-          .compare-modal .ant-modal-footer {
-            border-top: none;
-            padding: 16px 24px;
-            background-color: #fafcff;
-          }
-
-          .compare-modal-title {
-            font-size: 22px;
-            font-weight: bold;
-            color: white !important;
-            display: flex;
-            align-items: center;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-          }
-
-          .compare-info-column {
-            background: linear-gradient(to right, #f0f7ff, #e6f4ff);
-          }
-
-          .compare-info-cell {
-            font-weight: bold;
-            color: #1a5fb4;
-            padding: 12px 8px;
-            font-size: 15px;
-          }
-
-          .compare-image-container {
-            display: flex;
-            justify-content: center;
-            padding: 16px;
-            background-color: white;
-            border-radius: 12px;
-            margin: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            transition: all 0.3s ease;
-          }
-
-          .compare-image-container:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-          }
-
-          .compare-product-image {
-            width: 180px;
-            height: 180px;
-            object-fit: contain;
-            border-radius: 8px;
-            transition: transform 0.5s ease;
-          }
-
-          .compare-product-image:hover {
-            transform: scale(1.08);
-          }
-
-          .compare-product-name {
-            font-weight: bold;
-            color: #1890ff;
-            font-size: 18px;
-            padding: 10px 0;
-            text-align: center;
-            border-bottom: 2px solid #e6f7ff;
-            margin-bottom: 8px;
-          }
-
-          .compare-brand,
-          .compare-category,
-          .compare-skin-type {
-            padding: 8px 0;
-            font-size: 15px;
-            color: #333;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-          }
-
-          .compare-brand::before {
-            content: "🏷️";
-            margin-right: 8px;
-          }
-
-          .compare-category::before {
-            content: "📂";
-            margin-right: 8px;
-          }
-
-          .compare-skin-type::before {
-            content: "👤";
-            margin-right: 8px;
-          }
-
-          .compare-original-price {
-            text-decoration: line-through;
-            color: #999;
-            font-size: 14px;
-            text-align: center;
-            padding: 4px 0;
-          }
-
-          .compare-discount-price {
-            color: #f5222d;
-            font-weight: bold;
-            font-size: 20px;
-            text-align: center;
-            padding: 8px 0;
-            background: linear-gradient(to right, #fff0f0, #fff9f9);
-            border-radius: 8px;
-            margin: 8px 0;
-            box-shadow: 0 2px 6px rgba(245, 34, 45, 0.1);
-          }
-
-          .compare-description,
-          .compare-ingredients {
-            max-height: 150px;
-            overflow-y: auto;
-            padding: 12px;
-            text-align: justify;
-            line-height: 1.6;
-            background-color: white;
-            border-radius: 8px;
-            margin: 8px 0;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            font-size: 14px;
-            color: #444;
-            border-left: 3px solid #1890ff;
-          }
-
-          .compare-description::-webkit-scrollbar,
-          .compare-ingredients::-webkit-scrollbar {
-            width: 6px;
-          }
-
-          .compare-description::-webkit-scrollbar-thumb,
-          .compare-ingredients::-webkit-scrollbar-thumb {
-            background-color: #d9d9d9;
-            border-radius: 3px;
-          }
-
-          .compare-description::-webkit-scrollbar-track,
-          .compare-ingredients::-webkit-scrollbar-track {
-            background-color: #f5f5f5;
-            border-radius: 3px;
-          }
-
-          /* Tùy chỉnh bảng */
-          .compare-table {
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-          }
-
-          .ant-table-thead > tr > th {
-            background: linear-gradient(135deg, #e6f7ff, #bae7ff);
-            color: #0050b3;
-            font-weight: bold;
-            padding: 16px 12px;
-            border-bottom: 2px solid #91caff;
-          }
-
-          .ant-table-tbody > tr > td {
-            padding: 16px 12px;
-            transition: all 0.3s ease;
-          }
-
-          .ant-table-tbody > tr:hover > td {
-            background-color: #f0f9ff;
-            transform: translateY(-2px);
-          }
-
-          .ant-table-tbody > tr:nth-child(even) > td {
-            background-color: #fafcff;
-          }
-
-          .ant-table-tbody > tr:nth-child(odd) > td {
-            background-color: #ffffff;
-          }
-
-          /* Button styling */
-          .compare-modal .ant-btn {
-            border-radius: 8px;
-            height: 40px;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 6px rgba(24, 144, 255, 0.2);
-            border: none;
-            background: linear-gradient(135deg, #40a9ff, #1890ff);
-            color: white;
-          }
-
-          .compare-modal .ant-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3);
-            background: linear-gradient(135deg, #69c0ff, #40a9ff);
-          }
-        `}</style>
 
         <Table
           columns={compareColumns}
