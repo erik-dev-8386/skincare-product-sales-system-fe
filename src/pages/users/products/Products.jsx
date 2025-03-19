@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   Input,
   Select,
@@ -40,81 +40,102 @@ export default function Products() {
   const [visibleBrands, setVisibleBrands] = useState(5);
   const [visibleSkinTypes, setVisibleSkinTypes] = useState(5);
   const [visibleDiscounts, setVisibleDiscounts] = useState(5);
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
   const { cart } = useContext(CartContext);
+  const [searchParams] = useSearchParams();
 
   useEffect(() => {
-    fetchProducts();
-    fetchCategories();
-    fetchSkinTypes();
-    fetchDiscounts();
-    fetchBrands();
-  }, []);
+    const init = async () => {
+      try {
+        setIsLoading(true);
+        // Fetch tất cả data cần thiết
+        const [productsRes, categoriesRes, skinTypesRes, discountsRes, brandsRes] = await Promise.all([
+          api.get("/products"),
+          api.get("/categories"),
+          api.get("/skin-types"),
+          api.get("/discounts"),
+          api.get("/brands")
+        ]);
 
-  const fetchProducts = async () => {
-    try {
-      const response = await api.get("/products");
-      setProducts(response.data);
-      setFilteredProducts(response.data);
-    } catch (error) {
-      console.error("Error fetching products:", error);
-      alert("Could not load products. Please try again later.");
-    }
-  };
+        // Set state cho tất cả data
+        setProducts(productsRes.data);
+        setCategories(categoriesRes.data);
+        setSkinTypes(skinTypesRes.data);
+        setBrands(brandsRes.data);
+        
+        // Xử lý discounts
+        const discountMap = discountsRes.data.reduce((acc, discount) => {
+          acc[discount.discountId] = discount.discountPercent;
+          return acc;
+        }, {});
+        setDiscounts(discountMap);
+        setDiscountList(discountsRes.data);
 
-  const fetchCategories = async () => {
-    try {
-      const response = await api.get("/categories");
-      setCategories(response.data);
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-    }
-  };
+        // Lấy params từ URL
+        const searchFromUrl = searchParams.get("search");
+        const categoryFromUrl = searchParams.get("category");
 
-  const fetchSkinTypes = async () => {
-    try {
-      const response = await api.get("/skin-types");
-      setSkinTypes(response.data);
-    } catch (error) {
-      console.error("Error fetching skin types:", error);
-    }
-  };
+        // Set state cho search và category nếu có
+        if (searchFromUrl) {
+          setSearchTerm(searchFromUrl);
+        }
+        if (categoryFromUrl) {
+          setSelectedCategory(categoryFromUrl);
+        }
 
-  const fetchDiscounts = async () => {
-    try {
-      const response = await api.get("/discounts");
-      const discountMap = response.data.reduce((acc, discount) => {
-        acc[discount.discountId] = discount.discountPercent;
-        return acc;
-      }, {});
-      setDiscounts(discountMap);
-      setDiscountList(response.data);
-    } catch (error) {
-      console.error("Error fetching discounts:", error);
-    }
-  };
+        // Nếu có search hoặc category, filter products
+        if (searchFromUrl || categoryFromUrl) {
+          const filtered = productsRes.data.filter((product) => {
+            let matchSearch = true;
+            let matchCategory = true;
 
-  const fetchBrands = async () => {
-    try {
-      const response = await api.get("/brands");
-      setBrands(response.data);
-    } catch (error) {
-      console.error("Error fetching brands:", error);
-    }
-  };
+            if (searchFromUrl) {
+              const productName = product.productName.toLowerCase();
+              const searchValue = searchFromUrl.toLowerCase();
+              const productCategory = categoriesRes.data.find(cat => cat.categoryId === product.categoryId);
+              const categoryName = productCategory ? productCategory.categoryName.toLowerCase() : '';
+              
+              matchSearch = productName.includes(searchValue) || categoryName.includes(searchValue);
+            }
+
+            if (categoryFromUrl) {
+              matchCategory = product.categoryId === categoryFromUrl;
+            }
+
+            return matchSearch && matchCategory;
+          });
+
+          setFilteredProducts(filtered);
+        } else {
+          // Nếu không có search params, hiển thị tất cả sản phẩm
+          setFilteredProducts(productsRes.data);
+        }
+
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error initializing data:", error);
+        setIsLoading(false);
+      }
+    };
+
+    init();
+  }, [searchParams]); // Chỉ phụ thuộc vào searchParams
 
   const handleSearch = (event) => {
     const query = event.target.value.toLowerCase();
     setSearchTerm(query);
-    filterProducts(
-      query,
-      selectedCategory,
-      selectedSkinType,
-      selectedBrand,
-      sortOption,
-      selectedDiscount
-    );
+    if (searchParams.get("search")) {
+      filterProducts(
+        query,
+        selectedCategory,
+        selectedSkinType,
+        selectedBrand,
+        sortOption,
+        selectedDiscount
+      );
+    }
   };
 
   const handleSort = (value) => {
@@ -345,20 +366,22 @@ export default function Products() {
     ];
   };
 
-  const filterProducts = (
-    search,
-    category,
-    skintype,
-    brand,
-    sort,
-    discount
-  ) => {
+  const filterProducts = (search, category, skintype, brand, sort, discount) => {
     let filtered = [...products];
 
     if (search) {
-      filtered = filtered.filter((product) =>
-        product.productName.toLowerCase().includes(search)
-      );
+      filtered = filtered.filter((product) => {
+        const productName = product.productName.toLowerCase();
+        const searchValue = search.toLowerCase();
+        
+        const matchName = productName.includes(searchValue);
+        
+        const productCategory = categories.find(cat => cat.categoryId === product.categoryId);
+        const matchCategory = productCategory && 
+          productCategory.categoryName.toLowerCase().includes(searchValue);
+        
+        return matchName || matchCategory;
+      });
     }
 
     if (category) {
@@ -555,301 +578,309 @@ export default function Products() {
 
           <Layout>
             <Content style={{ padding: "20px" }}>
-              <div
-                style={{ display: "flex", gap: "10px", marginBottom: "20px" }}
-              >
-                <Input
-                  placeholder="Tìm sản phẩm..."
-                  value={searchTerm}
-                  onChange={handleSearch}
-                  style={{ width: "300px" }}
-                  suffix={<i className="fa-solid fa-magnifying-glass"></i>}
-                />
-                <Select
-                  placeholder={
-                    <span>
-                      <i className="fa-solid fa-filter"></i> Lọc sản phẩm
-                      theo...
-                    </span>
-                  }
-                  style={{ width: "200px" }}
-                  onChange={handleSort}
-                  value={sortOption || undefined}
-                >
-                  <Option value="a-z">A-Z</Option>
-                  <Option value="z-a">Z-A</Option>
-                  <Option value="low-high">Giá: Thấp - cao</Option>
-                  <Option value="high-low">Giá: Cao - thấp</Option>
-                </Select>
-              </div>
-
-              <Row gutter={[16, 16]}>
-                {filteredProducts.slice(0, visibleProducts).map((product) => (
-                  <Col xs={24} sm={12} md={8} lg={6} key={product.productId}>
-                    <ProductCard
-                      product={product}
-                      discounts={discounts}
-                      brands={brands}
-                      onCompareClick={handleCompareClick}
-                    />
-                  </Col>
-                ))}
-              </Row>
-
-              {filteredProducts.length > visibleProducts && (
-                <div style={{ textAlign: "center", marginTop: "20px" }}>
-                  <Button type="primary" onClick={handleLoadMore}>
-                    Xem thêm
-                  </Button>
+              {isLoading ? (
+                <div style={{ textAlign: 'center', padding: '20px' }}>
+                  Đang tải sản phẩm...
                 </div>
-              )}
-
-              <Modal
-                title={
-                  <div className="compare-modal-title">
-                    <i
-                      className="fa-solid fa-scale-balanced"
-                      style={{ marginRight: "10px" }}
-                    ></i>
-                    So sánh sản phẩm
+              ) : (
+                <>
+                  <div
+                    style={{ display: "flex", gap: "10px", marginBottom: "20px" }}
+                  >
+                    <Input
+                      placeholder="Tìm sản phẩm..."
+                      value={searchTerm}
+                      onChange={handleSearch}
+                      style={{ width: "300px" }}
+                      suffix={<i className="fa-solid fa-magnifying-glass"></i>}
+                    />
+                    <Select
+                      placeholder={
+                        <span>
+                          <i className="fa-solid fa-filter"></i> Lọc sản phẩm
+                          theo...
+                        </span>
+                      }
+                      style={{ width: "200px" }}
+                      onChange={handleSort}
+                      value={sortOption || undefined}
+                    >
+                      <Option value="a-z">A-Z</Option>
+                      <Option value="z-a">Z-A</Option>
+                      <Option value="low-high">Giá: Thấp - cao</Option>
+                      <Option value="high-low">Giá: Cao - thấp</Option>
+                    </Select>
                   </div>
-                }
-                open={isCompareModalVisible}
-                onCancel={handleCloseCompare}
-                width={1000}
-                footer={[
-                  <Button key="close" onClick={handleCloseCompare}>
-                    Đóng
-                  </Button>,
-                ]}
-                className="compare-modal"
-              >
-                <style jsx="true">{`
-                  .compare-modal .ant-modal-content {
-                    border-radius: 16px;
-                    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-                   
-                    overflow: hidden;
-                  }
 
-                  .compare-modal .ant-modal-header {
-                    background: linear-gradient(135deg, #a3d9ff, #7ec2ff);
-                    border-bottom: none;
-                    padding: 16px 24px;
-                  }
+                  <Row gutter={[16, 16]}>
+                    {filteredProducts.slice(0, visibleProducts).map((product) => (
+                      <Col xs={24} sm={12} md={8} lg={6} key={product.productId}>
+                        <ProductCard
+                          product={product}
+                          discounts={discounts}
+                          brands={brands}
+                          onCompareClick={handleCompareClick}
+                        />
+                      </Col>
+                    ))}
+                  </Row>
 
-                  .compare-modal .ant-modal-title {
-                    color: white !important;
-                  }
+                  {filteredProducts.length > visibleProducts && (
+                    <div style={{ textAlign: "center", marginTop: "20px" }}>
+                      <Button type="primary" onClick={handleLoadMore}>
+                        Xem thêm
+                      </Button>
+                    </div>
+                  )}
 
-                  .compare-modal .ant-modal-body {
-                    padding: 24px;
-                    background-color: #fafcff;
-                  }
+                  <Modal
+                    title={
+                      <div className="compare-modal-title">
+                        <i
+                          className="fa-solid fa-scale-balanced"
+                          style={{ marginRight: "10px" }}
+                        ></i>
+                        So sánh sản phẩm
+                      </div>
+                    }
+                    open={isCompareModalVisible}
+                    onCancel={handleCloseCompare}
+                    width={1000}
+                    footer={[
+                      <Button key="close" onClick={handleCloseCompare}>
+                        Đóng
+                      </Button>,
+                    ]}
+                    className="compare-modal"
+                  >
+                    <style jsx="true">{`
+                      .compare-modal .ant-modal-content {
+                        border-radius: 16px;
+                        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                       
+                        overflow: hidden;
+                      }
 
-                  .compare-modal .ant-modal-footer {
-                    border-top: none;
-                    padding: 16px 24px;
-                    background-color: #fafcff;
-                  }
+                      .compare-modal .ant-modal-header {
+                        background: linear-gradient(135deg, #a3d9ff, #7ec2ff);
+                        border-bottom: none;
+                        padding: 16px 24px;
+                      }
 
-                  .compare-modal-title {
-                    font-size: 22px;
-                    font-weight: bold;
-                    color: white !important;
-                    display: flex;
-                    align-items: center;
-                    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-                  }
+                      .compare-modal .ant-modal-title {
+                        color: white !important;
+                      }
 
-                  .compare-info-column {
-                    background: linear-gradient(to right, #f0f7ff, #e6f4ff);
-                  }
+                      .compare-modal .ant-modal-body {
+                        padding: 24px;
+                        background-color: #fafcff;
+                      }
 
-                  .compare-info-cell {
-                    font-weight: bold;
-                    color: #1a5fb4;
-                    padding: 12px 8px;
-                    font-size: 15px;
-                  }
+                      .compare-modal .ant-modal-footer {
+                        border-top: none;
+                        padding: 16px 24px;
+                        background-color: #fafcff;
+                      }
 
-                  .compare-image-container {
-                    display: flex;
-                    justify-content: center;
-                    padding: 16px;
-                    background-color: white;
-                    border-radius: 12px;
-                    margin: 8px;
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-                    transition: all 0.3s ease;
-                  }
+                      .compare-modal-title {
+                        font-size: 22px;
+                        font-weight: bold;
+                        color: white !important;
+                        display: flex;
+                        align-items: center;
+                        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+                      }
 
-                  .compare-image-container:hover {
-                    transform: translateY(-5px);
-                    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-                  }
+                      .compare-info-column {
+                        background: linear-gradient(to right, #f0f7ff, #e6f4ff);
+                      }
 
-                  .compare-product-image {
-                    width: 180px;
-                    height: 180px;
-                    object-fit: contain;
-                    border-radius: 8px;
-                    transition: transform 0.5s ease;
-                  }
+                      .compare-info-cell {
+                        font-weight: bold;
+                        color: #1a5fb4;
+                        padding: 12px 8px;
+                        font-size: 15px;
+                      }
 
-                  .compare-product-image:hover {
-                    transform: scale(1.08);
-                  }
+                      .compare-image-container {
+                        display: flex;
+                        justify-content: center;
+                        padding: 16px;
+                        background-color: white;
+                        border-radius: 12px;
+                        margin: 8px;
+                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+                        transition: all 0.3s ease;
+                      }
 
-                  .compare-product-name {
-                    font-weight: bold;
-                    color: #1890ff;
-                    font-size: 18px;
-                    padding: 10px 0;
-                    text-align: center;
-                    border-bottom: 2px solid #e6f7ff;
-                    margin-bottom: 8px;
-                  }
+                      .compare-image-container:hover {
+                        transform: translateY(-5px);
+                        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+                      }
 
-                  .compare-brand,
-                  .compare-category,
-                  .compare-skin-type {
-                    padding: 8px 0;
-                    font-size: 15px;
-                    color: #333;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                  }
+                      .compare-product-image {
+                        width: 180px;
+                        height: 180px;
+                        object-fit: contain;
+                        border-radius: 8px;
+                        transition: transform 0.5s ease;
+                      }
 
-                  .compare-brand::before {
-                    content: "🏷️";
-                    margin-right: 8px;
-                  }
+                      .compare-product-image:hover {
+                        transform: scale(1.08);
+                      }
 
-                  .compare-category::before {
-                    content: "📂";
-                    margin-right: 8px;
-                  }
+                      .compare-product-name {
+                        font-weight: bold;
+                        color: #1890ff;
+                        font-size: 18px;
+                        padding: 10px 0;
+                        text-align: center;
+                        border-bottom: 2px solid #e6f7ff;
+                        margin-bottom: 8px;
+                      }
 
-                  .compare-skin-type::before {
-                    content: "👤";
-                    margin-right: 8px;
-                  }
+                      .compare-brand,
+                      .compare-category,
+                      .compare-skin-type {
+                        padding: 8px 0;
+                        font-size: 15px;
+                        color: #333;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                      }
 
-                  .compare-original-price {
-                    text-decoration: line-through;
-                    color: #999;
-                    font-size: 14px;
-                    text-align: center;
-                    padding: 4px 0;
-                  }
+                      .compare-brand::before {
+                        content: "🏷️";
+                        margin-right: 8px;
+                      }
 
-                  .compare-discount-price {
-                    color: #f5222d;
-                    font-weight: bold;
-                    font-size: 20px;
-                    text-align: center;
-                    padding: 8px 0;
-                    background: linear-gradient(to right, #fff0f0, #fff9f9);
-                    border-radius: 8px;
-                    margin: 8px 0;
-                    box-shadow: 0 2px 6px rgba(245, 34, 45, 0.1);
-                  }
+                      .compare-category::before {
+                        content: "📂";
+                        margin-right: 8px;
+                      }
 
-                  .compare-description,
-                  .compare-ingredients {
-                    max-height: 150px;
-                    overflow-y: auto;
-                    padding: 12px;
-                    text-align: justify;
-                    line-height: 1.6;
-                    background-color: white;
-                    border-radius: 8px;
-                    margin: 8px 0;
-                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-                    font-size: 14px;
-                    color: #444;
-                    border-left: 3px solid #1890ff;
-                  }
+                      .compare-skin-type::before {
+                        content: "👤";
+                        margin-right: 8px;
+                      }
 
-                  .compare-description::-webkit-scrollbar,
-                  .compare-ingredients::-webkit-scrollbar {
-                    width: 6px;
-                  }
+                      .compare-original-price {
+                        text-decoration: line-through;
+                        color: #999;
+                        font-size: 14px;
+                        text-align: center;
+                        padding: 4px 0;
+                      }
 
-                  .compare-description::-webkit-scrollbar-thumb,
-                  .compare-ingredients::-webkit-scrollbar-thumb {
-                    background-color: #d9d9d9;
-                    border-radius: 3px;
-                  }
+                      .compare-discount-price {
+                        color: #f5222d;
+                        font-weight: bold;
+                        font-size: 20px;
+                        text-align: center;
+                        padding: 8px 0;
+                        background: linear-gradient(to right, #fff0f0, #fff9f9);
+                        border-radius: 8px;
+                        margin: 8px 0;
+                        box-shadow: 0 2px 6px rgba(245, 34, 45, 0.1);
+                      }
 
-                  .compare-description::-webkit-scrollbar-track,
-                  .compare-ingredients::-webkit-scrollbar-track {
-                    background-color: #f5f5f5;
-                    border-radius: 3px;
-                  }
+                      .compare-description,
+                      .compare-ingredients {
+                        max-height: 150px;
+                        overflow-y: auto;
+                        padding: 12px;
+                        text-align: justify;
+                        line-height: 1.6;
+                        background-color: white;
+                        border-radius: 8px;
+                        margin: 8px 0;
+                        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+                        font-size: 14px;
+                        color: #444;
+                        border-left: 3px solid #1890ff;
+                      }
 
-                  /* Tùy chỉnh bảng */
-                  .compare-table {
-                    border-radius: 12px;
-                    overflow: hidden;
-                    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-                  }
+                      .compare-description::-webkit-scrollbar,
+                      .compare-ingredients::-webkit-scrollbar {
+                        width: 6px;
+                      }
 
-                  .ant-table-thead > tr > th {
-                    background: linear-gradient(135deg, #e6f7ff, #bae7ff);
-                    color: #0050b3;
-                    font-weight: bold;
-                    padding: 16px 12px;
-                    border-bottom: 2px solid #91caff;
-                  }
+                      .compare-description::-webkit-scrollbar-thumb,
+                      .compare-ingredients::-webkit-scrollbar-thumb {
+                        background-color: #d9d9d9;
+                        border-radius: 3px;
+                      }
 
-                  .ant-table-tbody > tr > td {
-                    padding: 16px 12px;
-                    transition: all 0.3s ease;
-                  }
+                      .compare-description::-webkit-scrollbar-track,
+                      .compare-ingredients::-webkit-scrollbar-track {
+                        background-color: #f5f5f5;
+                        border-radius: 3px;
+                      }
 
-                  .ant-table-tbody > tr:hover > td {
-                    background-color: #f0f9ff;
-                    transform: translateY(-2px);
-                  }
+                      /* Tùy chỉnh bảng */
+                      .compare-table {
+                        border-radius: 12px;
+                        overflow: hidden;
+                        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+                      }
 
-                  .ant-table-tbody > tr:nth-child(even) > td {
-                    background-color: #fafcff;
-                  }
+                      .ant-table-thead > tr > th {
+                        background: linear-gradient(135deg, #e6f7ff, #bae7ff);
+                        color: #0050b3;
+                        font-weight: bold;
+                        padding: 16px 12px;
+                        border-bottom: 2px solid #91caff;
+                      }
 
-                  .ant-table-tbody > tr:nth-child(odd) > td {
-                    background-color: #ffffff;
-                  }
+                      .ant-table-tbody > tr > td {
+                        padding: 16px 12px;
+                        transition: all 0.3s ease;
+                      }
 
-                  /* Button styling */
-                  .compare-modal .ant-btn {
-                    border-radius: 8px;
-                    height: 40px;
-                    font-weight: bold;
-                    transition: all 0.3s ease;
-                    box-shadow: 0 2px 6px rgba(24, 144, 255, 0.2);
-                    border: none;
-                    background: linear-gradient(135deg, #40a9ff, #1890ff);
-                    color: white;
-                  }
+                      .ant-table-tbody > tr:hover > td {
+                        background-color: #f0f9ff;
+                        transform: translateY(-2px);
+                      }
 
-                  .compare-modal .ant-btn:hover {
-                    transform: translateY(-2px);
-                    box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3);
-                    background: linear-gradient(135deg, #69c0ff, #40a9ff);
-                  }
-                `}</style>
+                      .ant-table-tbody > tr:nth-child(even) > td {
+                        background-color: #fafcff;
+                      }
 
-                <Table
-                  columns={compareColumns}
-                  dataSource={getCompareData()}
-                  pagination={false}
-                  bordered
-                  className="compare-table"
-                />
-              </Modal>
+                      .ant-table-tbody > tr:nth-child(odd) > td {
+                        background-color: #ffffff;
+                      }
+
+                      /* Button styling */
+                      .compare-modal .ant-btn {
+                        border-radius: 8px;
+                        height: 40px;
+                        font-weight: bold;
+                        transition: all 0.3s ease;
+                        box-shadow: 0 2px 6px rgba(24, 144, 255, 0.2);
+                        border: none;
+                        background: linear-gradient(135deg, #40a9ff, #1890ff);
+                        color: white;
+                      }
+
+                      .compare-modal .ant-btn:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3);
+                        background: linear-gradient(135deg, #69c0ff, #40a9ff);
+                      }
+                    `}</style>
+
+                    <Table
+                      columns={compareColumns}
+                      dataSource={getCompareData()}
+                      pagination={false}
+                      bordered
+                      className="compare-table"
+                    />
+                  </Modal>
+                </>
+              )}
             </Content>
           </Layout>
         </Layout>

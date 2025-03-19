@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import "./Body.css";
 import hot from "../../../assets/home/hotdeal.jpg";
@@ -44,6 +43,10 @@ export default function Body() {
   const [bestSellerProducts, setBestSellerProducts] = useState([]);
   const [bestSellerCurrentSlide, setBestSellerCurrentSlide] = useState(0);
 
+  // Thêm state cho blogs
+  const [blogs, setBlogs] = useState([]);
+  const [currentBlogSlide, setCurrentBlogSlide] = useState(0);
+
   // Thêm handlers cho top searched products slides
   const handleTopSearchNext = () => {
     setTopSearchCurrentSlide((prevSlide) =>
@@ -85,6 +88,22 @@ export default function Body() {
     bestSellerCurrentSlide,
     bestSellerCurrentSlide + 5
   );
+
+  // Thêm handlers cho blog slides
+  const handleBlogNext = () => {
+    setCurrentBlogSlide((prevSlide) =>
+      prevSlide + 3 < blogs.length ? prevSlide + 3 : 0
+    );
+  };
+
+  const handleBlogPrev = () => {
+    setCurrentBlogSlide((prevSlide) =>
+      prevSlide - 3 >= 0 ? prevSlide - 3 : Math.max(0, blogs.length - 3)
+    );
+  };
+
+  // Tính toán blogs hiển thị cho slide hiện tại
+  const visibleBlogs = blogs.slice(currentBlogSlide, currentBlogSlide + 3);
 
   // Fetch suitable products from API
   useEffect(() => {
@@ -227,6 +246,20 @@ export default function Body() {
     };
 
     fetchBestSellerProducts();
+  }, []);
+
+  // Thêm useEffect để fetch blogs
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const response = await api.get("/blogs");
+        setBlogs(response.data);
+      } catch (error) {
+        console.error("Error fetching blogs:", error);
+      }
+    };
+
+    fetchBlogs();
   }, []);
 
   // Handle adding product to cart
@@ -640,25 +673,96 @@ export default function Body() {
 
           <div
             className="row"
-            style={{ justifyContent: "center", marginBottom: "50px" }}
+            style={{ 
+              justifyContent: "center", 
+              marginBottom: "50px",
+              position: "relative" 
+            }}
           >
-            <div className="col-4">
-              <img src={s3} alt="Haven SkinLogo" className="ss" />
-              <br />
-              <br />
-              Tại Sao Triệt Lông Xong Lại Thấy Lông Mọc Nhiều Hơn?
-            </div>
-            <div className="col-4">
-              <img src={s4} alt="Haven SkinLogo" className="ss" />
-              <br />
-              <br />7 Cách Sử Dụng Toner 12% Emmié Bạn Đã Biết Chưa?
-            </div>
-            <div className="col-4">
-              <img src={s5} alt="Haven SkinLogo" className="ss" />
-              <br />
-              <br />
-              Tại Sao Triệt Lông Xong Lại Thấy Lông Mọc Nhiều Hơn?
-            </div>
+            {/* Prev Button */}
+            <button
+              onClick={handleBlogPrev}
+              className="slider-control prev"
+              style={{
+                position: "absolute",
+                left: "-50px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                backgroundColor: "gray",
+              }}
+            >
+              &lt;
+            </button>
+
+            {/* Blog Slides */}
+            {visibleBlogs.map((blog) => (
+              <div className="col-4" key={blog.blogId}>
+                <div 
+                  style={{ 
+                    cursor: 'pointer',
+                    borderRadius: '8px',
+                    overflow: 'hidden',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                    transition: 'transform 0.3s ease',
+                    height: '100%',
+                    backgroundColor: '#fff'
+                  }}
+                  onClick={() => navigate(`/blog/${blog.blogId}`)}
+                >
+                  <div style={{
+                    width: '100%',
+                    height: '250px',
+                    position: 'relative',
+                    backgroundColor: '#f8f9fa',
+                  }}>
+                    <img
+                      src={blog.blogImages?.[0]?.imageURL || s1}
+                      alt={blog.blogTitle}
+                      className="ss"
+                      style={{ 
+                        position: 'absolute',
+                        top: '0',
+                        left: '0',
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        objectPosition: 'center',
+                      }}
+                    />
+                  </div>
+                  <div style={{ padding: '15px' }}>
+                    <h5 style={{ 
+                      fontSize: '16px',
+                      fontWeight: '500',
+                      minHeight: '48px',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                      display: '-webkit-box',
+                      WebkitLineClamp: '2',
+                      WebkitBoxOrient: 'vertical',
+                      margin: '0'
+                    }}>
+                      {blog.blogTitle}
+                    </h5>
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {/* Next Button */}
+            <button
+              onClick={handleBlogNext}
+              className="slider-control next"
+              style={{
+                position: "absolute",
+                right: "-50px",
+                top: "50%",
+                transform: "translateY(-50%)",
+                backgroundColor: "gray",
+              }}
+            >
+              &gt;
+            </button>
           </div>
         </div>
       </div>

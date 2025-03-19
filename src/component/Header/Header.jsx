@@ -1,16 +1,23 @@
 import { useState, useEffect, useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Header.css";
 import logo from "../../assets/Logo_01.jpg";
 import { jwtDecode } from "jwt-decode";
 import { CartContext } from "../../context/CartContext";
 import { ShoppingCartOutlined, DashboardOutlined, MenuOutlined } from "@ant-design/icons";
 import { Badge } from "antd";
+import api from "../../config/api";
 
 export default function Header() {
   const [role, setRole] = useState(null);
   const { cart } = useContext(CartContext);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchKeyword, setSearchKeyword] = useState("");
+  const [searchSuggestions, setSearchSuggestions] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [products, setProducts] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -23,7 +30,27 @@ export default function Header() {
         setRole(null);
       }
     }
+    fetchCategories();
+    fetchProducts();
   }, []);
+
+  const fetchCategories = async () => {
+    try {
+      const response = await api.get("/categories");
+      setCategories(response.data);
+    } catch (error) {
+      console.error("Lỗi khi tải danh mục:", error);
+    }
+  };
+
+  const fetchProducts = async () => {
+    try {
+      const response = await api.get("/products");
+      setProducts(response.data);
+    } catch (error) {
+      console.error("Lỗi khi tải sản phẩm:", error);
+    }
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -32,6 +59,78 @@ export default function Header() {
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
+  };
+
+  const handleSearchInputChange = async (e) => {
+    const value = e.target.value;
+    setSearchKeyword(value);
+    
+    if (value.trim()) {
+      const matchingCategories = categories.filter(cat => 
+        cat.categoryName.toLowerCase().includes(value.toLowerCase())
+      );
+      
+      const matchingProducts = products.filter(product => {
+        const productName = product.productName.toLowerCase();
+        const searchValue = value.toLowerCase();
+        
+        const productCategory = categories.find(cat => cat.categoryId === product.categoryId);
+        const categoryName = productCategory ? productCategory.categoryName.toLowerCase() : '';
+        
+        return productName.includes(searchValue) || categoryName.includes(searchValue);
+      });
+
+      const suggestions = [
+        ...matchingCategories.map(cat => ({
+          id: cat.categoryId,
+          name: cat.categoryName,
+          type: 'category'
+        })),
+        ...matchingProducts.map(prod => {
+          const category = categories.find(cat => cat.categoryId === prod.categoryId);
+          return {
+            id: prod.productId,
+            name: prod.productName,
+            type: 'product',
+            categoryId: prod.categoryId,
+            categoryName: category ? category.categoryName : ''
+          };
+        })
+      ];
+      
+      setSearchSuggestions(suggestions);
+      setShowSuggestions(true);
+    } else {
+      setSearchSuggestions([]);
+      setShowSuggestions(false);
+    }
+  };
+
+  const handleSuggestionClick = (item) => {
+    if (item.type === 'category') {
+      navigate(`/products?category=${item.id}`);
+    } else {
+      navigate(`/products?category=${item.categoryId}&search=${encodeURIComponent(item.name)}`);
+    }
+    setSearchKeyword("");
+    setShowSuggestions(false);
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    if (searchKeyword.trim()) {
+      const matchingCategory = categories.find(cat => 
+        cat.categoryName.toLowerCase().includes(searchKeyword.toLowerCase())
+      );
+
+      if (matchingCategory) {
+        navigate(`/products?category=${matchingCategory.categoryId}&search=${encodeURIComponent(searchKeyword.trim())}`);
+      } else {
+        navigate(`/products?search=${encodeURIComponent(searchKeyword.trim())}`);
+      }
+      setSearchKeyword("");
+      setShowSuggestions(false);
+    }
   };
 
   return (
@@ -102,9 +201,43 @@ export default function Header() {
       </div>
 
       <div className="icon col-3">
-        <div className="search">
-          <input type="text" placeholder="Tìm kiếm..." className="searchtt" />
-          <i className="fas fa-search search-icon"></i>
+        <div className="search-container" style={{ position: 'relative' }}>
+          <form className="search" onSubmit={handleSearch}>
+            <input
+              type="text"
+              placeholder="Tìm kiếm..."
+              className="searchtt"
+              value={searchKeyword}
+              onChange={handleSearchInputChange}
+              onFocus={() => setShowSuggestions(true)}
+            />
+            <button type="submit" style={{ border: 'none', background: 'none', cursor: 'pointer' }}>
+              <i className="fas fa-search search-icon"></i>
+            </button>
+          </form>
+          
+          {showSuggestions && searchSuggestions.length > 0 && (
+            <div className="search-suggestions">
+              {searchSuggestions.map((item) => (
+                <div
+                  key={`${item.type}-${item.id}`}
+                  className="suggestion-item"
+                  onClick={() => handleSuggestionClick(item)}
+                >
+                  <i className={item.type === 'category' ? 'fas fa-folder' : 'fas fa-box'} 
+                     style={{ marginRight: '8px' }} />
+                  <div>
+                    <div>{item.name}</div>
+                    {item.type === 'product' && item.categoryName && (
+                      <div className="suggestion-category">
+                        Danh mục: {item.categoryName}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <Link to="/shopping-cart" className="cart">
