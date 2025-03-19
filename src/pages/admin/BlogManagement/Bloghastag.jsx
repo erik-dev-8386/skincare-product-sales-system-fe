@@ -42,12 +42,11 @@ const BlogHashtag = () => {
       render: (text) => (
         <div
           dangerouslySetInnerHTML={{
-            __html:
-              text && typeof text === "string"
-                ? text.length > 50
-                  ? text.substring(0, 50) + "..."
-                  : text
-                : "",
+            __html: text && typeof text === "string"
+              ? text.length > 50
+                ? text.substring(0, 50) + "..."
+                : text
+              : "",
           }}
         />
       ),
@@ -129,7 +128,8 @@ const BlogHashtag = () => {
 
   const handleSearch = async () => {
     try {
-      const response = await api.get(`/blog-hashtag/name/${searchText}`);
+      const encodedSearchText = encodeURIComponent(searchText);
+      const response = await api.get(`/blog-hashtag/name/${encodedSearchText}`);
       if (response.data) {
         setHashtagList([response.data]);
       } else {
@@ -166,8 +166,7 @@ const BlogHashtag = () => {
     const isDuplicate = hashtagList.some(
       (hashtag) =>
         hashtag.blogHashtagName === values.blogHashtagName &&
-        (!editingHashtag ||
-          hashtag.blogHashtagId !== editingHashtag.blogHashtagId)
+        (!editingHashtag || hashtag.blogHashtagId !== editingHashtag.blogHashtagId)
     );
 
     if (isDuplicate) {
@@ -177,14 +176,16 @@ const BlogHashtag = () => {
 
     if (editingHashtag) {
       try {
+        const encodedHashtagName = encodeURIComponent(editingHashtag.blogHashtagName);
         await api.put(
-          `/blog-hashtag/${editingHashtag.blogHashtagName}`,
+          `/blog-hashtag/${encodedHashtagName}`,
           values
         );
         toast.success("Đã sửa hashtag thành công!");
         fetchHashtags();
         handleCloseModal();
       } catch (error) {
+        console.error("Lỗi khi cập nhật hashtag:", error);
         toast.error("Cập nhật hashtag không thành công!");
       }
     } else {
@@ -198,6 +199,7 @@ const BlogHashtag = () => {
         fetchHashtags();
         handleCloseModal();
       } catch (error) {
+        console.error("Lỗi khi thêm hashtag mới:", error);
         toast.error("Thêm hashtag mới không thành công!");
       }
     }
@@ -217,10 +219,12 @@ const BlogHashtag = () => {
 
   const handleDeleteHashtag = async (blogHashtagName) => {
     try {
-      await api.delete(`/blog-hashtag/${blogHashtagName}`);
+      const encodedHashtagName = encodeURIComponent(blogHashtagName);
+      await api.delete(`/blog-hashtag/${encodedHashtagName}`);
       toast.success("Đã xóa hashtag này thành công!");
       fetchHashtags();
     } catch (error) {
+      console.error("Lỗi khi xóa hashtag:", error);
       toast.error("Xóa hashtag này không thành công!");
     }
   };

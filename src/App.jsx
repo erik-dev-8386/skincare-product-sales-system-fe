@@ -47,6 +47,7 @@ import OrderManagement from "./pages/admin/OrderManagement/OrderManagement.jsx";
 import BlogManage from "./pages/admin/BlogManagement/Blogmanage.jsx";
 import BlogHashtag from "./pages/admin/BlogManagement/Bloghastag.jsx";
 import BlogCategory from "./pages/admin/BlogManagement/Blogcategory.jsx";
+import CustomerManagement from "./pages/admin/UserManagement/UserManagement.jsx";
 function App() {
   return (
     <Routes>
@@ -103,9 +104,9 @@ function App() {
           path="/admin/skin-type-management"
           element={<SkinTypeManagement />}
         />
-        <Route path="/admin/list-staff" element={<ListStaff />} />
-        <Route path="/admin/create-staff" element={<CreateStaff />} />
-        <Route path="/admin/list-user" element={<UserManagement />} />
+        <Route path="/admin/staff-management" element={<ListStaff />} />
+        {/* <Route path="/admin/create-staff" element={<CreateStaff />} /> */}
+        <Route path="/admin/customer-management" element={<CustomerManagement />} />
 
         <Route
           path="/admin/product-management"

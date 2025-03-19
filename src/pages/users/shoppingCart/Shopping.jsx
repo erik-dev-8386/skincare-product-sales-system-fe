@@ -156,22 +156,28 @@ export default function CartPage() {
 
     try {
       const response = await api.post("/cart/checkout", checkoutRequestDTO);
-      toast.success("Checkout successfully!");
+  
+      toast.success("Bạn đã đặt hàng thành công!");
       // setCart([]); // Clear cart after successful checkout
-      navigate("/cart", { state: { checkoutResponse: response.data } }); // Redirect to homepage or order confirmation page
+
+      setTimeout(() => {
+        navigate("/cart", { state: { checkoutResponse: response.data } })
+      }, 3000);
+      // navigate("/cart", { state: { checkoutResponse: response.data } }); // Redirect to homepage or order confirmation page
     } catch (error) {
       console.error("Error during checkout:", error);
-      toast.error("Checkout failed! Please try again.");
+      toast.error("Đặt hàng không thành công! Hãy thử lại.");
     }
   };
 
   const columns = [
     {
-      title: "Ảnh",
+      title: <p className="title-cart">Ảnh</p>,
       dataIndex: "productImages",
       key: "image",
       render: (images) => (
         <Image
+        className="image-product"
           src={images[0]?.imageURL}
           alt="product"
           width={100}
@@ -180,12 +186,12 @@ export default function CartPage() {
       ),
     },
     {
-      title: "Sản phẩm",
+      title: <p className="title-cart">Sản phẩm</p>,
       dataIndex: "productName",
       key: "productName",
     },
     {
-      title: "Giá tiền",
+      title: <p className="title-cart">Giá tiền</p>,
       dataIndex: "discountPrice",
       key: "price",
       render: (price) => (
@@ -196,25 +202,26 @@ export default function CartPage() {
       ),
     },
     {
-      title: "Số lượng",
+      title: <p className="title-cart">Số lượng</p>,
       key: "quantity",
       render: (_, item) => (
         <Space>
           <Button
-            color="primary"
-            variant="solid"
+          className="btn-decrease"
+            
             icon={<MinusOutlined />}
             onClick={() => decreaseQuantity(item.productId)}
             size="small"
           />
           <Input
+          className="quantity-product"
             min={1}
             value={item.quantity}
             style={{ width: 60, textAlign: "center" }}
           />
           <Button
-            color="primary"
-            variant="solid"
+          className="btn-increase"
+           
             icon={<PlusOutlined />}
             onClick={() => increaseQuantity(item.productId)}
             size="small"
@@ -223,7 +230,7 @@ export default function CartPage() {
       ),
     },
     {
-      title: "Tổng",
+      title: <p className="title-cart">Tổng</p>,
       key: "total",
       render: (_, item) => (
         <Text>
@@ -233,12 +240,13 @@ export default function CartPage() {
       ),
     },
     {
-      title: "Nút điều khiển",
+      title: <p className="title-cart">Nút điều khiển</p>,
       key: "action",
       render: (_, item) => (
         <Button
           color="danger"
           variant="solid"
+          style={{border: "2px solid #ff4d4f"}}
           icon={<DeleteOutlined />}
           onClick={() => deleteItem(item.productId)}
         >
@@ -249,14 +257,18 @@ export default function CartPage() {
   ];
 
   return (
+    <>
+    <ToastContainer />
     <div className="container">
-      <ToastContainer />
+     
       <div className="cart-container">
         <Card>
-          <Title level={2} className="cart-header">
+          {/* <Title level={2} className="cart-header">
             Giỏ hàng
-          </Title>
+          </Title> */}
+          <h1>Giỏ hàng</h1>
           <Table
+          className="table-cart"
             dataSource={cart}
             columns={columns}
             pagination={false}
@@ -271,7 +283,7 @@ export default function CartPage() {
               </span>
             </div>
             <Button
-              type="primary"
+              
               size="large"
               className="checkout-btn"
               onClick={handleCheckout}
@@ -282,6 +294,7 @@ export default function CartPage() {
         </Card>
       </div>
     </div>
+    </>
   );
 }
 
@@ -370,7 +383,7 @@ export default function CartPage() {
 
 //   const columns = [
 //     {
-//       title: "Ảnh",
+//       title: <p className="title-cart">Ảnh</p>,
 //       dataIndex: "productImages",
 //       key: "image",
 //       render: (images) => (
@@ -383,12 +396,12 @@ export default function CartPage() {
 //       ),
 //     },
 //     {
-//       title: "Sản phẩm",
+//       title: <p className="title-cart">Sản phẩm</p>,
 //       dataIndex: "productName",
 //       key: "productName",
 //     },
 //     {
-//       title: "Giá tiền",
+//       title: <p className="title-cart">Giá tiền</p>,
 //       dataIndex: "discountPrice",
 //       key: "price",
 //       render: (price) => (
@@ -399,7 +412,7 @@ export default function CartPage() {
 //       ),
 //     },
 //     {
-//       title: "Số lượng",
+//       title: <p className="title-cart">Số lượng</p>,
 //       key: "quantity",
 //       render: (_, item) => (
 //         <Space>
@@ -426,7 +439,7 @@ export default function CartPage() {
 //       ),
 //     },
 //     {
-//       title: "Tổng",
+//       title: <p className="title-cart">Tổng</p>,
 //       key: "total",
 //       render: (_, item) => (
 //         <Text>
@@ -436,7 +449,7 @@ export default function CartPage() {
 //       ),
 //     },
 //     {
-//       title: "Nút điều khiển",
+//       title: <p className="title-cart">Nút điều khiển</p>,
 //       key: "action",
 //       render: (_, item) => (
 //         <Button

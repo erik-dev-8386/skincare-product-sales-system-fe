@@ -41,6 +41,13 @@ export default function ProductDetail() {
   const [mainImage, setMainImage] = useState("");
   const [value, setValue] = useState({ scale: 1, translation: { x: 0, y: 0 } }); // State for zoom and translation
   const { addToCart } = useContext(CartContext);
+  const [showAllSimilar, setShowAllSimilar] = useState(false);
+  const [showAllSkinType, setShowAllSkinType] = useState(false);
+
+  // Số lượng sản phẩm hiển thị ban đầu
+  const initialDisplayCount = 4;
+  const [displayCountSimilar, setDisplayCountSimilar] = useState(4); // Số lượng sản phẩm tương tự hiển thị ban đầu
+  const [displayCountSkinType, setDisplayCountSkinType] = useState(4); // Số lượng sản phẩm cùng loại da hiển thị ban đầu
 
   const formatPrice = (price) => {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -109,9 +116,9 @@ export default function ProductDetail() {
     );
     return item
       ? item.brandName ||
-          item.skinName ||
-          item.categoryName ||
-          item.discountPercent
+      item.skinName ||
+      item.categoryName ||
+      item.discountPercent
       : "Loading...";
   };
 
@@ -225,9 +232,7 @@ export default function ProductDetail() {
     }
 
     navigate("/shopping-cart");
-    // setTimeout(() => {
-    //   navigate("/shopping-cart");
-    // }, 3000);
+
   };
 
   const handleThumbnailClick = (imageURL) => {
@@ -344,9 +349,8 @@ export default function ProductDetail() {
                 {product.productImages.map((image, index) => (
                   <div
                     key={index}
-                    className={`border mx-1 rounded-2 ${
-                      mainImage === image.imageURL ? "thumbnail-active" : ""
-                    }`}
+                    className={`border mx-1 rounded-2 ${mainImage === image.imageURL ? "thumbnail-active" : ""
+                      }`}
                     onClick={() => handleThumbnailClick(image.imageURL)}
                     style={{ cursor: "pointer" }}
                   >
@@ -386,16 +390,18 @@ export default function ProductDetail() {
                   </span>
                   <span className="text-muted"> /mỗi hộp</span>
                 </div>
-                <p style={{ textDecoration: "line-through", color: "gray" }}>
-                  {formatPrice(product.unitPrice)}
-                  <span style={{ textDecoration: "underline" }}>đ</span>
-                </p>
+                {product.discountId && ( // Chỉ hiển thị unitPrice khi có discount
+                  <p style={{ textDecoration: "line-through", color: "gray" }}>
+                    {formatPrice(product.unitPrice)}
+                    <span style={{ textDecoration: "underline" }}>đ</span>
+                  </p>
+                )}
 
                 <div className="row" style={{ color: "black" }}>
                   <div className="row" style={{ fontSize: 25, color: "red" }}>
                     <dt className="col-3">Giảm giá:</dt>
                     <dd className="col-9">
-                      {findNameById(product.discountId, discounts)} %
+                      {product.discountId ? `${findNameById(product.discountId, discounts)} %` : "Không có giảm giá"}
                     </dd>
                   </div>
 
@@ -416,31 +422,31 @@ export default function ProductDetail() {
                   </div>
                 </div>
                 <Button
-                  
+
                   className="button-buy"
                   onClick={handleAddToCartAndNavigate}
-           
+
                   icon={<DollarOutlined />}
                 >
-                  
+
                   Mua ngay
                 </Button>
                 <Button
-                
+
                   className="button-add-to-card"
                   onClick={handleAddToCart}
                   style={{ padding: 5 }}
                   icon={<ShoppingCartOutlined />}
                 >
-                  
+
                   Thêm vào giỏ hàng
                 </Button>
                 <Button
                   className="button-like"
                   style={{ padding: 5 }}
-                  icon={<HeartOutlined  />}
+                  icon={<HeartOutlined />}
                 >
-                  
+
                   Yêu thích
                 </Button>
               </div>
@@ -461,7 +467,7 @@ export default function ProductDetail() {
                     <div className="card">
                       <div className="card-body">
                         <h5 className="card-title">Các sản phẩm tương tự</h5>
-                        {similarProducts.map((product) => (
+                        {similarProducts.slice(0, displayCountSimilar).map((product) => (
                           <div className="d-flex mb-3" key={product.productId}>
                             <Link
                               to={`/products/${product.productId}`}
@@ -490,6 +496,15 @@ export default function ProductDetail() {
                             </div>
                           </div>
                         ))}
+                        {similarProducts.length > displayCountSimilar && (
+                          <Button
+                            type="link"
+                            onClick={() => setDisplayCountSimilar(displayCountSimilar + 4)} // Tăng số lượng hiển thị lên 4
+                            style={{ width: '100%', marginTop: '10px' }}
+                          >
+                            Xem thêm
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -499,7 +514,7 @@ export default function ProductDetail() {
                         <h5 className="card-title">
                           Gợi ý sản phẩm cùng loại da
                         </h5>
-                        {sameSkinTypeProducts.map((product) => (
+                        {sameSkinTypeProducts.slice(0, displayCountSkinType).map((product) => (
                           <div className="d-flex mb-3" key={product.productId}>
                             <Link
                               to={`/products/${product.productId}`}
@@ -528,6 +543,15 @@ export default function ProductDetail() {
                             </div>
                           </div>
                         ))}
+                        {sameSkinTypeProducts.length > displayCountSkinType && (
+                          <Button
+                            type="link"
+                            onClick={() => setDisplayCountSkinType(displayCountSkinType + 4)} // Tăng số lượng hiển thị lên 4
+                            style={{ width: '100%', marginTop: '10px' }}
+                          >
+                            Xem thêm
+                          </Button>
+                        )}
                       </div>
                     </div>
                   </div>

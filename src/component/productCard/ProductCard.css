@@ -1,0 +1,14 @@
+.button-compare:hover{
+background-color: white !important;
+color: #900001 !important;
+border: 2px solid #900001 !important;
+}
+
+.product-card {
+    min-height: 300px; /* Đặt chiều cao tối thiểu cho card */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Căn đều các phần tử trong card */
+    width: 250px;
+   padding: 0 !important;
+  }

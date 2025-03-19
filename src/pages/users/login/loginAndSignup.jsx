@@ -122,6 +122,7 @@ export default function LoginAndSignup() {
 
       if (res.ok && data.token) {
         //  Lưu token vào localStorage
+        console.log("token real:", data.token);
         localStorage.setItem("token", data.token);
 
         //  Giải mã token lấy role
@@ -129,10 +130,6 @@ export default function LoginAndSignup() {
         setRole(decodedToken.role);
 
       }
-
-
-
-
       toast.success("Đăng nhập thành công!");
       setTimeout(() => navigate("/"), 1500); // Chuyển hướng về trang chủ
     } catch (error) {
@@ -142,33 +139,35 @@ export default function LoginAndSignup() {
   };
 
   // const handleSuccess = async (response) => {
-  //   console.log("Google Token:", response.credential);
+  //   console.log("Google Token:", response.credential); // Kiểm tra token nhận được
   //   try {
-  //     const res = await fetch(
-  //       "http://localhost:8080/haven-skin/users/login/google",
-  //       {
-  //         method: "POST",
-  //         headers: { "Content-Type": "application/json" },
-  //         body: JSON.stringify(response.credential),
-  //       }
-  //     );
-
-  //     const data = await res.json();
+  //     const res = await api.post("/users/login/google", {
+  //       token: response.credential, // Gửi token trực tiếp
+  //     });
+  
+  //     console.log("Response from server:", res); // Log response từ server
+  
+  //     const data = res.data; // Sử dụng res.data thay vì res.json()
   //     console.log("User data:", data);
-
-  //     if (res.ok && data.redirectUrl) {
+  
+  //     if (res.status === 200 && data.token) {
+  //       // Lưu token vào localStorage
+  //       localStorage.setItem("token", data.token);
+  
+  //       // Giải mã token lấy role
+  //       const decodedToken = jwtDecode(data.token);
+  //       setRole(decodedToken.role);
+  
   //       toast.success("Đăng nhập thành công!");
-  //       navigate(data.redirectUrl); // Chuyển hướng đúng trang
+  //       setTimeout(() => navigate("/"), 1500); // Chuyển hướng về trang chủ
   //     } else {
-  //       console.error("Server returned an error:", data);
-  //       toast.error(data.error || "Đăng nhập thất bại!");
+  //       toast.error("Đăng nhập thất bại!");
   //     }
   //   } catch (error) {
   //     console.error("Login failed:", error);
-  //     toast.error("Lỗi kết nối đến server!");
+  //     toast.error("Đăng nhập thất bại!");
   //   }
   // };
-
 
   return (
     <div className="body">

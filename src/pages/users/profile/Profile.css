@@ -37,3 +37,26 @@
     color: #000 !important; /* Màu chữ đen */
     cursor: not-allowed; /* Con trỏ chuột khi hover */
 }
+
+/* Thêm CSS để điều chỉnh khoảng cách giữa các phần tử trong form */
+.profile-container .ant-form-item {
+    margin-bottom: 8px; /* Giảm khoảng cách giữa các Form.Item */
+  }
+  
+  .profile-container .ant-row {
+    margin-bottom: 8px; /* Giảm khoảng cách giữa các Row */
+  }
+  
+  .profile-container .ant-col {
+    padding: 0 4px; /* Giảm khoảng cách giữa các Col */
+  }
+  
+  .profile-container .ant-input,
+  .profile-container .ant-picker,
+  .profile-container .ant-select-selector {
+    height: 32px; /* Điều chỉnh chiều cao của các input */
+  }
+  
+  .profile-container .ant-upload {
+    margin-bottom: 8px; /* Giảm khoảng cách dưới của Upload */
+  }

@@ -140,6 +140,11 @@ const Blog = () => {
     setFilteredBlogs(filtered);
   };
 
+  // Add a function to handle blog card clicks
+  const handleBlogClick = (blogId) => {
+    navigate(`/blog/${blogId}`);
+  };
+
   if (loading) {
     return (
       <div
@@ -338,36 +343,84 @@ const Blog = () => {
               </div>
 
               {filteredBlogs.length > 0 ? (
-                <>
-                  {/* Featured blog post - first post gets featured treatment */}
-                  {filteredBlogs.length > 0 && (
+                <div className="hasaki-style-blog-layout">
+                  {/* Featured section with one large post */}
+                  <div className="blog-section">
                     <div className="blog-section-header">
-                      <h2 className="blog-section-title">Bài viết nổi bật</h2>
+                      <h2 className="blog-section-title">
+                        <i className="fa-solid fa-star"></i> Bài Viết Nổi Bật
+                      </h2>
                       <div className="blog-section-line"></div>
                     </div>
-                  )}
-
-                  <div className="blog-featured-post">
-                    <BlogCard blog={filteredBlogs[0]} featured={true} />
+                    
+                    {filteredBlogs.length > 0 && (
+                      <div className="featured-blog-card" onClick={() => handleBlogClick(filteredBlogs[0].blogId)}>
+                        <div className="featured-blog-image">
+                          <img 
+                            src={filteredBlogs[0].blogImages && filteredBlogs[0].blogImages.length > 0 
+                              ? filteredBlogs[0].blogImages[0].imageURL 
+                              : "https://via.placeholder.com/800x400?text=No+Image"
+                            } 
+                            alt={filteredBlogs[0].blogTitle}
+                          />
+                        </div>
+                        <div className="featured-blog-content">
+                          <h3 className="featured-blog-title">{filteredBlogs[0].blogTitle}</h3>
+                          <div className="featured-blog-meta">
+                            <span className="blog-date">
+                              <i className="fa-solid fa-calendar-days"></i> {new Date(filteredBlogs[0].postedTime).toLocaleDateString("vi-VN")}
+                            </span>
+                            {filteredBlogs[0].blogCategory && (
+                              <span className="blog-category">
+                                <i className="fa-solid fa-folder"></i> {filteredBlogs[0].blogCategory.blogCategoryName}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
-                  {/* Regular blog posts */}
-                  {filteredBlogs.length > 1 && (
+                  {/* Recent posts section in a grid layout */}
+                  <div className="blog-section">
                     <div className="blog-section-header">
-                      <h2 className="blog-section-title">Bài viết mới</h2>
+                      <h2 className="blog-section-title">
+                        <i className="fa-solid fa-clock"></i> Bài Viết Mới Nhất
+                      </h2>
                       <div className="blog-section-line"></div>
-                      <a href="#" className="blog-section-view-all">
-                        Xem tất cả
-                      </a>
                     </div>
-                  )}
-
-                  <div className="blog-cards-container">
-                    {filteredBlogs.slice(1).map((blog) => (
-                      <BlogCard key={blog.blogId} blog={blog} />
-                    ))}
+                    
+                    <div className="blog-grid">
+                      {filteredBlogs.slice(1).map((blog) => (
+                        <div 
+                          className="blog-grid-item"
+                          key={blog.blogId}
+                          onClick={() => handleBlogClick(blog.blogId)}
+                        >
+                          <div className="blog-card">
+                            <div className="blog-image">
+                              <img 
+                                src={blog.blogImages && blog.blogImages.length > 0 
+                                  ? blog.blogImages[0].imageURL 
+                                  : "https://via.placeholder.com/300x200?text=No+Image"
+                              } 
+                                alt={blog.blogTitle}
+                              />
+                            </div>
+                            <div className="blog-content">
+                              <h3 className="blog-title">{blog.blogTitle}</h3>
+                              <div className="blog-meta">
+                                <span className="blog-date">
+                                  <i className="fa-solid fa-calendar-days"></i> {new Date(blog.postedTime).toLocaleDateString("vi-VN")}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </>
+                </div>
               ) : (
                 <div className="no-blogs-found">
                   <i className="fa-solid fa-face-sad-tear no-results-icon"></i>

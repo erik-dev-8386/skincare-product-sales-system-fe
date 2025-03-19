@@ -1,10 +1,11 @@
-import { Button, Form, Input, Modal, Table, Popconfirm, Upload, Radio, DatePicker, Select, InputNumber, Tag } from "antd";
+import { Button, Form, Input, Modal, Table, Popconfirm, Upload, Radio, DatePicker, Select, InputNumber, Tag, Image } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import { UploadOutlined } from "@ant-design/icons";
 import moment from "moment";
 import api from "../../../config/api";
+import { center } from "@cloudinary/url-gen/qualifiers/textAlignment";
 
 const StaffManagement = () => {
   const [staffList, setStaffList] = useState([]);
@@ -24,7 +25,7 @@ const StaffManagement = () => {
     { title: 'Tên', dataIndex: 'lastName', key: 'lastName' },
     { title: 'Giới tính', dataIndex: 'gender', key: 'gender' },
     { title: 'Địa chỉ', dataIndex: 'address', key: 'address' },
-    { title: 'Ngày sinh', dataIndex: 'birthDate', key: 'birthDate', render: (date) => moment(date).format("YYYY-MM-DD") },
+    { title: 'Ngày sinh', dataIndex: 'birthDate', key: 'birthDate', render: (date) => date? moment(date).format("YYYY-MM-DD") : "không có thông tin" },
     { title: 'Email', dataIndex: 'email', key: 'email' },
     { title: 'Số điện thoại', dataIndex: 'phone', key: 'phone' },
     { title: 'Đánh giá', dataIndex: 'rating', key: 'rating' },
@@ -32,7 +33,7 @@ const StaffManagement = () => {
       title: 'Ảnh đại diện',
       dataIndex: 'image',
       key: 'image',
-      render: (image) => image ? <img src={image} alt="Avatar" width={50} height={50} /> : 'Không có ảnh'
+      render: (image) => image ? <Image src={image} alt="Avatar" width={50} height={50} /> : 'Không có ảnh'
     },
     {
       title: 'Vai trò',
@@ -40,15 +41,15 @@ const StaffManagement = () => {
       key: 'role',
       render: (role) => role === 1 ? "Quản trị viên" : "Nhân viên"
     },
-    {
-      title: 'Trạng thái',
-      dataIndex: 'status',
-      key: 'status',
-      render: (status) => {
-        const statusInfo = statusMapping[status] || { text: "KHÔNG BIẾT", color: "default" };
-        return <Tag color={statusInfo.color}>{statusInfo.text}</Tag>;
-      }
-    },
+    // {
+    //   title: 'Trạng thái',
+    //   dataIndex: 'status',
+    //   key: 'status',
+    //   render: (status) => {
+    //     const statusInfo = statusMapping[status] || { text: "KHÔNG BIẾT", color: "default" };
+    //     return <Tag color={statusInfo.color}>{statusInfo.text}</Tag>;
+    //   }
+    // },
     {
       title: 'Thao tác',
       key: 'actions',
