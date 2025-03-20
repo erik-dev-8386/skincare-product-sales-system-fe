@@ -34,6 +34,10 @@ export default function ProductDetail() {
   const [showAllSimilar, setShowAllSimilar] = useState(false);
   const [showAllSkinType, setShowAllSkinType] = useState(false);
 
+  const [reviews, setReviews] = useState([]);
+  const [showAllReviews, setShowAllReviews] = useState(false);
+  const [displayCountReviews, setDisplayCountReviews] = useState(4);
+
   // Số lượng sản phẩm hiển thị ban đầu
 
   const [displayCountSimilar, setDisplayCountSimilar] = useState(4); // Số lượng sản phẩm tương tự hiển thị ban đầu
@@ -50,17 +54,17 @@ export default function ProductDetail() {
         const response = await api.get(`/products/${id}`);
         setProduct(response.data);
         setMainImage(response.data.productImages[0]?.imageURL);
-  
+
         // Fetch tất cả sản phẩm
         const allProductsResponse = await api.get("/products");
         const allProducts = allProductsResponse.data;
-  
+
         // Lọc sản phẩm tương tự (cùng categoryId)
         const similarProducts = allProducts.filter(
           (p) => p.categoryId === response.data.categoryId && p.productId !== id
         );
         setSimilarProducts(similarProducts);
-  
+
         // Lọc sản phẩm cùng loại da (cùng skinTypeId)
         const sameSkinTypeProducts = allProducts.filter(
           (p) => p.skinTypeId === response.data.skinTypeId && p.productId !== id
@@ -72,7 +76,7 @@ export default function ProductDetail() {
         setLoading(false);
       }
     };
-  
+
     fetchProduct();
   }, [id]);
 
@@ -97,6 +101,19 @@ export default function ProductDetail() {
 
     fetchOptions();
   }, []);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const response = await api.get(`/reviews/product/${id}`);
+        setReviews(response.data);
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+      }
+    };
+
+    fetchReviews();
+  }, [id]);
 
   const findNameById = (id, data) => {
     const item = data.find(
@@ -302,6 +319,79 @@ export default function ProductDetail() {
         </div>
       ),
     },
+    {
+      key: "5",
+      label: "Đánh giá",
+      children: (
+        <div className="tabContentStyle">
+          {/* Thêm phần đánh giá sản phẩm */}
+          <div className="mt-4">
+                    <h3>Đánh giá sản phẩm</h3>
+                    <div className="d-flex align-items-center mb-3">
+                      <span className="h2 me-2">4.9</span>
+                      <div className="d-flex flex-column">
+                        <div className="d-flex">
+                          {[...Array(5)].map((_, i) => (
+                            <span key={i} className="text-warning">★</span>
+                          ))}
+                        </div>
+                        <span className="text-muted">80 nhận xét</span>
+                      </div>
+                    </div>
+                    <div className="mb-3">
+                      <div className="d-flex align-items-center">
+                        <span className="me-2">5 sao</span>
+                        <progress className="flex-grow-1" value="73" max="80"></progress>
+                        <span className="ms-2">73</span>
+                      </div>
+                      <div className="d-flex align-items-center">
+                        <span className="me-2">4 sao</span>
+                        <progress className="flex-grow-1" value="7" max="80"></progress>
+                        <span className="ms-2">7</span>
+                      </div>
+                      <div className="d-flex align-items-center">
+                        <span className="me-2">3 sao</span>
+                        <progress className="flex-grow-1" value="0" max="80"></progress>
+                        <span className="ms-2">0</span>
+                      </div>
+                      <div className="d-flex align-items-center">
+                        <span className="me-2">2 sao</span>
+                        <progress className="flex-grow-1" value="0" max="80"></progress>
+                        <span className="ms-2">0</span>
+                      </div>
+                      <div className="d-flex align-items-center">
+                        <span className="me-2">1 sao</span>
+                        <progress className="flex-grow-1" value="0" max="80"></progress>
+                        <span className="ms-2">0</span>
+                      </div>
+                    </div>
+                    <div className="mb-3">
+                      <Button type="primary" onClick={() => setShowAllReviews(!showAllReviews)}>
+                        {showAllReviews ? "Ẩn bớt" : "Xem tất cả"}
+                      </Button>
+                    </div>
+                    {reviews.slice(0, showAllReviews ? reviews.length : displayCountReviews).map((review, index) => (
+                      <div key={index} className="mb-3">
+                        <div className="d-flex align-items-center">
+                          <span className="me-2">{review.rating} sao</span>
+                          <span className="text-muted">{review.date}</span>
+                        </div>
+                        <p>{review.comment}</p>
+                      </div>
+                    ))}
+                    {reviews.length > displayCountReviews && !showAllReviews && (
+                      <Button
+                        type="link"
+                        onClick={() => setDisplayCountReviews(displayCountReviews + 4)}
+                        style={{ width: '100%', marginTop: '10px' }}
+                      >
+                        Xem thêm
+                      </Button>
+                    )}
+                  </div>
+        </div>
+      ),
+    },
   ];
 
   return (
@@ -453,6 +543,7 @@ export default function ProductDetail() {
                   <div className="tabStyle">
                     <Tabs defaultActiveKey="1" items={tabItems} />
                   </div>
+                  
                 </div>
                 <div className="col-lg-4">
                   <div className="px-0 border rounded-2 shadow-0">
