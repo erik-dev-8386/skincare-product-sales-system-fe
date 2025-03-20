@@ -604,7 +604,7 @@ export default function Body() {
 
           {/* ============================================ */}
           <div className="col-12">
-            <h3 className="san">Top Best Seller</h3>
+            <h3 className="san">Top 5 sản phẩm bán chạy</h3>
           </div>
 
           <div
@@ -616,7 +616,7 @@ export default function Body() {
             }}
           >
             {/* Prev Button */}
-            <button
+            {/* <button
               onClick={handleBestSellerPrev}
               className="slider-control prev"
               style={{
@@ -628,7 +628,7 @@ export default function Body() {
               }}
             >
               &lt;
-            </button>
+            </button> */}
 
             {/* Best Seller Products */}
             {bestSellerProducts && bestSellerProducts.length > 0 ? (
@@ -650,7 +650,7 @@ export default function Body() {
             )}
 
             {/* Next Button */}
-            <button
+            {/* <button
               onClick={handleBestSellerNext}
               className="slider-control next"
               style={{
@@ -662,7 +662,7 @@ export default function Body() {
               }}
             >
               &gt;
-            </button>
+            </button> */}
           </div>
 
           {/* ==================================================== */}
