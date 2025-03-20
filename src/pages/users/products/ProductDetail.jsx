@@ -44,7 +44,6 @@ export default function ProductDetail() {
   const [displayCountSimilar, setDisplayCountSimilar] = useState(4); // Số lượng sản phẩm tương tự hiển thị ban đầu
   const [displayCountSkinType, setDisplayCountSkinType] = useState(4); // Số lượng sản phẩm cùng loại da hiển thị ban đầu
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
   const [feedbackForm] = Form.useForm();
 
   const formatPrice = (price) => {
@@ -431,7 +430,6 @@ export default function ProductDetail() {
 
       if (response.data) {
         toast.success("Đánh giá sản phẩm thành công!");
-        setIsModalVisible(false);
         feedbackForm.resetFields();
 
         // Xử lý dữ liệu nhận về từ response
@@ -502,18 +500,8 @@ export default function ProductDetail() {
     }
   };
 
-  // Thêm modal đánh giá
-  const showFeedbackModal = () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      toast.error("Vui lòng đăng nhập để đánh giá sản phẩm");
-      return;
-    }
-    setIsModalVisible(true);
-  };
-
+  // Giữ lại handleCancel chỉ để reset form nếu cần
   const handleCancel = () => {
-    setIsModalVisible(false);
     feedbackForm.resetFields();
   };
 
@@ -602,47 +590,66 @@ export default function ProductDetail() {
                 <span className="text-muted">{reviews.length} nhận xét</span>
               </div>
             </div>
-            <div className="mb-3">
-              <Button type="primary" onClick={showFeedbackModal}>
-                Viết đánh giá
-              </Button>
-              {reviews.length > displayCountReviews && (
-                <Button 
-                  type="link" 
-                  onClick={() => setShowAllReviews(!showAllReviews)}
-                  style={{ marginLeft: '10px' }}
+            
+            {/* Thêm form đánh giá trực tiếp thay vì sử dụng modal */}
+            <div className="mb-4 p-3 border rounded">
+              <h4>Viết đánh giá của bạn</h4>
+              <Form form={feedbackForm} onFinish={handleSubmitFeedback} layout="vertical">
+                <Form.Item
+                  name="content"
+                  rules={[{ required: true, message: 'Vui lòng nhập nội dung đánh giá' }]}
                 >
-                  {showAllReviews ? "Ẩn bớt" : "Xem tất cả"}
-                </Button>
-              )}
+                  <Input.TextArea 
+                    rows={4} 
+                    placeholder="Chia sẻ trải nghiệm của bạn về sản phẩm này" 
+                  />
+                </Form.Item>
+                <Form.Item>
+                  <Button type="primary" htmlType="submit">
+                    Gửi đánh giá
+                  </Button>
+                </Form.Item>
+              </Form>
             </div>
+            
             {reviews.length > 0 ? (
-              reviews.slice(0, showAllReviews ? reviews.length : displayCountReviews).map((review, index) => (
-                <div key={index} className="mb-3 p-3 border rounded">
-                  <div className="d-flex align-items-center">
-                    <UserOutlined className="me-2" />
-                    <strong className="me-2">
-                      {review.users?.fullName || 
-                       (review.user_first_name && review.user_last_name 
-                         ? `${review.user_first_name} ${review.user_last_name}` 
-                         : review.userId?.split('@')[0] || "Người dùng")}
-                    </strong>
-                    <span className="text-muted">
-                      {new Date(review.feedbackDate).toLocaleDateString('vi-VN', {
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit'
-                      })}
-                    </span>
+              <>
+                {reviews.length > displayCountReviews && (
+                  <Button 
+                    type="link" 
+                    onClick={() => setShowAllReviews(!showAllReviews)}
+                    style={{ marginBottom: '10px' }}
+                  >
+                    {showAllReviews ? "Ẩn bớt" : "Xem tất cả"}
+                  </Button>
+                )}
+                {reviews.slice(0, showAllReviews ? reviews.length : displayCountReviews).map((review, index) => (
+                  <div key={index} className="mb-3 p-3 border rounded">
+                    <div className="d-flex align-items-center">
+                      <UserOutlined className="me-2" />
+                      <strong className="me-2">
+                        {review.users?.fullName || 
+                         (review.user_first_name && review.user_last_name 
+                           ? `${review.user_first_name} ${review.user_last_name}` 
+                           : review.userId?.split('@')[0] || "Người dùng")}
+                      </strong>
+                      <span className="text-muted">
+                        {new Date(review.feedbackDate).toLocaleDateString('vi-VN', {
+                          year: 'numeric',
+                          month: 'long',
+                          day: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
+                      </span>
+                    </div>
+                    <p className="mt-2">{review.feedbackContent}</p>
+                    <p className="text-muted small">
+                      Sản phẩm: {review.productName || product.productName}
+                    </p>
                   </div>
-                  <p className="mt-2">{review.feedbackContent}</p>
-                  <p className="text-muted small">
-                    Sản phẩm: {review.productName || product.productName}
-                  </p>
-                </div>
-              ))
+                ))}
+              </>
             ) : (
               <p>Chưa có đánh giá nào cho sản phẩm này</p>
             )}
@@ -909,32 +916,6 @@ export default function ProductDetail() {
           </section>
         </div>
       </div>
-
-      {/* Thêm Modal đánh giá sản phẩm */}
-      <Modal
-        title="Đánh giá sản phẩm"
-        open={isModalVisible}
-        onCancel={handleCancel}
-        footer={null}
-      >
-        <Form form={feedbackForm} onFinish={handleSubmitFeedback} layout="vertical">
-          <Form.Item
-            name="content"
-            label="Nội dung đánh giá"
-            rules={[{ required: true, message: 'Vui lòng nhập nội dung đánh giá' }]}
-          >
-            <Input.TextArea 
-              rows={4} 
-              placeholder="Chia sẻ trải nghiệm của bạn về sản phẩm này" 
-            />
-          </Form.Item>
-          <Form.Item>
-            <Button type="primary" htmlType="submit">
-              Gửi đánh giá
-            </Button>
-          </Form.Item>
-        </Form>
-      </Modal>
     </>
   );
 }
