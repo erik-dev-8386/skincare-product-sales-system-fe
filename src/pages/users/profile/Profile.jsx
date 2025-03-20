@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Form, Input, DatePicker, Upload, Button, Select, message, Row, Col, Image } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
@@ -110,16 +109,6 @@ export default function Profile() {
     setImagePreviews(userData.image ? [userData.image] : []); // Reset image previews
   };
 
-  //   const handleCancelClick = () => {
-  //     setIsEditing(false);
-  //     form.setFieldsValue({
-  //       ...userData,
-  //       birthDate: userData.birthDate ? dayjs(userData.birthDate) : null, // Đảm bảo birthDate là dayjs
-  //     });
-  //     setFileList([]); // Reset fileList
-  //     setImagePreviews(userData.image ? [userData.image] : []); // Reset image previews
-  //   };
-
   // Handle file upload
   const handleFileChange = ({ fileList }) => {
     setFileList(fileList);
@@ -133,96 +122,128 @@ export default function Profile() {
   return (
     <>
       <ToastContainer />
-      <div className="profile-container">
-        <Form form={form} layout="vertical">
-          <h1>Thông tin tài khoản</h1>
-          <Row gutter={16}>
-            <Col span={8}>
-              <Form.Item name="firstName" label="Tên">
-                <Input disabled={!isEditing} />
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item name="lastName" label="Họ">
-                <Input disabled={!isEditing} />
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item name="gender" label="Giới tính">
-                <Select disabled={!isEditing}>
-                  <Option value="khác">Khác</Option>
-                  <Option value="nam">Nam</Option>
-                  <Option value="nữ">Nữ</Option>
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={8}>
-              <Form.Item name="email" label="Email">
-                <Input disabled />
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item name="phone" label="Số điện thoại">
-                <Input disabled={!isEditing} />
-              </Form.Item>
-            </Col>
-            <Col span={8}>
-              <Form.Item name="birthDate" label="Ngày sinh">
-                <DatePicker disabled={!isEditing} format="YYYY-MM-DD" />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row>
-            <Col span={24}>
-              <Form.Item name="address" label="Địa chỉ">
-                <Input disabled={!isEditing} />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item label="Ảnh đại diện">
-                <Upload
-                  fileList={fileList}
-                  beforeUpload={() => false} // Prevent auto-upload
-                  onChange={handleFileChange} // Handle file selection
-                  disabled={!isEditing}
-                >
-                  <Button icon={<UploadOutlined />} disabled={!isEditing}>
-                    Tải ảnh đại diện lên
-                  </Button>
-                </Upload>
-                {imagePreviews.length > 0 && (
+      <div className="user-profile-page">
+        <div className="profile-container">
+          <div className="profile-card">
+            <div className="profile-header">
+              <div className="profile-cover"></div>
+              <div className="profile-avatar-wrapper">
+                {imagePreviews.length > 0 ? (
                   <Image
                     src={imagePreviews[0]}
-                    alt="image Preview"
-                    width={100}
-                    style={{ marginTop: 8 }}
+                    alt="Avatar Preview"
+                    className="profile-avatar"
                   />
+                ) : (
+                  <div className="profile-avatar-placeholder">
+                    {userData.firstName ? userData.firstName[0] : ''}
+                  </div>
                 )}
-              </Form.Item>
-            </Col>
-            <Col span={12} style={{ textAlign: 'right' }}>
-              {isEditing ? (
-                <>
-                  <Button color="primary" variant="solid" onClick={handleSubmit} style={{ marginRight: 8 , border: "2px solid #1677ff"  }}>
-                    Lưu
-                  </Button>
-                  <Button color="danger" variant="solid" onClick={handleCancelClick} style={{ border: "2px solid #ff4d4f"  }}>
-                    Hủy
-                  </Button>
-                </>
-              ) : (
-                <Button type="primary" onClick={handleEditClick}>
-                  Chỉnh sửa thông tin
-                </Button>
-              )}
-            </Col>
-          </Row>
-        </Form>
+                {isEditing && (
+                  <Upload
+                    fileList={fileList}
+                    beforeUpload={() => false}
+                    onChange={handleFileChange}
+                    className="avatar-upload-overlay"
+                  >
+                    <Button icon={<UploadOutlined />} className="upload-button">
+                      Thay đổi ảnh
+                    </Button>
+                  </Upload>
+                )}
+              </div>
+              <h1 className="profile-name">
+                {userData.firstName} {userData.lastName}
+              </h1>
+            </div>
 
+            <Form form={form} layout="vertical" className="profile-form">
+              <div className="form-grid">
+                <div className="form-section">
+                  <h2 className="section-title">Thông tin cá nhân</h2>
+                  <div className="form-row">
+                    <Form.Item name="firstName" label="Tên">
+                      <Input disabled={!isEditing} />
+                    </Form.Item>
+                    <Form.Item name="lastName" label="Họ">
+                      <Input disabled={!isEditing} />
+                    </Form.Item>
+                  </div>
+
+                  <div className="form-row">
+                    <Form.Item name="gender" label="Giới tính">
+                      <Select disabled={!isEditing}>
+                        <Option value="nam">Nam</Option>
+                        <Option value="nữ">Nữ</Option>
+                        <Option value="khác">Khác</Option>
+                      </Select>
+                    </Form.Item>
+                    <Form.Item name="birthDate" label="Ngày sinh">
+                      <DatePicker 
+                        disabled={!isEditing} 
+                        format="DD/MM/YYYY" 
+                        style={{ width: '100%' }}
+                      />
+                    </Form.Item>
+                  </div>
+                </div>
+
+                <div className="form-section">
+                  <h2 className="section-title">Thông tin liên hệ</h2>
+                  <Form.Item name="email" label="Email">
+                    <Input disabled />
+                  </Form.Item>
+                  <Form.Item name="phone" label="Số điện thoại">
+                    <Input disabled={!isEditing} />
+                  </Form.Item>
+                  <Form.Item name="address" label="Địa chỉ">
+                    <Input disabled={!isEditing} />
+                  </Form.Item>
+                </div>
+              </div>
+
+              <div className="profile-actions">
+                {isEditing ? (
+                  <div className="action-buttons">
+                    <Button 
+                      type="primary" 
+                      onClick={handleSubmit} 
+                      className="save-button"
+                      style={{
+                        backgroundColor: '#900001',
+                        borderColor: '#900001'
+                      }}
+                    >
+                      Lưu thay đổi
+                    </Button>
+                    <Button 
+                      onClick={handleCancelClick} 
+                      className="cancel-button"
+                      style={{
+                        color: '#900001',
+                        borderColor: '#900001'
+                      }}
+                    >
+                      Hủy
+                    </Button>
+                  </div>
+                ) : (
+                  <Button 
+                    type="primary" 
+                    onClick={handleEditClick}
+                    className="edit-button"
+                    style={{
+                      backgroundColor: '#900001',
+                      borderColor: '#900001'
+                    }}
+                  >
+                    Chỉnh sửa thông tin
+                  </Button>
+                )}
+              </div>
+            </Form>
+          </div>
+        </div>
       </div>
     </>
   );
