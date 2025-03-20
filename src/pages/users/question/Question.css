@@ -73,7 +73,7 @@
 .submit-btn {
   display: block;
   margin: 2rem auto;
-  padding: 1rem 2.5rem;
+  padding: 10px 20px;
   background-color: #de1e5e;  /* Màu nền nút */
   color: white;
   border: none;
@@ -183,8 +183,8 @@
   }
   
   .submit-btn {
-    width: 100%;
-    padding: 0.8rem;
+    width: 200px;
+    padding: 5px;
   }
   
 }

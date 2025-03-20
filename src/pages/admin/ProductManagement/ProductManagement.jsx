@@ -58,13 +58,13 @@ const ProductManagement = () => {
       title: "Giá gốc (đ)",
       dataIndex: "unitPrice",
       key: "unitPrice",
-      render: (text) => formatPrice(text),
+      render: (text) => `${formatPrice(text)} đ`,
     },
     {
       title: "Giá giảm (đ)",
       dataIndex: "discountPrice",
       key: "discountPrice",
-      render: (text) => formatPrice(text),
+      render: (text) => `${formatPrice(text)} đ`,
     },
     {
       title: "Số lượng tồn kho",
@@ -82,7 +82,7 @@ const ProductManagement = () => {
       key: "discountId",
       render: (discountId) => {
         const discount = discounts.find((d) => d.discountId === discountId);
-        return discount ? discount.discountPercent : "N/A";
+        return discount ? `${discount.discountPercent} %` : "0 %";
       },
     },
     {
@@ -722,9 +722,7 @@ const ProductManagement = () => {
             </p>
             <p>
               <strong>Giảm giá: </strong>
-              {discounts.find(
-                (d) => d.discountId === selectedProduct.discountId
-              )?.discountName || "N/A"}
+              {discounts.find((d) => d.discountId === selectedProduct.discountId)?.discountPercent || "0"} {"%"}
             </p>
             <p>
               <strong>Loại sản phẩm: </strong>
