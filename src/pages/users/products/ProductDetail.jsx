@@ -1,16 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import {
-  Card,
-  Button,
-  Breadcrumb,
-  Row,
-  Col,
-  Typography,
-  Divider,
-  InputNumber,
-  Tabs,
-} from "antd";
+import { Card, Button, Breadcrumb, Row, Col, Typography, Divider, InputNumber, Tabs, } from "antd";
 import {
   ShoppingCartOutlined,
   HeartOutlined,
@@ -45,7 +35,7 @@ export default function ProductDetail() {
   const [showAllSkinType, setShowAllSkinType] = useState(false);
 
   // Số lượng sản phẩm hiển thị ban đầu
-  const initialDisplayCount = 4;
+
   const [displayCountSimilar, setDisplayCountSimilar] = useState(4); // Số lượng sản phẩm tương tự hiển thị ban đầu
   const [displayCountSkinType, setDisplayCountSkinType] = useState(4); // Số lượng sản phẩm cùng loại da hiển thị ban đầu
 
@@ -56,31 +46,33 @@ export default function ProductDetail() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
+        // Fetch chi tiết sản phẩm
         const response = await api.get(`/products/${id}`);
-        // console.log("Product Response:", response.data);
         setProduct(response.data);
         setMainImage(response.data.productImages[0]?.imageURL);
-
-        const similarResponse = await api.get(
-          `/products?categoryId=${response.data.categoryId}`
+  
+        // Fetch tất cả sản phẩm
+        const allProductsResponse = await api.get("/products");
+        const allProducts = allProductsResponse.data;
+  
+        // Lọc sản phẩm tương tự (cùng categoryId)
+        const similarProducts = allProducts.filter(
+          (p) => p.categoryId === response.data.categoryId && p.productId !== id
         );
-        setSimilarProducts(
-          similarResponse.data.filter((p) => p.productId !== id)
+        setSimilarProducts(similarProducts);
+  
+        // Lọc sản phẩm cùng loại da (cùng skinTypeId)
+        const sameSkinTypeProducts = allProducts.filter(
+          (p) => p.skinTypeId === response.data.skinTypeId && p.productId !== id
         );
-
-        const sameSkinTypeResponse = await api.get(
-          `/products?skinTypeId=${response.data.skinTypeId}`
-        );
-        setSameSkinTypeProducts(
-          sameSkinTypeResponse.data.filter((p) => p.productId !== id)
-        );
+        setSameSkinTypeProducts(sameSkinTypeProducts);
       } catch (error) {
         console.error("Error fetching product:", error);
       } finally {
         setLoading(false);
       }
     };
-
+  
     fetchProduct();
   }, [id]);
 
@@ -511,9 +503,7 @@ export default function ProductDetail() {
                   <div className="px-0 border rounded-2 shadow-0 mt-4">
                     <div className="card">
                       <div className="card-body">
-                        <h5 className="card-title">
-                          Gợi ý sản phẩm cùng loại da
-                        </h5>
+                        <h5 className="card-title">Gợi ý sản phẩm cùng loại da</h5>
                         {sameSkinTypeProducts.slice(0, displayCountSkinType).map((product) => (
                           <div className="d-flex mb-3" key={product.productId}>
                             <Link
@@ -546,7 +536,7 @@ export default function ProductDetail() {
                         {sameSkinTypeProducts.length > displayCountSkinType && (
                           <Button
                             type="link"
-                            onClick={() => setDisplayCountSkinType(displayCountSkinType + 4)} // Tăng số lượng hiển thị lên 4
+                            onClick={() => setDisplayCountSkinType(displayCountSkinType + 4)}
                             style={{ width: '100%', marginTop: '10px' }}
                           >
                             Xem thêm
