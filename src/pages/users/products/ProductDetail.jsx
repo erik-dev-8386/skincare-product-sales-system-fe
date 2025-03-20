@@ -1,20 +1,11 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import {
-  Card,
-  Button,
-  Breadcrumb,
-  Row,
-  Col,
-  Typography,
-  Divider,
-  InputNumber,
-  Tabs,
-} from "antd";
+import { Card, Button, Breadcrumb, Row, Col, Typography, Divider, InputNumber, Tabs, Form, Input, Modal, Rate } from "antd";
 import {
   ShoppingCartOutlined,
   HeartOutlined,
   DollarOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import api from "../../../config/api";
 import "./ProductDetail.css";
@@ -44,10 +35,17 @@ export default function ProductDetail() {
   const [showAllSimilar, setShowAllSimilar] = useState(false);
   const [showAllSkinType, setShowAllSkinType] = useState(false);
 
+  const [reviews, setReviews] = useState([]);
+  const [showAllReviews, setShowAllReviews] = useState(false);
+  const [displayCountReviews, setDisplayCountReviews] = useState(4);
+
   // Số lượng sản phẩm hiển thị ban đầu
-  const initialDisplayCount = 4;
+
   const [displayCountSimilar, setDisplayCountSimilar] = useState(4); // Số lượng sản phẩm tương tự hiển thị ban đầu
   const [displayCountSkinType, setDisplayCountSkinType] = useState(4); // Số lượng sản phẩm cùng loại da hiển thị ban đầu
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [feedbackForm] = Form.useForm();
 
   const formatPrice = (price) => {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -56,24 +54,26 @@ export default function ProductDetail() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
+        // Fetch chi tiết sản phẩm
         const response = await api.get(`/products/${id}`);
-        // console.log("Product Response:", response.data);
         setProduct(response.data);
         setMainImage(response.data.productImages[0]?.imageURL);
 
-        const similarResponse = await api.get(
-          `/products?categoryId=${response.data.categoryId}`
-        );
-        setSimilarProducts(
-          similarResponse.data.filter((p) => p.productId !== id)
-        );
+        // Fetch tất cả sản phẩm
+        const allProductsResponse = await api.get("/products");
+        const allProducts = allProductsResponse.data;
 
-        const sameSkinTypeResponse = await api.get(
-          `/products?skinTypeId=${response.data.skinTypeId}`
+        // Lọc sản phẩm tương tự (cùng categoryId)
+        const similarProducts = allProducts.filter(
+          (p) => p.categoryId === response.data.categoryId && p.productId !== id
         );
-        setSameSkinTypeProducts(
-          sameSkinTypeResponse.data.filter((p) => p.productId !== id)
+        setSimilarProducts(similarProducts);
+
+        // Lọc sản phẩm cùng loại da (cùng skinTypeId)
+        const sameSkinTypeProducts = allProducts.filter(
+          (p) => p.skinTypeId === response.data.skinTypeId && p.productId !== id
         );
+        setSameSkinTypeProducts(sameSkinTypeProducts);
       } catch (error) {
         console.error("Error fetching product:", error);
       } finally {
@@ -105,6 +105,126 @@ export default function ProductDetail() {
 
     fetchOptions();
   }, []);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        if (!product || !product.productId) {
+          console.log("Product ID không hợp lệ");
+          return;
+        }
+
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.log("Không tìm thấy token");
+          return;
+        }
+
+        let email;
+        try {
+          const decodedToken = jwtDecode(token);
+          email = decodedToken.sub;
+          console.log("Email from token for fetching reviews:", email);
+        } catch (error) {
+          console.error("Lỗi khi giải mã token:", error);
+          return;
+        }
+
+        // Thêm log để debug
+        console.log("Fetching reviews for product:", product.productId);
+        console.log("Full API URL:", `${api.defaults.baseURL}/feedbacks/product/${product.productId}`);
+
+        // Thêm tham số email vào URL để backend có thể lọc theo user
+        const response = await api.get(`/feedbacks/product/${product.productId}?email=${email}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
+        
+        console.log("Fetched feedbacks response:", response);
+        
+        if (response.data) {
+          // Xử lý dữ liệu từ backend với first_name và last_name
+          const enhancedReviews = response.data.map(review => ({
+            ...review,
+            // Tạo thông tin người dùng đầy đủ
+            users: {
+              email: review.userId || review.email,
+              fullName: review.user_first_name && review.user_last_name 
+                ? `${review.user_first_name} ${review.user_last_name}`
+                : (review.userId?.split('@')[0] || "Người dùng")
+            }
+          }));
+          
+          // Sắp xếp theo thời gian mới nhất
+          const sortedReviews = enhancedReviews.sort((a, b) => 
+            new Date(b.feedbackDate) - new Date(a.feedbackDate)
+          );
+          
+          setReviews(sortedReviews);
+        } else {
+          setReviews([]);
+        }
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+        console.log("Error response data:", error.response?.data);
+        console.log("Error response status:", error.response?.status);
+        
+        // Thử phương án thay thế nếu API chính gặp lỗi
+        try {
+          const token = localStorage.getItem("token");
+          const response = await api.get('/feedbacks/all', {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
+          
+          if (response.data) {
+            // Lọc các đánh giá của sản phẩm hiện tại
+            const productFeedbacks = response.data.filter(
+              feedback => feedback.productId === product.productId
+            );
+            
+            const enhancedReviews = productFeedbacks.map(review => ({
+              ...review,
+              users: {
+                email: review.userId || review.email,
+                fullName: review.user_first_name && review.user_last_name 
+                  ? `${review.user_first_name} ${review.user_last_name}`
+                  : (review.userId?.split('@')[0] || "Người dùng")
+              }
+            }));
+            
+            const sortedReviews = enhancedReviews.sort((a, b) => 
+              new Date(b.feedbackDate) - new Date(a.feedbackDate)
+            );
+            
+            setReviews(sortedReviews);
+            console.log("Successfully fetched reviews using fallback method");
+          }
+        } catch (fallbackError) {
+          console.error("Fallback method also failed:", fallbackError);
+          setReviews([]);
+        }
+      }
+
+      // Kiểm tra cache trước
+      try {
+        const cachedReviews = localStorage.getItem(`product_reviews_${product.productId}`);
+        if (cachedReviews) {
+          const parsedCache = JSON.parse(cachedReviews);
+          console.log("Found cached reviews:", parsedCache);
+          setReviews(parsedCache);
+        }
+      } catch (cacheError) {
+        console.error("Error reading cache:", cacheError);
+      }
+    };
+
+    if (product) {
+      fetchReviews();
+    }
+  }, [product]);
 
   const findNameById = (id, data) => {
     const item = data.find(
@@ -243,6 +363,160 @@ export default function ProductDetail() {
     setValue({ scale: 1, translation: { x: 0, y: 0 } }); // Reset zoom and translation
   };
 
+  // Thêm hàm để fetch feedback
+  const fetchFeedbacks = async () => {
+    try {
+      const response = await api.get(`/feedbacks/product/${id}`);
+      setReviews(response.data);
+    } catch (error) {
+      console.error("Error fetching feedbacks:", error);
+    }
+  };
+
+  // Thêm hàm xử lý gửi feedback
+  const handleSubmitFeedback = async (values) => {
+    try {
+      // Lấy token từ localStorage và giải mã để lấy email
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        toast.error("Bạn chưa đăng nhập! Vui lòng đăng nhập để tạo feedback.");
+        return;
+      }
+
+      let email;
+      try {
+        const decodedToken = jwtDecode(token);
+        email = decodedToken.sub; // sub chứa email trong JWT
+        console.log("Decoded token:", decodedToken);
+        console.log("Email from token:", email);
+      } catch (error) {
+        console.error("Lỗi khi giải mã token:", error);
+        toast.error("Không thể xác thực thông tin người dùng. Vui lòng đăng nhập lại!");
+        return;
+      }
+
+      if (!email) {
+        toast.error("Không tìm thấy thông tin email người dùng!");
+        return;
+      }
+
+      // Tạo dữ liệu feedback với đầy đủ thông tin
+      const feedbackData = {
+        feedbackContent: values.content,
+        feedbackDate: new Date().toISOString(),
+        productId: product.productId,
+        productName: product.productName,
+        userId: email,
+        status: 0
+      };
+
+      console.log("Sending feedback data:", feedbackData);
+      console.log("API base URL:", api.defaults.baseURL);
+      console.log("Full API URL:", `${api.defaults.baseURL}/feedbacks/${email}/${product.productName}`);
+
+      // Gửi feedback với endpoint chính xác
+      const response = await api.post(
+        `/feedbacks/${email}/${product.productName}`,
+        feedbackData,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      console.log("Feedback submit response:", response);
+
+      if (response.data) {
+        toast.success("Đánh giá sản phẩm thành công!");
+        setIsModalVisible(false);
+        feedbackForm.resetFields();
+
+        // Xử lý dữ liệu nhận về từ response
+        const returnedData = response.data;
+        
+        // Tạo object feedback mới với đầy đủ thông tin
+        const newFeedback = {
+          ...returnedData,
+          feedbackId: returnedData.feedbackId || Date.now().toString(),
+          feedbackContent: values.content,
+          feedbackDate: new Date().toISOString(),
+          productId: product.productId,
+          productName: product.productName,
+          userId: email,
+          user_first_name: returnedData.user_first_name,
+          user_last_name: returnedData.user_last_name,
+          users: {
+            email: email,
+            fullName: returnedData.user_first_name && returnedData.user_last_name 
+              ? `${returnedData.user_first_name} ${returnedData.user_last_name}`
+              : email.split('@')[0]
+          }
+        };
+
+        // Thêm feedback mới vào đầu danh sách và sắp xếp lại
+        setReviews(prev => {
+          const updatedReviews = [newFeedback, ...prev];
+          return updatedReviews.sort((a, b) => 
+            new Date(b.feedbackDate) - new Date(a.feedbackDate)
+          );
+        });
+        
+        // LƯU CACHE TẠM THỜI ĐỂ TRÁNH MẤT DỮ LIỆU KHI RELOAD
+        try {
+          const cachedReviews = localStorage.getItem(`product_reviews_${product.productId}`);
+          let updatedCache = [];
+          
+          if (cachedReviews) {
+            updatedCache = JSON.parse(cachedReviews);
+            updatedCache.unshift(newFeedback);
+          } else {
+            updatedCache = [newFeedback];
+          }
+          
+          localStorage.setItem(`product_reviews_${product.productId}`, JSON.stringify(updatedCache));
+        } catch (cacheError) {
+          console.error("Error caching reviews:", cacheError);
+        }
+      }
+    } catch (error) {
+      console.error("Error submitting feedback:", error);
+      console.log("Error response:", error.response?.data);
+      console.log("Error status:", error.response?.status);
+      
+      if (error.response) {
+        if (error.response.status === 500) {
+          toast.error("Lỗi server: Không thể gửi đánh giá. Vui lòng thử lại sau!");
+        } else if (error.response.status === 404) {
+          toast.error("Endpoint không tồn tại. Vui lòng kiểm tra lại đường dẫn API!");
+        } else if (error.response.status === 400) {
+          toast.error("Dữ liệu không hợp lệ. Vui lòng kiểm tra lại!");
+        } else {
+          toast.error(error.response.data?.message || "Có lỗi xảy ra khi gửi đánh giá");
+        }
+      } else {
+        toast.error("Không thể kết nối đến server. Vui lòng kiểm tra kết nối mạng!");
+      }
+    }
+  };
+
+  // Thêm modal đánh giá
+  const showFeedbackModal = () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Vui lòng đăng nhập để đánh giá sản phẩm");
+      return;
+    }
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    feedbackForm.resetFields();
+  };
+
   if (loading || !product) return <p>Loading...</p>;
 
   // Define breadcrumb items
@@ -307,6 +581,81 @@ export default function ProductDetail() {
       children: (
         <div className="tabContentStyle">
           <p dangerouslySetInnerHTML={{ __html: product.usageInstruction }} />
+        </div>
+      ),
+    },
+    {
+      key: "5",
+      label: "Đánh giá",
+      children: (
+        <div className="tabContentStyle">
+          <div className="mt-4">
+            <h3>Đánh giá sản phẩm</h3>
+            <div className="d-flex align-items-center mb-3">
+              <span className="h2 me-2">{reviews.length > 0 ? "4.9" : "0"}</span>
+              <div className="d-flex flex-column">
+                <div className="d-flex">
+                  {[...Array(5)].map((_, i) => (
+                    <span key={i} className="text-warning">★</span>
+                  ))}
+                </div>
+                <span className="text-muted">{reviews.length} nhận xét</span>
+              </div>
+            </div>
+            <div className="mb-3">
+              <Button type="primary" onClick={showFeedbackModal}>
+                Viết đánh giá
+              </Button>
+              {reviews.length > displayCountReviews && (
+                <Button 
+                  type="link" 
+                  onClick={() => setShowAllReviews(!showAllReviews)}
+                  style={{ marginLeft: '10px' }}
+                >
+                  {showAllReviews ? "Ẩn bớt" : "Xem tất cả"}
+                </Button>
+              )}
+            </div>
+            {reviews.length > 0 ? (
+              reviews.slice(0, showAllReviews ? reviews.length : displayCountReviews).map((review, index) => (
+                <div key={index} className="mb-3 p-3 border rounded">
+                  <div className="d-flex align-items-center">
+                    <UserOutlined className="me-2" />
+                    <strong className="me-2">
+                      {review.users?.fullName || 
+                       (review.user_first_name && review.user_last_name 
+                         ? `${review.user_first_name} ${review.user_last_name}` 
+                         : review.userId?.split('@')[0] || "Người dùng")}
+                    </strong>
+                    <span className="text-muted">
+                      {new Date(review.feedbackDate).toLocaleDateString('vi-VN', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </span>
+                  </div>
+                  <p className="mt-2">{review.feedbackContent}</p>
+                  <p className="text-muted small">
+                    Sản phẩm: {review.productName || product.productName}
+                  </p>
+                </div>
+              ))
+            ) : (
+              <p>Chưa có đánh giá nào cho sản phẩm này</p>
+            )}
+            {!showAllReviews && reviews.length > displayCountReviews && (
+              <Button
+                type="link"
+                onClick={() => setDisplayCountReviews(displayCountReviews + 4)}
+                style={{ width: '100%', marginTop: '10px' }}
+              >
+                Xem thêm đánh giá
+              </Button>
+            )}
+          </div>
         </div>
       ),
     },
@@ -461,6 +810,7 @@ export default function ProductDetail() {
                   <div className="tabStyle">
                     <Tabs defaultActiveKey="1" items={tabItems} />
                   </div>
+                  
                 </div>
                 <div className="col-lg-4">
                   <div className="px-0 border rounded-2 shadow-0">
@@ -511,9 +861,7 @@ export default function ProductDetail() {
                   <div className="px-0 border rounded-2 shadow-0 mt-4">
                     <div className="card">
                       <div className="card-body">
-                        <h5 className="card-title">
-                          Gợi ý sản phẩm cùng loại da
-                        </h5>
+                        <h5 className="card-title">Gợi ý sản phẩm cùng loại da</h5>
                         {sameSkinTypeProducts.slice(0, displayCountSkinType).map((product) => (
                           <div className="d-flex mb-3" key={product.productId}>
                             <Link
@@ -546,7 +894,7 @@ export default function ProductDetail() {
                         {sameSkinTypeProducts.length > displayCountSkinType && (
                           <Button
                             type="link"
-                            onClick={() => setDisplayCountSkinType(displayCountSkinType + 4)} // Tăng số lượng hiển thị lên 4
+                            onClick={() => setDisplayCountSkinType(displayCountSkinType + 4)}
                             style={{ width: '100%', marginTop: '10px' }}
                           >
                             Xem thêm
@@ -561,6 +909,32 @@ export default function ProductDetail() {
           </section>
         </div>
       </div>
+
+      {/* Thêm Modal đánh giá sản phẩm */}
+      <Modal
+        title="Đánh giá sản phẩm"
+        open={isModalVisible}
+        onCancel={handleCancel}
+        footer={null}
+      >
+        <Form form={feedbackForm} onFinish={handleSubmitFeedback} layout="vertical">
+          <Form.Item
+            name="content"
+            label="Nội dung đánh giá"
+            rules={[{ required: true, message: 'Vui lòng nhập nội dung đánh giá' }]}
+          >
+            <Input.TextArea 
+              rows={4} 
+              placeholder="Chia sẻ trải nghiệm của bạn về sản phẩm này" 
+            />
+          </Form.Item>
+          <Form.Item>
+            <Button type="primary" htmlType="submit">
+              Gửi đánh giá
+            </Button>
+          </Form.Item>
+        </Form>
+      </Modal>
     </>
   );
 }

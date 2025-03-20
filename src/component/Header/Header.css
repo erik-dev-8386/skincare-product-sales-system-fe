@@ -91,6 +91,7 @@
 
 .nav li:hover .subnav {
     display: block;
+    width: 167px;
     
 
 }

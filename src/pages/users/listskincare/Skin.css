@@ -58,11 +58,11 @@
   }
 
   .routine-card {
-    background: #fff;
     padding: 20px;
+    margin: 15px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
+    background-color: #fff;
   }
 
   .tips-content {
@@ -102,6 +102,11 @@
     border-radius: 8px;
     padding: 15px;
     text-align: center;
+    margin: 10px;
+    background: white;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 100%; /* Đảm bảo card không bị dãn */
   }
 
   .product-card img {
@@ -134,14 +139,15 @@
   }
 
   .clickable-step {
-    cursor: pointer;
-    color: #007bff;
-    transition: color 0.3s;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
   }
 
   .clickable-step:hover {
-    color: #0056b3;
-    text-decoration: underline;
+    background-color: #f5f5f5;
+    cursor: pointer;
   }
 
   .modal-overlay {
@@ -159,91 +165,199 @@
 
   .modal-content {
     background: white;
-    padding: 30px;
-    border-radius: 8px;
-    max-width: 800px;
-    width: 90%;
+    padding: 40px;
+    border-radius: 16px;
+    max-width: 1200px;
+    width: 95%;
     max-height: 90vh;
     overflow-y: auto;
     position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  }
+
+  .modal-content h2 {
+    font-size: 28px;
+    margin-bottom: 25px;
+    color: #333;
+  }
+
+  .modal-content .description {
+    font-size: 18px;
+    margin: 20px 0;
+  }
+
+  .modal-content h3 {
+    font-size: 22px;
+    margin: 25px 0 15px;
+    color: #444;
   }
 
   .close-btn {
     position: absolute;
-    right: 15px;
-    top: 15px;
-    font-size: 24px;
-    background: none;
-    border: none;
-    cursor: pointer;
+    right: 20px;
+    top: 20px;
+    font-size: 28px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f5f5f5;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+  }
+
+  .close-btn:hover {
+    background: #e0e0e0;
+    transform: rotate(90deg);
   }
 
   .recommendations {
     position: relative;
+    padding: 0 60px;
+    margin: 30px 0;
     width: 100%;
-    padding: 0 40px;
-    margin: 20px 0;
   }
 
   .recommendations-slider {
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE and Edge */
-  }
-
-  .recommendations-slider::-webkit-scrollbar {
-    display: none; /* Chrome, Safari and Opera */
+    overflow-x: hidden;
+    padding: 20px 0;
+    position: relative;
   }
 
   .recommendations-row {
     display: flex;
-    gap: 20px;
-    padding: 10px 0;
+    gap: 30px;
+    transition: transform 0.3s ease;
+    padding: 10px 5px;
   }
 
   .recommendation-item {
-    min-width: calc(33.333% - 14px);
-    flex: 0 0 calc(33.333% - 14px);
+    flex: 0 0 300px;
+    max-width: 300px;
   }
 
-  .slider-control {
+  .recommendation-item .product-card {
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 20px;
+    height: 100%;
+    background: white;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .recommendation-item .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+  }
+
+  .recommendation-item .product-card img {
+    width: 220px;
+    height: 220px;
+    object-fit: contain;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+
+  .recommendation-item .product-card h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 15px 0;
+    color: #333;
+    text-align: center;
+  }
+
+  .recommendation-item .product-card .brand-name {
+    color: #666;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  .recommendation-item .product-card .price {
+    font-size: 1.3rem;
+    color: #e53935;
+    font-weight: bold;
+    margin: 10px 0;
+  }
+
+  .recommendation-item .product-card .original-price {
+    text-decoration: line-through;
+    color: #999;
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+  }
+
+  .recommendation-item .product-card .discount-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: #ff4d4f;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+  }
+
+  .recommendation-item .product-card .compare-btn {
+    margin-top: 15px;
+    padding: 8px 20px;
+    background: #1890ff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+  }
+
+  .recommendation-item .product-card .compare-btn:hover {
+    background: #40a9ff;
+    transform: translateY(-2px);
+  }
+
+  .recommendations .slider-control {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid #ddd;
+    background: white;
+    border: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
     cursor: pointer;
+    z-index: 100;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 20px;
-    z-index: 2;
+    color: #333;
+    transition: all 0.3s ease;
   }
 
-  .slider-control.prev {
-    left: 0;
+  .recommendations .slider-control:hover {
+    background: #f5f5f5;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    transform: translateY(-50%) scale(1.1);
   }
 
-  .slider-control.next {
-    right: 0;
+  .recommendations .slider-control.prev {
+    left: 10px;
   }
 
-  .slider-control:hover {
-    background: rgba(255, 255, 255, 1);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  .recommendations .slider-control.next {
+    right: 10px;
   }
 
-  .product-card {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 15px;
-    background: white;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  .recommendations .slider-control:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
   }
 
   .product-card:hover {
@@ -465,4 +579,31 @@
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3);
     background: linear-gradient(135deg, #69c0ff, #40a9ff);
+  }
+
+  .skincare-routine .col-md-6 {
+    padding: 15px;
+  }
+
+  .skincare-routine {
+    margin: 30px 0;
+  }
+
+  /* Tạo scrollbar đẹp cho modal */
+  .modal-content::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .modal-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+
+  .modal-content::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+  }
+
+  .modal-content::-webkit-scrollbar-thumb:hover {
+    background: #555;
   }

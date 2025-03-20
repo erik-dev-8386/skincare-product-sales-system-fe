@@ -734,13 +734,10 @@ export default function Thuong() {
 
               <h3>Sản phẩm gợi ý:</h3>
               <div className="recommendations">
-                <button
-                  className="slider-control prev"
-                  onClick={handleRecommendationPrev}
-                >
+                <button className="slider-control prev" onClick={handleRecommendationPrev}>
                   &lt;
                 </button>
-
+                
                 <div className="recommendations-slider">
                   <div className="recommendations-row">
                     {filteredProducts.length > 0
@@ -775,11 +772,8 @@ export default function Thuong() {
                         ))}
                   </div>
                 </div>
-
-                <button
-                  className="slider-control next"
-                  onClick={handleRecommendationNext}
-                >
+                
+                <button className="slider-control next" onClick={handleRecommendationNext}>
                   &gt;
                 </button>
               </div>
