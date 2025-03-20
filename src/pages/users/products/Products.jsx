@@ -135,6 +135,7 @@ export default function Products() {
         selectedBrand,
         sortOption,
         selectedDiscount
+        
       );
     }
   };
@@ -234,6 +235,7 @@ export default function Products() {
         </div>
       ),
     },
+    
     {
       title: "Sản phẩm 1",
       dataIndex: "product1",
@@ -329,12 +331,12 @@ export default function Products() {
         info: "Giá gốc",
         product1: (
           <div className="compare-original-price">
-            {p1.unitPrice.toLocaleString()}đ
+            {p1.unitPrice.toLocaleString()}₫
           </div>
         ),
         product2: (
           <div className="compare-original-price">
-            {p2.unitPrice.toLocaleString()}đ
+            {p2.unitPrice.toLocaleString()}₫
           </div>
         ),
       },
@@ -343,12 +345,12 @@ export default function Products() {
         info: "Giá khuyến mãi",
         product1: (
           <div className="compare-discount-price">
-            {p1.discountPrice.toLocaleString()}đ
+            {p1.discountPrice.toLocaleString()}₫
           </div>
         ),
         product2: (
           <div className="compare-discount-price">
-            {p2.discountPrice.toLocaleString()}đ
+            {p2.discountPrice.toLocaleString()}₫
           </div>
         ),
       },
