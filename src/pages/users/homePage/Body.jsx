@@ -452,8 +452,9 @@ export default function Body() {
       {
         key: "8",
         info: "Mô tả",
-        product1: <div className="compare-description">{p1.description}</div>,
-        product2: <div className="compare-description">{p2.description}</div>,
+        product1: <div className="compare-description"  dangerouslySetInnerHTML={{ __html: p1.description }}/>,
+        
+        product2: <div className="compare-description" dangerouslySetInnerHTML={{ __html: p2.description }}/>,
       },
       {
         key: "9",
