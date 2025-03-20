@@ -183,7 +183,7 @@ const ProductCard = ({
                 right: 0,
                 zIndex: 1, // Đảm bảo badge nằm trên cùng
                 padding: "2px 8px",
-                background: "linear-gradient(90deg, rgba(131,58,180,1) 0%, rgba(255,226,0,1) 0%, rgba(255,149,0,1) 100%, rgba(253,29,29,1) 100%)",
+                background: "linear-gradient(90deg, rgba(255,226,0,1) 0%, rgba(255,149,0,1) 100%)",
                 color: "black",
                 borderRadius: "0 5px 0 5px", // Bo tròn góc dưới bên trái
                 fontSize: "14px",

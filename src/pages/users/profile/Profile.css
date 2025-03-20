@@ -96,6 +96,10 @@
   display: inline-block;
 }
 
+.profile-avatar-wrapper .ant-image-mask{
+  border-radius: 50%;
+}
+
 .profile-avatar,
 .profile-avatar-placeholder {
   width: 100px;
