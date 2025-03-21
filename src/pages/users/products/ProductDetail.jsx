@@ -46,6 +46,10 @@ export default function ProductDetail() {
 
   const [feedbackForm] = Form.useForm();
 
+  const [averageRating, setAverageRating] = useState(0);
+  const [ratingCounts, setRatingCounts] = useState({});
+  const [userRating, setUserRating] = useState(0); // Default to 0 stars (no rating)
+
   const formatPrice = (price) => {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
   };
@@ -222,6 +226,48 @@ export default function ProductDetail() {
 
     if (product) {
       fetchReviews();
+    }
+  }, [product]);
+
+  useEffect(() => {
+    const fetchRatingData = async () => {
+      try {
+        if (!product || !product.productId) return;
+        
+        // Fetch average rating
+        const avgResponse = await api.get(`/feedbacks/average-rating/${product.productName}`);
+        console.log("Average rating response:", avgResponse.data);
+        
+        // Handle NaN or invalid values
+        const avgRating = !isNaN(avgResponse.data) ? avgResponse.data : 0;
+        setAverageRating(avgRating);
+        
+        // Fetch rating counts by star
+        const countsResponse = await api.get(`/feedbacks/get-star/by-customer/${product.productName}`);
+        console.log("Rating counts response:", countsResponse.data);
+        
+        // Ensure all star values (1-5) exist in the ratings object
+        const formattedCounts = {};
+        for (let i = 1; i <= 5; i++) {
+          formattedCounts[i] = countsResponse.data[i] || 0;
+        }
+        
+        setRatingCounts(formattedCounts);
+        
+        console.log("Formatted ratings data:", {
+          average: avgRating,
+          counts: formattedCounts
+        });
+      } catch (error) {
+        console.error("Error fetching rating data:", error);
+        // Set default values in case of error
+        setAverageRating(0);
+        setRatingCounts({1: 0, 2: 0, 3: 0, 4: 0, 5: 0});
+      }
+    };
+    
+    if (product) {
+      fetchRatingData();
     }
   }, [product]);
 
@@ -407,7 +453,8 @@ export default function ProductDetail() {
         productId: product.productId,
         productName: product.productName,
         userId: email,
-        status: 0
+        status: 0,
+        rating: values.rating // Thêm rating từ form vào dữ liệu gửi đi
       };
 
       console.log("Sending feedback data:", feedbackData);
@@ -444,6 +491,7 @@ export default function ProductDetail() {
           productId: product.productId,
           productName: product.productName,
           userId: email,
+          rating: values.rating, // Thêm rating vào feedback mới
           user_first_name: returnedData.user_first_name,
           user_last_name: returnedData.user_last_name,
           users: {
@@ -477,6 +525,17 @@ export default function ProductDetail() {
           localStorage.setItem(`product_reviews_${product.productId}`, JSON.stringify(updatedCache));
         } catch (cacheError) {
           console.error("Error caching reviews:", cacheError);
+        }
+        
+        // Cập nhật lại average rating và rating counts
+        try {
+          const avgResponse = await api.get(`/feedbacks/average-rating/${product.productName}`);
+          setAverageRating(avgResponse.data);
+          
+          const countsResponse = await api.get(`/feedbacks/get-star/by-customer/${product.productName}`);
+          setRatingCounts(countsResponse.data);
+        } catch (error) {
+          console.error("Error updating rating data after submission:", error);
         }
       }
     } catch (error) {
@@ -580,21 +639,86 @@ export default function ProductDetail() {
           <div className="mt-4">
             <h3>Đánh giá sản phẩm</h3>
             <div className="d-flex align-items-center mb-3">
-              <span className="h2 me-2">{reviews.length > 0 ? "4.9" : "0"}</span>
+              <span className="h2 me-2">
+                {averageRating ? averageRating.toFixed(1) : "0.0"}
+              </span>
               <div className="d-flex flex-column">
                 <div className="d-flex">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-warning">★</span>
-                  ))}
+                  <Rate disabled defaultValue={averageRating} allowHalf />
                 </div>
-                <span className="text-muted">{reviews.length} nhận xét</span>
+                <span className="text-muted">
+                  {reviews.length > 0 
+                    ? `${reviews.length} đánh giá` 
+                    : "Chưa có đánh giá"}
+                </span>
               </div>
             </div>
             
-            {/* Thêm form đánh giá trực tiếp thay vì sử dụng modal */}
+            {/* Hiển thị phân bố số sao chi tiết hơn */}
+            {Object.keys(ratingCounts).length > 0 && (
+              <div className="mb-4">
+                <h5 className="mb-3">Phân bố đánh giá</h5>
+                {[5, 4, 3, 2, 1].map(star => {
+                  // Calculate percentage for progress bar
+                  const count = ratingCounts[star] || 0;
+                  const total = reviews.length;
+                  const percentage = total > 0 ? (count / total) * 100 : 0;
+                  
+                  return (
+                    <div key={star} className="d-flex align-items-center mb-2">
+                      <div style={{ width: '60px', textAlign: 'right' }}>
+                        <strong>{star}</strong> <span className="text-warning">★</span>
+                      </div>
+                      <div className="progress flex-grow-1 mx-3" style={{ height: '12px' }}>
+                        <div 
+                          className="progress-bar bg-warning" 
+                          role="progressbar" 
+                          style={{width: `${percentage}%`}}
+                          aria-valuenow={count} 
+                          aria-valuemin="0" 
+                          aria-valuemax={total}
+                        ></div>
+                      </div>
+                      <div style={{ width: '50px' }}>
+                        <span>{count}</span>
+                        <small className="text-muted ms-1">
+                          ({percentage.toFixed(0)}%)
+                        </small>
+                      </div>
+                    </div>
+                  );
+                })}
+                <div className="mt-2 text-center text-muted small">
+                  Tổng cộng: {reviews.length} đánh giá • Trung bình: {averageRating.toFixed(1)}/5
+                </div>
+              </div>
+            )}
+            
+            {/* Form đánh giá với thêm Rating component */}
             <div className="mb-4 p-3 border rounded">
               <h4>Viết đánh giá của bạn</h4>
               <Form form={feedbackForm} onFinish={handleSubmitFeedback} layout="vertical">
+                <Form.Item
+                  name="rating"
+                  label="Đánh giá của bạn"
+                  initialValue={0}
+                  rules={[{ 
+                    required: true, 
+                    type: 'number',
+                    min: 1,
+                    message: 'Vui lòng chọn số sao đánh giá' 
+                  }]}
+                >
+                  <Rate 
+                    onChange={value => {
+                      setUserRating(value);
+                      // Cập nhật giá trị form field
+                      feedbackForm.setFieldsValue({ rating: value });
+                    }}
+                    value={userRating}
+                    style={{ fontSize: '28px' }}
+                  />
+                </Form.Item>
                 <Form.Item
                   name="content"
                   rules={[{ required: true, message: 'Vui lòng nhập nội dung đánh giá' }]}
@@ -642,6 +766,9 @@ export default function ProductDetail() {
                           minute: '2-digit'
                         })}
                       </span>
+                    </div>
+                    <div className="mt-1">
+                      <Rate disabled value={review.rating || 5} />
                     </div>
                     <p className="mt-2">{review.feedbackContent}</p>
                     <p className="text-muted small">
