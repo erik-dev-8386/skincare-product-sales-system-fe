@@ -55,16 +55,16 @@ const ProductManagement = () => {
       key: "productName",
     },
     {
-      title: "Giá gốc (đ)",
+      title: "Giá gốc (₫)",
       dataIndex: "unitPrice",
       key: "unitPrice",
-      render: (text) => `${formatPrice(text)} đ`,
+      render: (text) => `${formatPrice(text)} ₫`,
     },
     {
-      title: "Giá giảm (đ)",
+      title: "Giá giảm (₫)",
       dataIndex: "discountPrice",
       key: "discountPrice",
-      render: (text) => `${formatPrice(text)} đ`,
+      render: (text) => `${formatPrice(text)} ₫`,
     },
     {
       title: "Số lượng tồn kho",
@@ -665,10 +665,10 @@ const ProductManagement = () => {
             </p>
             <p>
               <strong>Giá gốc: </strong>{" "}
-              {formatPrice(selectedProduct.unitPrice)}
+              {formatPrice(selectedProduct.unitPrice)} {"₫"}
             </p>
             <p>
-              <strong>Giá giảm: </strong> {selectedProduct.discountPrice}
+              <strong>Giá giảm: </strong> {selectedProduct.discountPrice} {"₫"}
             </p>
             <p>
               <strong>Mô tả: </strong>
@@ -714,11 +714,11 @@ const ProductManagement = () => {
             <p>
               <strong>Hạn sử dụng: </strong>{" "}
               {selectedProduct.exp
-                ? dayjs(selectedProduct.exp).format("YYYY-MM-DD")
+                ? dayjs(selectedProduct.exp).format("YYYY-MM-DD") 
                 : "N/A"}
             </p>
             <p>
-              <strong>Dung tích:</strong> {selectedProduct.netWeight} {"(ml)"}
+              <strong>Dung tích:</strong> {selectedProduct.netWeight} {"ml"}
             </p>
             <p>
               <strong>Giảm giá: </strong>

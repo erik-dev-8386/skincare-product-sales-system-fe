@@ -48,6 +48,7 @@ import BlogManage from "./pages/admin/BlogManagement/Blogmanage.jsx";
 import BlogHashtag from "./pages/admin/BlogManagement/Bloghastag.jsx";
 import BlogCategory from "./pages/admin/BlogManagement/Blogcategory.jsx";
 import CustomerManagement from "./pages/admin/UserManagement/UserManagement.jsx";
+import Point from "./pages/users/profile/point.jsx";
 function App() {
   return (
     <Routes>
@@ -86,6 +87,8 @@ function App() {
       <Route path="/user" element={<ProfileLayout />}>
         <Route index element={<Profile />} />
         <Route path="/user/history" element={<History />} />
+        <Route path="/user/point" element={<Point />} />
+        
       </Route>
 
       {/* admin */}

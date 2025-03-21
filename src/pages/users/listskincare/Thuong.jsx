@@ -182,9 +182,83 @@ export default function Thuong() {
       usage:
         "Thoa một lớp mỏng đều lên da, massage nhẹ nhàng theo chuyển động tròn.",
     },
+    serum: {
+      title: "Serum Dưỡng Da",
+      description: "Cung cấp dưỡng chất đậm đặc cho da",
+      keyPoints: [
+        "Thẩm thấu sâu vào da",
+        "Cung cấp dưỡng chất đậm đặc",
+        "Cải thiện các vấn đề về da"
+      ],
+      recommendations: [
+        {
+          name: "The Ordinary Niacinamide 10% + Zinc 1%",
+          description: "Serum kiểm soát dầu nhờn và se khít lỗ chân lông",
+          image: serum,
+        },
+        {
+          name: "Vichy Mineral 89",
+          description: "Serum giàu khoáng chất, cấp ẩm và phục hồi da",
+          image: serum,
+        },
+      ],
+      usage: "Thoa 2-3 giọt lên da và vỗ nhẹ để thẩm thấu."
+    },
+    moisturizer: {
+      title: "Kem Dưỡng Ẩm Cho Da Thường",
+      description: "Cung cấp và duy trì độ ẩm, tăng cường hàng rào bảo vệ da",
+      keyPoints: [
+        "Dưỡng ẩm chuyên sâu",
+        "Không gây bít tắc lỗ chân lông",
+        "Tăng cường hàng rào bảo vệ da"
+      ],
+      recommendations: [
+        {
+          name: "CeraVe Moisturizing Cream",
+          description: "Kem dưỡng ẩm với ceramides phục hồi da",
+          image: kem,
+        },
+        {
+          name: "Neutrogena Hydro Boost",
+          description: "Kem dưỡng ẩm dạng gel với Hyaluronic Acid",
+          image: kem,
+        },
+      ],
+      usage: "Thoa một lượng vừa đủ lên da, massage nhẹ nhàng theo chuyển động tròn."
+    },
+    sunscreen: {
+      title: "Kem Chống Nắng Cho Da Thường",
+      description: "Bảo vệ da khỏi tác hại của tia UV, ngăn ngừa lão hóa sớm",
+      keyPoints: [
+        "Bảo vệ da khỏi tia UVA/UVB",
+        "Ngăn ngừa lão hóa da do ánh nắng",
+        "Phòng ngừa đốm nâu và tăng sắc tố"
+      ],
+      recommendations: [
+        {
+          name: "La Roche-Posay Anthelios",
+          description: "Kem chống nắng dịu nhẹ, không gây nhờn rít",
+          image: kem,
+        },
+        {
+          name: "Biore UV Aqua Rich Watery Essence",
+          description: "Kem chống nắng dạng gel, thẩm thấu nhanh",
+          image: kem,
+        },
+      ],
+      usage: "Thoa đều lên da 15-30 phút trước khi ra ngoài, thoa lại sau mỗi 2 giờ khi ở ngoài trời."
+    },
   };
 
   const handleStepClick = async (step) => {
+    console.log(`Step clicked: ${step}, exists: ${!!skinCareSteps[step]}`);
+    
+    if (!skinCareSteps[step]) {
+      console.error(`Step not found: ${step}`);
+      alert("Thông tin về bước này hiện chưa có sẵn. Chúng tôi sẽ cập nhật sớm.");
+      return;
+    }
+    
     setSelectedStep(step);
     setShowModal(true);
 
@@ -217,12 +291,27 @@ export default function Thuong() {
     }
 
     if (categoryName) {
-      const products = await fetchFilteredProducts(categoryName);
-      setFilteredProducts(products);
+      try {
+        const products = await fetchFilteredProducts(categoryName);
+        setFilteredProducts(products);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        setFilteredProducts([]);
+      }
     }
   };
 
   const getStepInfo = () => {
+    if (!selectedStep || !skinCareSteps[selectedStep]) {
+      console.error(`Step not found: ${selectedStep}`);
+      return {
+        title: "Thông tin không có sẵn",
+        description: "Không tìm thấy thông tin cho bước này.",
+        keyPoints: [],
+        recommendations: [],
+        usage: "Không có hướng dẫn."
+      };
+    }
     return skinCareSteps[selectedStep];
   };
 
@@ -536,6 +625,10 @@ export default function Thuong() {
     ];
   };
 
+  useEffect(() => {
+    console.log("Available skincare steps:", Object.keys(skinCareSteps));
+  }, []);
+
   return (
     <>
       {/* <Header /> */}
@@ -719,64 +812,77 @@ export default function Thuong() {
               <button className="close-btn" onClick={() => setShowModal(false)}>
                 ×
               </button>
-              <h2>{getStepInfo().title}</h2>
-              <p className="description">{getStepInfo().description}</p>
+              
+              {skinCareSteps[selectedStep] ? (
+                <>
+                  <h2>{getStepInfo().title}</h2>
+                  <p className="description">{getStepInfo().description}</p>
 
-              <h3>Đặc điểm chính:</h3>
-              <ul>
-                {getStepInfo().keyPoints.map((point, index) => (
-                  <li key={index}>{point}</li>
-                ))}
-              </ul>
+                  <h3>Đặc điểm chính:</h3>
+                  <ul>
+                    {getStepInfo().keyPoints.map((point, index) => (
+                      <li key={index}>{point}</li>
+                    ))}
+                  </ul>
 
-              <h3>Cách sử dụng:</h3>
-              <p>{getStepInfo().usage}</p>
+                  <h3>Cách sử dụng:</h3>
+                  <p>{getStepInfo().usage}</p>
 
-              <h3>Sản phẩm gợi ý:</h3>
-              <div className="recommendations">
-                <button className="slider-control prev" onClick={handleRecommendationPrev}>
-                  &lt;
-                </button>
-                
-                <div className="recommendations-slider">
-                  <div className="recommendations-row">
-                    {filteredProducts.length > 0
-                      ? filteredProducts.map((product) => (
-                          <div
-                            key={`filtered-${product.productId}`}
-                            className="recommendation-item"
-                          >
-                            <ProductCard
-                              product={product}
-                              discounts={discounts}
-                              brands={brands}
-                              categories={categories}
-                              skintypes={skintypes}
-                              onCompareClick={handleCompareClick}
-                            />
-                          </div>
-                        ))
-                      : getStepInfo().recommendations.map((product, index) => (
-                          <div
-                            key={`default-${index}`}
-                            className="recommendation-item"
-                          >
-                            <div className="product-card">
-                              <img src={product.image} alt={product.name} />
-                              <h4>{product.name}</h4>
-                              <div className="description">
-                                {product.description}
+                  <h3>Sản phẩm gợi ý:</h3>
+                  <div className="recommendations">
+                    <button className="slider-control prev" onClick={handleRecommendationPrev}>
+                      &lt;
+                    </button>
+                    
+                    <div className="recommendations-slider">
+                      <div className="recommendations-row">
+                        {filteredProducts && filteredProducts.length > 0 ? (
+                          filteredProducts.map((product) => (
+                            <div
+                              key={`filtered-${product.productId}`}
+                              className="recommendation-item"
+                            >
+                              <ProductCard
+                                key={`card-${product.productId}`}
+                                product={product}
+                                discounts={discounts}
+                                brands={brands}
+                                categories={categories}
+                                skintypes={skintypes}
+                                onCompareClick={handleCompareClick}
+                              />
+                            </div>
+                          ))
+                        ) : (
+                          getStepInfo().recommendations.map((product, index) => (
+                            <div
+                              key={`default-${index}`}
+                              className="recommendation-item"
+                            >
+                              <div className="product-card">
+                                <img src={product.image} alt={product.name} />
+                                <h4>{product.name}</h4>
+                                <div className="description">
+                                  {product.description}
+                                </div>
                               </div>
                             </div>
-                          </div>
-                        ))}
+                          ))
+                        )}
+                      </div>
+                    </div>
+                    
+                    <button className="slider-control next" onClick={handleRecommendationNext}>
+                      &gt;
+                    </button>
                   </div>
+                </>
+              ) : (
+                <div className="error-message">
+                  <h2>Thông tin chưa cập nhật</h2>
+                  <p>Thông tin về bước này hiện chưa có sẵn. Chúng tôi sẽ cập nhật sớm.</p>
                 </div>
-                
-                <button className="slider-control next" onClick={handleRecommendationNext}>
-                  &gt;
-                </button>
-              </div>
+              )}
             </div>
           </div>
         )}

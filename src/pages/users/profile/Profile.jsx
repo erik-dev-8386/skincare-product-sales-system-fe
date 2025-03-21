@@ -130,6 +130,7 @@ export default function Profile() {
               <div className="profile-avatar-wrapper">
                 {imagePreviews.length > 0 ? (
                   <Image
+                
                     src={imagePreviews[0]}
                     alt="Avatar Preview"
                     className="profile-avatar"
