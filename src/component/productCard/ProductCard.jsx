@@ -173,7 +173,7 @@ const ProductCard = ({
       }}
       hoverable
       cover={
-        <div style={{ position: "relative" }}>
+        <div style={{ position: "relative", width: "100%", overflow: "hidden" }}>
           {discountPercent > 0 && (
             <div
               className="discount-badge"
@@ -199,10 +199,10 @@ const ProductCard = ({
             src={product.productImages[0]?.imageURL}
             style={{
               height: "150px",
-              width: "250px",
+              width: "100%",
               objectFit: "contain",
-              borderRadius: "10px 10px 0 0"
-             
+              padding: "10px",
+              maxWidth: "100%"
             }}
           />
         </div>
