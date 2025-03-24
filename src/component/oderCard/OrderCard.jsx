@@ -289,7 +289,7 @@ const OrderCard = ({ order, onOrderCancelled, onOrderDelivered }) => {
               <Text strong>Thông tin người nhận:</Text>
               {orderDetails && (
                 <div>
-                  <Text>Họ và tên: {orderDetails.customerName} </Text>
+                  <Text>Họ và tên: {orderDetails.customerLastName} {orderDetails.customerFirstName} </Text>
                   <br />
                   <Text>Số điện thoại: {orderDetails.customerPhone}</Text>
                   <br />

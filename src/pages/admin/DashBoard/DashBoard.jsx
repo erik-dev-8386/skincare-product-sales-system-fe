@@ -40,8 +40,8 @@ export default function DashBoard() {
   const [form] = Form.useForm();
 
   useEffect(() => {
-    axios
-      .get("https://jsonplaceholder.typicode.com/users")
+    api
+      .get("/users/customers")
       .then((response) => {
         setUsers(response.data);
         setLoading(false);
@@ -51,7 +51,7 @@ export default function DashBoard() {
 
   useEffect(() => {
     api
-      .get("/users")
+      .get("/users/admin-staff")
       .then((response) => {
         setStaff(response.data);
         setLoading(false);

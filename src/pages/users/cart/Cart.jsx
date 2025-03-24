@@ -2989,7 +2989,7 @@ export default function Cart() {
             }
         } else {
             try {
-                const response = await api.post(`/cart/pay/${orderId}`, checkoutRequest);
+                const response = await api.get(`/cart/pay/${orderId}`, checkoutRequest);
                 const total = checkoutResponse.total || subtotal;
 
                 toast.success(`Thanh toán thành công! Tổng tiền: ${total.toLocaleString()} đ`);
