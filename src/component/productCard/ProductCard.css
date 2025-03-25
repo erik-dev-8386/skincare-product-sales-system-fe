@@ -9,6 +9,6 @@ border: 2px solid #900001 !important;
     display: flex;
     flex-direction: column;
     justify-content: space-between; /* Căn đều các phần tử trong card */
-    width: 250px;
    padding: 0 !important;
+   
   }

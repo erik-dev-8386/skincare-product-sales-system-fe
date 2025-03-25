@@ -1,15 +1,3 @@
-/* .hotdeal {
-    width: 100%;
-    height: 250px; 
-    object-fit: cover; 
-    display: block;
-    margin: 0 auto 20px;
-    margin-left: 10px;
-    z-index: 5; // Đảm bảo không che chữ Trang chủ
-    position: relative;
-} */
-
-
 
 .san {
     margin-top: 20px;
@@ -57,25 +45,14 @@
     margin-left: 10px;
 }
 
-.row:last-child {
-    margin-bottom: 50px; /* Tạo khoảng cách cuối cùng trước khi đến footer */
-}
-footer {
-    margin-top: 50px; /* Khoảng cách với nội dung trước đó */
-    text-align: center;
-    background-color: #f8f9fa; /* Màu nền */
-    padding: 20px 0;
-}
+
+
 
 .ss{
     height: 350px;
     width: 400px;
 }
 
-.sv{
-    height: 280px;
-    width: 400px;
-}
 
 /* ========================== */
 .slider-control {
@@ -276,7 +253,7 @@ footer {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   }
 
-  .ant-table-thead > tr > th {
+ .compare-table .ant-table-thead > tr > th {
     background: linear-gradient(135deg, #e6f7ff, #bae7ff);
     color: #0050b3;
     font-weight: bold;
@@ -284,21 +261,21 @@ footer {
     border-bottom: 2px solid #91caff;
   }
 
-  .ant-table-tbody > tr > td {
+  .compare-table .ant-table-tbody > tr > td {
     padding: 16px 12px;
     transition: all 0.3s ease;
   }
 
-  .ant-table-tbody > tr:hover > td {
+  .compare-table .ant-table-tbody > tr:hover > td {
     background-color: #f0f9ff;
     transform: translateY(-2px);
   }
 
-  .ant-table-tbody > tr:nth-child(even) > td {
+  .compare-table .ant-table-tbody > tr:nth-child(even) > td {
     background-color: #fafcff;
   }
 
-  .ant-table-tbody > tr:nth-child(odd) > td {
+  .compare-table .ant-table-tbody > tr:nth-child(odd) > td {
     background-color: #ffffff;
   }
 

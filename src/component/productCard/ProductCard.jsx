@@ -163,6 +163,7 @@ const ProductCard = ({
     <Card
       className="product-card" // Thêm class để áp dụng CSS
       style={{
+        width: "250px",
         display: "flex",
         justifyContent: "center",
         flexDirection: "column",
@@ -199,10 +200,8 @@ const ProductCard = ({
             src={product.productImages[0]?.imageURL}
             style={{
               height: "150px",
-              width: "100%",
+              width: "250px",
               objectFit: "contain",
-              padding: "10px",
-              maxWidth: "100%"
             }}
           />
         </div>

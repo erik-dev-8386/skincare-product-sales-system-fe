@@ -12,7 +12,7 @@ const { Text } = Typography;
 const getStatusTag = (status) => {
   switch (status) {
     case 0:
-      return <Tag icon={<ShoppingCartOutlined />} color="gray">Đã thêm vào giỏ</Tag>;
+      return <Tag icon={<ShoppingCartOutlined />} color="gray">Đã thêm vào giỏ hàng</Tag>;
     case 1:
       return <Tag icon={<ClockCircleOutlined />} color="blue">Chờ xác nhận</Tag>;
     case 2:

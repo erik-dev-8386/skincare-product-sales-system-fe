@@ -452,9 +452,9 @@ export default function Body() {
       {
         key: "8",
         info: "Mô tả",
-        product1: <div className="compare-description"  dangerouslySetInnerHTML={{ __html: p1.description }}/>,
-        
-        product2: <div className="compare-description" dangerouslySetInnerHTML={{ __html: p2.description }}/>,
+        product1: <div className="compare-description" dangerouslySetInnerHTML={{ __html: p1.description }} />,
+
+        product2: <div className="compare-description" dangerouslySetInnerHTML={{ __html: p2.description }} />,
       },
       {
         key: "9",
@@ -483,9 +483,10 @@ export default function Body() {
 
           {/* Display suitable products */}
           <div
-            className="row "
+            className="row"
             style={{
-
+              display: "flex",
+              alignItems: "center",
               justifyContent: "center",
               marginBottom: "50px",
               position: "relative",
@@ -509,7 +510,7 @@ export default function Body() {
             {/* Visible Products */}
             {visibleProducts.map((product) => (
               <div className="col-2"
-                style={{ margin: 20 }}
+                style={{ marginRight: 40 }}
                 key={product.productId}>
                 <ProductCard
                   product={product}
@@ -536,11 +537,11 @@ export default function Body() {
             </button>
           </div>
 
-          <div className="col-12">
+          {/* <div className="col-12">
             <h3 className="san">Top dòng sản phẩm được tìm kiếm</h3>
-          </div>
+          </div> */}
 
-          <div
+          {/* <div
             className="row"
             style={{
               justifyContent: "center",
@@ -548,7 +549,7 @@ export default function Body() {
               position: "relative",
             }}
           >
-            {/* Prev Button */}
+           
             <button
               onClick={handleTopSearchPrev}
               className="slider-control prev"
@@ -563,7 +564,7 @@ export default function Body() {
               &lt;
             </button>
 
-            {/* Top Searched Products */}
+            
             {topSearchedProducts && topSearchedProducts.length > 0 ? (
               visibleTopSearchProducts.map((product) => (
                 <div
@@ -587,7 +588,7 @@ export default function Body() {
               </div>
             )}
 
-            {/* Next Button */}
+            
             <button
               onClick={handleTopSearchNext}
               className="slider-control next"
@@ -601,7 +602,7 @@ export default function Body() {
             >
               &gt;
             </button>
-          </div>
+          </div> */}
 
           {/* ============================================ */}
           <div className="col-12">
@@ -674,10 +675,10 @@ export default function Body() {
 
           <div
             className="row"
-            style={{ 
-              justifyContent: "center", 
+            style={{
+              justifyContent: "center",
               marginBottom: "50px",
-              position: "relative" 
+              position: "relative"
             }}
           >
             {/* Prev Button */}
@@ -698,8 +699,8 @@ export default function Body() {
             {/* Blog Slides */}
             {visibleBlogs.map((blog) => (
               <div className="col-4" key={blog.blogId}>
-                <div 
-                  style={{ 
+                <div
+                  style={{
                     cursor: 'pointer',
                     borderRadius: '8px',
                     overflow: 'hidden',
@@ -720,7 +721,7 @@ export default function Body() {
                       src={blog.blogImages?.[0]?.imageURL || s1}
                       alt={blog.blogTitle}
                       className="ss"
-                      style={{ 
+                      style={{
                         position: 'absolute',
                         top: '0',
                         left: '0',
@@ -732,7 +733,7 @@ export default function Body() {
                     />
                   </div>
                   <div style={{ padding: '15px' }}>
-                    <h5 style={{ 
+                    <h5 style={{
                       fontSize: '16px',
                       fontWeight: '500',
                       minHeight: '48px',

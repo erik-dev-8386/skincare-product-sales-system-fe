@@ -110,7 +110,7 @@ const OrderHistory = () => {
 
   const statusLabels = {
     all: "Tất cả",
-    // 0: "Chưa đặt hàng",
+    0: "Chưa thanh toán",
     1: "Chờ xác nhận",
     2: "Đang chuẩn bị",
     3: "Đang giao hàng",
