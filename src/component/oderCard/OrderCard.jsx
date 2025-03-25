@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Card, Image, List, Tag, Typography, Button, Modal, Popconfirm, message } from 'antd';
-import { CheckCircleOutlined, CloseCircleOutlined, ClockCircleOutlined, SyncOutlined, CarOutlined, ShoppingCartOutlined, RedoOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import { CheckCircleOutlined, CloseCircleOutlined, ClockCircleOutlined, SyncOutlined, CarOutlined, ShoppingCartOutlined, RedoOutlined, DollarOutlined } from '@ant-design/icons';
+import { Link, useNavigate} from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode'; // Thư viện giải mã token
 import api from '../../config/api'; // Import API service
 import './OrderCard.css';
@@ -70,6 +70,79 @@ const OrderCard = ({ order, onOrderCancelled, onOrderDelivered }) => {
     } catch (error) {
       console.error('Error fetching order details:', error);
       return null;
+    }
+  };
+
+  const navigate = useNavigate();
+
+  const handleAddToCartAndNavigate = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      toast.error("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
+      setTimeout(() => {
+        navigate("/login-and-signup");
+      }, 3000);
+      return;
+    }
+
+    try {
+      const decoded = jwtDecode(token);
+      const email = decoded.sub;
+      
+      // Thêm từng sản phẩm trong đơn hàng vào giỏ hàng
+      for (const item of order.items) {
+        // Tìm productId nếu chưa có trong productIds
+        if (!productIds[item.productName]) {
+          const products = await fetchProducts(item.productName);
+          if (products && products.length > 0) {
+            productIds[item.productName] = products[0].productId;
+          }
+        }
+        
+        // Thêm vào giỏ hàng qua API
+        await api.post(`/cart/add-to-cart`, {
+          productId: productIds[item.productName],
+          quantity: item.quantity,
+          email: email
+        });
+      }
+
+      // Cập nhật localStorage
+      if (email) {
+        const cartKey = `cart_${email}`;
+        const savedCart = localStorage.getItem(cartKey);
+        let updatedCart = savedCart ? JSON.parse(savedCart) : [];
+
+        // Thêm các sản phẩm mới vào giỏ hàng local
+        for (const item of order.items) {
+          if (productIds[item.productName]) {
+            const existingIndex = updatedCart.findIndex(
+              cartItem => cartItem.productId === productIds[item.productName]
+            );
+            
+            if (existingIndex >= 0) {
+              updatedCart[existingIndex].quantity += item.quantity;
+            } else {
+              updatedCart.push({
+                productId: productIds[item.productName],
+                productName: item.productName,
+                image: item.image,
+                price: item.price,
+                discountPrice: item.discountPrice,
+                quantity: item.quantity
+              });
+            }
+          }
+        }
+
+        localStorage.setItem(cartKey, JSON.stringify(updatedCart));
+      }
+
+      toast.success("Đã thêm sản phẩm vào giỏ hàng thành công");
+      navigate("/shopping-cart");
+    } catch (error) {
+      console.error("Lỗi khi thêm vào giỏ hàng:", error);
+      toast.error("Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng");
     }
   };
 
@@ -187,6 +260,16 @@ const OrderCard = ({ order, onOrderCancelled, onOrderDelivered }) => {
 
         <div className='button-order-card' >
           <Button
+
+            className="button-buy"
+            onClick={handleAddToCartAndNavigate}
+
+            icon={<DollarOutlined />}
+          >
+
+            Mua lại đơn hàng
+          </Button>
+          <Button
             className='button-detail'
             color='primary'
             variant="solid"
@@ -225,7 +308,7 @@ const OrderCard = ({ order, onOrderCancelled, onOrderDelivered }) => {
             >
               <Button
                 className='button-deliver'
-                style={{border: "2px solid green", width: 150}}
+                style={{ border: "2px solid green", width: 150 }}
                 color="green"
                 variant="solid"
                 loading={delivering}
@@ -262,7 +345,7 @@ const OrderCard = ({ order, onOrderCancelled, onOrderDelivered }) => {
                 key="deliver"
                 color="green"
                 variant="solid"
-                style={{border: "2px solid green"}}
+                style={{ border: "2px solid green" }}
                 icon={<CheckCircleOutlined />}
                 onClick={() => {
                   handleCancel();

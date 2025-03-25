@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Card, Typography } from 'antd';
+import { Table, Card, Typography, Radio, Timeline} from 'antd';
 import axios from 'axios';
 import { jwtDecode } from "jwt-decode";
 import api from '../../../config/api';
@@ -25,12 +25,10 @@ const Point = () => {
         .then(response => {
           const wallet = response.data;
           setPointsData([{
-            key: '1',
-            date: '20/03 15:35',
-            points: '+30',
-            total: 30,
-            action: 'Đăng ký thành viên mới',
-            content: 'Tài khoản #162972'
+            key: 1,
+            date: wallet.createdAt,
+            points: wallet.balance,
+            note: 'Tạo ví điểm thưởng'
           }]);
           setTotalPoints(wallet.balance || 0);
           setLoading(false);
@@ -42,53 +40,57 @@ const Point = () => {
     }
   }, []);
 
-  const columns = [
-    {
-      title: 'Ngày',
-      dataIndex: 'date',
-      key: 'date',
-    },
-    {
-      title: 'Điểm',
-      dataIndex: 'points',
-      key: 'points',
-    },
-    {
-      title: 'Tổng cuối',
-      dataIndex: 'total',
-      key: 'total',
-    },
-    {
-      title: 'Hành động',
-      dataIndex: 'action',
-      key: 'action',
-    },
-    {
-      title: 'Nội dung',
-      dataIndex: 'content',
-      key: 'content',
-    },
-  ];
+  const [mode, setMode] = useState('left');
+  const onChange = e => {
+    setMode(e.target.value);
+  };
 
   return (
-    <Card>
-      <Title level={4}>Quản lý điểm thường</Title>
+    <>
+      <h1>Quản lý điểm thưởng</h1>
       <div style={{ margin: 16 }}>
-      <div >
-        <strong>Tổng điểm hiện có:</strong> {totalPoints}
+        <div >
+          <strong>Tổng điểm hiện có:</strong> {totalPoints}
+        </div>
+        <div>
+          <strong>Tương ứng:</strong> {formatPrice(totalPoints)} ₫
+        </div>
       </div>
-      <div>
-        <strong>Tương ứng:</strong> {formatPrice(totalPoints)} ₫
-      </div>
-      </div>
-      <Table
-        columns={columns}
-        dataSource={pointsData}
-        loading={loading}
-        pagination={false}
+
+      <Radio.Group
+        onChange={onChange}
+        value={mode}
+        style={{
+          marginBottom: 20,
+        }}
+      >
+        <Radio value="left">Left</Radio>
+        <Radio value="right">Right</Radio>
+        <Radio value="alternate">Alternate</Radio>
+      </Radio.Group>
+      <Timeline
+        mode={mode}
+        items={[
+          {
+            label: '2015-09-01',
+            children: 'Create a services',
+          },
+          {
+            label: '2015-09-01 09:12:11',
+            children: 'Solve initial network problems',
+          },
+          {
+            children: 'Technical testing',
+          },
+          {
+            label: '2015-09-01 09:12:11',
+            children: 'Network problems being solved',
+          },
+        ]}
       />
-      
-    </Card>
+    </>
+
+
   );
 };
 

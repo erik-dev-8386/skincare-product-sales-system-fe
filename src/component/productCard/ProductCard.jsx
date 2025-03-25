@@ -202,6 +202,7 @@ const ProductCard = ({
               height: "150px",
               width: "250px",
               objectFit: "contain",
+              paddingTop: 2,
             }}
           />
         </div>
