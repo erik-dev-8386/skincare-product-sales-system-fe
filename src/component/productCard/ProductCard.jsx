@@ -125,7 +125,7 @@
 import React from "react";
 import { Card, Button } from "antd";
 import { useNavigate } from "react-router-dom";
-import './ProductCard.css';
+import "./ProductCard.css";
 
 const { Meta } = Card;
 
@@ -174,7 +174,9 @@ const ProductCard = ({
       }}
       hoverable
       cover={
-        <div style={{ position: "relative", width: "100%", overflow: "hidden" }}>
+        <div
+          style={{ position: "relative", width: "100%", overflow: "hidden" }}
+        >
           {discountPercent > 0 && (
             <div
               className="discount-badge"
@@ -184,7 +186,8 @@ const ProductCard = ({
                 right: 0,
                 zIndex: 1, // Đảm bảo badge nằm trên cùng
                 padding: "2px 8px",
-                background: "linear-gradient(90deg, rgba(255,226,0,1) 0%, rgba(255,149,0,1) 100%)",
+                background:
+                  "linear-gradient(90deg, rgba(255,226,0,1) 0%, rgba(255,149,0,1) 100%)",
                 color: "black",
                 borderRadius: "0 5px 0 5px", // Bo tròn góc dưới bên trái
                 fontSize: "14px",
@@ -212,7 +215,7 @@ const ProductCard = ({
       <Meta
         title={<p>{product.productName}</p>}
         description={
-          <div style={{height: 100}}>
+          <div style={{ height: 100 }}>
             <p>{findBrandNameById(product.brandId)}</p>
             <strong style={{ color: "green" }}>
               {formatPrice(product.discountPrice)}
