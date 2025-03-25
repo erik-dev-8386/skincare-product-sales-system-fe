@@ -16,6 +16,7 @@
     "@cloudinary/react": "^1.13.1",
     "@cloudinary/url-gen": "^1.21.0",
     "@react-oauth/google": "^0.12.1",
+    "@stomp/stompjs": "^7.1.0",
     "@tinymce/tinymce-react": "^6.0.0",
     "antd": "^5.24.5",
     "apexcharts": "^4.5.0",
@@ -38,6 +39,9 @@
     "react-router-dom": "^7.1.5",
     "react-toastify": "^11.0.3",
     "react-zoom-pan-pinch": "^3.7.0",
+    "recharts": "^2.15.1",
+    "reconnecting-websocket": "^4.4.0",
+    "sockjs-client": "^1.6.1",
     "tinymce": "^7.7.0"
   },
   "devDependencies": {
