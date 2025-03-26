@@ -1,5 +1,12 @@
-
-.bieudo{
-    height: 500px;
-    width: 600px;
-}
+.dashboard-container {
+    padding: 20px;
+  }
+  
+  .bieudo {
+    max-width: 100%;
+    height: auto;
+  }
+  
+  .mt-4 {
+    margin-top: 1rem;
+  }

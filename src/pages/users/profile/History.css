@@ -1,0 +1,52 @@
+.status-tabs .ant-tabs-tab:hover {
+    background-color: white !important;
+    border: 1px solid #900001 !important;
+
+}
+
+.ant-badge:hover {
+    color: #900001 !important;
+}
+
+.status-tabs .ant-tabs-tab {
+    background-color: #900001 !important;
+    margin-right: 3px !important;
+    
+}
+
+
+.status-tabs .ant-badge {
+    color: white;
+
+}
+
+.status-tabs .ant-scroll-number {
+    background-color: #4CAF50 !important;
+    color: white !important;
+    font-weight: 500;
+    font-size: 12px;
+    min-width: 20px;
+    height: 20px;
+    line-height: 20px !important;
+    border-radius: 10px !important;
+    box-shadow: 0 0 0 1px white;
+    transform: translate(50%, -40%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 4px;
+    position: 'absolute'
+}
+
+/* Thêm hiệu ứng khi hover */
+/* .status-tabs .ant-badge:hover .ant-scroll-number {
+    box-shadow: 0 0 0 1px #900001;
+    transform: translate(10%, -10%) scale(1.05);
+    transition: all 0.2s ease;
+}
+*/
+
+/* .ant-tabs-nav-wrap{
+    height: 80px;
+    margin-top: 20px;
+} */
