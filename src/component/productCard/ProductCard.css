@@ -1,14 +1,102 @@
-.button-compare:hover{
-background-color: white !important;
-color: #900001 !important;
-border: 2px solid #900001 !important;
+/* .product-card {
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+   
+    padding: 0 !important;
+
+}
+
+.button-compare {
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-weight: bold;
+    letter-spacing: 1px;
+    padding: 8px 16px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.button-compare:hover {
+    background-color: white !important;
+    color: #900001 !important;
+    border: 2px solid #900001 !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.button-compare:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .product-card {
-    min-height: 300px; /* Đặt chiều cao tối thiểu cho card */
+    min-height: 300px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Căn đều các phần tử trong card */
-   padding: 0 !important;
-   
-  }
+    justify-content: space-between;
+    padding: 0 !important;
+    transition: box-shadow 0.3s ease;
+}
+  */
+
+
+
+.button-compare {
+    background-color: rgba(144, 0, 1, 0.1) !important;
+    color: #900001 !important;
+    border: 2px solid rgba(144, 0, 1, 0.3) !important;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    border-radius: 24px;
+    padding: 6px 18px;
+    text-transform: none;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.button-compare::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(144, 0, 1, 0.1), transparent);
+    transition: all 0.5s ease;
+}
+
+.button-compare:hover::before {
+    left: 100%;
+}
+
+.button-compare:hover {
+    background-color: #900001 !important;
+    color: white !important;
+    border-color: #900001 !important;
+    box-shadow: 0 2px 5px rgba(144, 0, 1, 0.2);
+    transform: translateY(-1px);
+}
+
+.button-compare:active {
+    transform: scale(0.98);
+    box-shadow: 0 1px 3px rgba(144, 0, 1, 0.05);
+}
+
+.product-card {
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0 !important;
+    border-radius: 16px;
+    border: 1px solid rgba(144, 0, 1, 0.1);
+    transition: all 0.3s ease;
+}
+
+.product-card:hover {
+    box-shadow: 0 4px 12px rgba(144, 0, 1, 0.08) !important;
+    transform: translateY(-2px);
+}
