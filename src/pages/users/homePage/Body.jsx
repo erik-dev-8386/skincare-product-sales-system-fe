@@ -888,7 +888,7 @@ export default function Body() {
       <section className="section blog-section">
         <div className="section-header">
           <h2 className="section-title">BLOG LÀM ĐẸP</h2>
-          <button className="view-all-btn" onClick={() => navigate("/blogs")}>XEM TẤT CẢ</button>
+          <button className="view-all-btn" onClick={() => navigate("/blog")}>XEM TẤT CẢ</button>
         </div>
         <div className="blog-grid">
           {visibleBlogs.map(blog => (
