@@ -3357,12 +3357,12 @@ export default function Cart() {
                 }
 
                 window.location.href = payUrl.payUrl;
-                setCart([]);
-                setCartItems([]);
+                // setCart([]);
+                // setCartItems([]);
 
-                setTimeout(() => {
-                    navigate("/");
-                }, 3000);
+                // setTimeout(() => {
+                //     navigate("/");
+                // }, 3000);
             } catch (error) {
                 console.error("Error during Momo payment process:", error);
                 toast.error("Có lỗi xảy ra khi thanh toán qua Momo. Vui lòng thử lại.");

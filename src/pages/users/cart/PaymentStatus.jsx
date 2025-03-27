@@ -1,23 +1,23 @@
-
-
-import React, { useEffect, useState } from 'react';
-import { Result, Button, Card, Row, Col, Typography, Divider, Steps, Spin, message } from 'antd';
-import { 
-  CheckCircleOutlined, 
-  ShoppingOutlined, 
-  CarOutlined, 
-  SmileOutlined, 
+import React, { useContext, useEffect, useState } from 'react';
+import { Result, Button, Card, Row, Col, Typography, Divider, Steps, Spin } from 'antd';
+import {
+  CheckCircleOutlined,
+  ShoppingOutlined,
+  CarOutlined,
+  SmileOutlined,
   CloseCircleOutlined,
-  LoadingOutlined 
+  LoadingOutlined
 } from '@ant-design/icons';
 import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import api from '../../../config/api';
 import { toast } from 'react-toastify';
+import { CartContext } from "../../../context/CartContext";
 
 const { Title, Text } = Typography;
 const { Step } = Steps;
 
 const SuccessPayment = () => {
+  const { setCart } = useContext(CartContext);
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams] = useSearchParams();
@@ -43,8 +43,7 @@ const SuccessPayment = () => {
         // First fetch order details
         try {
           const { data: orderData } = await api.get(`/orders/${orderId}`);
-          
-          // Map the API response to match the frontend structure
+
           setOrderDetails({
             orderId: orderData.orderId,
             date: new Date(orderData.orderTime).toLocaleDateString('vi-VN'),
@@ -62,7 +61,6 @@ const SuccessPayment = () => {
           });
         } catch (orderError) {
           console.error('Lỗi khi lấy thông tin đơn hàng:', orderError);
-          // Continue even if order details fail
         }
 
         // Process payment verification for Momo
@@ -84,21 +82,20 @@ const SuccessPayment = () => {
             if (response.status === 200) {
               const success = parseInt(resultCode) === 0;
               setPaymentStatus(success ? 'success' : 'failed');
-              
+
               if (success) {
                 toast.success('Thanh toán thành công qua Momo');
+                setCart([]);
               } else {
                 toast.error(response.data?.message || 'Thanh toán qua Momo không thành công');
               }
-            } else {
-              throw new Error(response.data?.message || `HTTP error! status: ${response.status}`);
             }
           } catch (apiError) {
             console.error('Lỗi khi xác thực thanh toán:', apiError);
-            // If resultCode is 0 (success), still consider it successful
             if (parseInt(resultCode) === 0) {
               setPaymentStatus('success');
               toast.success('Thanh toán thành công qua Momo');
+              setCart([]);
             } else {
               setPaymentStatus('failed');
               toast.error(apiError.response?.data?.message || 'Xác thực thanh toán thất bại');
@@ -107,6 +104,7 @@ const SuccessPayment = () => {
         } else {
           // COD scenario
           setPaymentStatus('success');
+          setCart([]);
         }
 
       } catch (err) {
@@ -119,7 +117,7 @@ const SuccessPayment = () => {
     };
 
     processPayment();
-  }, [searchParams, location.state]);
+  }, [searchParams, location.state, setCart]);
 
   if (loading) {
     return (
@@ -131,7 +129,7 @@ const SuccessPayment = () => {
 
   if (error) {
     return (
-      <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
+      <div style={{ padding: '24px', maxWidth: '1200px', margin: '50px auto' }}>
         <Result
           status="error"
           title="Đã xảy ra lỗi"
@@ -144,16 +142,16 @@ const SuccessPayment = () => {
 
   if (paymentStatus === 'failed') {
     return (
-      <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
+      <div style={{ padding: '24px', maxWidth: '1200px', margin: '50px auto' }}>
         <Result
           status="error"
           title="Thanh Toán Thất Bại!"
           subTitle="Đã có lỗi xảy ra trong quá trình thanh toán. Vui lòng thử lại hoặc liên hệ hỗ trợ."
           extra={[
-            <Button type="primary" key="retry" onClick={() => navigate('/checkout', { state: { orderId: orderDetails?.orderId } })}>
+            <Button type="primary" key="retry" onClick={() => navigate('/shopping-cart', { state: { orderId: orderDetails?.orderId } })}>
               Thử lại thanh toán
             </Button>,
-            <Button key="contact" onClick={() => navigate('/contact')}>Liên hệ hỗ trợ</Button>,
+            <Button key="contact" onClick={() => navigate('/about-me')}>Liên hệ hỗ trợ</Button>,
           ]}
         />
       </div>
@@ -162,14 +160,14 @@ const SuccessPayment = () => {
 
   if (!orderDetails) {
     return (
-      <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
+      <div style={{ padding: '24px', maxWidth: '1200px', margin: '50px auto' }}>
         <Result
           status="warning"
           title="Không tìm thấy thông tin đơn hàng"
           subTitle={`Mã đơn hàng: ${searchParams.get('orderId')}`}
           extra={[
             <Button key="home" type="primary" onClick={() => navigate('/')}>Về Trang Chủ</Button>,
-            <Button key="contact" onClick={() => navigate('/contact')}>Liên hệ hỗ trợ</Button>
+            <Button key="contact" onClick={() => navigate('/about-me')}>Liên hệ hỗ trợ</Button>
           ]}
         />
       </div>
@@ -177,8 +175,7 @@ const SuccessPayment = () => {
   }
 
   return (
-    <div style={{ padding: '24px', maxWidth: '1200px', marginTop: "50px", marginLeft: "auto", marginRight: "auto" }}>
-      
+    <div style={{ padding: '24px', maxWidth: '1200px', margin: '50px auto' }}>
       <Result
         status="success"
         title="Thanh Toán Thành Công!"
@@ -195,7 +192,7 @@ const SuccessPayment = () => {
         <Col xs={24} md={16}>
           <Card title="Chi tiết đơn hàng" bordered={false}>
             <Steps current={paymentStatus === 'success' ? 2 : 1} responsive>
-              <Step title="Đặt hàng" icon={<ShoppingOutlined />} /> 
+              <Step title="Đặt hàng" icon={<ShoppingOutlined />} />
               <Step
                 title="Thanh toán"
                 icon={paymentStatus === 'success' ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
