@@ -186,3 +186,21 @@
   border-radius: 4px;
   margin-top: 1rem;
 }
+
+.reward-points-display {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+    border: 1px solid #e9ecef;
+}
+
+.reward-points-display h5 {
+    margin-bottom: 10px;
+    color: #900001;
+    font-weight: bold;
+}
+
+.reward-points-display p {
+    margin: 5px 0;
+}
