@@ -501,7 +501,7 @@ export default function ProductDetail() {
     const token = localStorage.getItem("token");
     if (token) {
       // Đã đăng nhập -> chuyển đến trang thanh toán
-      navigate("/checkout");
+      navigate("/shopping-cart");
     } else {
       // Chưa đăng nhập -> chuyển đến trang đăng nhập
       navigate("/login-and-signup", { 

@@ -1,3 +1,5 @@
+
+
 import React, { useEffect, useState } from 'react';
 import { Result, Button, Card, Row, Col, Typography, Divider, Steps, Spin, message } from 'antd';
 import { 
@@ -47,10 +49,10 @@ const SuccessPayment = () => {
             orderId: orderData.orderId,
             date: new Date(orderData.orderTime).toLocaleDateString('vi-VN'),
             totalAmount: `${orderData.totalAmount.toLocaleString('vi-VN')} VND`,
-            paymentMethod: orderData.transactions?.type === 1 ? 'Ví điện tử Momo' : 'COD',
+            paymentMethod: orderData.transactionType = 1 ? 'Ví điện tử Momo' : 'COD',
             shippingAddress: orderData.address,
-            customerName: `${orderData.users?.firstName} ${orderData.users?.lastName}`,
-            customerPhone: orderData.users?.phone,
+            customerName: `${orderData.customerFirstName} ${orderData.customerLastName}`,
+            customerPhone: orderData.customerPhone,
             items: orderData.orderDetails?.map(detail => ({
               id: detail.productId,
               name: detail.product?.name || `Sản phẩm ${detail.productId}`,
@@ -175,7 +177,8 @@ const SuccessPayment = () => {
   }
 
   return (
-    <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
+    <div style={{ padding: '24px', maxWidth: '1200px', marginTop: "50px", marginLeft: "auto", marginRight: "auto" }}>
+      
       <Result
         status="success"
         title="Thanh Toán Thành Công!"
@@ -192,7 +195,7 @@ const SuccessPayment = () => {
         <Col xs={24} md={16}>
           <Card title="Chi tiết đơn hàng" bordered={false}>
             <Steps current={paymentStatus === 'success' ? 2 : 1} responsive>
-              <Step title="Đặt hàng" icon={<ShoppingOutlined />} />
+              <Step title="Đặt hàng" icon={<ShoppingOutlined />} /> 
               <Step
                 title="Thanh toán"
                 icon={paymentStatus === 'success' ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
