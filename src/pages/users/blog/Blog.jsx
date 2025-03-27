@@ -1,4 +1,3 @@
-// Blog.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -16,8 +15,6 @@ import {
 import api from "../../../config/api";
 import "./Blog.css";
 import BlogCard from "../../../component/BlogCard/BlogCard.jsx";
-import Footer from "../../../component/Footer/Footer.jsx";
-import Header from "../../../component/Header/Header.jsx";
 
 const { Option } = Select;
 const { Sider, Content, Header: LayoutHeader } = Layout;
@@ -200,14 +197,9 @@ const Blog = () => {
         />
 
         <div className="blog-header-banner">
-          <div className="blog-header-overlay">
-            <Title level={1} className="blog-title">
-              Blog của Haven Skin
-            </Title>
-            <Paragraph className="blog-subtitle">
-              Khám phá những bài viết về chăm sóc da, làm đẹp và sức khỏe
-            </Paragraph>
-          </div>
+          {/* <div className="blog-header-overlay">
+            
+          </div> */}
         </div>
 
         <Layout className="blog-content-layout">
@@ -413,7 +405,15 @@ const Blog = () => {
                                 <span className="blog-date">
                                   <i className="fa-solid fa-calendar-days"></i> {new Date(blog.postedTime).toLocaleDateString("vi-VN")}
                                 </span>
+                                {filteredBlogs[0].blogCategory && (
+                              <span className="blog-category">
+                                <i className="fa-solid fa-folder"></i> {filteredBlogs[0].blogCategory.blogCategoryName}
+                              </span>
+                            )}
+                              
                               </div>
+                              
+                              
                             </div>
                           </div>
                         </div>

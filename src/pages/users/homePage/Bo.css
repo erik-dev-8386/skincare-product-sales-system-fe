@@ -1,9 +1,9 @@
 /* Bo.css */
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@300;400;500&family=Roboto:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans+Extra+Condensed:wght@300;400;500&display=swap');
 
 /* Base Styles */
 .home-container {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Fira Sans Extra Condensed', sans-serif;
     color: #555;
     max-width: 1400px;
     margin: 0 auto;
@@ -50,8 +50,8 @@
 
 .section-title {
     font-size: 36px;
-    font-weight: 300;
-    font-family: 'Playfair Display', serif;
+    font-weight: 550;
+    font-family: 'Fira Sans Extra Condensed', sans-serif;
     color: #666;
     margin-bottom: 40px;
     position: relative;
@@ -114,22 +114,23 @@
 
 .view-all-btn {
     background: transparent;
-    border: 1px solid rgba(212, 163, 115, 0.3);
-    color: #d4a373;
+    border: 2px solid rgba(144, 0, 1, 0.3) !important;
+    color: #900001 !important;
     padding: 8px 20px;
     border-radius: 20px;
     font-size: 13px;
-    font-weight: 300;
+    font-weight: 600;
     letter-spacing: 1px;
     cursor: pointer;
     transition: all 0.3s ease;
 }
 
 .view-all-btn:hover {
-    background: rgba(212, 163, 115, 0.1);
-    color: #d4a373;
+    background-color: #900001 !important;
+    color: white !important;
     letter-spacing: 1.5px;
-    border-color: rgba(212, 163, 115, 0.5);
+    border-color: #900001 !important;
+    box-shadow: 0 2px 5px rgba(144, 0, 1, 0.2);
 }
 
 /* Products Section */
@@ -176,20 +177,6 @@
     transform: scale(1.05);
     box-shadow: 0 3px 15px rgba(0, 0, 0, 0.05);
 }
-
-/* Best Sellers Section */
-/* .best-sellers-section {
-    background-color: #fffcf9;
-    padding: 50px 30px;
-    margin: 80px 0;
-}
-
-.best-seller-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 30px;
-    margin-top: 40px;
-} */
 
 .best-sellers-section {
     background-color: #fff9f2;
