@@ -14,6 +14,7 @@ import { CartContext } from "../../../context/CartContext";
 import { toast, ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom"; // Import Link
 import { jwtDecode } from "jwt-decode"; // Sửa cách import jwt-decode
+import MyEditor from "../../../component/TinyMCE/MyEditor";
 
 const { Title } = Typography;
 
@@ -836,7 +837,7 @@ export default function ProductDetail() {
                   name="content"
                   rules={[{ required: true, message: 'Vui lòng nhập nội dung đánh giá' }]}
                 >
-                  <Input.TextArea 
+                  <MyEditor
                     rows={4} 
                     placeholder="Chia sẻ trải nghiệm của bạn về sản phẩm này" 
                   />
