@@ -323,27 +323,18 @@ export default function Profile() {
         setLoading(false);
         return;
       }
-
+  
       try {
         const decodedToken = jwtDecode(token);
         const userEmail = decodedToken.sub;
-
-        // Fetch user data and wallet data in parallel
-        const [userResponse, walletResponse] = await Promise.all([
-          api.get(`/users/${userEmail}`, {
-            headers: { Authorization: `Bearer ${token}` },
-          }),
-          api.get(`/coinWallets/email/${userEmail}`, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
-        ]);
-
+  
+        // Fetch user data first
+        const userResponse = await api.get(`/users/${userEmail}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        
         const userData = userResponse.data;
-        const walletData = walletResponse.data;
-
         setUserData(userData);
-        setTotalPoints(walletData.balance || 0);
-
         form.setFieldsValue({
           firstName: userData.firstName,
           lastName: userData.lastName,
@@ -353,9 +344,26 @@ export default function Profile() {
           address: userData.address,
           birthDate: userData.birthDate ? dayjs(userData.birthDate) : null,
         });
-
+  
         if (userData.image) {
           setImagePreviews([userData.image]);
+        }
+  
+        // Then fetch wallet data and handle 404 error
+        try {
+          const walletResponse = await api.get(`/coinWallets/email/${userEmail}`, {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          setTotalPoints(walletResponse.data.balance || 0);
+        } catch (walletError) {
+          if (walletError.response && walletError.response.status === 404) {
+            // Wallet not found, set points to 0
+            setTotalPoints(0);
+          } else {
+            // Other errors - log but still set to 0
+            console.error("Error fetching wallet data:", walletError);
+            setTotalPoints(0);
+          }
         }
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -364,7 +372,7 @@ export default function Profile() {
         setLoading(false);
       }
     };
-
+  
     fetchData();
   }, [form]);
 

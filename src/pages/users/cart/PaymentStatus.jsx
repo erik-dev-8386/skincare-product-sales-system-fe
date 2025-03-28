@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Result, Button, Card, Row, Col, Typography, Divider, Steps, Spin } from 'antd';
+import { Result, Button, Card, Row, Col, Typography, Divider, Steps, Spin, Image } from 'antd';
 import {
   CheckCircleOutlined,
   ShoppingOutlined,
@@ -25,8 +25,25 @@ const SuccessPayment = () => {
   const [orderDetails, setOrderDetails] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [productsLoading, setProductsLoading] = useState(false);
 
   useEffect(() => {
+    const fetchProductDetails = async (productId) => {
+      try {
+        const response = await api.get(`/products/${productId}`);
+        return {
+          name: response.data.productName,
+          image: response.data.productImages[0]?.imageURL || '' // Get the first image URL
+        };
+      } catch (error) {
+        console.error(`Error fetching product ${productId}:`, error);
+        return {
+          name: `Sản phẩm ${productId}`,
+          image: ''
+        };
+      }
+    };
+
     const processPayment = async () => {
       try {
         const orderId = searchParams.get('orderId') || location.state?.orderId;
@@ -40,69 +57,69 @@ const SuccessPayment = () => {
           return;
         }
 
-        // First fetch order details
-        try {
-          const { data: orderData } = await api.get(`/orders/${orderId}`);
+        // Fetch order details
+        const { data: orderData } = await api.get(`/orders/${orderId}`);
 
-          setOrderDetails({
-            orderId: orderData.orderId,
-            date: new Date(orderData.orderTime).toLocaleDateString('vi-VN'),
-            totalAmount: `${orderData.totalAmount.toLocaleString('vi-VN')} VND`,
-            paymentMethod: orderData.transactionType = 1 ? 'Ví điện tử Momo' : 'COD',
-            shippingAddress: orderData.address,
-            customerName: `${orderData.customerFirstName} ${orderData.customerLastName}`,
-            customerPhone: orderData.customerPhone,
-            items: orderData.orderDetails?.map(detail => ({
+        // Create initial order details
+        const initialOrderDetails = {
+          orderId: orderData.orderId,
+          date: new Date(orderData.orderTime).toLocaleDateString('vi-VN'),
+          totalAmount: `${orderData.totalAmount.toLocaleString('vi-VN')} đ`,
+          paymentMethod: orderData.transactionType === 1 ? 'Ví điện tử Momo' : 'COD',
+          shippingAddress: orderData.address,
+          customerName: `${orderData.customerFirstName} ${orderData.customerLastName}`,
+          customerPhone: orderData.customerPhone,
+          items: orderData.orderDetails?.map(detail => ({
+            id: detail.productId,
+            name: 'Đang tải...',
+            image: null,
+            price: `${detail.discountPrice.toLocaleString('vi-VN')} đ`,
+            quantity: detail.quantity
+          })) || []
+        };
+
+        setOrderDetails(initialOrderDetails);
+        setProductsLoading(true);
+
+        // Fetch product details for all items
+        const productDetails = await Promise.all(
+          orderData.orderDetails?.map(async (detail) => {
+            const productInfo = await fetchProductDetails(detail.productId);
+            return {
               id: detail.productId,
-              name: detail.product?.name || `Sản phẩm ${detail.productId}`,
-              price: `${detail.discountPrice.toLocaleString('vi-VN')} VND`,
+              ...productInfo,
+              price: `${detail.discountPrice.toLocaleString('vi-VN')} đ`,
               quantity: detail.quantity
-            })) || []
-          });
-        } catch (orderError) {
-          console.error('Lỗi khi lấy thông tin đơn hàng:', orderError);
-        }
-
-        // Process payment verification for Momo
-        if (resultCode !== null) {
-          try {
-            const payload = {
-              orderId: orderId,
-              requestId: requestId || '',
-              resultCode: parseInt(resultCode),
-              amount: amount && !isNaN(amount) ? parseInt(amount) : undefined
             };
+          }) || []
+        );
 
-            const response = await api.post('/momo/ipn-handler-new', payload, {
-              headers: {
-                'Content-Type': 'application/json'
-              }
-            });
+        // Update order details with product info
+        setOrderDetails(prev => ({
+          ...prev,
+          items: productDetails
+        }));
+        setProductsLoading(false);
 
-            if (response.status === 200) {
-              const success = parseInt(resultCode) === 0;
-              setPaymentStatus(success ? 'success' : 'failed');
+        // Process payment status
+        if (resultCode !== null) {
+          const payload = {
+            orderId,
+            requestId: requestId || '',
+            resultCode: parseInt(resultCode),
+            amount: amount && !isNaN(amount) ? parseInt(amount) : undefined
+          };
 
-              if (success) {
-                toast.success('Thanh toán thành công qua Momo');
-                setCart([]);
-              } else {
-                toast.error(response.data?.message || 'Thanh toán qua Momo không thành công');
-              }
-            }
-          } catch (apiError) {
-            console.error('Lỗi khi xác thực thanh toán:', apiError);
-            if (parseInt(resultCode) === 0) {
-              setPaymentStatus('success');
+          const response = await api.post('/momo/ipn-handler-new', payload);
+          if (response.status === 200) {
+            const success = parseInt(resultCode) === 0;
+            setPaymentStatus(success ? 'success' : 'failed');
+            if (success) {
               toast.success('Thanh toán thành công qua Momo');
               setCart([]);
-            } else {
-              setPaymentStatus('failed');
-              toast.error(apiError.response?.data?.message || 'Xác thực thanh toán thất bại');
             }
           }
         } else {
-          // COD scenario
           setPaymentStatus('success');
           setCart([]);
         }
@@ -205,12 +222,31 @@ const SuccessPayment = () => {
             <Divider />
 
             <h5>Sản phẩm đã mua</h5>
-            {orderDetails.items.map(item => (
-              <div key={item.id} style={{ marginBottom: '12px', display: 'flex', justifyContent: 'space-between' }}>
-                <Text>{item.name} - Số lượng: {item.quantity}</Text>
-                <Text strong>{item.price}</Text>
-              </div>
-            ))}
+            {productsLoading ? (
+              <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />
+            ) : (
+              orderDetails.items.map(item => (
+                <div key={item.id} style={{ marginBottom: '16px', display: 'flex', gap: '16px', alignItems: 'center' }}>
+                  <div style={{ width: '80px', height: '80px', flexShrink: 0 }}>
+                    <Image
+                      src={item.image}
+                      alt={item.name}
+                      width={80}
+                      height={80}
+                      style={{ objectFit: 'cover' }}
+                      fallback="fallback-image.jpg"
+                    />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <Text strong style={{ display: 'block', marginBottom: '4px' }}>{item.name}</Text>
+                    <Text type="secondary" style={{ display: 'block', marginBottom: '4px' }}>
+                      Số lượng: {item.quantity}
+                    </Text>
+                    <Text strong style={{ color: '#1890ff' }}>{item.price}</Text>
+                  </div>
+                </div>
+              ))
+            )}
 
             <Divider />
 
