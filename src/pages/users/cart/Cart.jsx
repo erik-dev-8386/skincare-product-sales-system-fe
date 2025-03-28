@@ -1,5 +1,4 @@
 
-
 // import React, { useState, useEffect, useContext } from "react";
 // import { useLocation, useNavigate } from "react-router-dom";
 // import { CartContext } from "../../../context/CartContext";
@@ -7,7 +6,7 @@
 // import "./Cart.css";
 // import api from "../../../config/api";
 // import { toast, ToastContainer } from "react-toastify";
-// import { Image } from "antd";
+// import { Image, Switch } from "antd";
 
 // export default function Cart() {
 //     const location = useLocation();
@@ -27,9 +26,18 @@
 //         paymentMethod: "",
 //     });
 //     const [isUserInfoValid, setIsUserInfoValid] = useState(false);
-//     const [isInfoConfirmed, setIsInfoConfirmed] = useState(false); // Thêm state này
+//     const [isInfoConfirmed, setIsInfoConfirmed] = useState(false);
+//     const [rewardPoints, setRewardPoints] = useState(0);
+//     const [useRewardPoints, setUseRewardPoints] = useState(false);
+//     const [discountAmount, setDiscountAmount] = useState(0);
+//     const [isConfirming, setIsConfirming] = useState(false);
 
 //     const orderId = checkoutResponse?.orderId;
+
+//     // Format number with dots as thousand separators
+//     const formatNumber = (num) => {
+//         return num?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") || "0";
+//     };
 
 //     if (!orderId) {
 //         console.error("Order ID is missing!");
@@ -51,28 +59,55 @@
 //                 const decodedToken = jwtDecode(token);
 //                 const userEmail = decodedToken.sub;
 
-//                 const response = await api.get(`/users/${userEmail}`, {
+//                 // Fetch user data first
+//                 const userResponse = await api.get(`/users/${userEmail}`, {
 //                     headers: {
 //                         Authorization: `Bearer ${token}`,
 //                     },
 //                 });
 
-//                 const data = response.data;
+//                 const userData = userResponse.data;
 //                 setFormData({
-//                     firstName: data.firstName || "",
-//                     lastName: data.lastName || "",
-//                     email: data.email || "",
-//                     phone: data.phone || "",
-//                     address: data.address || "",
+//                     firstName: userData.firstName || "",
+//                     lastName: userData.lastName || "",
+//                     email: userData.email || "",
+//                     phone: userData.phone || "",
+//                     address: userData.address || "",
 //                     paymentMethod: formData.paymentMethod,
 //                 });
+
+//                 // Then fetch wallet data
+//                 try {
+//                     const walletResponse = await api.get(`/coinWallets/email/${userEmail}`, {
+//                         headers: {
+//                             Authorization: `Bearer ${token}`,
+//                         },
+//                     });
+//                     setRewardPoints(walletResponse.data.balance || 0);
+//                 } catch (walletError) {
+//                     if (walletError.response?.status === 404) {
+//                         // Wallet not found, set points to 0
+//                         setRewardPoints(0);
+//                     } else {
+//                         // Other errors
+//                         console.error("Error fetching wallet data:", walletError);
+//                         setRewardPoints(0);
+//                         toast.error("Không thể tải thông tin ví điểm thưởng");
+//                     }
+//                 }
 //             } catch (error) {
 //                 console.error("Error fetching user data:", error);
+//                 toast.error("Không thể tải thông tin người dùng");
+//                 if (error.response?.status === 401) {
+//                     // Unauthorized - redirect to login
+//                     navigate("/login");
+//                 }
 //             }
 //         };
 
 //         fetchUserData();
 //     }, [navigate]);
+
 
 //     useEffect(() => {
 //         const { firstName, lastName, email, phone, address } = formData;
@@ -84,52 +119,64 @@
 //         setFormData({ ...formData, [e.target.name]: e.target.value });
 //     };
 
-//     // const handleCheckOutConfirmation = async () => {
-//     //     try {
-//     //         const response = await api.post(`/users/check-out/${formData.email}/${orderId}`, formData);
-//     //         const updatedUser = response.data;
-
-//     //         setFormData({
-//     //             firstName: updatedUser.firstName || "",
-//     //             lastName: updatedUser.lastName || "",
-//     //             email: updatedUser.email || "",
-//     //             phone: updatedUser.phone || "",
-//     //             address: updatedUser.address || "",
-//     //             paymentMethod: formData.paymentMethod,
-//     //         });
-
-//     //         setIsInfoConfirmed(true); // Cập nhật state khi thông tin được xác nhận
-//     //         toast.success("Thông tin đã được xác nhận!");
-//     //     } catch (error) {
-//     //         console.error("Error checking out user:", error);
-//     //         toast.error("Có lỗi xảy ra khi xác nhận thông tin.");
-//     //     }
-//     // };
-
 //     const handleCheckOutConfirmation = async () => {
+//         setIsConfirming(true);
 //         try {
-//             // Gọi API để lưu thông tin khách hàng vào database
-//             const response = await api.post(`/users/check-out/${formData.email}/${orderId}`, formData);
-//             const updatedUser = response.data;
+//             const token = localStorage.getItem("token");
+//             if (!token) {
+//                 toast.error("Vui lòng đăng nhập");
+//                 return;
+//             }
 
-//             // Cập nhật state với thông tin mới từ server
-//             setFormData({
-//                 firstName: updatedUser.firstName || "",
-//                 lastName: updatedUser.lastName || "",
-//                 email: updatedUser.email || "",
-//                 phone: updatedUser.phone || "",
-//                 address: updatedUser.address || "",
-//                 paymentMethod: formData.paymentMethod,
-//             });
+//             const userDTO = {
+//                 firstName: formData.firstName,
+//                 lastName: formData.lastName,
+//                 email: formData.email,
+//                 phone: formData.phone,
+//                 address: formData.address
+//             };
 
-//             // Đánh dấu thông tin đã được xác nhận
+//             const response = await api.post(
+//                 `/orders/check-out/${formData.email}/${orderId}`,
+//                 userDTO,
+//                 {
+//                     headers: {
+//                         'Content-Type': 'application/json',
+//                         'Authorization': `Bearer ${token}`
+//                     }
+//                 }
+//             );
+
+//             const orderData = response.data;
+
+//             setFormData(prev => ({
+//                 ...prev,
+//                 firstName: orderData.customerFirstName || prev.firstName,
+//                 lastName: orderData.customerLastName || prev.lastName,
+//                 phone: orderData.customerPhone || prev.phone,
+//                 address: orderData.address || prev.address,
+//             }));
+
+//             setCheckoutResponse(prev => ({
+//                 ...prev,
+//                 ...orderData,
+//                 customerFirstName: orderData.customerFirstName,
+//                 customerLastName: orderData.customerLastName,
+//                 customerPhone: orderData.customerPhone,
+//                 address: orderData.address
+//             }));
+
 //             setIsInfoConfirmed(true);
-//             toast.success("Thông tin đã được xác nhận và lưu thành công!");
+//             toast.success("Thông tin đã được xác nhận và cập nhật!");
 //         } catch (error) {
-//             console.error("Error checking out user:", error);
-//             toast.error("Có lỗi xảy ra khi xác nhận thông tin.");
+//             console.error("Error confirming order:", error);
+//             toast.error(error.response?.data?.message || "Có lỗi khi xác nhận đơn hàng");
+//         } finally {
+//             setIsConfirming(false);
 //         }
 //     };
+
+
 
 //     const totalQuantity = checkoutResponse?.cartItems?.reduce(
 //         (total, item) => total + item.quantity,
@@ -141,8 +188,20 @@
 //         0
 //     ) || 0;
 
-//     const rewardPoints = Math.floor(subtotal * 0.01);
-//     const finalTotal = subtotal;
+//     const pointsEarned = Math.floor(subtotal * 0.01);
+//     const maxDiscount = subtotal * 0.1; // Maximum 10% of order total
+//     const actualDiscount = useRewardPoints ? Math.min(rewardPoints, maxDiscount) : 0;
+//     const finalTotal = Math.max(0, subtotal - actualDiscount);
+
+//     const handleRewardPointsChange = (checked) => {
+//         const discount = checked ? Math.min(rewardPoints, maxDiscount) : 0;
+//         setDiscountAmount(discount);
+//         setUseRewardPoints(checked);
+//         toast.success(checked
+//             ? `Chuẩn bị áp dụng giảm giá ${formatNumber(discount)} đ`
+//             : "Đã tắt giảm giá bằng điểm thưởng"
+//         );
+//     };
 
 //     const handleCheckout = async () => {
 //         if (!isInfoConfirmed) {
@@ -150,19 +209,43 @@
 //             return;
 //         }
 
-//         const checkoutRequest = {
-//             email: formData.email,
-//             cartItemDTO: cartItems.map((item) => ({
-//                 productName: item.productName,
-//                 quantity: item.quantity,
-//                 price: item.discountPrice,
-//             })),
-//             orderId: orderId,
-//             total: finalTotal,
-//         };
+//         const token = localStorage.getItem("token");
+//         if (!token) {
+//             toast.error("Vui lòng đăng nhập");
+//             return;
+//         }
 
-//         if (formData.paymentMethod === "Momo") {
-//             try {
+//         try {
+//             // Only call apply-discount API when actually checking out
+//             if (useRewardPoints) {
+//                 await api.post(
+//                     "/coinWallets/apply-discount",
+//                     null,
+//                     {
+//                         params: {
+//                             orderId,
+//                             useCoinWallet: true
+//                         },
+//                         headers: {
+//                             Authorization: `Bearer ${token}`
+//                         }
+//                     }
+//                 );
+//             }
+
+//             const checkoutRequest = {
+//                 email: formData.email,
+//                 cartItemDTO: cartItems.map((item) => ({
+//                     productName: item.productName,
+//                     quantity: item.quantity,
+//                     price: item.discountPrice,
+//                 })),
+//                 orderId: orderId,
+//                 total: finalTotal,
+//                 useRewardPoints: useRewardPoints
+//             };
+
+//             if (formData.paymentMethod === "Momo") {
 //                 const response = await api.post(`/momo/create/${orderId}`, checkoutRequest);
 //                 const payUrl = response.data;
 
@@ -171,32 +254,22 @@
 //                 }
 
 //                 window.location.href = payUrl.payUrl;
-//                 // setCart([]);
-//                 // setCartItems([]);
+//             } else {
+//                 const response = await api.get(`/cart/pay/${orderId}`, {
+//                     params: checkoutRequest
+//                 });
 
-//                 // setTimeout(() => {
-//                 //     navigate("/");
-//                 // }, 3000);
-//             } catch (error) {
-//                 console.error("Error during Momo payment process:", error);
-//                 toast.error("Có lỗi xảy ra khi thanh toán qua Momo. Vui lòng thử lại.");
-//             }
-//         } else {
-//             try {
-//                 const response = await api.get(`/cart/pay/${orderId}`, checkoutRequest);
-//                 const total = checkoutResponse.total || subtotal;
-
-//                 toast.success(`Thanh toán thành công! Tổng tiền: ${total.toLocaleString()} đ`);
+//                 toast.success(`Thanh toán thành công! Tổng tiền: ${formatNumber(finalTotal)} đ`);
 //                 setCart([]);
 //                 setCartItems([]);
 
 //                 setTimeout(() => {
 //                     navigate("/");
 //                 }, 3000);
-//             } catch (error) {
-//                 console.error("Error during checkout:", error);
-//                 toast.error("Có lỗi xảy ra khi thanh toán. Vui lòng thử lại.");
 //             }
+//         } catch (error) {
+//             console.error("Error during checkout:", error);
+//             toast.error(error.response?.data?.message || "Có lỗi xảy ra khi thanh toán");
 //         }
 //     };
 
@@ -208,10 +281,8 @@
 //             return;
 //         }
 
-//         const email = formData.email;
-
 //         try {
-//             const response = await api.delete(`/cart/delete/${email}/${orderId}`, {
+//             const response = await api.delete(`/cart/delete/${formData.email}/${orderId}`, {
 //                 headers: {
 //                     Authorization: `Bearer ${token}`,
 //                 },
@@ -220,12 +291,10 @@
 //             if (response.status === 200) {
 //                 toast.success("Đơn hàng đã được hủy thành công.");
 //                 navigate("/shopping-cart");
-//             } else {
-//                 toast.error("Có lỗi xảy ra khi hủy đơn hàng. Vui lòng thử lại.");
 //             }
 //         } catch (error) {
 //             console.error("Error during order cancellation:", error);
-//             toast.error("Có lỗi xảy ra khi hủy đơn hàng. Vui lòng thử lại.");
+//             toast.error("Có lỗi xảy ra khi hủy đơn hàng.");
 //         }
 //     };
 
@@ -261,12 +330,12 @@
 //                                         </td>
 //                                         <td>{item.productName}</td>
 //                                         <td>
-//                                             {item.discountPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}{" "}
+//                                             {formatNumber(item.discountPrice)}{" "}
 //                                             <span style={{ textDecoration: "underline" }}>đ</span>
 //                                         </td>
 //                                         <td>{item.quantity}</td>
 //                                         <td>
-//                                             {(item.quantity * item.discountPrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}{" "}
+//                                             {formatNumber(item.quantity * item.discountPrice)}{" "}
 //                                             <span style={{ textDecoration: "underline" }}>đ</span>
 //                                         </td>
 //                                     </tr>
@@ -304,20 +373,35 @@
 //                         </div>
 
 //                         <div className="user-info-display">
-//                             <h5>Thông tin đã điền:</h5>
-//                             <p>Tên: {formData.firstName} {formData.lastName}</p>
-//                             <p>Email: {formData.email}</p>
-//                             <p>Điện thoại: {formData.phone}</p>
-//                             <p>Địa chỉ: {formData.address}</p>
+//                             <h5>Thông tin đã xác nhận:</h5>
+//                             {checkoutResponse ? (
+//                                 <div style={{display: "block"}}>
+//                                     <p>Tên: {checkoutResponse.customerFirstName} {checkoutResponse.customerLastName}</p>
+//                                     <p>Email: {formData.email}</p>
+//                                     <p>Điện thoại: {checkoutResponse.customerPhone}</p>
+//                                     <p>Địa chỉ: {checkoutResponse.address}</p>
+//                                 </div>
+//                             ) : (
+//                                 <p>Chưa có thông tin xác nhận</p>
+//                             )}
+
+//                             <button
+//                                 onClick={handleCheckOutConfirmation}
+//                                 className="btn primary"
+//                                 disabled={!isUserInfoValid || isConfirming}
+//                             >
+//                                 {isConfirming ? 'Đang xác nhận...' : 'Xác nhận thông tin'}
+//                             </button>
+
+
+//                             <div className="reward-points-display">
+//                                 <h5>Điểm thưởng hiện có:</h5>
+//                                 <p>{formatNumber(rewardPoints)} điểm</p>
+//                                 <p>Tương ứng: {formatNumber(rewardPoints)} đ</p>
+//                             </div>
 //                         </div>
 
-//                         <button
-//                             onClick={handleCheckOutConfirmation}
-//                             className="btn primary"
-//                             disabled={!isUserInfoValid}
-//                         >
-//                             Xác nhận thông tin
-//                         </button>
+
 //                     </div>
 
 //                     <div className="order-info">
@@ -326,8 +410,24 @@
 //                             <strong>Tổng sản phẩm đã chọn:</strong> {totalQuantity}
 //                         </p>
 //                         <p>
-//                             <strong>Tích điểm:</strong> {rewardPoints} điểm
+//                             <strong>Tích điểm từ đơn này:</strong> {formatNumber(pointsEarned)} điểm
 //                         </p>
+
+//                         <div className="reward-points-apply">
+//                             <label>
+//                                 <Switch
+//                                     checked={useRewardPoints}
+//                                     onChange={handleRewardPointsChange}
+//                                     disabled={rewardPoints <= 0 || !isInfoConfirmed || subtotal <= 0}
+//                                 />
+//                                 <span>Sử dụng điểm thưởng (Tối đa 10% đơn hàng)</span>
+//                             </label>
+//                             {useRewardPoints && (
+//                                 <p style={{ color: 'green' }}>
+//                                     Đã giảm: {formatNumber(actualDiscount)} đ
+//                                 </p>
+//                             )}
+//                         </div>
 
 //                         <div className="payment-method">
 //                             <h5 style={{ fontWeight: 700 }}>Chọn phương thức thanh toán</h5>
@@ -357,7 +457,12 @@
 //                             <p style={{ color: "black", fontSize: 20, fontWeight: "bold" }}>
 //                                 Tổng thanh toán:
 //                             </p>
-//                             {subtotal.toLocaleString()} <span style={{ textDecoration: "underline" }}>đ</span>
+//                             {useRewardPoints && (
+//                                 <p style={{ textDecoration: 'line-through', color: 'gray' }}>
+//                                     {formatNumber(subtotal)} đ
+//                                 </p>
+//                             )}
+//                             <p>{formatNumber(finalTotal)} đ</p>
 //                         </div>
 
 //                         <div className="buttons">
@@ -377,6 +482,7 @@
 //         </>
 //     );
 // }
+
 import React, { useState, useEffect, useContext } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { CartContext } from "../../../context/CartContext";
@@ -409,6 +515,7 @@ export default function Cart() {
     const [useRewardPoints, setUseRewardPoints] = useState(false);
     const [discountAmount, setDiscountAmount] = useState(0);
     const [isConfirming, setIsConfirming] = useState(false);
+    const [isProcessing, setIsProcessing] = useState(false);
 
     const orderId = checkoutResponse?.orderId;
 
@@ -420,7 +527,7 @@ export default function Cart() {
     if (!orderId) {
         console.error("Order ID is missing!");
         toast.error("Lỗi: Không tìm thấy mã đơn hàng.");
-        return;
+        return null;
     }
 
     // Fetch user information from API
@@ -437,14 +544,28 @@ export default function Cart() {
                 const decodedToken = jwtDecode(token);
                 const userEmail = decodedToken.sub;
 
-                // Fetch user data first
-                const userResponse = await api.get(`/users/${userEmail}`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
+                // Fetch user data and wallet data in parallel
+                const [userResponse, walletResponse] = await Promise.all([
+                    api.get(`/users/${userEmail}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }),
+                    api.get(`/coinWallets/email/${userEmail}`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }).catch(error => {
+                        if (error.response?.status === 404) {
+                            return { data: { balance: 0 } }; // Return default wallet if not found
+                        }
+                        throw error;
+                    })
+                ]);
 
                 const userData = userResponse.data;
+                const walletData = walletResponse.data;
+
                 setFormData({
                     firstName: userData.firstName || "",
                     lastName: userData.lastName || "",
@@ -454,30 +575,11 @@ export default function Cart() {
                     paymentMethod: formData.paymentMethod,
                 });
 
-                // Then fetch wallet data
-                try {
-                    const walletResponse = await api.get(`/coinWallets/email/${userEmail}`, {
-                        headers: {
-                            Authorization: `Bearer ${token}`,
-                        },
-                    });
-                    setRewardPoints(walletResponse.data.balance || 0);
-                } catch (walletError) {
-                    if (walletError.response?.status === 404) {
-                        // Wallet not found, set points to 0
-                        setRewardPoints(0);
-                    } else {
-                        // Other errors
-                        console.error("Error fetching wallet data:", walletError);
-                        setRewardPoints(0);
-                        toast.error("Không thể tải thông tin ví điểm thưởng");
-                    }
-                }
+                setRewardPoints(walletData.balance || 0);
             } catch (error) {
                 console.error("Error fetching user data:", error);
                 toast.error("Không thể tải thông tin người dùng");
                 if (error.response?.status === 401) {
-                    // Unauthorized - redirect to login
                     navigate("/login");
                 }
             }
@@ -485,7 +587,6 @@ export default function Cart() {
 
         fetchUserData();
     }, [navigate]);
-
 
     useEffect(() => {
         const { firstName, lastName, email, phone, address } = formData;
@@ -554,7 +655,27 @@ export default function Cart() {
         }
     };
 
-
+    const updateOrderTotal = async (newTotal) => {
+        try {
+            const token = localStorage.getItem("token");
+            const response = await api.put(
+                `/orders/order-amount/${orderId}`,
+                {
+                    totalAmount: newTotal,
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                }
+            );
+            return response.data;
+        } catch (error) {
+            console.error("Error updating order total:", error);
+            throw error;
+        }
+    };
 
     const totalQuantity = checkoutResponse?.cartItems?.reduce(
         (total, item) => total + item.quantity,
@@ -571,19 +692,40 @@ export default function Cart() {
     const actualDiscount = useRewardPoints ? Math.min(rewardPoints, maxDiscount) : 0;
     const finalTotal = Math.max(0, subtotal - actualDiscount);
 
-    const handleRewardPointsChange = (checked) => {
-        const discount = checked ? Math.min(rewardPoints, maxDiscount) : 0;
-        setDiscountAmount(discount);
-        setUseRewardPoints(checked);
-        toast.success(checked
-            ? `Chuẩn bị áp dụng giảm giá ${formatNumber(discount)} đ`
-            : "Đã tắt giảm giá bằng điểm thưởng"
-        );
+    const handleRewardPointsChange = async (checked) => {
+        try {
+            setIsProcessing(true);
+            const discount = checked ? Math.min(rewardPoints, maxDiscount) : 0;
+            
+            // Update order total when reward points are toggled
+            if (checked) {
+                await updateOrderTotal(subtotal - discount);
+            } else {
+                await updateOrderTotal(subtotal);
+            }
+            
+            setDiscountAmount(discount);
+            setUseRewardPoints(checked);
+            toast.success(checked
+                ? `Đã áp dụng giảm giá ${formatNumber(discount)} đ`
+                : "Đã tắt giảm giá bằng điểm thưởng"
+            );
+        } catch (error) {
+            console.error("Error updating reward points:", error);
+            toast.error("Có lỗi khi cập nhật điểm thưởng");
+        } finally {
+            setIsProcessing(false);
+        }
     };
 
     const handleCheckout = async () => {
         if (!isInfoConfirmed) {
             toast.error("Vui lòng xác nhận thông tin trước khi thanh toán.");
+            return;
+        }
+
+        if (!formData.paymentMethod) {
+            toast.error("Vui lòng chọn phương thức thanh toán");
             return;
         }
 
@@ -593,8 +735,9 @@ export default function Cart() {
             return;
         }
 
+        setIsProcessing(true);
         try {
-            // Only call apply-discount API when actually checking out
+            // Apply discount if reward points are used
             if (useRewardPoints) {
                 await api.post(
                     "/coinWallets/apply-discount",
@@ -648,6 +791,8 @@ export default function Cart() {
         } catch (error) {
             console.error("Error during checkout:", error);
             toast.error(error.response?.data?.message || "Có lỗi xảy ra khi thanh toán");
+        } finally {
+            setIsProcessing(false);
         }
     };
 
@@ -732,7 +877,11 @@ export default function Cart() {
                         <h4>Thông tin người nhận</h4>
                         {["firstName", "lastName", "email", "phone"].map((field) => (
                             <div key={field} className="input-group">
-                                <label>{field.charAt(0).toUpperCase() + field.slice(1)}</label>
+                                <label>
+                                    {field === "firstName" ? "Họ" : 
+                                     field === "lastName" ? "Tên" : 
+                                     field === "email" ? "Email" : "Điện thoại"}
+                                </label>
                                 <input
                                     type={field === "email" ? "email" : "text"}
                                     name={field}
@@ -770,16 +919,13 @@ export default function Cart() {
                             >
                                 {isConfirming ? 'Đang xác nhận...' : 'Xác nhận thông tin'}
                             </button>
-
-
-                            <div className="reward-points-display">
-                                <h5>Điểm thưởng hiện có:</h5>
-                                <p>{formatNumber(rewardPoints)} điểm</p>
-                                <p>Tương ứng: {formatNumber(rewardPoints)} đ</p>
-                            </div>
                         </div>
 
-
+                        <div className="reward-points-display">
+                            <h5>Điểm thưởng hiện có:</h5>
+                            <p>{formatNumber(rewardPoints)} điểm</p>
+                            <p>Tương ứng: {formatNumber(rewardPoints)} đ</p>
+                        </div>
                     </div>
 
                     <div className="order-info">
@@ -796,7 +942,7 @@ export default function Cart() {
                                 <Switch
                                     checked={useRewardPoints}
                                     onChange={handleRewardPointsChange}
-                                    disabled={rewardPoints <= 0 || !isInfoConfirmed || subtotal <= 0}
+                                    disabled={rewardPoints <= 0 || !isInfoConfirmed || subtotal <= 0 || isProcessing}
                                 />
                                 <span>Sử dụng điểm thưởng (Tối đa 10% đơn hàng)</span>
                             </label>
@@ -816,6 +962,7 @@ export default function Cart() {
                                     value="Momo"
                                     checked={formData.paymentMethod === "Momo"}
                                     onChange={handleChange}
+                                    disabled={isProcessing}
                                 />
                                 Thanh toán qua Momo
                             </label>
@@ -826,6 +973,7 @@ export default function Cart() {
                                     value="cod"
                                     checked={formData.paymentMethod === "cod"}
                                     onChange={handleChange}
+                                    disabled={isProcessing}
                                 />
                                 Thanh toán khi nhận hàng
                             </label>
@@ -844,12 +992,17 @@ export default function Cart() {
                         </div>
 
                         <div className="buttons">
-                            <button onClick={handleCheckout} className="btn primary">
-                                Mua
+                            <button 
+                                onClick={handleCheckout} 
+                                className="btn primary"
+                                disabled={isProcessing || !formData.paymentMethod}
+                            >
+                                {isProcessing ? 'Đang xử lý...' : 'Mua'}
                             </button>
                             <button
                                 onClick={handleCancel}
                                 className="btn secondary"
+                                disabled={isProcessing}
                             >
                                 Hủy
                             </button>

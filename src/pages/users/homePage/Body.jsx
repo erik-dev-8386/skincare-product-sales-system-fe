@@ -47,11 +47,11 @@ export default function Body() {
           bestSellerRes,
           blogsRes
         ] = await Promise.all([
-          api.get("/products"),
-          api.get("/brands"),
-          api.get("/categories"),
-          api.get("/discounts"),
-          api.get("/skin-types"),
+          api.get("/products/list-name-products"),
+          api.get("/brands/list-name-brands"),
+          api.get("/categories/list-name-categories"),
+          api.get("/discounts/list-name-discounts"),
+          api.get("/skin-types/list-name-skin-types"),
           api.get("/products/best-seller"),
           api.get("/blogs")
         ]);

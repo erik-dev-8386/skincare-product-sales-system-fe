@@ -989,11 +989,11 @@ export default function Products() {
       try {
         setIsLoading(true);
         const [productsRes, categoriesRes, skinTypesRes, discountsRes, brandsRes] = await Promise.all([
-          api.get("/products"),
-          api.get("/categories"),
-          api.get("/skin-types"),
-          api.get("/discounts"),
-          api.get("/brands")
+          api.get("/products/list-name-products"),
+          api.get("/categories/list-name-categories"),
+          api.get("/skin-types/list-name-skin-types"),
+          api.get("/discounts/list-name-discounts"),
+          api.get("/brands/list-name-brands")
         ]);
 
         setProducts(productsRes.data);

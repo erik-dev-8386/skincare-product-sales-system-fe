@@ -186,16 +186,17 @@ const ProductManagement = () => {
   useEffect(() => {
     const fetchOptions = async () => {
       try {
-        const brandsResponse = await api.get("/brands");
+        const brandsResponse = await api.get("/brands/list-name-brands");
+        // setBrands(brandsResponse.data.filter(item => item.status === 1));
         setBrands(brandsResponse.data);
-
-        const skinTypesResponse = await api.get("/skin-types");
+        const skinTypesResponse = await api.get("/skin-types/list-name-skin-types");
+        // setSkinTypes(skinTypesResponse.data.filter(item => item.status === 1));
         setSkinTypes(skinTypesResponse.data);
-
-        const categoriesResponse = await api.get("/categories");
+        const categoriesResponse = await api.get("/categories/list-name-categories");
+        // setCategories(categoriesResponse.data.filter(item => item.status === 2));
         setCategories(categoriesResponse.data);
-
-        const discountsResponse = await api.get("/discounts");
+        const discountsResponse = await api.get("/discounts/list-name-discounts");
+        // setDiscounts(discountsResponse.data.filter(item => item.status === 2));
         setDiscounts(discountsResponse.data);
       } catch (error) {
         console.error("Error fetching options:", error);
