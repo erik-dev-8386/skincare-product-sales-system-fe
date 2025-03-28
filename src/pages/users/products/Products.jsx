@@ -677,7 +677,6 @@
 //   );
 // }
 
-
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { 
@@ -732,82 +731,148 @@ export default function Products() {
 
   const compareColumns = [
     {
-      title: 'Thuộc tính',
-      dataIndex: 'attribute',
-      key: 'attribute',
-      width: 150,
+      title: "Thông tin",
+      dataIndex: "info",
+      key: "info",
+      width: "20%",
+      className: "compare-info-column",
+      render: (text) => (
+        <div className="compare-info-cell">
+          <strong>{text}</strong>
+        </div>
+      ),
     },
-    ...compareProducts.map(product => ({
-      title: product.productName,
-      dataIndex: product.productId,
-      key: product.productId,
-      render: (text) => <div style={{ textAlign: 'center' }}>{text}</div>,
-    })),
+    {
+      title: "Sản phẩm 1",
+      dataIndex: "product1",
+      key: "product1",
+      width: "40%",
+      className: "compare-product-column",
+    },
+    {
+      title: "Sản phẩm 2",
+      dataIndex: "product2",
+      key: "product2",
+      width: "40%",
+      className: "compare-product-column",
+    },
   ];
 
   const getCompareData = () => {
-    if (compareProducts.length === 0) return [];
-    
-    const data = [
+    const [p1, p2] = compareProducts;
+    if (!p1 || !p2) return [];
+
+    const brand1 = brands.find((b) => b.brandId === p1.brandId)?.brandName;
+    const brand2 = brands.find((b) => b.brandId === p2.brandId)?.brandName;
+    const category1 = categories.find(
+      (c) => c.categoryId === p1.categoryId
+    )?.categoryName;
+    const category2 = categories.find(
+      (c) => c.categoryId === p2.categoryId
+    )?.categoryName;
+    const skinType1 = skinTypes.find(
+      (s) => s.skinTypeId === p1.skinTypeId
+    )?.skinName;
+    const skinType2 = skinTypes.find(
+      (s) => s.skinTypeId === p2.skinTypeId
+    )?.skinName;
+
+    return [
       {
-        key: 'price',
-        attribute: 'Giá',
-        ...compareProducts.reduce((acc, product) => {
-          const originalPrice = product.price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
-          const discountPercent = discounts[product.discountId] || 0;
-          const discountedPrice = discountPercent > 0 
-            ? (product.price * (1 - discountPercent / 100)).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })
-            : originalPrice;
-          
-          acc[product.productId] = discountPercent > 0 
-            ? (
-                <>
-                  <div style={{ textDecoration: 'line-through', color: 'gray' }}>{originalPrice}</div>
-                  <div style={{ color: 'red', fontWeight: 'bold' }}>{discountedPrice}</div>
-                </>
-              )
-            : originalPrice;
-          return acc;
-        }, {}),
+        key: "1",
+        info: "Hình ảnh",
+        product1: (
+          <div className="compare-image-container">
+            <img
+              src={p1.productImages[0]?.imageURL}
+              alt={p1.productName}
+              className="compare-product-image"
+            />
+          </div>
+        ),
+        product2: (
+          <div className="compare-image-container">
+            <img
+              src={p2.productImages[0]?.imageURL}
+              alt={p2.productName}
+              className="compare-product-image"
+            />
+          </div>
+        ),
       },
       {
-        key: 'brand',
-        attribute: 'Thương hiệu',
-        ...compareProducts.reduce((acc, product) => {
-          const brand = brands.find(b => b.brandId === product.brandId);
-          acc[product.productId] = brand ? brand.brandName : 'N/A';
-          return acc;
-        }, {}),
+        key: "2",
+        info: "Tên sản phẩm",
+        product1: <div className="compare-product-name">{p1.productName}</div>,
+        product2: <div className="compare-product-name">{p2.productName}</div>,
       },
       {
-        key: 'category',
-        attribute: 'Danh mục',
-        ...compareProducts.reduce((acc, product) => {
-          const category = categories.find(c => c.categoryId === product.categoryId);
-          acc[product.productId] = category ? category.categoryName : 'N/A';
-          return acc;
-        }, {}),
+        key: "3",
+        info: "Thương hiệu",
+        product1: <div className="compare-brand">{brand1}</div>,
+        product2: <div className="compare-brand">{brand2}</div>,
       },
       {
-        key: 'skinType',
-        attribute: 'Loại da',
-        ...compareProducts.reduce((acc, product) => {
-          const skinType = skinTypes.find(s => s.skinTypeId === product.skinTypeId);
-          acc[product.productId] = skinType ? skinType.skinName : 'N/A';
-          return acc;
-        }, {}),
+        key: "4",
+        info: "Danh mục",
+        product1: <div className="compare-category">{category1}</div>,
+        product2: <div className="compare-category">{category2}</div>,
       },
       {
-        key: 'description',
-        attribute: 'Mô tả',
-        ...compareProducts.reduce((acc, product) => {
-          acc[product.productId] = product.description || 'N/A';
-          return acc;
-        }, {}),
+        key: "5",
+        info: "Loại da phù hợp",
+        product1: (
+          <div className="compare-skin-type">
+            {skinType1 || "Chưa có thông tin"}
+          </div>
+        ),
+        product2: (
+          <div className="compare-skin-type">
+            {skinType2 || "Chưa có thông tin"}
+          </div>
+        ),
+      },
+      {
+        key: "6",
+        info: "Giá gốc",
+        product1: (
+          <div className="compare-original-price">
+            {p1.unitPrice.toLocaleString()}₫
+          </div>
+        ),
+        product2: (
+          <div className="compare-original-price">
+            {p2.unitPrice.toLocaleString()}₫
+          </div>
+        ),
+      },
+      {
+        key: "7",
+        info: "Giá khuyến mãi",
+        product1: (
+          <div className="compare-discount-price">
+            {p1.discountPrice.toLocaleString()}₫
+          </div>
+        ),
+        product2: (
+          <div className="compare-discount-price">
+            {p2.discountPrice.toLocaleString()}₫
+          </div>
+        ),
+      },
+      {
+        key: "8",
+        info: "Mô tả",
+        product1: <div className="compare-description" dangerouslySetInnerHTML={{ __html: p1.description }} />,
+        product2: <div className="compare-description" dangerouslySetInnerHTML={{ __html: p2.description }} />,
+      },
+      {
+        key: "9",
+        info: "Thành phần",
+        product1: <div className="compare-ingredients">{p1.ingredients}</div>,
+        product2: <div className="compare-ingredients">{p2.ingredients}</div>,
       },
     ];
-
-    return data;
   };
 
   const handleSearch = (e) => {
@@ -818,64 +883,36 @@ export default function Products() {
 
   const handleSort = (value) => {
     setSortOption(value);
-    let sortedProducts = [...filteredProducts];
-    
-    switch (value) {
-      case 'a-z':
-        sortedProducts.sort((a, b) => a.productName.localeCompare(b.productName));
-        break;
-      case 'z-a':
-        sortedProducts.sort((a, b) => b.productName.localeCompare(a.productName));
-        break;
-      case 'low-high':
-        sortedProducts.sort((a, b) => {
-          const priceA = a.price * (1 - (discounts[a.discountId] || 0) / 100);
-          const priceB = b.price * (1 - (discounts[b.discountId] || 0) / 100);
-          return priceA - priceB;
-        });
-        break;
-      case 'high-low':
-        sortedProducts.sort((a, b) => {
-          const priceA = a.price * (1 - (discounts[a.discountId] || 0) / 100);
-          const priceB = b.price * (1 - (discounts[b.discountId] || 0) / 100);
-          return priceB - priceA;
-        });
-        break;
-      default:
-        break;
-    }
-    
-    setFilteredProducts(sortedProducts);
+    filterProducts(searchTerm, selectedCategory, selectedSkinType, selectedBrand, selectedDiscount, value);
   };
 
   const handleCategorySelect = (categoryId) => {
     setSelectedCategory(categoryId);
     setVisibleProducts(12);
-    filterProducts(searchTerm, categoryId, selectedSkinType, selectedBrand, selectedDiscount);
+    filterProducts(searchTerm, categoryId, selectedSkinType, selectedBrand, selectedDiscount, sortOption);
   };
 
   const handleSkinTypeSelect = (skinTypeId) => {
     setSelectedSkinType(skinTypeId);
     setVisibleProducts(12);
-    filterProducts(searchTerm, selectedCategory, skinTypeId, selectedBrand, selectedDiscount);
+    filterProducts(searchTerm, selectedCategory, skinTypeId, selectedBrand, selectedDiscount, sortOption);
   };
 
   const handleBrandSelect = (brandId) => {
     setSelectedBrand(brandId);
     setVisibleProducts(12);
-    filterProducts(searchTerm, selectedCategory, selectedSkinType, brandId, selectedDiscount);
+    filterProducts(searchTerm, selectedCategory, selectedSkinType, brandId, selectedDiscount, sortOption);
   };
 
   const handleDiscountSelect = (discountId) => {
     setSelectedDiscount(discountId);
     setVisibleProducts(12);
-    filterProducts(searchTerm, selectedCategory, selectedSkinType, selectedBrand, discountId);
+    filterProducts(searchTerm, selectedCategory, selectedSkinType, selectedBrand, discountId, sortOption);
   };
 
-  const filterProducts = (searchValue, categoryId, skinTypeId, brandId, discountId) => {
+  const filterProducts = (searchValue, categoryId, skinTypeId, brandId, discountId, sort) => {
     let filtered = [...products];
     
-    // Filter by search term
     if (searchValue) {
       const searchLower = searchValue.toLowerCase();
       filtered = filtered.filter(product => {
@@ -886,63 +923,65 @@ export default function Products() {
       });
     }
     
-    // Filter by category
     if (categoryId) {
       filtered = filtered.filter(product => product.categoryId === categoryId);
     }
     
-    // Filter by skin type
     if (skinTypeId) {
       filtered = filtered.filter(product => product.skinTypeId === skinTypeId);
     }
     
-    // Filter by brand
     if (brandId) {
       filtered = filtered.filter(product => product.brandId === brandId);
     }
     
-    // Filter by discount
     if (discountId) {
       filtered = filtered.filter(product => product.discountId === discountId);
+    }
+
+    switch (sort) {
+      case "a-z":
+        filtered.sort((a, b) => a.productName.localeCompare(b.productName));
+        break;
+      case "z-a":
+        filtered.sort((a, b) => b.productName.localeCompare(a.productName));
+        break;
+      case "low-high":
+        filtered.sort((a, b) => a.discountPrice - b.discountPrice);
+        break;
+      case "high-low":
+        filtered.sort((a, b) => b.discountPrice - a.discountPrice);
+        break;
+      default:
+        break;
     }
     
     setFilteredProducts(filtered);
   };
 
   const handleCompareClick = (product) => {
-    const isAlreadyAdded = compareProducts.some(p => p.productId === product.productId);
-    
-    if (isAlreadyAdded) {
-      setCompareProducts(compareProducts.filter(p => p.productId !== product.productId));
-    } else {
-      if (compareProducts.length < 3) {
-        setCompareProducts([...compareProducts, product]);
-      } else {
-        Modal.warning({
-          title: 'Giới hạn so sánh',
-          content: 'Bạn chỉ có thể so sánh tối đa 3 sản phẩm cùng lúc.',
-        });
-      }
-    }
-  };
-
-  const handleOpenCompare = () => {
     if (compareProducts.length < 2) {
+      if (!compareProducts.find((p) => p.productId === product.productId)) {
+        setCompareProducts([...compareProducts, product]);
+        if (compareProducts.length === 1) {
+          setIsCompareModalVisible(true);
+        }
+      }
+    } else {
       Modal.warning({
-        title: 'So sánh sản phẩm',
-        content: 'Vui lòng chọn ít nhất 2 sản phẩm để so sánh.',
+        title: 'Giới hạn so sánh',
+        content: 'Chỉ có thể so sánh tối đa 2 sản phẩm cùng lúc!',
       });
-      return;
     }
-    setIsCompareModalVisible(true);
   };
 
   const handleCloseCompare = () => {
     setIsCompareModalVisible(false);
+    setCompareProducts([]);
   };
 
   const handleLoadMore = () => {
-    setVisibleProducts(prev => prev + 12);
+    setVisibleProducts((prevVisibleProducts) => prevVisibleProducts + 12);
   };
 
   useEffect(() => {
@@ -1037,7 +1076,7 @@ export default function Products() {
           {compareProducts.length > 0 && (
             <Button 
               type="primary" 
-              onClick={handleOpenCompare}
+              onClick={() => setIsCompareModalVisible(true)}
               style={{ marginLeft: '20px' }}
             >
               So sánh ({compareProducts.length})

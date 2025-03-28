@@ -108,7 +108,7 @@ export default function ProfileLayout() {
   const menuItems = [
     { key: "/user", icon: <IdcardOutlined />, label: "Thông tin tài khoản" },
     { key: "/user/history", icon: <HistoryOutlined />, label: "Lịch sử mua hàng" },
-    { key: "/user/point", icon: <FireOutlined />, label: "Điểm tích lũy" },
+    // { key: "/user/point", icon: <FireOutlined />, label: "Điểm tích lũy" },
     { key: "/user/setting", icon: <SettingOutlined />, label: "Cài đặt" },
   ];
 

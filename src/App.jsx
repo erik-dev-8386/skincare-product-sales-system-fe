@@ -49,13 +49,14 @@ import BlogHashtag from "./pages/admin/BlogManagement/Bloghastag.jsx";
 import BlogCategory from "./pages/admin/BlogManagement/Blogcategory.jsx";
 import CustomerManagement from "./pages/admin/UserManagement/UserManagement.jsx";
 import Point from "./pages/users/profile/point.jsx";
+import SuccessPayment from "./pages/users/cart/PaymentStatus.jsx";
 function App() {
   return (
     <Routes>
       {/* user */}
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
-        <Route path="/about-us" element={<AboutUs />} />
+        {/* <Route path="/about-us" element={<AboutUs />} /> */}
         <Route path="/about-me" element={<AboutMe />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-of-use" element={<TermsOfUse />} />
@@ -77,6 +78,7 @@ function App() {
         <Route path="/question" element={<Question />} />
         <Route path="/products" element={<Products />} />
         <Route path="/products/:id" element={<ProductDetail />} />
+        <Route path="/success-payment" element={<SuccessPayment />} />
       </Route>
       {/* login */}
       <Route path="/login" element={<Login />} />

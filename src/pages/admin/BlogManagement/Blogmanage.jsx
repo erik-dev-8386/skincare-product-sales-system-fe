@@ -308,11 +308,14 @@ const BlogManage = () => {
           blogHashtagName: tag,
         })),
         status: form.getFieldValue("status") || 1, // Mặc định là hiển thị nếu không có giá trị
+        postedTime: new Date().toISOString(),
       };
 
       // Nếu đang chỉnh sửa, thêm blogId vào dữ liệu
       if (editingBlog) {
         blogData.blogId = editingBlog.blogId;
+         // Giữ nguyên ngày đăng cũ khi chỉnh sửa
+      blogData.postedTime = editingBlog.postedTime;
       }
 
       console.log("Blog data being sent:", blogData);
