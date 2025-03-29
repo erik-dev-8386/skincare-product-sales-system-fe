@@ -929,6 +929,15 @@ export default function Cart() {
                             ></textarea>
                         </div>
 
+                        <button
+                                onClick={handleCheckOutConfirmation}
+                                className="btn primary"
+                                style={{marginTop: 10}}
+                                disabled={!isUserInfoValid || isConfirming}
+                            >
+                                {isConfirming ? 'Đang xác nhận...' : 'Xác nhận thông tin'}
+                            </button>
+
                         <div className="user-info-display">
                             <h5>Thông tin đã xác nhận:</h5>
                             {checkoutResponse ? (
@@ -942,14 +951,7 @@ export default function Cart() {
                                 <p>Chưa có thông tin xác nhận</p>
                             )}
 
-                            <button
-                                onClick={handleCheckOutConfirmation}
-                                className="btn primary"
-                                style={{marginTop: 10}}
-                                disabled={!isUserInfoValid || isConfirming}
-                            >
-                                {isConfirming ? 'Đang xác nhận...' : 'Xác nhận thông tin'}
-                            </button>
+                           
                         </div>
 
                         <div className="reward-points-display">
@@ -975,7 +977,7 @@ export default function Cart() {
                                     onChange={handleRewardPointsChange}
                                     disabled={rewardPoints <= 0 || !isInfoConfirmed || subtotal <= 0 || isProcessing}
                                 />
-                                <span>Sử dụng điểm thưởng (Tối đa 10% đơn hàng)</span>
+                                <span>Sử dụng điểm thưởng <br />(Tối đa 10% cho đơn hàng)</span>
                             </label>
                             {useRewardPoints && (
                                 <p style={{ color: 'green' }}>
