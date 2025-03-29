@@ -52,7 +52,7 @@ const BlogDetail = () => {
         } else {
           // If it's not a UUID, try direct API call
           const response = await api.get(`/blogs/${id}`);
-          blogData = response.data;
+          blogData = response.data; 
         }
         
         if (!blogData) {
@@ -190,7 +190,7 @@ const BlogDetail = () => {
       backgroundColor: '#fff',
       minHeight: '100vh'
     }}>
-      <Breadcrumb
+      {/* <Breadcrumb
         className="blog-detail-breadcrumb"
         style={{
           
@@ -222,7 +222,7 @@ const BlogDetail = () => {
             title: <span>{blog.blogTitle}</span>,
           },
         ]}
-      />
+      /> */}
 
       <div className="blog-detail-content" style={{
         backgroundColor: '#fff',

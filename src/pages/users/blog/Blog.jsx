@@ -167,7 +167,7 @@ const Blog = () => {
   return (
     <div className="blog-container">
       <Layout style={{ minHeight: "100vh", background: "#fff" }}>
-        <Breadcrumb
+        {/* <Breadcrumb
           style={{
           
             padding: "0px 20px",
@@ -194,7 +194,7 @@ const Blog = () => {
               style: { cursor: "pointer" },
             },
           ]}
-        />
+        /> */}
 
         <div className="blog-header-banner">
           {/* <div className="blog-header-overlay">
