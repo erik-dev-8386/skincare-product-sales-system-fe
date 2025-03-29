@@ -968,26 +968,26 @@ export default function Cart() {
                             {isConfirming ? 'Đang xác nhận...' : 'Xác nhận thông tin'}
                         </button>
 
-                        <div className="user-info-display">
-                            <h5>Thông tin đã xác nhận:</h5>
-                            {checkoutResponse ? (
-                                <div style={{ display: "block" }}>
-                                    <p>Tên: {checkoutResponse.customerFirstName} {checkoutResponse.customerLastName}</p>
-                                    <p>Email: {formData.email}</p>
-                                    <p>Điện thoại: {checkoutResponse.customerPhone}</p>
-                                    <p>Địa chỉ: {checkoutResponse.address}</p>
-                                </div>
-                            ) : (
-                                <p>Chưa có thông tin xác nhận</p>
-                            )}
+                        <div className="user-info-section" style={{ display: 'flex', gap: '20px' }}>
+                            <div className="user-info-display" style={{ flex: 1 }}>
+                                <h5>Thông tin đã xác nhận:</h5>
+                                {checkoutResponse ? (
+                                    <div style={{ display: "block" }}>
+                                        <p><strong>Tên:</strong> {checkoutResponse.customerFirstName} {checkoutResponse.customerLastName}</p>
+                                        <p><strong>Email:</strong> {formData.email}</p>
+                                        <p><strong>Điện thoại:</strong> {checkoutResponse.customerPhone}</p>
+                                        <p><strong>Địa chỉ:</strong> {checkoutResponse.address}</p>
+                                    </div>
+                                ) : (
+                                    <p>Chưa có thông tin xác nhận</p>
+                                )}
+                            </div>
 
-
-                        </div>
-
-                        <div className="reward-points-display">
-                            <h5>Điểm thưởng hiện có:</h5>
-                            <p>{formatNumber(rewardPoints)} điểm</p>
-                            <p>Tương ứng: {formatNumber(rewardPoints)} đ</p>
+                            <div className="reward-points-display" style={{ flex: 1 }}>
+                                <h5>Điểm thưởng hiện có:</h5>
+                                <p>{formatNumber(rewardPoints)} điểm</p>
+                                <p>Tương ứng: {formatNumber(rewardPoints)} đ</p>
+                            </div>
                         </div>
                     </div>
 

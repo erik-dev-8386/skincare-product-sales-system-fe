@@ -122,9 +122,10 @@ h4 {
   border-radius: 6px;
   margin-top: 20px;
   border: 1px solid #e9ecef;
+  height: 175px;
 }
 
-.user-info-display h5 {
+.user-info-section .user-info-display h5 {
   color: #900001;
   margin-bottom: 10px;
   font-size: 16px;
@@ -137,14 +138,15 @@ h4 {
 
 /* Reward Points */
 .reward-points-display {
-  margin-top: 25px;
+  margin-top: 20px;
   padding: 15px;
   background-color: #f8f9fa;
   border-radius: 6px;
   border: 1px solid #e9ecef;
+  height: 175px;
 }
 
-.reward-points-display h5 {
+.user-info-section .reward-points-display h5 {
   margin-bottom: 10px;
   color: #900001;
   font-weight: 600;
@@ -316,6 +318,27 @@ h4 {
 .input-group input:invalid:focus,
 .input-group textarea:invalid:focus {
   box-shadow: 0 0 0 2px rgba(255, 68, 68, 0.2);
+}
+
+.user-info-section {
+  display: flex;
+  gap: 20px;
+  
+}
+
+.user-info-display, .reward-points-display {
+  flex: 1;
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.user-info-display h5, .reward-points-display h5 {
+  margin-top: 0;
+  color: #333;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 8px;
 }
 
 /* Responsive Adjustments */
