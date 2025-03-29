@@ -90,7 +90,7 @@ h4 {
   display: block;
   margin-bottom: 8px;
   font-weight: 400;
-  color: #555;
+  color: black;
 }
 
 .input-group input,
@@ -296,6 +296,26 @@ h4 {
 .order-info h2{
   font-weight: bold;
   color: #900001;
+}
+
+.required {
+  color: red;
+}
+
+.error-message {
+  color: red;
+  font-size: 0.8em;
+  font-style: italic;
+}
+
+.input-group input:invalid,
+.input-group textarea:invalid {
+  border-color: #ff4444;
+}
+
+.input-group input:invalid:focus,
+.input-group textarea:invalid:focus {
+  box-shadow: 0 0 0 2px rgba(255, 68, 68, 0.2);
 }
 
 /* Responsive Adjustments */

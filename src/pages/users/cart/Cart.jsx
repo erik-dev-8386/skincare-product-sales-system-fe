@@ -875,68 +875,98 @@ export default function Cart() {
                         <h4>Thông tin người nhận</h4>
                         <div className="name-fields">
                             <div className="input-group half-width">
-                                <label>Họ</label>
+                                <label>
+                                    Họ <span className="required">*</span>
+                                    {!formData.firstName && (
+                                        <span className="error-message"> (Không được để trống)</span>
+                                    )}
+                                </label>
                                 <input
                                     type="text"
                                     name="firstName"
                                     placeholder="Họ người nhận..."
                                     value={formData.firstName}
                                     onChange={handleChange}
+                                    required
                                 />
                             </div>
                             <div className="input-group half-width">
-                                <label>Tên</label>
+                                <label>
+                                    Tên <span className="required">*</span>
+                                    {!formData.lastName && (
+                                        <span className="error-message"> (Không được để trống)</span>
+                                    )}
+                                </label>
                                 <input
                                     type="text"
                                     name="lastName"
                                     placeholder="Tên người nhận..."
                                     value={formData.lastName}
                                     onChange={handleChange}
+                                    required
                                 />
                             </div>
                         </div>
 
                         <div className="contact-fields">
                             <div className="input-group half-width">
-                                <label>Email</label>
+                                <label>
+                                    Email <span className="required">*</span>
+                                    {!formData.email && (
+                                        <span className="error-message"> (Không được để trống)</span>
+                                    )}
+                                </label>
                                 <input
                                     type="email"
                                     name="email"
                                     placeholder="Email người nhận..."
                                     value={formData.email}
                                     onChange={handleChange}
+                                    required
                                 />
                             </div>
                             <div className="input-group half-width">
-                                <label>Số điện thoại</label>
+                                <label>
+                                    Số điện thoại <span className="required">*</span>
+                                    {!formData.phone && (
+                                        <span className="error-message"> (Không được để trống)</span>
+                                    )}
+                                </label>
                                 <input
                                     type="text"
                                     name="phone"
                                     placeholder="Số điện thoại người nhận..."
                                     value={formData.phone}
                                     onChange={handleChange}
+                                    required
                                 />
                             </div>
                         </div>
 
                         <div className="input-group">
-                            <label>Địa chỉ</label>
+                            <label>
+                                Địa chỉ <span className="required">*</span>
+                                {!formData.address && (
+                                    <span className="error-message"> (Không được để trống)</span>
+                                )}
+                            </label>
                             <textarea
                                 name="address"
                                 placeholder="Địa chỉ người nhận..."
                                 value={formData.address}
                                 onChange={handleChange}
+                                required
                             ></textarea>
                         </div>
 
                         <button
-                                onClick={handleCheckOutConfirmation}
-                                className="btn primary"
-                                style={{marginTop: 10}}
-                                disabled={!isUserInfoValid || isConfirming}
-                            >
-                                {isConfirming ? 'Đang xác nhận...' : 'Xác nhận thông tin'}
-                            </button>
+                            onClick={handleCheckOutConfirmation}
+                            className="btn primary"
+                            style={{ marginTop: 10 }}
+                            disabled={!isUserInfoValid || isConfirming}
+                        >
+                            {isConfirming ? 'Đang xác nhận...' : 'Xác nhận thông tin'}
+                        </button>
 
                         <div className="user-info-display">
                             <h5>Thông tin đã xác nhận:</h5>
@@ -951,7 +981,7 @@ export default function Cart() {
                                 <p>Chưa có thông tin xác nhận</p>
                             )}
 
-                           
+
                         </div>
 
                         <div className="reward-points-display">
@@ -1024,7 +1054,7 @@ export default function Cart() {
                             {formatNumber(subtotal)} đ
                         </p>
                     )}
-                    <p style={{color: "red"}}>{formatNumber(finalTotal)} đ</p>
+                    <p style={{ color: "red" }}>{formatNumber(finalTotal)} đ</p>
                 </div>
 
                 <div className="buttons">
