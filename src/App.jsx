@@ -54,7 +54,7 @@ function App() {
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
    
-        <Route path="/about-me" element={<AboutMe />} />
+        <Route path="/about-us" element={<AboutMe />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-of-use" element={<TermsOfUse />} />
         <Route path="/blog" element={<Blog />} />

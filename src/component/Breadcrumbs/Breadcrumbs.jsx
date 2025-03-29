@@ -342,7 +342,7 @@ export default function Breadcrumbs() {
         );
       }
 
-      if (crumb === "about-me") {
+      if (crumb === "about-us") {
         return (
           <div className="crumb" key={crumb}>
             <Link to={currentLink}>

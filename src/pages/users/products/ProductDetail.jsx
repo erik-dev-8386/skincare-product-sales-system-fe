@@ -969,14 +969,14 @@ export default function ProductDetail() {
 
                   Thêm vào giỏ hàng
                 </Button>
-                <Button
+                {/* <Button 
                   className="button-like"
                   style={{ padding: 5 }}
                   icon={<HeartOutlined />}
                 >
 
                   Yêu thích
-                </Button>
+                </Button>*/}
               </div>
             </Col>
           </Row>

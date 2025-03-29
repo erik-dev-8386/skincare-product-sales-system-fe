@@ -826,7 +826,7 @@ export default function Cart() {
             <ToastContainer autoClose={3000} />
           
                 <div className="cart-container">
-                    <h2 className="title">Trang thanh toán</h2>
+                    <h2 className="title">Thanh toán</h2>
                     <h4>Thông tin đơn hàng</h4>
 
                     <table className="cart-table">

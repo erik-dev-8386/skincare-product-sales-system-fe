@@ -198,7 +198,7 @@ export default function Header() {
                 </ul>
               </li>
               <li>
-                <Link to="/about-me">Giới thiệu & Liên hệ</Link>
+                <Link to="/about-us">Giới thiệu & Liên hệ</Link>
               </li>
             </ul>
           </div>

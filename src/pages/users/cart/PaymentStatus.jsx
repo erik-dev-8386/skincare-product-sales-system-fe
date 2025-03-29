@@ -151,7 +151,7 @@
 //             <Button type="primary" key="retry" onClick={() => navigate('/shopping-cart', { state: { orderId: orderDetails?.orderId } })}>
 //               Thử lại thanh toán
 //             </Button>,
-//             <Button key="contact" onClick={() => navigate('/about-me')}>Liên hệ hỗ trợ</Button>,
+//             <Button key="contact" onClick={() => navigate('/about-us')}>Liên hệ hỗ trợ</Button>,
 //           ]}
 //         />
 //       </div>
@@ -167,7 +167,7 @@
 //           subTitle={`Mã đơn hàng: ${searchParams.get('orderId')}`}
 //           extra={[
 //             <Button key="home" type="primary" onClick={() => navigate('/')}>Về Trang Chủ</Button>,
-//             <Button key="contact" onClick={() => navigate('/about-me')}>Liên hệ hỗ trợ</Button>
+//             <Button key="contact" onClick={() => navigate('/about-us')}>Liên hệ hỗ trợ</Button>
 //           ]}
 //         />
 //       </div>
@@ -441,7 +441,7 @@ const SuccessPayment = () => {
             <Button type="primary" key="retry" onClick={() => navigate('/shopping-cart', { state: { orderId: orderDetails?.orderId } })}>
               Thử lại thanh toán
             </Button>,
-            <Button key="contact" onClick={() => navigate('/about-me')}>Liên hệ hỗ trợ</Button>,
+            <Button key="contact" onClick={() => navigate('/about-us')}>Liên hệ hỗ trợ</Button>,
           ]}
         />
       </div>
@@ -457,7 +457,7 @@ const SuccessPayment = () => {
           subTitle={`Mã đơn hàng: ${searchParams.get('orderId')}`}
           extra={[
             <Button key="home" type="primary" onClick={() => navigate('/')}>Về Trang Chủ</Button>,
-            <Button key="contact" onClick={() => navigate('/about-me')}>Liên hệ hỗ trợ</Button>
+            <Button key="contact" onClick={() => navigate('/about-us')}>Liên hệ hỗ trợ</Button>
           ]}
         />
       </div>
