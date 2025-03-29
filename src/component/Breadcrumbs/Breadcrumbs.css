@@ -1,0 +1,36 @@
+.breadcrumbs {
+    width: 120%;
+    background: white; /* hoặc none tùy bạn */
+    padding: 10px 15px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    
+}
+
+.breadcrumbs > * {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.breadcrumbs .crumb:after {
+    content: '>';
+    margin-left: 10px;
+}
+
+.breadcrumbs .crumb:last-child:after {
+    display: none;
+}
+
+.breadcrumbs .crumb a {
+    color: black;
+    text-decoration: none; /* Loại bỏ gạch chân */
+}
+
+/* Đảm bảo breadcrumbs nằm ngang */
+.breadcrumbs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}

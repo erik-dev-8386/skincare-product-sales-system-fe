@@ -169,8 +169,8 @@ const Blog = () => {
       <Layout style={{ minHeight: "100vh", background: "#fff" }}>
         <Breadcrumb
           style={{
-            margin: "20px 0",
-            padding: "10px 20px",
+          
+            padding: "0px 20px",
             background: "#f8f9fa",
             borderRadius: "4px",
           }}

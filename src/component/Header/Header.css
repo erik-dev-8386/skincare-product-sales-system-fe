@@ -1,15 +1,15 @@
-.Header {
+/* .Header {
     font-family: "Fira Sans Extra Condensed", serif;
     position: fixed;
     top: 0;
     background-color: #900001;
-    /* background: linear-gradient(to right, #900001, #c0244e); */
+    
     left: 0;
     right: 0;
-    /* height: 85px; */
+   
     min-height: 85px;
-    z-index: 1000;
-    /* z-index: để cho thanh  hiện không bị trôi; */
+    
+   
     display: flex;
     z-index: 1000;
     font-size: medium;
@@ -17,6 +17,31 @@
     align-items: center;
     padding: 0 15px;
     box-sizing: border-box;
+} */
+
+.Header {
+    font-family: "Fira Sans Extra Condensed", serif;
+    position: fixed;
+    top: 0;
+    background-color: #900001;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    font-size: medium;
+    width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column; /* Thêm dòng này */
+   
+    
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    padding: 0;
+    min-height: 85px;
+    width: 100%;
 }
 
 /* common */
@@ -27,6 +52,7 @@
 .logo {
     height: 80px;
     max-width: 100%;
+    margin-left: 20px;
 }
 
 /* Navigation styling */
@@ -189,6 +215,7 @@
     justify-content: center;
     width: 40px;
     height: 40px;
+    margin-right: 20px;
 }
 
 /* .cart {
@@ -320,7 +347,7 @@
 
 @media screen and (min-width: 1400px) {
     .Header {
-        padding: 0 30px;
+        padding: 0;
     }
     
     .nav li a {
@@ -336,7 +363,7 @@
 @media screen and (max-width: 992px) {
     .Header {
         flex-wrap: wrap;
-        padding: 0 10px;
+        padding: 0 10px 0 0;
     }
     
     .col-1 {

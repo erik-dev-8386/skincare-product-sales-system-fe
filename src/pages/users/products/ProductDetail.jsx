@@ -601,22 +601,7 @@ export default function ProductDetail() {
 
   if (loading || !product) return <p>Loading...</p>;
 
-  // Define breadcrumb items
-  const breadcrumbItems = [
-    {
-      title: "Trang chủ",
-      onClick: () => navigate("/"),
-      style: { cursor: "pointer" },
-    },
-    {
-      title: "Sản phẩm",
-      onClick: () => navigate("/products"),
-      style: { cursor: "pointer" },
-    },
-    {
-      title: product.productName,
-    },
-  ];
+  
 
   // Define tabs using the `items` prop
   const tabItems = [
@@ -856,13 +841,11 @@ export default function ProductDetail() {
   return (
     <>
       <ToastContainer />
-      <div className="container">
+      
         <div style={{ maxWidth: "1200px", margin: "auto", padding: "20px" }}>
           {/* Breadcrumb with `items` prop */}
-          <Breadcrumb
-            style={{ marginBottom: "20px" }}
-            items={breadcrumbItems}
-          />
+         
+          <h1>Chi tiết sản phẩm</h1>
 
           <Row gutter={32}>
             {/* Product Image */}
@@ -1104,7 +1087,7 @@ export default function ProductDetail() {
             </div>
           </section>
         </div>
-      </div>
+     
     </>
   );
 }

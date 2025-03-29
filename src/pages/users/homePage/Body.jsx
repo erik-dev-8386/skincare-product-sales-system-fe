@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import ProductCard from "../../../component/productCard/ProductCard";
 import api from "../../../config/api";
 import { Modal, Table, Button } from "antd";
-import {  LeftOutlined, RightOutlined } from "@ant-design/icons";
+import { LeftOutlined, RightOutlined } from "@ant-design/icons";
 
 export default function Body() {
   const [suitableProducts, setSuitableProducts] = useState([]);
@@ -55,14 +55,14 @@ export default function Body() {
           api.get("/products/best-seller"),
           api.get("/blogs")
         ]);
-        
+
         setSuitableProducts(productsRes.data);
         setBrands(brandsRes.data);
         setCategories(categoriesRes.data);
         setSkinTypes(skinTypesRes.data);
         setBestSellerProducts(bestSellerRes.data);
         setBlogs(blogsRes.data);
-        
+
         const discountMap = discountsRes.data.reduce((acc, discount) => {
           acc[discount.discountId] = discount.discountPercent;
           return acc;
@@ -106,13 +106,7 @@ export default function Body() {
   const visibleProducts = suitableProducts.slice(currentSlide, currentSlide + 4);
   const visibleBlogs = blogs.slice(0, 4);
 
-  const breadcrumbItems = [
-    {
-      title: "Trang chủ",
-      onClick: () => navigate("/"),
-      className: "breadcrumb-item",
-    },
-  ];
+
 
   const getCompareData = () => {
     const [p1, p2] = compareProducts;
@@ -201,15 +195,15 @@ export default function Body() {
 
   return (
     <div className="home-container">
-      <Breadcrumb items={breadcrumbItems} className="breadcrumb" />
+
       <section className="section hot-deals-section">
-  <h2 className="section-title" style={{ 
-    marginTop: "5px", 
-    textAlign: "center",
-    width: "100%"
-  }}>HOT DEAL</h2>
-  <Slider slides={hotDealSlides} />
-</section>
+        <h2 className="section-title" style={{
+         
+          textAlign: "center",
+          width: "100%"
+        }}>HOT DEAL</h2>
+        <Slider slides={hotDealSlides} />
+      </section>
       {/* Products Section - 4 items in a single row */}
       <section className="section products-section">
         <div className="section-header">
@@ -220,7 +214,7 @@ export default function Body() {
           <button className="slider-nav-btn prev-btn" onClick={handlePrev}>
             <LeftOutlined />
           </button>
-          
+
           <div className="single-row-product-grid">
             {visibleProducts.map(product => (
               <ProductCard
@@ -232,13 +226,13 @@ export default function Body() {
               />
             ))}
           </div>
-          
+
           <button className="slider-nav-btn next-btn" onClick={handleNext}>
             <RightOutlined />
           </button>
         </div>
       </section>
-      
+
       {/* Best Sellers Section - 5 items */}
       <section className="section best-sellers-section">
         <div className="section-header">
@@ -246,21 +240,21 @@ export default function Body() {
           {/* <button className="view-all-btn" onClick={() => navigate("/products?sort=best-seller")}>XEM TẤT CẢ</button> */}
         </div>
         <div className="best-seller-grid">
-  {bestSellerProducts.slice(0, 5).map(product => (
-    <ProductCard
-      key={`bestseller-${product.productId}`}
-      product={product}
-      discounts={discounts}
-      brands={brands}
-      categories={categories}
-      onCompareClick={handleCompareClick}
-      className="product-card" // Thêm class này
-      style={{ margin: '5px' }} // Hoặc thêm style trực tiếp
-    />
-  ))}
-</div>
+          {bestSellerProducts.slice(0, 5).map(product => (
+            <ProductCard
+              key={`bestseller-${product.productId}`}
+              product={product}
+              discounts={discounts}
+              brands={brands}
+              categories={categories}
+              onCompareClick={handleCompareClick}
+              className="product-card" // Thêm class này
+              style={{ margin: '5px' }} // Hoặc thêm style trực tiếp
+            />
+          ))}
+        </div>
       </section>
-      
+
       {/* Blog Section */}
       <section className="section blog-section">
         <div className="section-header">
@@ -269,8 +263,8 @@ export default function Body() {
         </div>
         <div className="blog-grid">
           {visibleBlogs.map(blog => (
-            <div 
-              className="blog-card" 
+            <div
+              className="blog-card"
               key={blog.blogId}
               onClick={() => navigate(`/blog/${blog.blogId}`)}
             >
@@ -289,7 +283,7 @@ export default function Body() {
           ))}
         </div>
       </section>
-      
+
       {/* Comparison Modal */}
       <Modal
         title={(

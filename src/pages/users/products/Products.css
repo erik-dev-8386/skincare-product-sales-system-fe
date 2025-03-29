@@ -242,6 +242,7 @@
 .product-breadcrumb {
   padding: 15px 0 25px;
   font-size: 14px;
+  margin-bottom: 20px ;
 }
 
 .product-breadcrumb .ant-breadcrumb-link {
@@ -251,7 +252,7 @@
 }
 
 .product-breadcrumb .ant-breadcrumb-link:hover {
-  color: #d4a373;
+  color: #900001;
 }
 
 /* Header */
@@ -282,7 +283,7 @@
 .filter-section-title {
   font-family: 'Fira Sans Extra Condensed', sans-serif;
   font-weight: 400;
-  color: #555;
+  color: #900001 !important;
   text-align: center;
   margin: 25px 0 15px;
   font-size: 16px;
@@ -299,25 +300,25 @@
 .product-menu .ant-menu-item {
   margin: 0 !important;
   border-radius: 4px !important;
-  transition: all 0.3s ease !important;
+  /* transition: all 0.3s ease !important; */
   height: 40px !important;
   line-height: 40px !important;
 }
 
 .product-menu .ant-menu-item:hover {
-  background: rgba(212, 163, 115, 0.1) !important;
-  color: #d4a373 !important;
+  background: #bd43435c !important;
+  color: black !important;
 }
 
 .product-menu .ant-menu-item-selected {
-  background: rgba(212, 163, 115, 0.1) !important;
-  color: #d4a373 !important;
+  background: #bd43435c !important;
+  color: black !important;
   font-weight: 400 !important;
 }
 
 .view-more-btn {
-  color: #d4a373 !important;
-  border-color: rgba(212, 163, 115, 0.3) !important;
+  color: #900001 !important;
+  border-color: rgba(227, 125, 23, 0.3) !important;
   margin-top: 10px !important;
   width: 100% !important;
   background: transparent !important;
@@ -332,7 +333,7 @@
   background: #fff !important;
   padding: 30px !important;
   border-radius: 8px !important;
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.079);
   min-height: calc(100vh - 200px);
 }
 
@@ -355,12 +356,12 @@
 }
 
 .search-input:hover {
-  border-color: #d4a373 !important;
+  border-color: #900001 !important;
 }
 
 .search-input .ant-input {
   font-weight: 300;
-  padding-left: 5px;
+  /* padding-left: 5px; */
 }
 
 .filter-select {
@@ -466,7 +467,7 @@
 }
 
 .compare-discount-price {
-  color: #d4a373 !important;
+  color: #900001 !important;
   font-weight: 400 !important;
 } */
 

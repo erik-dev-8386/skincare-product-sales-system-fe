@@ -824,7 +824,7 @@ export default function Cart() {
     return (
         <>
             <ToastContainer autoClose={3000} />
-            <div className="container">
+          
                 <div className="cart-container">
                     <h2 className="title">Trang thanh toán</h2>
                     <h4>Thông tin đơn hàng</h4>
@@ -1009,7 +1009,7 @@ export default function Cart() {
                         </div>
                     </div>
                 </div>
-            </div>
+            
         </>
     );
 }

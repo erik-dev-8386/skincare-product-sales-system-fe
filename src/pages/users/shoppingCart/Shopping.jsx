@@ -572,7 +572,7 @@ export default function CartPage() {
   return (
     <>
       <ToastContainer />
-      <div className="container">
+      
         <div className="cart-container">
           <Card>
             <h1>Giỏ hàng</h1>
@@ -613,7 +613,7 @@ export default function CartPage() {
             )}
           </Card>
         </div>
-      </div>
+     
     </>
   );
 }

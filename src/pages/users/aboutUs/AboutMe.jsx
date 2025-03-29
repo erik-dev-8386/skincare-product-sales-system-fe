@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 export default function AboutMe() {
     return (
         <>
-            {/* <Header /> */}
+           
             <section className="about-us-section">
                 <div className="overlay">
                     <div className="content">
