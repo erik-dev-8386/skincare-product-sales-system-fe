@@ -662,7 +662,6 @@ export default function CartPage() {
   return (
     <>
       <ToastContainer />
-      
         <div className="cart-container">
           <Card>
             <h1>Giỏ hàng</h1>

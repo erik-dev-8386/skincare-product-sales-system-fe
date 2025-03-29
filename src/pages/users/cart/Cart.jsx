@@ -696,14 +696,14 @@ export default function Cart() {
         try {
             setIsProcessing(true);
             const discount = checked ? Math.min(rewardPoints, maxDiscount) : 0;
-            
+
             // Update order total when reward points are toggled
             if (checked) {
                 await updateOrderTotal(subtotal - discount);
             } else {
                 await updateOrderTotal(subtotal);
             }
-            
+
             setDiscountAmount(discount);
             setUseRewardPoints(checked);
             toast.success(checked
@@ -776,9 +776,7 @@ export default function Cart() {
 
                 window.location.href = payUrl.payUrl;
             } else {
-                const response = await api.get(`/cart/pay/${orderId}`, {
-                    params: checkoutRequest
-                });
+                const response = await api.get(`/cart/pay/${orderId}`);
 
                 toast.success(`Thanh toán thành công! Tổng tiền: ${formatNumber(finalTotal)} đ`);
                 setCart([]);
@@ -824,76 +822,108 @@ export default function Cart() {
     return (
         <>
             <ToastContainer autoClose={3000} />
-          
-                <div className="cart-container">
-                    <h2 className="title">Thanh toán</h2>
-                    <h4>Thông tin đơn hàng</h4>
 
-                    <table className="cart-table">
-                        <thead>
-                            <tr>
-                                <th>Ảnh</th>
-                                <th>Sản phẩm</th>
-                                <th>Giá tiền</th>
-                                <th>Số lượng</th>
-                                <th>Tổng tiền</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {checkoutResponse?.cartItems ? (
-                                checkoutResponse.cartItems.map((item) => (
-                                    <tr key={item.productId}>
-                                        <td>
-                                            <Image
-                                                src={item.imageUrl || ""}
-                                                alt={item.productName}
-                                                className="product-image"
-                                                style={{ width: 80, height: 50 }}
-                                            />
-                                        </td>
-                                        <td>{item.productName}</td>
-                                        <td>
-                                            {formatNumber(item.discountPrice)}{" "}
-                                            <span style={{ textDecoration: "underline" }}>đ</span>
-                                        </td>
-                                        <td>{item.quantity}</td>
-                                        <td>
-                                            {formatNumber(item.quantity * item.discountPrice)}{" "}
-                                            <span style={{ textDecoration: "underline" }}>đ</span>
-                                        </td>
-                                    </tr>
-                                ))
-                            ) : (
-                                <tr>
-                                    <td colSpan="5" style={{ textAlign: "center" }}>
-                                        Không có sản phẩm nào trong giỏ hàng.
+            <div className="cart-container">
+                <h2 className="title">Thanh toán</h2>
+                <h4>Thông tin sản phẩm đơn hàng</h4>
+
+                <table className="cart-table">
+                    <thead>
+                        <tr>
+                            <th>Ảnh</th>
+                            <th>Sản phẩm</th>
+                            <th>Giá tiền</th>
+                            <th>Số lượng</th>
+                            <th>Tổng tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {checkoutResponse?.cartItems ? (
+                            checkoutResponse.cartItems.map((item) => (
+                                <tr key={item.productId}>
+                                    <td>
+                                        <Image
+                                            src={item.imageUrl || ""}
+                                            alt={item.productName}
+                                            className="product-image"
+                                            style={{ width: 80, height: 50 }}
+                                        />
+                                    </td>
+                                    <td>{item.productName}</td>
+                                    <td>
+                                        {formatNumber(item.discountPrice)}{" "}
+                                        <span style={{ textDecoration: "underline" }}>đ</span>
+                                    </td>
+                                    <td>{item.quantity}</td>
+                                    <td>
+                                        {formatNumber(item.quantity * item.discountPrice)}{" "}
+                                        <span style={{ textDecoration: "underline" }}>đ</span>
                                     </td>
                                 </tr>
-                            )}
-                        </tbody>
-                    </table>
-
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="5" style={{ textAlign: "center" }}>
+                                    Không có sản phẩm nào trong giỏ hàng.
+                                </td>
+                            </tr>
+                        )}
+                    </tbody>
+                </table>
+                <div style={{ display: "flex" }}>
                     <div className="customer-info">
                         <h4>Thông tin người nhận</h4>
-                        {["firstName", "lastName", "email", "phone"].map((field) => (
-                            <div key={field} className="input-group">
-                                <label>
-                                    {field === "firstName" ? "Họ" : 
-                                     field === "lastName" ? "Tên" : 
-                                     field === "email" ? "Email" : "Điện thoại"}
-                                </label>
+                        <div className="name-fields">
+                            <div className="input-group half-width">
+                                <label>Họ</label>
                                 <input
-                                    type={field === "email" ? "email" : "text"}
-                                    name={field}
-                                    value={formData[field]}
+                                    type="text"
+                                    name="firstName"
+                                    placeholder="Họ người nhận..."
+                                    value={formData.firstName}
                                     onChange={handleChange}
                                 />
                             </div>
-                        ))}
+                            <div className="input-group half-width">
+                                <label>Tên</label>
+                                <input
+                                    type="text"
+                                    name="lastName"
+                                    placeholder="Tên người nhận..."
+                                    value={formData.lastName}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="contact-fields">
+                            <div className="input-group half-width">
+                                <label>Email</label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    placeholder="Email người nhận..."
+                                    value={formData.email}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div className="input-group half-width">
+                                <label>Số điện thoại</label>
+                                <input
+                                    type="text"
+                                    name="phone"
+                                    placeholder="Số điện thoại người nhận..."
+                                    value={formData.phone}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                        </div>
+
                         <div className="input-group">
                             <label>Địa chỉ</label>
                             <textarea
                                 name="address"
+                                placeholder="Địa chỉ người nhận..."
                                 value={formData.address}
                                 onChange={handleChange}
                             ></textarea>
@@ -902,7 +932,7 @@ export default function Cart() {
                         <div className="user-info-display">
                             <h5>Thông tin đã xác nhận:</h5>
                             {checkoutResponse ? (
-                                <div style={{display: "block"}}>
+                                <div style={{ display: "block" }}>
                                     <p>Tên: {checkoutResponse.customerFirstName} {checkoutResponse.customerLastName}</p>
                                     <p>Email: {formData.email}</p>
                                     <p>Điện thoại: {checkoutResponse.customerPhone}</p>
@@ -915,6 +945,7 @@ export default function Cart() {
                             <button
                                 onClick={handleCheckOutConfirmation}
                                 className="btn primary"
+                                style={{marginTop: 10}}
                                 disabled={!isUserInfoValid || isConfirming}
                             >
                                 {isConfirming ? 'Đang xác nhận...' : 'Xác nhận thông tin'}
@@ -954,7 +985,7 @@ export default function Cart() {
                         </div>
 
                         <div className="payment-method">
-                            <h5 style={{ fontWeight: 700 }}>Chọn phương thức thanh toán</h5>
+                            <h4 style={{ fontWeight: 700 }}>Chọn phương thức thanh toán</h4>
                             <label>
                                 <input
                                     type="radio"
@@ -978,38 +1009,41 @@ export default function Cart() {
                                 Thanh toán khi nhận hàng
                             </label>
                         </div>
-
-                        <div className="total-payment">
-                            <p style={{ color: "black", fontSize: 20, fontWeight: "bold" }}>
-                                Tổng thanh toán:
-                            </p>
-                            {useRewardPoints && (
-                                <p style={{ textDecoration: 'line-through', color: 'gray' }}>
-                                    {formatNumber(subtotal)} đ
-                                </p>
-                            )}
-                            <p>{formatNumber(finalTotal)} đ</p>
-                        </div>
-
-                        <div className="buttons">
-                            <button 
-                                onClick={handleCheckout} 
-                                className="btn primary"
-                                disabled={isProcessing || !formData.paymentMethod}
-                            >
-                                {isProcessing ? 'Đang xử lý...' : 'Mua'}
-                            </button>
-                            <button
-                                onClick={handleCancel}
-                                className="btn secondary"
-                                disabled={isProcessing}
-                            >
-                                Hủy
-                            </button>
-                        </div>
                     </div>
+
                 </div>
-            
+
+                <div className="total-payment">
+                    <p style={{ color: "black", fontSize: 20, fontWeight: "bold" }}>
+                        Tổng thanh toán:
+                    </p>
+                    {useRewardPoints && (
+                        <p style={{ textDecoration: 'line-through', color: 'gray' }}>
+                            {formatNumber(subtotal)} đ
+                        </p>
+                    )}
+                    <p style={{color: "red"}}>{formatNumber(finalTotal)} đ</p>
+                </div>
+
+                <div className="buttons">
+                    <button
+                        onClick={handleCheckout}
+                        className="btn primary"
+                        disabled={isProcessing || !formData.paymentMethod}
+                    >
+                        {isProcessing ? 'Đang xử lý...' : 'Mua'}
+                    </button>
+                    <button
+                        onClick={handleCancel}
+                        className="btn secondary"
+                        disabled={isProcessing}
+                    >
+                        Hủy
+                    </button>
+                </div>
+
+            </div>
+
         </>
     );
 }
