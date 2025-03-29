@@ -144,6 +144,18 @@ export default function Breadcrumbs() {
                 )
             }
 
+            
+
+            if (crumb === 'success-payment') {
+                return (
+                    <div className="crumb" key={crumb}>
+                        <Link to={currentLink}>
+                        <i className="fa-solid fa-circle-check"></i>  Trạng thái thanh toán
+                        </Link>
+                    </div>
+                )
+            }
+
 
 
             return (

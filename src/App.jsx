@@ -71,7 +71,7 @@ function App() {
         <Route path="/question" element={<Question />} />
         <Route path="/products" element={<Products />} />
         <Route path="/products/:id" element={<ProductDetail />} />
-        <Route path="/success-payment" element={<SuccessPayment />} />
+        <Route path="/shopping-cart/cart/success-payment" element={<SuccessPayment />} />
       </Route>
       {/* login */}
  

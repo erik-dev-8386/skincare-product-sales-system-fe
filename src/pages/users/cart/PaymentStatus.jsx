@@ -419,7 +419,7 @@ const SuccessPayment = () => {
 
   if (error) {
     return (
-      <div style={{ padding: '24px', maxWidth: '1200px', margin: '50px auto' }}>
+      <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
         <Result
           status="error"
           title="Đã xảy ra lỗi"
@@ -432,7 +432,7 @@ const SuccessPayment = () => {
 
   if (paymentStatus === 'failed') {
     return (
-      <div style={{ padding: '24px', maxWidth: '1200px', margin: '50px auto' }}>
+      <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
         <Result
           status="error"
           title="Thanh Toán Thất Bại!"
@@ -450,7 +450,7 @@ const SuccessPayment = () => {
 
   if (!orderDetails) {
     return (
-      <div style={{ padding: '24px', maxWidth: '1200px', margin: '50px auto' }}>
+      <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
         <Result
           status="warning"
           title="Không tìm thấy thông tin đơn hàng"
@@ -465,7 +465,7 @@ const SuccessPayment = () => {
   }
 
   return (
-    <div style={{ padding: '24px', maxWidth: '1200px', margin: '50px auto' }}>
+    <div style={{ padding: '24px', maxWidth: '1200px', margin: '0 auto' }}>
       <Result
         status="success"
         title="Thanh Toán Thành Công!"
