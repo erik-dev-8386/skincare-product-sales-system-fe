@@ -271,6 +271,7 @@
 //     </>
 //   );
 // }
+//===========================================================================
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CartContext } from "../../../context/CartContext";
@@ -436,50 +437,139 @@ export default function CartPage() {
   );
 
   const handleCheckout = async () => {
-    setCheckoutLoading(true);
-    try {
-      // Verify stock for all items
-      for (const item of cart) {
+    const token = localStorage.getItem("token");
+    
+    if (!token) {
+      // Nếu chưa đăng nhập, chuyển hướng đến trang đăng nhập
+      navigate("/login-and-signup", { state: { fromCart: true } });
+      return;
+    }
+
+        // Kiểm tra số lượng tồn kho cho tất cả sản phẩm trong giỏ
+    for (const item of cart) {
+      try {
         const response = await api.get(`/products/${item.productId}`);
-        if (item.quantity > response.data.quantity) {
-          toast.error(`${item.productName} chỉ còn ${response.data.quantity} sản phẩm trong kho`);
+        const currentStock = response.data.quantity;
+        
+        if (item.quantity > currentStock) {
+          toast.error(`${item.productName} chỉ còn ${currentStock} sản phẩm trong kho`);
           setCheckoutLoading(false);
           return;
         }
-      }
-
-      // Proceed with checkout if all items are available
-      const token = localStorage.getItem("token");
-      if (!token) {
-        navigate("/login-and-signup", { state: { fromCart: true } });
+      } catch (error) {
+        console.error(`Error checking stock for product ${item.productId}:`, error);
+        toast.error(`Không thể kiểm tra số lượng tồn kho cho ${item.productName}`);
+        setCheckoutLoading(false);
         return;
       }
+    }
 
+    try {
       const decodedToken = jwtDecode(token);
       const email = decodedToken.sub;
 
       const checkoutItems = cart.map((item) => ({
-        productId: item.productId,
         productName: item.productName,
         quantity: item.quantity,
         discountPrice: item.discountPrice,
       }));
 
-      const response = await api.post("/cart/checkout", {
+      const checkoutRequestDTO = {
         email: email,
         cartItemDTO: checkoutItems,
-      });
+      };
 
-      toast.success("Đặt hàng thành công!");
-      navigate("/cart", { state: { order: response.data } });
+      const response = await api.post("/cart/checkout", checkoutRequestDTO);
+      
+      toast.success("Bạn đã đặt hàng thành công!");
+      
+      // Chuyển đến trang thanh toán với thông tin đơn hàng
+      navigate("/shopping-cart/cart", { 
+        state: { 
+          checkoutResponse: response.data,
+          cartItems: cart 
+        } 
+      });
       
     } catch (error) {
-      console.error("Checkout error:", error);
-      toast.error("Đặt hàng không thành công: " + (error.response?.data?.message || "Lỗi hệ thống"));
-    } finally {
-      setCheckoutLoading(false);
+      console.error("Error during checkout:", error);
+      toast.error("Đặt hàng không thành công! Hãy thử lại.");
     }
   };
+
+// const handleCheckout = async () => {
+//   setCheckoutLoading(true);
+  
+//   try {
+//     // 1. Kiểm tra token đăng nhập
+//     const token = localStorage.getItem("token");
+//     if (!token) {
+//       navigate("/login-and-signup", { state: { fromCart: true } });
+//       return;
+//     }
+
+//     // 2. Kiểm tra số lượng tồn kho cho tất cả sản phẩm trong giỏ
+//     for (const item of cart) {
+//       try {
+//         const response = await api.get(`/products/${item.productId}`);
+//         const currentStock = response.data.quantity;
+        
+//         if (item.quantity > currentStock) {
+//           toast.error(`${item.productName} chỉ còn ${currentStock} sản phẩm trong kho`);
+//           setCheckoutLoading(false);
+//           return;
+//         }
+//       } catch (error) {
+//         console.error(`Error checking stock for product ${item.productId}:`, error);
+//         toast.error(`Không thể kiểm tra số lượng tồn kho cho ${item.productName}`);
+//         setCheckoutLoading(false);
+//         return;
+//       }
+//     }
+
+//     // 3. Nếu tất cả sản phẩm đều đủ số lượng, tiến hành đặt hàng
+//     const decodedToken = jwtDecode(token);
+//     const email = decodedToken.sub;
+
+//     const checkoutItems = cart.map((item) => ({
+//     //  productId: item.productId, // Thêm productId để phía server có thể cập nhật số lượng
+//       productName: item.productName,
+//       quantity: item.quantity,
+//       discountPrice: item.discountPrice,
+//     }));
+
+//     const checkoutRequestDTO = {
+//       email: email,
+//       cartItemDTO: checkoutItems,
+//     };
+
+//     // 4. Gọi API checkout
+//     const response = await api.post("/cart/checkout", checkoutRequestDTO);
+    
+//     // 5. Xử lý kết quả
+//     toast.success("Đặt hàng thành công!");
+    
+//     // 6. Chuyển hướng và truyền thông tin đơn hàng
+//     navigate("/cart", { 
+//       state: { 
+//         orderDetails: response.data,
+//         cartItems: cart 
+//       } 
+//     });
+    
+//   } catch (error) {
+//     console.error("Error during checkout:", error);
+    
+//     // Hiển thị thông báo lỗi chi tiết nếu có
+//     const errorMessage = error.response?.data?.message 
+//       ? `Lỗi: ${error.response.data.message}`
+//       : "Đặt hàng không thành công! Vui lòng thử lại.";
+    
+//     toast.error(errorMessage);
+//   } finally {
+//     setCheckoutLoading(false);
+//   }
+// };
 
   const columns = [
     {

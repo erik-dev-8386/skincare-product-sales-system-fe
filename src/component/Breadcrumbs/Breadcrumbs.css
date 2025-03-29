@@ -6,6 +6,7 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+    padding-left: 50px;
     
 }
 
@@ -33,4 +34,8 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
+}
+
+.anticon {
+    margin-right: 4px;
 }

@@ -193,8 +193,8 @@ const BlogDetail = () => {
       <Breadcrumb
         className="blog-detail-breadcrumb"
         style={{
-          margin: '20px 0',
-          padding: '10px 20px',
+          
+          padding: '0px 20px',
           backgroundColor: '#f8f9fa',
           borderRadius: '8px',
           boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
