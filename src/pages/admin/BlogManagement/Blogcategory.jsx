@@ -79,41 +79,41 @@ const BlogCategory = () => {
           }}
         >
           <Tooltip title="Sửa">
-          <Button
-            color="orange"
-            variant="filled"
-            onClick={() => handleEditCategory(record)}
-            style={{ margin: 3, border: "2px solid" }}
-          >
-            <i className="fa-solid fa-pen-to-square"></i>
-          </Button>
-          </Tooltip>
-          <Tooltip title="Chi tiết">
-          <Button
-            color="primary"
-            variant="filled"
-            type="default"
-            onClick={() => handleViewDetails(record)}
-            style={{ margin: 3, border: "2px solid" }}
-          >
-            <i className="fa-solid fa-eye"></i>
-          </Button>
-          </Tooltip>
-          <Tooltip title="Xóa">
-          <Popconfirm
-            title="Bạn có muốn xóa danh mục này không?"
-            onConfirm={() => handleDeleteCategory(record.blogCategoryName)}
-            okText="Có"
-            cancelText="Không"
-          >
             <Button
-              color="red"
+              color="orange"
               variant="filled"
+              onClick={() => handleEditCategory(record)}
               style={{ margin: 3, border: "2px solid" }}
             >
-              <i className="fa-solid fa-trash"></i>
+              <i className="fa-solid fa-pen-to-square"></i>
             </Button>
-          </Popconfirm>
+          </Tooltip>
+          <Tooltip title="Chi tiết">
+            <Button
+              color="primary"
+              variant="filled"
+              type="default"
+              onClick={() => handleViewDetails(record)}
+              style={{ margin: 3, border: "2px solid" }}
+            >
+              <i className="fa-solid fa-eye"></i>
+            </Button>
+          </Tooltip>
+          <Tooltip title="Xóa">
+            <Popconfirm
+              title="Bạn có muốn xóa danh mục này không?"
+              onConfirm={() => handleDeleteCategory(record.blogCategoryName)}
+              okText="Có"
+              cancelText="Không"
+            >
+              <Button
+                color="red"
+                variant="filled"
+                style={{ margin: 3, border: "2px solid" }}
+              >
+                <i className="fa-solid fa-trash"></i>
+              </Button>
+            </Popconfirm>
           </Tooltip>
         </div>
       ),
@@ -123,7 +123,8 @@ const BlogCategory = () => {
   const fetchCategories = async () => {
     try {
       const response = await api.get("/blogCategory");
-      setCategoryList(response.data);
+      console.log("Fetched categories after update:", response.data);
+      setCategoryList([...response.data]);
     } catch (error) {
       console.error("Error fetching categories:", error);
       toast.error("Không thể tải danh sách danh mục!");
@@ -184,14 +185,25 @@ const BlogCategory = () => {
 
     if (editingCategory) {
       try {
-        await api.put(
-          `/blogCategory/${editingCategory.blogCategoryName}`,
-          values
-        );
+        const encodedCategoryName = encodeURIComponent(editingCategory.blogCategoryName);
+        console.log("Updating category with values:", values);
+        const response = await api.put(`/blogCategory/${encodedCategoryName}`, values);
+        console.log("API response after update:", response.data);
         toast.success("Đã sửa danh mục thành công!");
-        fetchCategories();
+
+        // Cập nhật thủ công categoryList
+        setCategoryList((prev) =>
+          prev.map((category) =>
+            category.blogCategoryId === editingCategory.blogCategoryId
+              ? { ...category, ...values }
+              : category
+          )
+        );
+
+        await fetchCategories();
         handleCloseModal();
       } catch (error) {
+        console.error("Lỗi khi cập nhật danh mục:", error);
         toast.error("Cập nhật danh mục không thành công!");
       }
     } else {
@@ -202,9 +214,10 @@ const BlogCategory = () => {
         };
         await api.post("/blogCategory", newCategory);
         toast.success("Đã thêm danh mục mới thành công!");
-        fetchCategories();
+        await fetchCategories();
         handleCloseModal();
       } catch (error) {
+        console.error("Lỗi khi thêm danh mục mới:", error);
         toast.error("Thêm danh mục mới không thành công!");
       }
     }
@@ -224,10 +237,12 @@ const BlogCategory = () => {
 
   const handleDeleteCategory = async (blogCategoryName) => {
     try {
-      await api.delete(`/blogCategory/${blogCategoryName}`);
+      const encodedCategoryName = encodeURIComponent(blogCategoryName);
+      await api.delete(`/blogCategory/${encodedCategoryName}`);
       toast.success("Đã xóa danh mục này thành công!");
-      fetchCategories();
+      await fetchCategories();
     } catch (error) {
+      console.error("Lỗi khi xóa danh mục:", error);
       toast.error("Xóa danh mục này không thành công!");
     }
   };
@@ -299,7 +314,6 @@ const BlogCategory = () => {
               onChange={(value) => form.setFieldsValue({ description: value })}
             />
           </Form.Item>
-
           {editingCategory && (
             <Form.Item
               label="Trạng thái"
@@ -316,8 +330,6 @@ const BlogCategory = () => {
           )}
         </Form>
       </Modal>
-
-      {/* Modal Chi Tiết */}
       <Modal
         title="Chi tiết danh mục"
         open={isDetailModalOpen}
@@ -331,8 +343,7 @@ const BlogCategory = () => {
               <strong>ID: </strong> {selectedCategory.blogCategoryId}
             </p>
             <p>
-              <strong>Tên danh mục: </strong>{" "}
-              {selectedCategory.blogCategoryName}
+              <strong>Tên danh mục: </strong> {selectedCategory.blogCategoryName}
             </p>
             <p>
               <strong>Mô tả: </strong>

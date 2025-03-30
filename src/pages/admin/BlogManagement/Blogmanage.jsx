@@ -10,6 +10,7 @@ import {
   Upload,
   Image,
   message,
+  Tooltip,
 } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
@@ -102,6 +103,16 @@ const BlogManage = () => {
       ),
     },
     {
+      title: "Tác giả",
+      key: "author",
+      render: (text, record) => {
+        if (record.user) {
+          return `${record.user.firstName} ${record.user.lastName}`;
+        }
+        return "N/A";
+      },
+    },
+    {
       title: "Ngày đăng",
       dataIndex: "postedTime",
       key: "postedTime",
@@ -132,14 +143,17 @@ const BlogManage = () => {
             width: 100,
           }}
         >
+          <Tooltip title="Sửa">
           <Button
             color="orange"
             variant="filled"
             onClick={() => handleEditBlog(record)}
             style={{ margin: 3, border: "2px solid" }}
           >
-            <i className="fa-solid fa-pen-to-square"></i> Sửa
+            <i className="fa-solid fa-pen-to-square"></i> 
           </Button>
+          </Tooltip>
+          <Tooltip title="Chi tiết">
           <Button
             color="primary"
             variant="filled"
@@ -147,8 +161,10 @@ const BlogManage = () => {
             onClick={() => handleViewDetails(record)}
             style={{ margin: 3, border: "2px solid" }}
           >
-            <i className="fa-solid fa-eye"></i> Chi tiết
+            <i className="fa-solid fa-eye"></i> 
           </Button>
+          </Tooltip>
+          <Tooltip title="Xóa">
           <Popconfirm
             title="Bạn có muốn xóa blog này không?"
             onConfirm={() => handleDeleteBlog(record.blogTitle)}
@@ -160,25 +176,31 @@ const BlogManage = () => {
               variant="filled"
               style={{ margin: 3, border: "2px solid" }}
             >
-              <i className="fa-solid fa-trash"></i> Xóa
+              <i className="fa-solid fa-trash"></i>
             </Button>
           </Popconfirm>
+          </Tooltip>
         </div>
       ),
     },
   ];
 
-  // Fetch categories và hashtags khi component mount
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch blog categories
         const categoriesResponse = await api.get("/blogCategory");
-        setCategories(categoriesResponse.data);
+        // Lọc categories có status = 1
+        const activeCategories = categoriesResponse.data.filter(
+          (category) => category.status === 1
+        );
+        setCategories(activeCategories);
 
-        // Fetch blog hashtags
         const hashtagsResponse = await api.get("/blog-hashtag");
-        setHashtags(hashtagsResponse.data);
+        // Lọc hashtags có status = 1
+        const activeHashtags = hashtagsResponse.data.filter(
+          (tag) => tag.status === 1
+        );
+        setHashtags(activeHashtags);
       } catch (error) {
         console.error("Error fetching options:", error);
         toast.info(
@@ -194,16 +216,15 @@ const BlogManage = () => {
     try {
       const response = await api.get("/blogs");
       console.log("Raw blog data:", response.data);
-
-      // Xử lý dữ liệu trước khi set vào state
       const processedBlogs = response.data.map((blog) => ({
         ...blog,
+        author: blog.user,
         blogImages: blog.blogImages
           ?.filter((images) => images.imageURL)
           .map((images) => ({
             imageId: images.imageId || null,
             imageURL: images.imageURL,
-            blogId: blog.blogId, // Thêm blogId từ blog cha
+            blogId: blog.blogId,
           })),
       }));
 
@@ -258,11 +279,37 @@ const BlogManage = () => {
     setSelectedBlog(null);
   };
 
+  // Function to check if blog title already exists
+  const checkTitleExists = async (title) => {
+    // Skip validation if we're editing the same blog
+    if (editingBlog && editingBlog.blogTitle === title) {
+      return false;
+    }
+    
+    try {
+      const response = await api.get(`/blogs/title/${title}`);
+      return !!response.data; // Returns true if data exists
+    } catch (error) {
+      // If 404 or other error, title doesn't exist
+      return false;
+    }
+  };
+
   const handleSubmitForm = async () => {
     try {
-      // Lấy token từ localStorage và giải mã để lấy email
-      const token = localStorage.getItem("token");
+      // Validate form fields first
+      await form.validateFields();
+      
+      const blogTitle = form.getFieldValue("blogTitle");
+      
+      // Check if title already exists
+      const titleExists = await checkTitleExists(blogTitle);
+      if (titleExists) {
+        message.error("Tiêu đề blog đã tồn tại! Vui lòng nhập tiêu đề khác.");
+        return;
+      }
 
+      const token = localStorage.getItem("token");
       if (!token) {
         message.error("Bạn chưa đăng nhập! Vui lòng đăng nhập để tạo blog.");
         return;
@@ -271,14 +318,10 @@ const BlogManage = () => {
       let email;
       try {
         const decodedToken = jwtDecode(token);
-        email = decodedToken.sub; // sub chứa email trong JWT
-        console.log("Decoded token:", decodedToken);
-        console.log("Email from token:", email);
+        email = decodedToken.sub;
       } catch (error) {
         console.error("Lỗi khi giải mã token:", error);
-        message.error(
-          "Không thể xác thực thông tin người dùng. Vui lòng đăng nhập lại!"
-        );
+        message.error("Không thể xác thực thông tin người dùng. Vui lòng đăng nhập lại!");
         return;
       }
 
@@ -287,90 +330,63 @@ const BlogManage = () => {
         return;
       }
 
-      // Lấy giá trị status từ form
-      const statusValue = form.getFieldValue("status");
-      console.log("Form status value:", statusValue);
+      let userData = null;
+      try {
+        const userResponse = await api.get(`/users/${email}`);
+        userData = userResponse.data;
+      } catch (userError) {
+        console.error("Lỗi khi lấy thông tin người dùng:", userError);
+        message.warning("Không thể lấy đầy đủ thông tin người tạo blog!");
+      }
 
+      let blogContent = form.getFieldValue("blogContent");
+
+      const formData = new FormData();
+
+      const blogData = {
+        blogTitle: blogTitle,
+        blogContent: blogContent,
+        blogCategory: {
+          blogCategoryName: form.getFieldValue(["blogCategory", "blogCategoryName"]),
+        },
+        hashtags: form.getFieldValue("hashtags").map((tag) => ({
+          blogHashtagName: tag,
+        })),
+        status: editingBlog ? form.getFieldValue("status") : 1,
+        postedTime: editingBlog ? editingBlog.postedTime : new Date().toISOString(),
+      };
+
+      if (userData) {
+        blogData.author = {
+          firstName: userData.firstName,
+          lastName: userData.lastName,
+          email: email,
+          userId: userData.userId,
+        };
+      }
+
+      formData.append("blogs", new Blob([JSON.stringify(blogData)], { type: "application/json" }));
+      formData.append("email", email);
+
+      if (imageFiles.length > 0) {
+        imageFiles.forEach((file) => {
+          formData.append("images", file);
+        });
+      } else if (!editingBlog) {
+        const emptyBlob = new Blob([""], { type: "application/octet-stream" });
+        formData.append("images", emptyBlob, "empty.txt");
+      }
+
+      let response;
       if (editingBlog) {
-        // For update, we need to use JSON format instead of multipart/form-data
-        // Extract the blog data without images
-        const updateData = {
-          blogTitle: form.getFieldValue("blogTitle"),
-          blogContent: form.getFieldValue("blogContent"),
-          blogCategory: {
-            blogCategoryName: form.getFieldValue([
-              "blogCategory",
-              "blogCategoryName",
-            ]),
+        response = await api.put(`/blogs/${editingBlog.blogTitle}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
           },
-          hashtags: form.getFieldValue("hashtags").map((tag) => ({
-            blogHashtagName: tag,
-          })),
-          status: statusValue, // Sử dụng giá trị status được lấy từ form
-          blogId: editingBlog.blogId,
-          postedTime: editingBlog.postedTime, // Giữ ngày đăng cũ khi chỉnh sửa
-        };
-
-        console.log("Update data being sent:", updateData);
-
-        // Send JSON data for update
-        const response = await api.put(
-          `/blogs/${editingBlog.blogTitle}`,
-          updateData,
-          {
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        });
         message.success("Cập nhật blog thành công!");
-        
-        // Check the response to ensure success
-        console.log("Update response:", response.data);
       } else {
-        const formData = new FormData();
-
-        // Tạo đối tượng blog để gửi lên server
-        const blogData = {
-          blogTitle: form.getFieldValue("blogTitle"),
-          blogContent: form.getFieldValue("blogContent"),
-          blogCategory: {
-            blogCategoryName: form.getFieldValue([
-              "blogCategory",
-              "blogCategoryName",
-            ]),
-          },
-          hashtags: form.getFieldValue("hashtags").map((tag) => ({
-            blogHashtagName: tag,
-          })),
-          status: 1, // Mặc định là hiển thị khi tạo mới
-          postedTime: new Date().toISOString(),
-        };
-
-        console.log("Create blog data being sent:", blogData);
-
-        // Thêm dữ liệu blog vào FormData
-        formData.append(
-          "blogs",
-          new Blob([JSON.stringify(blogData)], { type: "application/json" })
-        );
-
-        // Thêm email vào request
-        formData.append("email", email);
-
-        // Thêm các file ảnh vào FormData
-        if (imageFiles.length > 0) {
-          imageFiles.forEach((file) => {
-            formData.append("images", file);
-          });
-        } else {
-          // Nếu không có ảnh, thêm một file rỗng
-          const emptyBlob = new Blob([""], { type: "application/octet-stream" });
-          formData.append("images", emptyBlob, "empty.txt");
-        }
-
-        // For create, continue using multipart/form-data
-        const response = await api.post("/blogs", formData, {
+        response = await api.post("/blogs", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -378,22 +394,40 @@ const BlogManage = () => {
         message.success("Tạo blog thành công!");
       }
 
-      // Cập nhật lại danh sách blog và reset form
+      const updatedBlog = response.data;
+      const imageURLs = updatedBlog.blogImages?.map((img) => img.imageURL) || [];
+
+      let updatedContent = updatedBlog.blogContent;
+      if (imageURLs.length > 0) {
+        let imageIndex = 0;
+        updatedContent = updatedContent.replace(/<img data-placeholder="image-slot"[^>]*>/g, (match) => {
+          if (imageIndex < imageURLs.length) {
+            const imgTag = `<img src="${imageURLs[imageIndex]}" alt="Blog Image" style="max-width: 100%; height: auto;" />`;
+            imageIndex += 1;
+            return imgTag;
+          }
+          return "";
+        });
+      }
+
+      const processedBlog = { ...updatedBlog, blogContent: updatedContent };
+      if (editingBlog) {
+        setBlogList((prev) =>
+          prev.map((blog) => (blog.blogId === processedBlog.blogId ? processedBlog : blog))
+        );
+      } else {
+        setBlogList((prev) => [...prev, processedBlog]);
+      }
+
       setModalOpen(false);
-      fetchBlogs(); // Cập nhật lại danh sách blog sau khi thêm/sửa
       form.resetFields();
-      setUploadFileList([]);
       setImageFiles([]);
       setImagePreviews([]);
       setEditingBlog(null);
     } catch (error) {
       console.error("Lỗi khi xử lý blog:", error);
       console.error("Error response:", error.response?.data);
-      message.error(
-        editingBlog
-          ? "Có lỗi xảy ra khi cập nhật blog!"
-          : "Có lỗi xảy ra khi tạo blog!"
-      );
+      message.error(editingBlog ? "Có lỗi xảy ra khi cập nhật blog!" : "Có lỗi xảy ra khi tạo blog!");
     }
   };
 
@@ -401,7 +435,6 @@ const BlogManage = () => {
     setEditingBlog(blog);
     setModalOpen(true);
     setTimeout(() => {
-      // Convert existing images to fileList format
       const existingImages =
         blog.blogImages?.map((img, index) => ({
           uid: `-${index}`,
@@ -412,12 +445,9 @@ const BlogManage = () => {
 
       setUploadFileList(existingImages);
 
-      // Hiển thị ảnh hiện tại trong preview
-      const currentImagePreviews =
-        blog.blogImages?.map((img) => img.imageURL) || [];
+      const currentImagePreviews = blog.blogImages?.map((img) => img.imageURL) || [];
       setImagePreviews(currentImagePreviews);
 
-      // Set form values including status
       form.setFieldsValue({
         blogTitle: blog.blogTitle,
         blogContent: blog.blogContent,
@@ -425,11 +455,10 @@ const BlogManage = () => {
           blogCategoryName: blog.blogCategory.blogCategoryName,
         },
         hashtags: blog.hashtags.map((tag) => tag.blogHashtagName),
-        status: blog.status, // Make sure this is set correctly
+        status: blog.status,
         blogImages: existingImages,
       });
 
-      // Log form values for debugging
       console.log("Setting form values:", {
         blogTitle: blog.blogTitle,
         status: blog.status,
@@ -510,17 +539,15 @@ const BlogManage = () => {
           </Form.Item>
 
           <Form.Item
-            label="Nội dung"
-            name="blogContent"
-            rules={[
-              { required: true, message: "Nội dung không được để trống!" },
-            ]}
-          >
-            <MyEditor
-              value={form.getFieldValue("blogContent")}
-              onChange={(value) => form.setFieldsValue({ blogContent: value })}
-            />
-          </Form.Item>
+  label="Nội dung"
+  name="blogContent"
+  rules={[{ required: true, message: "Nội dung không được để trống!" }]}
+>
+  <MyEditor
+    value={form.getFieldValue("blogContent")}
+    onChange={(value) => form.setFieldsValue({ blogContent: value })}
+  />
+</Form.Item>
 
           <Form.Item
             label="Danh mục"
@@ -559,27 +586,24 @@ const BlogManage = () => {
             <Upload
               multiple
               beforeUpload={(file) => {
-                // Kiểm tra định dạng file
                 const isImage = file.type.startsWith("image/");
                 if (!isImage) {
                   message.error("Bạn chỉ có thể tải lên file hình ảnh!");
                   return Upload.LIST_IGNORE;
                 }
 
-                // Kiểm tra kích thước file (ví dụ: giới hạn 5MB)
                 const isLt5M = file.size / 1024 / 1024 < 5;
                 if (!isLt5M) {
                   message.error("Hình ảnh phải nhỏ hơn 5MB!");
                   return Upload.LIST_IGNORE;
                 }
 
-                // Lưu file vào state
                 setImageFiles((prev) => [...prev, file]);
                 setImagePreviews((prev) => [
                   ...prev,
                   URL.createObjectURL(file),
                 ]);
-                return false; // Prevent automatic upload
+                return false;
               }}
               showUploadList={false}
             >
@@ -612,7 +636,6 @@ const BlogManage = () => {
                       height: "auto",
                     }}
                     onClick={() => {
-                      // Xóa ảnh khỏi preview và imageFiles
                       setImagePreviews((prev) =>
                         prev.filter((_, i) => i !== index)
                       );
@@ -643,7 +666,6 @@ const BlogManage = () => {
         </Form>
       </Modal>
 
-      {/* Modal Chi Tiết */}
       <Modal
         title="Chi tiết blog"
         open={isDetailModalOpen}
@@ -674,6 +696,12 @@ const BlogManage = () => {
               {selectedBlog.hashtags?.map((tag) => (
                 <Tag key={tag.blogHashtagId}>{tag.blogHashtagName}</Tag>
               ))}
+            </p>
+            <p>
+              <strong>Tác giả: </strong>
+              {selectedBlog.user
+                ? `${selectedBlog.user.firstName} ${selectedBlog.user.lastName} (${selectedBlog.user.email})`
+                : "Không xác định"}
             </p>
             <p>
               <strong>Ngày đăng: </strong>

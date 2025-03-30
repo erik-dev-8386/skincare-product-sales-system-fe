@@ -171,40 +171,7 @@ const Blog = () => {
   return (
     <div className="blog-container">
       <Layout style={{ minHeight: "100vh", background: "#fff" }}>
-        {/* <Breadcrumb
-          style={{
-          
-            padding: "0px 20px",
-            background: "#f8f9fa",
-            borderRadius: "4px",
-          }}
-          items={[
-            {
-              title: (
-                <span style={{ color: "#6c757d" }}>
-                  <i className="fa-solid fa-home"></i> Trang chủ
-                </span>
-              ),
-              onClick: () => navigate("/"),
-              style: { cursor: "pointer" },
-            },
-            {
-              title: (
-                <span style={{ color: "#212529" }}>
-                  <i className="fa-solid fa-newspaper"></i> Blog
-                </span>
-              ),
-              onClick: () => navigate("/blog"),
-              style: { cursor: "pointer" },
-            },
-          ]}
-        /> */}
-
-        <div className="blog-header-banner">
-          {/* <div className="blog-header-overlay">
-            
-          </div> */}
-        </div>
+        <div className="blog-header-banner"></div>
 
         <Layout className="blog-content-layout">
           <Sider
@@ -371,6 +338,11 @@ const Blog = () => {
                                 <i className="fa-solid fa-folder"></i> {filteredBlogs[0].blogCategory.blogCategoryName}
                               </span>
                             )}
+                            {filteredBlogs[0].user && (
+                              <span className="blog-author">
+                                <i className="fa-solid fa-user"></i> {filteredBlogs[0].user.firstName} {filteredBlogs[0].user.lastName}
+                              </span>
+                            )}
                           </div>
                         </div>
                       </div>
@@ -412,6 +384,11 @@ const Blog = () => {
                                 {blog.blogCategory && (
                                   <span className="blog-category">
                                     <i className="fa-solid fa-folder"></i> {blog.blogCategory.blogCategoryName}
+                                  </span>
+                                )}
+                                {blog.user && (
+                                  <span className="blog-author">
+                                    <i className="fa-solid fa-user"></i> {blog.user.firstName} {blog.user.lastName}
                                   </span>
                                 )}
                               </div>

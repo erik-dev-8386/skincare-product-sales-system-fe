@@ -9,13 +9,13 @@ import {
   Image,
   Row,
   Col,
+  Tabs,
 } from "antd";
 import api from "../../../config/api";
 import "./BlogDetail.css";
-// import Footer from "../../../component/Footer/Footer.jsx";
-// import Header from "../../../component/Header/Header.jsx";
 
 const { Title } = Typography;
+const { TabPane } = Tabs;
 
 const BlogDetail = () => {
   const { id } = useParams();
@@ -24,12 +24,14 @@ const BlogDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [relatedBlogs, setRelatedBlogs] = useState([]);
+  const [relatedByHashtags, setRelatedByHashtags] = useState([]);
+  const [relatedByAuthor, setRelatedByAuthor] = useState([]);
   const [processedContent, setProcessedContent] = useState('');
 
   // Định nghĩa style chung cho tất cả hình ảnh
   const commonImageStyle = {
     width: '100%',
-    height: '400px', // Thống nhất chiều cao cho tất cả hình ảnh
+    height: '400px',
     objectFit: 'contain',
     borderRadius: '8px',
   };
@@ -46,11 +48,9 @@ const BlogDetail = () => {
         let blogData;
         
         if (isUUID) {
-          // Try to get all blogs and find the one with matching ID
           const allBlogsResponse = await api.get("/blogs");
           blogData = allBlogsResponse.data.find(blog => blog.blogId === id);
         } else {
-          // If it's not a UUID, try direct API call
           const response = await api.get(`/blogs/${id}`);
           blogData = response.data; 
         }
@@ -62,26 +62,11 @@ const BlogDetail = () => {
         }
         
         setBlog(blogData);
-        
-        // Fetch related blogs from the same category
-        if (blogData && blogData.blogCategory) {
-          const categoryId = blogData.blogCategory.blogCategoryId;
-          try {
-            const relatedResponse = await api.get(`/blogs/category/${categoryId}`);
-            // Filter out the current blog and limit to 3 related blogs
-            const filtered = relatedResponse.data
-              .filter((b) => b.blogId !== id)
-              .slice(0, 3);
-            setRelatedBlogs(filtered);
-          } catch (relatedError) {
-            console.error("Error fetching related blogs:", relatedError);
-          }
-        }
+        await fetchRelatedBlogs(blogData);
         
         setLoading(false);
       } catch (error) {
         console.error("Error fetching blog detail:", error);
-        // Hiển thị thông tin lỗi chi tiết hơn
         if (error.response) {
           console.error("Response data:", error.response.data);
           console.error("Response status:", error.response.status);
@@ -104,16 +89,87 @@ const BlogDetail = () => {
     };
 
     fetchBlogDetail();
-    // Scroll to top when component mounts
     window.scrollTo(0, 0);
   }, [id]);
 
-  useEffect(() => {
-    // Thêm meta charset nếu chưa có
-    const meta = document.createElement('meta');
-    meta.setAttribute('charset', 'UTF-8');
-    document.head.appendChild(meta);
-  }, []);
+  const fetchRelatedBlogs = async (blogData) => {
+    try {
+      // 1. Fetch blogs related by category
+      if (blogData.blogCategory) {
+        const categoryId = blogData.blogCategory.blogCategoryId;
+        try {
+          const relatedResponse = await api.get(`/blogs`);
+          const filtered = relatedResponse.data
+            .filter(b => 
+              b.blogId !== blogData.blogId &&
+              b.blogCategory?.blogCategoryId === categoryId
+            )
+            .slice(0, 3);
+          
+          const enhancedBlogs = filtered.map(blog => ({
+            ...blog,
+            blogCategory: blog.blogCategory || blogData.blogCategory
+          }));
+          
+          setRelatedBlogs(enhancedBlogs);
+        } catch (relatedError) {
+          console.error("Error fetching related blogs by category:", relatedError);
+        }
+      }
+
+      // 2. Fetch blogs related by hashtags
+      if (blogData.hashtags && blogData.hashtags.length > 0) {
+        try {
+          const allBlogsResponse = await api.get("/blogs");
+          const allBlogs = allBlogsResponse.data;
+          
+          const currentHashtagIds = blogData.hashtags.map(tag => tag.blogHashtagId);
+          
+          const blogsWithCommonHashtags = allBlogs.filter(otherBlog => {
+            if (otherBlog.blogId === blogData.blogId) return false;
+            if (!otherBlog.hashtags || otherBlog.hashtags.length === 0) return false;
+            return otherBlog.hashtags.some(tag => 
+              currentHashtagIds.includes(tag.blogHashtagId)
+            );
+          });
+          
+          const sortedBlogs = blogsWithCommonHashtags.sort((a, b) => {
+            const matchesA = a.hashtags.filter(tag => 
+              currentHashtagIds.includes(tag.blogHashtagId)
+            ).length;
+            const matchesB = b.hashtags.filter(tag => 
+              currentHashtagIds.includes(tag.blogHashtagId)
+            ).length;
+            return matchesB - matchesA;
+          });
+          
+          setRelatedByHashtags(sortedBlogs.slice(0, 3));
+        } catch (hashtagError) {
+          console.error("Error fetching related blogs by hashtags:", hashtagError);
+        }
+      }
+
+      // 3. Fetch blogs from the same author
+      if (blogData.user && blogData.user.userId) { // Sử dụng blog.user thay vì blog.author
+        try {
+          const allBlogsResponse = await api.get("/blogs");
+          const authorBlogs = allBlogsResponse.data
+            .filter(b => 
+              b.blogId !== blogData.blogId &&
+              b.user && 
+              b.user.userId === blogData.user.userId
+            )
+            .slice(0, 3);
+          
+          setRelatedByAuthor(authorBlogs);
+        } catch (authorError) {
+          console.error("Error fetching blogs by same author:", authorError);
+        }
+      }
+    } catch (error) {
+      console.error("Error in fetchRelatedBlogs:", error);
+    }
+  };
 
   useEffect(() => {
     if (blog?.blogContent && blog.blogImages && blog.blogImages.length > 1) {
@@ -144,13 +200,149 @@ const BlogDetail = () => {
     }
   }, [blog]);
 
-  // Thêm hàm helper
   const decodeText = (text) => {
     try {
       return decodeURIComponent(escape(text));
     } catch (e) {
       return text;
     }
+  };
+
+  const renderCommonHashtags = (relatedBlog) => {
+    if (!blog || !blog.hashtags || !relatedBlog.hashtags) return null;
+    
+    const currentHashtagIds = blog.hashtags.map(tag => tag.blogHashtagId);
+    const commonHashtags = relatedBlog.hashtags.filter(tag => 
+      currentHashtagIds.includes(tag.blogHashtagId)
+    );
+    
+    if (commonHashtags.length === 0) return null;
+    
+    return (
+      <div style={{ marginTop: '10px' }}>
+        <strong>Hashtag chung: </strong>
+        {commonHashtags.map(tag => (
+          <Tag 
+            key={tag.blogHashtagId} 
+            color="green"
+            style={{
+              padding: '3px 8px',
+              borderRadius: '12px',
+              fontSize: '12px',
+              margin: '2px'
+            }}
+          >
+            {decodeText(tag.blogHashtagName)}
+          </Tag>
+        ))}
+      </div>
+    );
+  };
+
+  const renderCategoryInfo = (relatedBlog) => {
+    if (!relatedBlog.blogCategory && !relatedBlog.categoryName) return null;
+    
+    const categoryName = relatedBlog.blogCategory?.blogCategoryName || relatedBlog.categoryName;
+    
+    return (
+      <div style={{ marginTop: '10px' }}>
+        <strong>Danh mục: </strong>
+        <Tag 
+          color="blue"
+          style={{
+            padding: '3px 8px',
+            borderRadius: '12px',
+            fontSize: '12px',
+            margin: '2px'
+          }}
+        >
+          {decodeText(categoryName)}
+        </Tag>
+      </div>
+    );
+  };
+
+  const renderAuthorInfo = (relatedBlog) => {
+    if (!relatedBlog.user) return null; // Sử dụng relatedBlog.user
+    
+    return (
+      <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center' }}>
+        <i className="fa-solid fa-user" style={{ color: '#3498db', marginRight: '5px' }}></i>
+        <strong>Tác giả: </strong>
+        <span style={{ marginLeft: '5px' }}>
+          {relatedBlog.user.firstName} {relatedBlog.user.lastName}
+        </span>
+      </div>
+    );
+  };
+
+  const renderBlogCard = (relatedBlog, options = {}) => {
+    const { showCommonHashtags = false, showAuthor = false, showCategory = false } = options;
+    
+    return (
+      <div
+        onClick={() => {
+          navigate(`/blog/${relatedBlog.blogId}`);
+          window.scrollTo(0, 0);
+        }}
+        style={{
+          cursor: 'pointer',
+          transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+          padding: '15px',
+          borderRadius: '10px',
+          backgroundColor: '#f9f9f9',
+          border: '1px solid #eee',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+        }}
+        onMouseOver={(e) => {
+          e.currentTarget.style.transform = 'translateY(-5px)';
+          e.currentTarget.style.boxShadow = '0 10px 20px rgba(0,0,0,0.1)';
+        }}
+        onMouseOut={(e) => {
+          e.currentTarget.style.transform = 'translateY(0)';
+          e.currentTarget.style.boxShadow = 'none';
+        }}
+      >
+        <Image
+          src={
+            relatedBlog.blogImages?.[0]?.imageURL ||
+            "https://via.placeholder.com/300x180?text=No+Image"
+          }
+          alt={relatedBlog.blogTitle}
+          preview={false}
+          style={{ ...commonImageStyle, height: '200px' }}
+        />
+        <h3 style={{
+          fontSize: '18px',
+          fontWeight: '600',
+          marginTop: '15px',
+          marginBottom: '10px',
+          color: '#2c3e50',
+          display: '-webkit-box',
+          WebkitLineClamp: '2',
+          WebkitBoxOrient: 'vertical',
+          overflow: 'hidden'
+        }}>
+          {decodeText(relatedBlog.blogTitle)}
+        </h3>
+        <div style={{
+          fontSize: '14px',
+          color: '#666',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '10px',
+          marginBottom: '10px'
+        }}>
+          <i className="fa-solid fa-calendar-days"></i>
+          {new Date(relatedBlog.postedTime).toLocaleDateString("vi-VN")}
+        </div>
+        {showCommonHashtags && renderCommonHashtags(relatedBlog)}
+        {showAuthor && renderAuthorInfo(relatedBlog)}
+        {showCategory && renderCategoryInfo(relatedBlog)}
+      </div>
+    );
   };
 
   if (loading) {
@@ -190,40 +382,6 @@ const BlogDetail = () => {
       backgroundColor: '#fff',
       minHeight: '100vh'
     }}>
-      {/* <Breadcrumb
-        className="blog-detail-breadcrumb"
-        style={{
-          
-          padding: '0px 20px',
-          backgroundColor: '#f8f9fa',
-          borderRadius: '8px',
-          boxShadow: '0 2px 4px rgba(0,0,0,0.05)'
-        }}
-        items={[
-          {
-            title: (
-              <span>
-                <i className="fa-solid fa-home"></i> Trang chủ
-              </span>
-            ),
-            onClick: () => navigate("/"),
-            style: { cursor: "pointer" },
-          },
-          {
-            title: (
-              <span>
-                <i className="fa-solid fa-newspaper"></i> Blog
-              </span>
-            ),
-            onClick: () => navigate("/blog"),
-            style: { cursor: "pointer" },
-          },
-          {
-            title: <span>{blog.blogTitle}</span>,
-          },
-        ]}
-      /> */}
-
       <div className="blog-detail-content" style={{
         backgroundColor: '#fff',
         borderRadius: '12px',
@@ -300,6 +458,19 @@ const BlogDetail = () => {
             <strong>Danh mục:</strong> 
             <span>{blog.blogCategory?.blogCategoryName || "Không có danh mục"}</span>
           </div>
+
+          {blog.user && ( // Sử dụng blog.user thay vì blog.author
+            <div style={{ 
+              marginBottom: '1rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px'
+            }}>
+              <i className="fa-solid fa-user" style={{ color: '#9b59b6' }}></i>
+              <strong>Tác giả:</strong> 
+              <span>{blog.user.firstName} {blog.user.lastName}</span>
+            </div>
+          )}
           
           {blog.hashtags && blog.hashtags.length > 0 && (
             <div className="blog-detail-tags" style={{
@@ -352,67 +523,131 @@ const BlogDetail = () => {
           </div>
         )}
 
-        {relatedBlogs.length > 0 && (
+        {(relatedBlogs.length > 0 || relatedByHashtags.length > 0 || relatedByAuthor.length > 0) && (
           <div className="blog-detail-related" style={{ marginTop: '40px' }}>
             <Divider orientation="left" style={{
               fontSize: '20px',
               color: '#2c3e50',
-              marginBottom: '30px'
+              marginBottom: '20px'
             }}>
               <i className="fa-solid fa-newspaper" style={{ marginRight: '10px' }}></i>
               Bài viết liên quan
             </Divider>
-            <Row gutter={[24, 24]}>
-              {relatedBlogs.map((relatedBlog) => (
-                <Col xs={24} sm={12} md={8} key={relatedBlog.blogId}>
-                  <div
-                    onClick={() => {
-                      navigate(`/blog/${relatedBlog.blogId}`);
-                      window.scrollTo(0, 0);
-                    }}
+            
+            <Tabs defaultActiveKey="category" type="card" style={{ marginBottom: '30px' }}>
+              <TabPane 
+                tab={
+                  <span>
+                    <i className="fa-solid fa-folder" style={{ marginRight: '5px' }}></i>
+                    Cùng danh mục
+                  </span>
+                } 
+                key="category"
+              >
+                {relatedBlogs.length > 0 ? (
+                  <div>
+                    <div style={{ marginBottom: '20px', padding: '10px', backgroundColor: '#f0f8ff', borderRadius: '8px' }}>
+                      <i className="fa-solid fa-info-circle" style={{ color: '#3498db', marginRight: '10px' }}></i>
+                      Các bài viết trong cùng danh mục <strong>"{blog.blogCategory?.blogCategoryName}"</strong>
+                    </div>
+                    
+                    <Row gutter={[24, 24]}>
+                      {relatedBlogs
+                        .filter(relatedBlog => 
+                          relatedBlog.blogCategory?.blogCategoryId === blog.blogCategory?.blogCategoryId
+                        )
+                        .slice(0, 3)
+                        .map((relatedBlog) => (
+                          <Col xs={24} sm={12} md={8} key={relatedBlog.blogId}>
+                            {renderBlogCard(relatedBlog, { 
+                              showCategory: true,
+                              showCommonHashtags: true 
+                            })}
+                          </Col>
+                        ))
+                      }
+                    </Row>
+                  </div>
+                ) : (
+                  <div style={{ textAlign: 'center', padding: '20px', color: '#666' }}>
+                    Không có bài viết nào trong cùng danh mục
+                  </div>
+                )}
+              </TabPane>
+              
+              <TabPane 
+                tab={
+                  <span>
+                    <i className="fa-solid fa-hashtag" style={{ marginRight: '5px' }}></i>
+                    Cùng hashtag
+                  </span>
+                } 
+                key="hashtags"
+              >
+                {relatedByHashtags.length > 0 ? (
+                  <div>
+                    <div style={{ marginBottom: '20px', padding: '10px', backgroundColor: '#f0fff0', borderRadius: '8px' }}>
+                      <i className="fa-solid fa-info-circle" style={{ color: '#2ecc71', marginRight: '10px' }}></i>
+                      Các bài viết có cùng hashtag với bài viết hiện tại
+                    </div>
+                    
+                    <Row gutter={[24, 24]}>
+                      {relatedByHashtags.map((relatedBlog) => (
+                        <Col xs={24} sm={12} md={8} key={relatedBlog.blogId}>
+                          {renderBlogCard(relatedBlog, { showCommonHashtags: true })}
+                        </Col>
+                      ))}
+                    </Row>
+                  </div>
+                ) : (
+                  <div style={{ textAlign: 'center', padding: '20px', color: '#666' }}>
+                    Không có bài viết nào có hashtag tương tự
+                  </div>
+                )}
+              </TabPane>
+
+              <TabPane 
+                tab={
+                  <span 
                     style={{
-                      cursor: 'pointer',
-                      transition: 'transform 0.3s ease',
-                      ':hover': {
-                        transform: 'translateY(-5px)'
-                      }
-                    }}
-                  >
-                    <Image
-                      src={
-                        relatedBlog.blogImages?.[0]?.imageURL ||
-                        "https://via.placeholder.com/300x180?text=No+Image"
-                      }
-                      alt={relatedBlog.blogTitle}
-                      preview={false}
-                      style={commonImageStyle}
-                    />
-                    <h3 style={{
-                      fontSize: '18px',
-                      fontWeight: '600',
-                      marginBottom: '10px',
-                      color: '#2c3e50',
-                      display: '-webkit-box',
-                      WebkitLineClamp: '2',
-                      WebkitBoxOrient: 'vertical',
-                      overflow: 'hidden'
-                    }}>
-                      {decodeText(relatedBlog.blogTitle)}
-                    </h3>
-                    <div style={{
-                      fontSize: '14px',
-                      color: '#666',
                       display: 'flex',
                       alignItems: 'center',
-                      gap: '10px'
+                      gap: '5px'
+                    }}
+                  >
+                    <i className="fa-solid fa-user"></i>
+                    Cùng tác giả
+                  </span>
+                } 
+                key="author"
+              >
+                {relatedByAuthor.length > 0 ? (
+                  <div>
+                    <div style={{ 
+                      marginBottom: '20px', 
+                      padding: '10px', 
+                      backgroundColor: '#f5f0ff', 
+                      borderRadius: '8px' 
                     }}>
-                      <i className="fa-solid fa-calendar-days"></i>
-                      {new Date(relatedBlog.postedTime).toLocaleDateString("vi-VN")}
+                      <i className="fa-solid fa-info-circle" style={{ color: '#9b59b6', marginRight: '10px' }}></i>
+                      Các bài viết khác của tác giả <strong>"{blog.user?.firstName} {blog.user?.lastName}"</strong>
                     </div>
+                    
+                    <Row gutter={[24, 24]}>
+                      {relatedByAuthor.map((relatedBlog) => (
+                        <Col xs={24} sm={12} md={8} key={relatedBlog.blogId}>
+                          {renderBlogCard(relatedBlog, { showAuthor: true })}
+                        </Col>
+                      ))}
+                    </Row>
                   </div>
-                </Col>
-              ))}
-            </Row>
+                ) : (
+                  <div style={{ textAlign: 'center', padding: '20px', color: '#666' }}>
+                    Không có bài viết nào từ cùng tác giả
+                  </div>
+                )}
+              </TabPane>
+            </Tabs>
           </div>
         )}
       </div>

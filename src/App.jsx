@@ -47,8 +47,12 @@ import BlogCategory from "./pages/admin/BlogManagement/Blogcategory.jsx";
 import CustomerManagement from "./pages/admin/UserManagement/UserManagement.jsx";
 import Point from "./pages/users/profile/point.jsx";
 import SuccessPayment from "./pages/users/cart/PaymentStatus.jsx";
+import { ToastContainer } from "react-toastify";
+import Setting from "./pages/users/profile/Setting.jsx";
 function App() {
   return (
+    <>
+    <ToastContainer />
     <Routes>
       {/* user */}
       <Route path="/" element={<Layout />}>
@@ -72,6 +76,7 @@ function App() {
         <Route path="/products" element={<Products />} />
         <Route path="/products/:id" element={<ProductDetail />} />
         <Route path="/shopping-cart/cart/success-payment" element={<SuccessPayment />} />
+
       </Route>
       {/* login */}
  
@@ -82,6 +87,8 @@ function App() {
         <Route index element={<Profile />} />
         <Route path="/user/history" element={<History />} />
         <Route path="/user/point" element={<Point />} />
+        <Route path="/user/setting" element={<Setting />} />
+
         
       </Route>
 
@@ -124,6 +131,7 @@ function App() {
 
       {/* <Route path="/product-management" element={<ProductManagement />} /> */}
     </Routes>
+    </>
   );
 }
 
