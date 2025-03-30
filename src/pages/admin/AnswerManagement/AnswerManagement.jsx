@@ -582,6 +582,7 @@ import {
   Tag,
   InputNumber,
   Select,
+  Tooltip,
 } from "antd";
 import { useEffect, useState, useCallback } from "react";
 import api from "../../../config/api";
@@ -739,30 +740,42 @@ const AnswerManagement = () => {
       title: "Nút điều khiển",
       key: "actions",
       render: (_, record) => (
-        <div className="button">
+        <div className="button" style={{ display: "flex", justifyContent: "center", flexDirection: "column", width: 100, alignItems: "center" }}>
+          <Tooltip title="Sửa">
           <Button
-            type="primary"
+            color="orange"
+            variant="filled"
             onClick={() => handleEditAnswer(record)}
-            style={{ marginRight: 8 }}
+            style={{ margin: 3, border: "2px solid", width: 100 }}
           >
-            <i className="fa-solid fa-pen-to-square"></i> Sửa
+            <i className="fa-solid fa-pen-to-square"></i>
           </Button>
+          </Tooltip>
+          <Tooltip title="Chi tiết">
           <Button
+           color="primary"
+           variant="filled"
+           type="default"
             onClick={() => handleViewDetails(record)}
-            style={{ marginRight: 8 }}
+            style={{ margin: 3, border: "2px solid", width: 100 }}
           >
-            <i className="fa-solid fa-eye"></i> Chi tiết
+            <i className="fa-solid fa-eye"></i>
           </Button>
+          </Tooltip>
+          <Tooltip title="xóa">
           <Popconfirm
             title="Bạn có muốn xóa câu trả lời này không?"
             onConfirm={() => handleDeleteAnswer(record.answerId)}
             okText="Có"
             cancelText="Không"
           >
-            <Button danger>
-              <i className="fa-solid fa-trash"></i> Xóa
+            <Button danger
+             style={{ margin: 3, border: "2px solid", width: 100 }}
+             >
+              <i className="fa-solid fa-trash"></i> 
             </Button>
           </Popconfirm>
+          </Tooltip>
         </div>
       ),
     },
