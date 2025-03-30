@@ -43,11 +43,12 @@ const BlogHashtag = () => {
       render: (text) => (
         <div
           dangerouslySetInnerHTML={{
-            __html: text && typeof text === "string"
-              ? text.length > 50
-                ? text.substring(0, 50) + "..."
-                : text
-              : "",
+            __html:
+              text && typeof text === "string"
+                ? text.length > 50
+                  ? text.substring(0, 50) + "..."
+                  : text
+                : "",
           }}
         />
       ),
@@ -78,41 +79,41 @@ const BlogHashtag = () => {
           }}
         >
           <Tooltip title="Sửa">
-          <Button
-            color="orange"
-            variant="filled"
-            onClick={() => handleEditHashtag(record)}
-            style={{ margin: 3, border: "2px solid" }}
-          >
-            <i className="fa-solid fa-pen-to-square"></i>
-          </Button>
-          </Tooltip>
-          <Tooltip title="Chi tiết">
-          <Button
-            color="primary"
-            variant="filled"
-            type="default"
-            onClick={() => handleViewDetails(record)}
-            style={{ margin: 3, border: "2px solid" }}
-          >
-            <i className="fa-solid fa-eye"></i>
-          </Button>
-          </Tooltip>
-          <Tooltip title="Xóa">
-          <Popconfirm
-            title="Bạn có muốn xóa hashtag này không?"
-            onConfirm={() => handleDeleteHashtag(record.blogHashtagName)}
-            okText="Có"
-            cancelText="Không"
-          >
             <Button
-              color="red"
+              color="orange"
               variant="filled"
+              onClick={() => handleEditHashtag(record)}
               style={{ margin: 3, border: "2px solid" }}
             >
-              <i className="fa-solid fa-trash"></i>
+              <i className="fa-solid fa-pen-to-square"></i>
             </Button>
-          </Popconfirm>
+          </Tooltip>
+          <Tooltip title="Chi tiết">
+            <Button
+              color="primary"
+              variant="filled"
+              type="default"
+              onClick={() => handleViewDetails(record)}
+              style={{ margin: 3, border: "2px solid" }}
+            >
+              <i className="fa-solid fa-eye"></i>
+            </Button>
+          </Tooltip>
+          <Tooltip title="Xóa">
+            <Popconfirm
+              title="Bạn có muốn xóa hashtag này không?"
+              onConfirm={() => handleDeleteHashtag(record.blogHashtagName)}
+              okText="Có"
+              cancelText="Không"
+            >
+              <Button
+                color="red"
+                variant="filled"
+                style={{ margin: 3, border: "2px solid" }}
+              >
+                <i className="fa-solid fa-trash"></i>
+              </Button>
+            </Popconfirm>
           </Tooltip>
         </div>
       ),
@@ -122,7 +123,8 @@ const BlogHashtag = () => {
   const fetchHashtags = async () => {
     try {
       const response = await api.get("/blog-hashtag");
-      setHashtagList(response.data);
+      console.log("Fetched hashtags:", response.data); // Debug dữ liệu
+      setHashtagList([...response.data]); // Tạo mảng mới để đảm bảo re-render
     } catch (error) {
       console.error("Error fetching hashtags:", error);
       toast.error("Không thể tải danh sách hashtag!");
@@ -184,12 +186,9 @@ const BlogHashtag = () => {
     if (editingHashtag) {
       try {
         const encodedHashtagName = encodeURIComponent(editingHashtag.blogHashtagName);
-        await api.put(
-          `/blog-hashtag/${encodedHashtagName}`,
-          values
-        );
+        await api.put(`/blog-hashtag/${encodedHashtagName}`, values);
         toast.success("Đã sửa hashtag thành công!");
-        fetchHashtags();
+        await fetchHashtags(); // Đợi fetch hoàn tất
         handleCloseModal();
       } catch (error) {
         console.error("Lỗi khi cập nhật hashtag:", error);
@@ -203,7 +202,7 @@ const BlogHashtag = () => {
         };
         await api.post("/blog-hashtag", newHashtag);
         toast.success("Đã thêm hashtag mới thành công!");
-        fetchHashtags();
+        await fetchHashtags(); // Đợi fetch hoàn tất
         handleCloseModal();
       } catch (error) {
         console.error("Lỗi khi thêm hashtag mới:", error);
@@ -229,7 +228,7 @@ const BlogHashtag = () => {
       const encodedHashtagName = encodeURIComponent(blogHashtagName);
       await api.delete(`/blog-hashtag/${encodedHashtagName}`);
       toast.success("Đã xóa hashtag này thành công!");
-      fetchHashtags();
+      await fetchHashtags();
     } catch (error) {
       console.error("Lỗi khi xóa hashtag:", error);
       toast.error("Xóa hashtag này không thành công!");
@@ -303,7 +302,6 @@ const BlogHashtag = () => {
               onChange={(value) => form.setFieldsValue({ description: value })}
             />
           </Form.Item>
-
           {editingHashtag && (
             <Form.Item
               label="Trạng thái"
@@ -320,8 +318,6 @@ const BlogHashtag = () => {
           )}
         </Form>
       </Modal>
-
-      {/* Modal Chi Tiết */}
       <Modal
         title="Chi tiết hashtag"
         open={isDetailModalOpen}

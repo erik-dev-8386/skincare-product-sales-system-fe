@@ -1,9 +1,9 @@
 
 import React, { useEffect, useState } from "react";
 import "./Bo.css";
-import hot from "../../../assets/home/hotdeal.jpg";
-import slider01 from "../../../assets/home/slider_1.webp";
-import slider02 from "../../../assets/home/Slider.jpg";
+import hot from "../../../assets/home/30.jpg";
+import slider01 from "../../../assets/home/50.jpg";
+import slider02 from "../../../assets/home/80.jpg";
 import Slider from "./Slider";
 import s1 from "../../../assets/home/s1.jpg";
 
@@ -196,14 +196,15 @@ export default function Body() {
   return (
     <div className="home-container">
 
-      <section className="section hot-deals-section">
-        <h2 className="section-title" style={{
-         
-          textAlign: "center",
-          width: "100%"
-        }}>HOT DEAL</h2>
-        <Slider slides={hotDealSlides} />
-      </section>
+<section className="section hot-deals-section">
+  <h2 className="section-title" style={{
+    textAlign: "center",
+    width: "100%"
+  }}>HOT DEAL</h2>
+  <div className="slider-wrapper">
+    <Slider slides={hotDealSlides} className="hot-deal-slider" />
+  </div>
+</section>
       {/* Products Section - 4 items in a single row */}
       <section className="section products-section">
         <div className="section-header">

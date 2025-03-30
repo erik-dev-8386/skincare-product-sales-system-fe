@@ -160,11 +160,11 @@ export default function Header() {
                   Sản phẩm
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link to="/customer-discounts" className="active">
                   Giảm giá
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link to="/blog" className="active">
                   Blog

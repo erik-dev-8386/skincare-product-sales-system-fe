@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal, Table, Popconfirm, Tag,Tooltip } from "antd";
+import { Button, Form, Input, Modal, Table, Popconfirm, Tag, Tooltip } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
@@ -26,53 +26,48 @@ const CategoryManagement = () => {
 
   const columns = [
     {
-      title: 'Tên danh mục',
-      dataIndex: 'categoryName',
-      key: 'categoryName',
+      title: "Tên danh mục",
+      dataIndex: "categoryName",
+      key: "categoryName",
     },
     {
-      title: 'Mô tả',
-      dataIndex: 'description',
-      key: 'description',
+      title: "Mô tả",
+      dataIndex: "description",
+      key: "description",
       render: (text) => (
         <div dangerouslySetInnerHTML={{ __html: text && typeof text === "string" ? (text.length > 50 ? text.substring(0, 50) + "..." : text) : "" }} />
       ),
     },
     {
-      title: 'Trạng thái',
-      dataIndex: 'status',
-      key: 'status',
+      title: "Trạng thái",
+      dataIndex: "status",
+      key: "status",
       render: (status) => {
         const statusInfo = statusMapping[status] || { text: "KHÔNG BIẾT", color: "default" };
         return <Tag color={statusInfo.color}>{statusInfo.text}</Tag>;
-      }
+      },
     },
     {
-      title: 'Nút điều khiển',
-      key: 'actions',
+      title: "Nút điều khiển",
+      key: "actions",
       render: (text, record) => (
-        <div className="button" style={{display: "flex", justifyContent: "center", flexDirection: "column", width: 100}}>
+        <div className="button" style={{ display: "flex", justifyContent: "center", flexDirection: "column", width: 100 }}>
           <Tooltip title="Sửa">
-          <Button color="orange" variant="filled" onClick={() => handleEditCategory(record)} style={{ margin: 3, border: "2px solid " }}>
-            <i className="fa-solid fa-pen-to-square"></i>
-          </Button>
+            <Button color="orange" variant="filled" onClick={() => handleEditCategory(record)} style={{ margin: 3, border: "2px solid " }}>
+              <i className="fa-solid fa-pen-to-square"></i>
+            </Button>
           </Tooltip>
           <Tooltip title="Chi tiết">
-          <Button color="primary" variant="filled" type="default" onClick={() => handleViewDetails(record)} style={{ margin: 3, border: "2px solid " }}>
-            <i className="fa-solid fa-eye"></i>
-          </Button>
+            <Button color="primary" variant="filled" type="default" onClick={() => handleViewDetails(record)} style={{ margin: 3, border: "2px solid " }}>
+              <i className="fa-solid fa-eye"></i>
+            </Button>
           </Tooltip>
           <Tooltip title="Xóa">
-          <Popconfirm
-            title="Bạn có muốn xóa loại da này không?"
-            onConfirm={() => handleDeleteCategory(record.categoryId)}
-            okText="Có"
-            cancelText="Không"
-          >
-            <Button color="red" variant="filled" style={{ margin: 3, border: "2px solid " }}>
-              <i className="fa-solid fa-trash"></i>
-            </Button>
-          </Popconfirm>
+            <Popconfirm title="Bạn có muốn xóa loại da này không?" onConfirm={() => handleDeleteCategory(record.categoryId)} okText="Có" cancelText="Không">
+              <Button color="red" variant="filled" style={{ margin: 3, border: "2px solid " }}>
+                <i className="fa-solid fa-trash"></i>
+              </Button>
+            </Popconfirm>
           </Tooltip>
         </div>
       ),
@@ -81,10 +76,11 @@ const CategoryManagement = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await api.get('/categories');
+      const response = await api.get("/categories");
       setCategoryList(response.data);
     } catch (error) {
       console.error("Error fetching categories:", error);
+      toast.error("Lấy danh sách danh mục thất bại!");
     }
   };
 
@@ -127,38 +123,45 @@ const CategoryManagement = () => {
     const isDuplicate = categoryList.some(
       (category) =>
         category.categoryName === values.categoryName &&
-        (!editingCategory || category.categoryId !== editingCategory.categoryId) // Allow editing the same category
+        (!editingCategory || category.categoryId !== editingCategory.categoryId)
     );
 
     if (isDuplicate) {
       toast.error("Tên danh mục đã tồn tại! Vui lòng nhập tên khác.");
-      return; // Prevent form submission
+      return;
     }
 
-    if (editingCategory) {
-      try {
-        await api.put(`/categories/${editingCategory.categoryId}`, values);
+    try {
+      if (editingCategory) {
+        await api.put(`/categories/${editingCategory.categoryId}`, {
+          categoryName: values.categoryName,
+          description: values.description,
+          status: values.status || 2, // Mặc định là HOẠT ĐỘNG nếu không có
+        });
         toast.success("Đã sửa danh mục thành công!");
-        fetchCategories();
-        handleCloseModal();
-      } catch (error) {
-        toast.error("Cập nhật danh mục không thành công!");
-      }
-    } else {
-      try {
-        await api.post('/categories', values);
+      } else {
+        await api.post("/categories", {
+          categoryName: values.categoryName,
+          description: values.description,
+          status: 2, // Mặc định là HOẠT ĐỘNG khi tạo mới
+        });
         toast.success("Đã thêm danh mục mới thành công!");
-        fetchCategories();
-        handleCloseModal();
-      } catch (error) {
-        toast.error("Thêm danh mục mới không thành công!");
       }
+      fetchCategories();
+      handleCloseModal();
+    } catch (error) {
+      console.error("Error submitting form:", error);
+      toast.error(error.response?.data?.message || "Thao tác không thành công!");
     }
   };
 
   const handleEditCategory = (category) => {
     setEditingCategory(category);
-    form.setFieldsValue(category);
+    form.setFieldsValue({
+      categoryName: category.categoryName,
+      description: category.description,
+      status: category.status, // Đảm bảo gửi status nếu backend yêu cầu
+    });
     handleOpenModal();
   };
 
@@ -168,7 +171,8 @@ const CategoryManagement = () => {
       toast.success("Đã xóa danh mục này thành công!");
       fetchCategories();
     } catch (error) {
-      toast.error("Xóa danh mục này không thành công!");
+      console.error("Error deleting category:", error);
+      toast.error(error.response?.data?.message || "Xóa danh mục không thành công!");
     }
   };
 
@@ -195,9 +199,9 @@ const CategoryManagement = () => {
         >
           Reset
         </Button>
-      <Button type="primary" onClick={handleOpenModal}>
-        <i className="fa-solid fa-plus"></i> Thêm danh mục mới
-      </Button>
+        <Button type="primary" onClick={handleOpenModal}>
+          <i className="fa-solid fa-plus"></i> Thêm danh mục mới
+        </Button>
       </div>
       <Table dataSource={categoryList} columns={columns} rowKey="categoryId" style={{ marginTop: 16 }} />
       <Modal
@@ -220,7 +224,8 @@ const CategoryManagement = () => {
           <Form.Item
             label="Mô tả"
             name="description"
-            rules={[{ required: true, message: "Mô tả không được để trống!" }]}>
+            rules={[{ required: true, message: "Mô tả không được để trống!" }]}
+          >
             <MyEditor
               value={form.getFieldValue("description") || ""}
               onChange={(value) => form.setFieldsValue({ description: value })}

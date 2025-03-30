@@ -7,14 +7,13 @@ import {
   Popconfirm,
   Select,
   Tag,
-  Tooltip
+  Tooltip,
 } from "antd";
 import { useForm } from "antd/es/form/Form";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import api from "../../../config/api";
 import { toast, ToastContainer } from "react-toastify";
 import MyEditor from "../../../component/TinyMCE/MyEditor";
-import { TextAlignment } from "@cloudinary/url-gen/qualifiers";
 
 const BrandManagement = () => {
   const { Option } = Select;
@@ -25,9 +24,9 @@ const BrandManagement = () => {
   const [isDetailModalOpen, setDetailModalOpen] = useState(false);
   const [selectedBrand, setSelectedBrand] = useState(null);
   const [searchText, setSearchText] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const statusMapping = {
-
     1: { text: "HOẠT ĐỘNG", color: "green" },
     2: { text: "KHÔNG HOẠT ĐỘNG", color: "red" },
   };
@@ -76,74 +75,98 @@ const BrandManagement = () => {
       title: <p className="title-product-management">Nút điều khiển</p>,
       key: "actions",
       render: (text, record) => (
-        <div className="button" style={{display: "flex", justifyContent: "center", flexDirection: "column", width: 100}}> 
-        <Tooltip title="Sửa">
-          <Button
-            color="orange"
-            variant="filled"
-            onClick={() => handleEditBrand(record)}
-            style={{ margin: 3, border: "2px solid " }}
-          >
-            <i className="fa-solid fa-pen-to-square"></i>
-          </Button>
-          </Tooltip>
-          <Tooltip title="CHi tiết">
-          <Button
-            color="primary"
-            variant="filled"
-            type="default"
-            onClick={() => handleViewDetails(record)}
-            style={{ margin: 3, border: "2px solid " }}
-          >
-            <i className="fa-solid fa-eye"></i> 
-          </Button>
-          </Tooltip>
-          <Tooltip title="Xóa">
-          <Popconfirm
-            title="Bạn có muốn xóa thương hiệu này không?"
-            onConfirm={() => handleDeleteBrand(record.brandId)}
-            okText="Có"
-            cancelText="Không"
-          >
+        <div
+          className="button"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column",
+            width: 100,
+          }}
+        >
+          <Tooltip title="Sửa">
             <Button
-              color="red"
+              color="orange"
               variant="filled"
+              onClick={() => handleEditBrand(record)}
               style={{ margin: 3, border: "2px solid " }}
             >
-              <i className="fa-solid fa-trash"></i>
+              <i className="fa-solid fa-pen-to-square"></i>
             </Button>
-          </Popconfirm>
+          </Tooltip>
+          <Tooltip title="Chi tiết">
+            <Button
+              color="primary"
+              variant="filled"
+              type="default"
+              onClick={() => handleViewDetails(record)}
+              style={{ margin: 3, border: "2px solid " }}
+            >
+              <i className="fa-solid fa-eye"></i>
+            </Button>
+          </Tooltip>
+          <Tooltip title="Xóa">
+            <Popconfirm
+              title="Bạn có muốn xóa thương hiệu này không?"
+              onConfirm={() => handleDeleteBrand(record.brandId)}
+              okText="Có"
+              cancelText="Không"
+            >
+              <Button
+                color="red"
+                variant="filled"
+                style={{ margin: 3, border: "2px solid " }}
+              >
+                <i className="fa-solid fa-trash"></i>
+              </Button>
+            </Popconfirm>
           </Tooltip>
         </div>
       ),
     },
   ];
 
-  const fetchBrands = async () => {
+  const fetchBrands = useCallback(async () => {
+    setLoading(true);
     try {
-      const response = await api.get("/brands");
+      const response = await api.get("/brands"); // Bỏ /haven-skin
       setBrandList(response.data);
     } catch (error) {
-      console.error("Error fetching brands:", error);
+      console.error(
+        "Error fetching brands:",
+        error.response?.data?.message || error.message
+      );
+      toast.error("Lỗi khi tải danh sách thương hiệu!");
+    } finally {
+      setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchBrands();
-  }, []);
+  }, [fetchBrands]);
 
   const handleSearch = async () => {
+    setLoading(true);
     try {
-      const response = await api.get(`/brands/search/${searchText}`);
+      const response = await api.get(`/brands/search/${searchText}`); // Bỏ /haven-skin
       setBrandList(response.data);
     } catch (error) {
-      console.error("Error searching brands:", error);
-      toast.error("Tìm kiếm thương hiệu  không thành công!");
+      console.error(
+        "Error searching brands:",
+        error.response?.data?.message || error.message
+      );
+      toast.error("Tìm kiếm thương hiệu không thành công!");
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleOpenModal = () => {
     setModalOpen(true);
+    if (!editingBrand) {
+      form.resetFields();
+    }
   };
 
   const handleCloseModal = () => {
@@ -162,53 +185,86 @@ const BrandManagement = () => {
     setSelectedBrand(null);
   };
 
+  const handleEditBrand = (brand) => {
+    setEditingBrand(brand);
+    form.setFieldsValue({
+      brandName: brand.brandName,
+      description: brand.description,
+      country: brand.country,
+      status: brand.status,
+    });
+    setModalOpen(true);
+  };
+
   const handleSubmitForm = async (values) => {
-    // Check for duplicate brand name
     const isDuplicate = brandList.some(
       (brand) =>
-        brand.brandName === values.brandName &&
-        (!editingBrand || brand.brandId !== editingBrand.brandId) // Allow editing the same brand
+        brand.brandName.toLowerCase() === values.brandName.toLowerCase() &&
+        (!editingBrand || brand.brandId !== editingBrand.brandId)
     );
 
     if (isDuplicate) {
       toast.error("Tên thương hiệu đã tồn tại! Vui lòng nhập tên khác.");
-      return; // Prevent form submission
+      return;
     }
 
-    if (editingBrand) {
-      try {
-        await api.put(`/brands/${editingBrand.brandId}`, values);
+    const brandData = {
+      brandName: values.brandName,
+      description: values.description,
+      country: values.country.trim().replace(/[^A-Za-z\s]/g, ""), // Loại bỏ ký tự không hợp lệ
+      ...(editingBrand && { status: values.status }),
+    };
+
+    try {
+      let response;
+      if (editingBrand) {
+        response = await api.put(`/brands/${editingBrand.brandId}`, brandData); // Bỏ /haven-skin
         toast.success("Đã sửa thương hiệu thành công!");
-        fetchBrands();
-        handleCloseModal();
-      } catch (error) {
-        toast.error("Cập nhật thương hiệu không thành công!");
-      }
-    } else {
-      try {
-        await api.post('/brands', values);
+        setBrandList((prevList) =>
+          prevList.map((item) =>
+            item.brandId === editingBrand.brandId ? response.data : item
+          )
+        );
+      } else {
+        response = await api.post("/brands", brandData); // Bỏ /haven-skin
         toast.success("Đã thêm thương hiệu mới thành công!");
-        fetchBrands();
-        handleCloseModal();
-      } catch (error) {
-        toast.error("Thêm thương hiệu mới không thành công!");
+        setBrandList((prevList) => [...prevList, response.data]);
+      }
+
+      fetchBrands();
+      handleCloseModal();
+    } catch (error) {
+      console.error(
+        "Error saving brand:",
+        error.response?.data?.message || error.message
+      );
+      if (error.response?.status === 400) {
+        toast.error(
+          error.response.data.message || "Dữ liệu không hợp lệ!"
+        );
+      } else if (error.response?.status === 500) {
+        toast.error("Lỗi server, vui lòng thử lại sau!");
+      } else {
+        toast.error(
+          editingBrand
+            ? "Sửa thương hiệu không thành công!"
+            : "Thêm thương hiệu không thành công!"
+        );
       }
     }
-  };
-
-  const handleEditBrand = (brand) => {
-    setEditingBrand(brand);
-    form.setFieldsValue(brand);
-    handleOpenModal();
   };
 
   const handleDeleteBrand = async (brandId) => {
     try {
       await api.delete(`/brands/${brandId}`);
       toast.success("Đã xóa thương hiệu này thành công!");
-      fetchBrands();
+      fetchBrands(); // Refresh the brand list after deletion
     } catch (error) {
-      toast.error("Xóa thương hiệu này không thành công!");
+      console.error(
+        "Error deleting brand:",
+        error.response?.data?.message || error.message
+      );
+      toast.error("Xóa thương hiệu không thành công!");
     }
   };
 
@@ -240,6 +296,7 @@ const BrandManagement = () => {
         </Button>
       </div>
       <Table
+        loading={loading}
         dataSource={brandList}
         columns={columns}
         rowKey="brandId"
@@ -257,7 +314,10 @@ const BrandManagement = () => {
           <Form.Item
             label="Tên thương hiệu"
             name="brandName"
-            rules={[{ required: true, message: "Tên thương hiệu không được bỏ trống!" }]}
+            rules={[
+              { required: true, message: "Tên thương hiệu không được bỏ trống!" },
+             
+            ]}
           >
             <Input />
           </Form.Item>
@@ -267,21 +327,20 @@ const BrandManagement = () => {
             rules={[{ required: true, message: "Mô tả không được để trống!" }]}
           >
             <MyEditor
-              value={form.getFieldValue("description")}
+              value={form.getFieldValue("description") || ""}
               onChange={(value) => form.setFieldsValue({ description: value })}
             />
           </Form.Item>
-
           <Form.Item
             label="Quốc gia"
             name="country"
             rules={[
               { required: true, message: "Quốc gia không được để trống" },
+              
             ]}
           >
             <Input />
           </Form.Item>
-
           {editingBrand && (
             <Form.Item
               label="Trạng thái"
@@ -298,8 +357,6 @@ const BrandManagement = () => {
           )}
         </Form>
       </Modal>
-
-      {/* Modal Chi Tiết */}
       <Modal
         title="Chi tiết thương hiệu"
         open={isDetailModalOpen}
