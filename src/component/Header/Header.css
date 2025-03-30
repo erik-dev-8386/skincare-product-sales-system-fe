@@ -31,9 +31,10 @@
     width: 100%;
     box-sizing: border-box;
     display: flex;
-    flex-direction: column; /* Thêm dòng này */
-   
-    
+    flex-direction: column;
+    /* Thêm dòng này */
+
+
 }
 
 .header-content {
@@ -72,12 +73,12 @@
     padding: 0;
 }
 
-.nav > li {
+.nav>li {
     display: inline-block;
     position: relative;
 }
 
-.nav > li > a {
+.nav>li>a {
     color: #fff;
 }
 
@@ -91,7 +92,7 @@
     font-size: 0.95rem;
 }
 
-.nav > li:hover > a {
+.nav>li:hover>a {
     background-color: #900001;
     color: #fff;
 }
@@ -118,7 +119,7 @@
 .nav li:hover .subnav {
     display: block;
     width: 167px;
-    
+
 
 }
 
@@ -142,7 +143,7 @@
     min-width: 160px;
     background-color: white;
     color: #900001;
-    
+
     /* background: linear-gradient(to right, #900001, #c0244e); */
 }
 
@@ -154,6 +155,7 @@
     display: none;
     min-width: 160px;
     z-index: 1001;
+    border-radius: 6px;
 }
 
 .nav .subnav li:hover a {
@@ -161,6 +163,7 @@
     /* background: linear-gradient(to right,#900001, #c0244e ); */
     color: #900001;
     width: 100%;
+
 }
 
 .search {
@@ -265,6 +268,7 @@
     border-radius: 50%;
     color: #900001;
 }
+
 /* 
 .cart .anticon-shopping-cart:hover {
     background-color: white; 
@@ -335,11 +339,11 @@
         padding: 0 8px;
         font-size: 0.9rem;
     }
-    
+
     .searchtt {
         width: 150px;
     }
-    
+
     .icon {
         gap: 15px;
     }
@@ -349,12 +353,12 @@
     .Header {
         padding: 0;
     }
-    
+
     .nav li a {
         padding: 0 15px;
         font-size: 1.1rem;
     }
-    
+
     .searchtt {
         width: 250px;
     }
@@ -365,54 +369,54 @@
         flex-wrap: wrap;
         padding: 0 10px 0 0;
     }
-    
+
     .col-1 {
         flex: 1;
     }
-    
+
     .mobile-menu-button {
         display: block;
         order: 3;
     }
-    
+
     .nav {
         flex: 0 0 100%;
         order: 4;
         display: none;
     }
-    
+
     .nav.active {
         display: block;
     }
-    
+
     .nav ul {
         flex-direction: column;
         align-items: flex-start;
     }
-    
+
     .nav li {
         width: 100%;
     }
-    
+
     .nav li a {
         line-height: 50px;
         width: 100%;
         padding: 0 15px;
     }
-    
+
     .nav .subnav {
         position: static;
         width: 100%;
         box-shadow: none;
         background-color: rgba(144, 0, 1, 0.9);
     }
-    
+
     .icon {
         flex: 0;
         order: 2;
         margin-left: auto;
     }
-    
+
     .search {
         display: none;
     }
@@ -422,70 +426,70 @@
     .Header {
         min-height: 70px;
     }
-    
+
     .logo {
         height: 50px;
     }
-    
+
     .icon {
         gap: 10px;
     }
 }
 
 .search-container {
-  position: relative;
-  width: 100%;
+    position: relative;
+    width: 100%;
 }
 
 .search-suggestions {
-  position: absolute;
-  top: 100%;
-  left: 0;
-  right: 0;
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  z-index: 1000;
-  max-height: 300px;
-  overflow-y: auto;
-  margin-top: 5px;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    max-height: 300px;
+    overflow-y: auto;
+    margin-top: 5px;
 }
 
 .suggestion-item {
-  padding: 12px 16px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: flex-start;
+    padding: 12px 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: flex-start;
 }
 
 .suggestion-item:hover {
-  background-color: #f0f0f0;
-  transform: translateX(5px);
+    background-color: #f0f0f0;
+    transform: translateX(5px);
 }
 
 .suggestion-type {
-  font-size: 0.8em;
-  color: #666;
-  margin-left: 8px;
+    font-size: 0.8em;
+    color: #666;
+    margin-left: 8px;
 }
 
 .suggestion-category {
-  font-size: 12px;
-  color: #666;
-  margin-top: 4px;
+    font-size: 12px;
+    color: #666;
+    margin-top: 4px;
 }
 
 .search-suggestions::-webkit-scrollbar {
-  width: 6px;
+    width: 6px;
 }
 
 .search-suggestions::-webkit-scrollbar-thumb {
-  background-color: #ccc;
-  border-radius: 3px;
+    background-color: #ccc;
+    border-radius: 3px;
 }
 
 .search-suggestions::-webkit-scrollbar-track {
-  background-color: #f5f5f5;
+    background-color: #f5f5f5;
 }

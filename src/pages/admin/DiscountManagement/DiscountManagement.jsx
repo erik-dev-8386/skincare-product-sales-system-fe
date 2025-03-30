@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal, Table, Popconfirm, DatePicker, Col, Row, Tag, Select } from "antd";
+import { Button, Form, Input, Modal, Table, Popconfirm, DatePicker, Col, Row, Tag, Select, Tooltip } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
@@ -85,12 +85,17 @@ const DiscountManagement = () => {
       key: 'actions',
       render: (text, record) => (
         <div className="button" style={{display: "flex", justifyContent: "center", flexDirection: "column", width: 100}}>
+          <Tooltip title="Sửa">
           <Button color="orange" variant="filled" size="small" onClick={() => handleEditDiscount(record)} style={{ margin: 3, border: "2px solid " }}>
-            <i className="fa-solid fa-pen-to-square"></i> Sửa
+            <i className="fa-solid fa-pen-to-square"></i>
           </Button>
+          </Tooltip>
+          <Tooltip title="Chi tiết">
           <Button color="primary" variant="filled" size="small" onClick={() => handleViewDetails(record)} style={{ margin: 3, border: "2px solid " }}>
-            <i className="fa-solid fa-eye"></i> Chi tiết
+            <i className="fa-solid fa-eye"></i> 
           </Button>
+          </Tooltip>
+          <Tooltip title="Xóa">
           <Popconfirm
             title="Bạn có muốn xóa giảm giá này không?"
             onConfirm={() => handleDeleteDiscount(record.discountId)}
@@ -98,9 +103,10 @@ const DiscountManagement = () => {
             cancelText="Không"
           >
             <Button color="red" variant="filled" size="small" style={{ margin: 3, border: "2px solid " }} >
-              <i className="fa-solid fa-trash"></i> Xóa
+              <i className="fa-solid fa-trash"></i>
             </Button>
           </Popconfirm>
+          </Tooltip>
         </div>
       ),
     },

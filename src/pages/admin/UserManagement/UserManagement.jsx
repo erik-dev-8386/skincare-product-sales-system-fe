@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal, Table, Popconfirm, Upload, Radio, DatePicker, Select, InputNumber, Tag, Image } from "antd";
+import { Button, Form, Input, Modal, Table, Popconfirm, Upload, Radio, DatePicker, Select, InputNumber, Tag, Image, Tooltip } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
@@ -6,6 +6,7 @@ import { UploadOutlined } from "@ant-design/icons";
 import moment from "moment";
 import api from "../../../config/api";
 import { center } from "@cloudinary/url-gen/qualifiers/textAlignment";
+import { Option } from "antd/es/mentions";
 
 const CustomerManagement = () => {
   const [customerList, setCustomerList] = useState([]);
@@ -28,7 +29,7 @@ const CustomerManagement = () => {
     { title: 'Ngày sinh', dataIndex: 'birthDate', key: 'birthDate', render: (date) => date? moment(date).format("YYYY-MM-DD") : "không có thông tin" },
     { title: 'Email', dataIndex: 'email', key: 'email' },
     { title: 'Số điện thoại', dataIndex: 'phone', key: 'phone' },
-    { title: 'Đánh giá', dataIndex: 'rating', key: 'rating' },
+    // { title: 'Đánh giá', dataIndex: 'rating', key: 'rating' },
     {
       title: 'Ảnh đại diện',
       dataIndex: 'image',
@@ -55,22 +56,28 @@ const CustomerManagement = () => {
       key: 'actions',
       render: (_, record) => (
         <div className="button" style={{display: "flex", justifyContent: "center", flexDirection: "column", width: 100}}>
-          <Button color="orange" variant="filled" onClick={() => handleEditCustomer(record)} style={{ margin: 3, border: "2px solid " }}>
-            <i className="fa-solid fa-pen-to-square"></i> Sửa
-          </Button>
-          <Button color="primary" variant="filled" type="default" onClick={() => handleViewDetails(record)} style={{ margin: 3, border: "2px solid " }}>
-            <i className="fa-solid fa-eye"></i> Chi tiết
-          </Button>
-          <Popconfirm
-            title="Bạn có chắc muốn xóa khách hàng này?"
-            onConfirm={() => handleDeleteCustomer(record.id)}
-            okText="Có"
-            cancelText="Không"
-          >
-            <Button color="red" variant="filled" style={{ margin: 3, border: "2px solid " }}>
-              <i className="fa-solid fa-trash"></i> Xóa
+          <Tooltip title="Sửa">
+            <Button color="orange" variant="filled" onClick={() => handleEditCustomer(record)} style={{ margin: 3, border: "2px solid " }}>
+              <i className="fa-solid fa-pen-to-square"></i>
             </Button>
-          </Popconfirm>
+          </Tooltip>
+          <Tooltip title="Chi tiết">
+            <Button color="primary" variant="filled" type="default" onClick={() => handleViewDetails(record)} style={{ margin: 3, border: "2px solid " }}>
+              <i className="fa-solid fa-eye"></i>
+            </Button>
+          </Tooltip>
+          <Tooltip title="Xóa">
+            <Popconfirm
+              title="Bạn có chắc muốn xóa khách hàng này?"
+              onConfirm={() => handleDeleteCustomer(record.id)}
+              okText="Có"
+              cancelText="Không"
+            >
+              <Button color="red" variant="filled" style={{ margin: 3, border: "2px solid " }}>
+                <i className="fa-solid fa-trash"></i>
+              </Button>
+            </Popconfirm>
+          </Tooltip>
         </div>
       ),
     },
@@ -186,9 +193,9 @@ const CustomerManagement = () => {
           <Form.Item label="Địa chỉ" name="address" rules={[{ required: true, message: "Không được để trống!" }]}>
             <Input />
           </Form.Item>
-          <Form.Item label="Đánh giá" name="rating" rules={[{ required: true, message: "Không được để trống!" }]}>
+          {/* <Form.Item label="Đánh giá" name="rating" rules={[{ required: true, message: "Không được để trống!" }]}>
             <InputNumber min={0} max={5} />
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item label="Vai trò" name="role" rules={[{ required: true, message: "Không được để trống!" }]}>
             <Select>
               
@@ -219,9 +226,9 @@ const CustomerManagement = () => {
             <p><strong>Giới tính: </strong> {selectedCustomer.gender}</p>
             <p><strong>Ngày sinh: </strong> {moment(selectedCustomer.birthDate).format("YYYY-MM-DD")}</p>
             <p><strong>Email: </strong> {selectedCustomer.email}</p>
-            <p><strong>Số điện thoại: </strong> {selectedCustomer.phoneNumber}</p>
+            <p><strong>Số điện thoại: </strong> {selectedCustomer.phone}</p>
             <p><strong>Địa chỉ: </strong> {selectedCustomer.address}</p>
-            <p><strong>Đánh giá: </strong> {selectedCustomer.rating}</p>
+            {/* <p><strong>Đánh giá: </strong> {selectedCustomer.rating}</p> */}
             <p><strong>Vai trò: </strong> {selectedCustomer.role === 3 ? "Khách hàng" : "không có thông tin"}</p>
             <p><strong>Trạng thái: </strong>
               {selectedCustomer.status !== undefined ? (

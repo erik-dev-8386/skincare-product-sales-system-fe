@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Table, Modal, Tag, Button, Descriptions, Select, Input } from "antd";
+import { Table, Modal, Tag, Button, Descriptions, Select, Input, Tooltip } from "antd";
 import axios from "axios";
 import api from "../../../config/api";
 import { ToastContainer, toast } from "react-toastify";
@@ -119,12 +119,16 @@ const OrderManagement = () => {
       key: "actions",
       render: (_, record) => (
         <div>
+          <Tooltip title="Chi tiết">
           <Button type="primary" onClick={() => handleViewDetails(record)} style={{ marginRight: 8 }}>
-            <i className="fa-solid fa-eye"></i> Xem chi tiết
+            <i className="fa-solid fa-eye"></i> 
           </Button>
+          </Tooltip>
+          <Tooltip title="Sửa">
           <Button type="default" onClick={() => handleEditOrder(record)}>
-            <i className="fa-solid fa-pen-to-square"></i> Chỉnh sửa
+            <i className="fa-solid fa-pen-to-square"></i> 
           </Button>
+          </Tooltip>
         </div>
       ),
     },

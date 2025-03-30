@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal, Table, Popconfirm, Upload, Radio, DatePicker, Select, InputNumber, Tag, Image } from "antd";
+import { Button, Form, Input, Modal, Table, Popconfirm, Upload, Radio, DatePicker, Select, InputNumber, Tag, Image, Tooltip } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
@@ -55,12 +55,17 @@ const StaffManagement = () => {
       key: 'actions',
       render: (_, record) => (
         <div className="button" style={{display: "flex", justifyContent: "center", flexDirection: "column", width: 100}}>
+          <Tooltip title="Sửa">
           <Button color="orange" variant="filled" onClick={() => handleEditStaff(record)} style={{ margin: 3, border: "2px solid " }}>
-            <i className="fa-solid fa-pen-to-square"></i> Sửa
+            <i className="fa-solid fa-pen-to-square"></i>
           </Button>
+          </Tooltip>
+           <Tooltip title="Chi tiết">
           <Button color="primary" variant="filled" type="default" onClick={() => handleViewDetails(record)} style={{ margin: 3, border: "2px solid " }}>
-            <i className="fa-solid fa-eye"></i> Chi tiết
+            <i className="fa-solid fa-eye"></i> 
           </Button>
+          </Tooltip>
+          <Tooltip title="Xóa">
           <Popconfirm
             title="Bạn có chắc muốn xóa nhân viên này?"
             onConfirm={() => handleDeleteStaff(record.id)}
@@ -68,9 +73,10 @@ const StaffManagement = () => {
             cancelText="Không"
           >
             <Button color="red" variant="filled" style={{ margin: 3, border: "2px solid " }}>
-              <i className="fa-solid fa-trash"></i> Xóa
+              <i className="fa-solid fa-trash"></i>
             </Button>
           </Popconfirm>
+          </Tooltip>
         </div>
       ),
     },

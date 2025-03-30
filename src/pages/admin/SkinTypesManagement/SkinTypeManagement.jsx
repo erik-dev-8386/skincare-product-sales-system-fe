@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal, Table, Popconfirm, Upload, Select, Col, Row, Tag, Image } from "antd";
+import { Button, Form, Input, Modal, Table, Popconfirm, Upload, Select, Col, Row, Tag, Image,Tooltip } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { UploadOutlined } from "@ant-design/icons";
 import { useEffect, useState, useCallback } from "react";
@@ -81,6 +81,7 @@ const SkinTypeManagement = () => {
       key: "actions",
       render: (text, record) => (
         <div className="button" style={{display: "flex", justifyContent: "center", flexDirection: "column", width: 100}}>
+         <Tooltip title="Sửa">
           <Button
             color="orange"
             variant="filled"
@@ -88,8 +89,10 @@ const SkinTypeManagement = () => {
             style={{ margin: 3, border: "2px solid " }}
           >
             <i className="fa-solid fa-pen-to-square"></i>
-            Sửa
+         
           </Button>
+          </Tooltip>
+          <Tooltip title="Chi tiết">
           <Button
             color="primary"
             variant="filled"
@@ -97,8 +100,10 @@ const SkinTypeManagement = () => {
             style={{ margin: 3, border: "2px solid " }}
           >
             <i className="fa-solid fa-eye"></i>
-            Chi tiết
+          
           </Button>
+          </Tooltip>
+          <Tooltip title="Xóa">
           <Popconfirm
             title="Bạn có muốn xóa loại da này không?"
             onConfirm={() => handleDeleteSkinType(record.skinTypeId)}
@@ -111,9 +116,10 @@ const SkinTypeManagement = () => {
               style={{ margin: 3, border: "2px solid " }}
             >
               <i className="fa-solid fa-trash"></i>
-              Xóa
+              
             </Button>
           </Popconfirm>
+          </Tooltip>
         </div>
       ),
     },

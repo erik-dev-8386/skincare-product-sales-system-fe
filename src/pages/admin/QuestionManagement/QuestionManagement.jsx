@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState, useCallback } from "react";
-import { Button, Form, Input, Modal, Table, Popconfirm, Tag } from "antd";
+import { Button, Form, Input, Modal, Table, Popconfirm, Tag, Tooltip } from "antd";
 import api from "../../../config/api";
 import { toast, ToastContainer } from "react-toastify";
 
@@ -133,30 +133,41 @@ const QuestionManagement = () => {
       title: "Nút điều khiển",
       key: "actions",
       render: (_, record) => (
-        <div className="button">
+        <div className="button" style={{ display: "flex", justifyContent: "center", flexDirection: "column", width: 100, alignItems: "center" }}>
+          <Tooltip title="Sửa">
           <Button
-            type="primary"
+            color="orange"
+            variant="filled"
             onClick={() => handleEditQuestion(record)}
-            style={{ marginRight: 8 }}
+            style={{ margin: 3, border: "2px solid", width: 100 }}
           >
-            <i className="fa-solid fa-pen-to-square"></i> Sửa
+            <i className="fa-solid fa-pen-to-square"></i> 
           </Button>
+          </Tooltip>
+          <Tooltip title="Chi tiết">
           <Button
+            color="primary"
+            variant="filled"
+            type="default"
             onClick={() => handleViewDetails(record)}
-            style={{ marginRight: 8 }}
+            style={{ margin: 3, border: "2px solid", width: 100 }}
           >
-            <i className="fa-solid fa-eye"></i> Chi tiết
+            <i className="fa-solid fa-eye"></i>
           </Button>
+          </Tooltip>
+          <Tooltip title="Xóa">
           <Popconfirm
             title="Bạn có muốn xóa câu hỏi này không?"
             onConfirm={() => handleDeleteQuestion(record.questionId)}
             okText="Có"
             cancelText="Không"
           >
-            <Button danger>
-              <i className="fa-solid fa-trash"></i> Xóa
+            <Button danger
+              style={{ margin: 3, border: "2px solid", width: 100 }}>
+              <i className="fa-solid fa-trash"></i>
             </Button>
           </Popconfirm>
+          </Tooltip>
         </div>
       ),
     },

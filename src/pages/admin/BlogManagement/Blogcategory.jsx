@@ -7,6 +7,7 @@ import {
   Popconfirm,
   Select,
   Tag,
+  Tooltip,
 } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
@@ -77,14 +78,17 @@ const BlogCategory = () => {
             width: 100,
           }}
         >
+          <Tooltip title="Sửa">
           <Button
             color="orange"
             variant="filled"
             onClick={() => handleEditCategory(record)}
             style={{ margin: 3, border: "2px solid" }}
           >
-            <i className="fa-solid fa-pen-to-square"></i> Sửa
+            <i className="fa-solid fa-pen-to-square"></i>
           </Button>
+          </Tooltip>
+          <Tooltip title="Chi tiết">
           <Button
             color="primary"
             variant="filled"
@@ -92,8 +96,10 @@ const BlogCategory = () => {
             onClick={() => handleViewDetails(record)}
             style={{ margin: 3, border: "2px solid" }}
           >
-            <i className="fa-solid fa-eye"></i> Chi tiết
+            <i className="fa-solid fa-eye"></i>
           </Button>
+          </Tooltip>
+          <Tooltip title="Xóa">
           <Popconfirm
             title="Bạn có muốn xóa danh mục này không?"
             onConfirm={() => handleDeleteCategory(record.blogCategoryName)}
@@ -105,9 +111,10 @@ const BlogCategory = () => {
               variant="filled"
               style={{ margin: 3, border: "2px solid" }}
             >
-              <i className="fa-solid fa-trash"></i> Xóa
+              <i className="fa-solid fa-trash"></i>
             </Button>
           </Popconfirm>
+          </Tooltip>
         </div>
       ),
     },
