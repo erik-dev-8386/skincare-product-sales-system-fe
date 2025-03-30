@@ -148,7 +148,7 @@
 }
 
 .compare-image-container:hover {
-  transform: translateY(-5px);
+  /* transform: translateY(-5px); */
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
@@ -275,7 +275,7 @@
 
 .compare-table .ant-table-tbody>tr:hover>td {
   background-color: #f0f9ff;
-  transform: translateY(-2px);
+  /* transform: translateY(-2px); */
 }
 
 .compare-table .ant-table-tbody>tr:nth-child(even)>td {
@@ -299,7 +299,7 @@
 }
 
 .compare-modal .ant-btn:hover {
-  transform: translateY(-2px);
+  /* transform: translateY(-2px); */
   box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3);
   background: linear-gradient(135deg, #69c0ff, #40a9ff);
 }

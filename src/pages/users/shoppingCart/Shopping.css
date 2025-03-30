@@ -10,7 +10,7 @@
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.279);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     color: #333;
-    margin-bottom: 20px !important;
+    margin: 20px auto !important;
 }
 
 .empty-cart-message {
@@ -36,7 +36,7 @@
 
 .empty-cart-message .ant-btn:hover {
     background: #a80001;
-    transform: translateY(-2px);
+    /* transform: translateY(-2px); */
 }
 
 .order-summary {
@@ -106,10 +106,10 @@
     box-shadow: 0 4px 12px rgba(144, 0, 1, 0.1);
 }
 
-.checkout-btn:active,
+/* .checkout-btn:active,
 .continue-shopping-btn:active {
     transform: translateY(1px);
-}
+} */
 
 /* Custom Table Styles */
 .table-cart .ant-table {

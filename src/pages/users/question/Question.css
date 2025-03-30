@@ -182,7 +182,7 @@ body {
 }
 
 .submit-btn:hover {
-  transform: translateY(-2px);
+  /* transform: translateY(-2px); */
   box-shadow: 0 5px 20px rgba(210, 54, 105, 0.4);
 }
 
@@ -846,18 +846,18 @@ body {
   width: 100%;
   height: 100%;
   background: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3));
-  transform: translateY(100%);
+  /* transform: translateY(100%); */
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .primary-btn:hover {
-  transform: translateY(-3px);
+  /* transform: translateY(-3px); */
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2) !important;
 }
-
+/* 
 .primary-btn:hover::after {
   transform: translateY(0);
-}
+} */
 
 .share-btn {
   background: white;
