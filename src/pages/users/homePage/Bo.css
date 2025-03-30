@@ -43,7 +43,7 @@
 
 /* Section Styling */
 .section {
-    margin: 60px 0;
+   
     padding: 30px 0;
     position: relative;
 }
@@ -85,9 +85,7 @@
 }
 
 /* Hot Deals Section */
-.hot-deals-section {
-    margin: 80px 0;
-}
+
 
 /* Tìm phần này trong file CSS */
 .hot-deals-section .section-title {
@@ -96,7 +94,7 @@
 
     /* Giống với các title khác */
     letter-spacing: 3px;
-    margin: 60px 0;
+   
 }
 
 .hot-deals-section .section-title::after {
@@ -341,9 +339,6 @@
         padding: 0 15px;
     }
 
-    .section {
-        margin: 50px 0;
-    }
 
     .section-title {
         font-size: 24px;

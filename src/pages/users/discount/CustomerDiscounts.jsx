@@ -74,15 +74,13 @@ const CustomerDiscounts = () => {
 
     return (
         <>
-        {/* <Header/> */}
-        <div className="container">
+        
         <Card>
             <Title className="discount-title" style={{color: "#900001"}} level={2}>Danh sách mã giảm giá</Title>
             <Text>Khám phá các chương trình giảm giá và ưu đãi mới nhất dành cho bạn.</Text>
             <Table dataSource={discounts} columns={columns} rowKey="discountId" style={{ marginTop: 16 }} />
         </Card>
-        </div>
-        {/* <Footer/> */}
+      
         </>
     );
 };

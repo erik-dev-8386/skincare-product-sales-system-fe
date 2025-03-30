@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal, Table, Popconfirm, Tag } from "antd";
+import { Button, Form, Input, Modal, Table, Popconfirm, Tag,Tooltip } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
@@ -52,12 +52,17 @@ const CategoryManagement = () => {
       key: 'actions',
       render: (text, record) => (
         <div className="button" style={{display: "flex", justifyContent: "center", flexDirection: "column", width: 100}}>
+          <Tooltip title="Sửa">
           <Button color="orange" variant="filled" onClick={() => handleEditCategory(record)} style={{ margin: 3, border: "2px solid " }}>
-            <i className="fa-solid fa-pen-to-square"></i> Sửa
+            <i className="fa-solid fa-pen-to-square"></i>
           </Button>
+          </Tooltip>
+          <Tooltip title="Chi tiết">
           <Button color="primary" variant="filled" type="default" onClick={() => handleViewDetails(record)} style={{ margin: 3, border: "2px solid " }}>
-            <i className="fa-solid fa-eye"></i> Chi tiết
+            <i className="fa-solid fa-eye"></i>
           </Button>
+          </Tooltip>
+          <Tooltip title="Xóa">
           <Popconfirm
             title="Bạn có muốn xóa loại da này không?"
             onConfirm={() => handleDeleteCategory(record.categoryId)}
@@ -65,9 +70,10 @@ const CategoryManagement = () => {
             cancelText="Không"
           >
             <Button color="red" variant="filled" style={{ margin: 3, border: "2px solid " }}>
-              <i className="fa-solid fa-trash"></i> Xóa
+              <i className="fa-solid fa-trash"></i>
             </Button>
           </Popconfirm>
+          </Tooltip>
         </div>
       ),
     },

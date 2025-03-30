@@ -44,8 +44,12 @@ const Blog = () => {
       setLoading(true);
       const response = await api.get("/blogs");
       console.log("Blog data:", response.data);
-      setBlogs(response.data);
-      setFilteredBlogs(response.data);
+      
+      // Filter blogs to only show those with status=1 (visible)
+      const visibleBlogs = response.data.filter(blog => blog.status === 1);
+      
+      setBlogs(visibleBlogs);
+      setFilteredBlogs(visibleBlogs);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching blogs:", error);
@@ -167,10 +171,10 @@ const Blog = () => {
   return (
     <div className="blog-container">
       <Layout style={{ minHeight: "100vh", background: "#fff" }}>
-        <Breadcrumb
+        {/* <Breadcrumb
           style={{
-            margin: "20px 0",
-            padding: "10px 20px",
+          
+            padding: "0px 20px",
             background: "#f8f9fa",
             borderRadius: "4px",
           }}
@@ -194,7 +198,7 @@ const Blog = () => {
               style: { cursor: "pointer" },
             },
           ]}
-        />
+        /> */}
 
         <div className="blog-header-banner">
           {/* <div className="blog-header-overlay">
@@ -405,15 +409,12 @@ const Blog = () => {
                                 <span className="blog-date">
                                   <i className="fa-solid fa-calendar-days"></i> {new Date(blog.postedTime).toLocaleDateString("vi-VN")}
                                 </span>
-                                {filteredBlogs[0].blogCategory && (
-                              <span className="blog-category">
-                                <i className="fa-solid fa-folder"></i> {filteredBlogs[0].blogCategory.blogCategoryName}
-                              </span>
-                            )}
-                              
+                                {blog.blogCategory && (
+                                  <span className="blog-category">
+                                    <i className="fa-solid fa-folder"></i> {blog.blogCategory.blogCategoryName}
+                                  </span>
+                                )}
                               </div>
-                              
-                              
                             </div>
                           </div>
                         </div>

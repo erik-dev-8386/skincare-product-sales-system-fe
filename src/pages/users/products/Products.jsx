@@ -65,7 +65,7 @@
 //         setCategories(categoriesRes.data);
 //         setSkinTypes(skinTypesRes.data);
 //         setBrands(brandsRes.data);
-        
+
 //         // Xử lý discounts
 //         const discountMap = discountsRes.data.reduce((acc, discount) => {
 //           acc[discount.discountId] = discount.discountPercent;
@@ -97,7 +97,7 @@
 //               const searchValue = searchFromUrl.toLowerCase();
 //               const productCategory = categoriesRes.data.find(cat => cat.categoryId === product.categoryId);
 //               const categoryName = productCategory ? productCategory.categoryName.toLowerCase() : '';
-              
+
 //               matchSearch = productName.includes(searchValue) || categoryName.includes(searchValue);
 //             }
 
@@ -135,7 +135,7 @@
 //         selectedBrand,
 //         sortOption,
 //         selectedDiscount
-        
+
 //       );
 //     }
 //   };
@@ -235,7 +235,7 @@
 //         </div>
 //       ),
 //     },
-    
+
 //     {
 //       title: "Sản phẩm 1",
 //       dataIndex: "product1",
@@ -358,7 +358,7 @@
 //         key: "8",
 //         info: "Mô tả",
 //         product1: <div className="compare-description"  dangerouslySetInnerHTML={{ __html: p1.description }}/>,
-        
+
 //         product2: <div className="compare-description" dangerouslySetInnerHTML={{ __html: p2.description }}/>,
 //       },
 //       {
@@ -377,13 +377,13 @@
 //       filtered = filtered.filter((product) => {
 //         const productName = product.productName.toLowerCase();
 //         const searchValue = search.toLowerCase();
-        
+
 //         const matchName = productName.includes(searchValue);
-        
+
 //         const productCategory = categories.find(cat => cat.categoryId === product.categoryId);
 //         const matchCategory = productCategory && 
 //           productCategory.categoryName.toLowerCase().includes(searchValue);
-        
+
 //         return matchName || matchCategory;
 //       });
 //     }
@@ -657,7 +657,7 @@
 //                     ]}
 //                     className="compare-modal"
 //                   >
-                    
+
 
 //                     <Table
 //                       columns={compareColumns}
@@ -679,18 +679,18 @@
 
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { 
-  Input, 
-  Select, 
-  Layout, 
-  Menu, 
-  Row, 
-  Col, 
-  Breadcrumb, 
-  Modal, 
-  Table, 
+import {
+  Input,
+  Select,
+  Layout,
+  Menu,
+  Row,
+  Col,
+  Breadcrumb,
+  Modal,
+  Table,
   Button,
-  Typography 
+  Typography
 } from "antd";
 import { SearchOutlined } from '@ant-design/icons';
 import api from "../../../config/api";
@@ -912,7 +912,7 @@ export default function Products() {
 
   const filterProducts = (searchValue, categoryId, skinTypeId, brandId, discountId, sort) => {
     let filtered = [...products];
-    
+
     if (searchValue) {
       const searchLower = searchValue.toLowerCase();
       filtered = filtered.filter(product => {
@@ -922,19 +922,19 @@ export default function Products() {
         return productName.includes(searchLower) || categoryName.includes(searchLower);
       });
     }
-    
+
     if (categoryId) {
       filtered = filtered.filter(product => product.categoryId === categoryId);
     }
-    
+
     if (skinTypeId) {
       filtered = filtered.filter(product => product.skinTypeId === skinTypeId);
     }
-    
+
     if (brandId) {
       filtered = filtered.filter(product => product.brandId === brandId);
     }
-    
+
     if (discountId) {
       filtered = filtered.filter(product => product.discountId === discountId);
     }
@@ -955,7 +955,7 @@ export default function Products() {
       default:
         break;
     }
-    
+
     setFilteredProducts(filtered);
   };
 
@@ -989,18 +989,18 @@ export default function Products() {
       try {
         setIsLoading(true);
         const [productsRes, categoriesRes, skinTypesRes, discountsRes, brandsRes] = await Promise.all([
-          api.get("/products"),
-          api.get("/categories"),
-          api.get("/skin-types"),
-          api.get("/discounts"),
-          api.get("/brands")
+          api.get("/products/list-name-products"),
+          api.get("/categories/list-name-categories"),
+          api.get("/skin-types/list-name-skin-types"),
+          api.get("/discounts/list-name-discounts"),
+          api.get("/brands/list-name-brands")
         ]);
 
         setProducts(productsRes.data);
         setCategories(categoriesRes.data);
         setSkinTypes(skinTypesRes.data);
         setBrands(brandsRes.data);
-        
+
         const discountMap = discountsRes.data.reduce((acc, discount) => {
           acc[discount.discountId] = discount.discountPercent;
           return acc;
@@ -1024,7 +1024,7 @@ export default function Products() {
               const searchValue = searchFromUrl.toLowerCase();
               const productCategory = categoriesRes.data.find(cat => cat.categoryId === product.categoryId);
               const categoryName = productCategory ? productCategory.categoryName.toLowerCase() : '';
-              
+
               matchSearch = productName.includes(searchValue) || categoryName.includes(searchValue);
             }
 
@@ -1051,222 +1051,210 @@ export default function Products() {
   }, [searchParams]);
 
   return (
-    <div className="product-page-container">
-      <Layout style={{ background: 'transparent' }}>
-        <Breadcrumb
-          className="product-breadcrumb"
-          items={[
-            {
-              title: "Trang chủ",
-              onClick: () => navigate("/"),
-              style: { cursor: "pointer" },
-            },
-            {
-              title: "Sản phẩm",
-              onClick: () => navigate("/products"),
-              style: { cursor: "pointer" },
-            },
-          ]}
-        />
+    
+      <div className="product-page-container">
+        <Layout style={{ background: 'transparent' }}>
+         
 
-        <Header className="product-header">
-          <Title level={2} style={{ fontWeight: 300, margin: 0, marginTop: "20px" }}>
-            Sản phẩm của Haven Skin
-          </Title>
-          {compareProducts.length > 0 && (
-            <Button 
-              type="primary" 
-              onClick={() => setIsCompareModalVisible(true)}
-              style={{ marginLeft: '20px' }}
-            >
-              So sánh ({compareProducts.length})
-            </Button>
-          )}
-        </Header>
-
-        <Layout className="product-layout">
-          <Sider className="product-sider" width={280}>
-            <Title level={5} className="filter-section-title">Danh mục</Title>
-            <Menu
-              className="product-menu"
-              mode="inline"
-              selectedKeys={[selectedCategory]}
-              onClick={(e) => handleCategorySelect(e.key)}
-              items={[
-                { key: "", label: "Tất cả" },
-                ...categories.slice(0, visibleCategories).map((category) => ({
-                  key: category.categoryId,
-                  label: category.categoryName,
-                })),
-              ]}
-            />
-            {categories.length > 5 && (
+          <Header className="product-header">
+            <h1>
+              Sản phẩm của Haven Skin
+            </h1>
+            {compareProducts.length > 0 && (
               <Button
-                className="view-more-btn"
-                onClick={() => setVisibleCategories(visibleCategories === 5 ? categories.length : 5)}
+                type="primary"
+                onClick={() => setIsCompareModalVisible(true)}
+                style={{ marginLeft: '20px' }}
               >
-                {visibleCategories === 5 ? "Xem thêm..." : "Thu gọn"}
+                So sánh ({compareProducts.length})
               </Button>
             )}
+          </Header>
 
-            <Title level={5} className="filter-section-title">Loại da</Title>
-            <Menu
-              className="product-menu"
-              mode="inline"
-              selectedKeys={[selectedSkinType]}
-              onClick={(e) => handleSkinTypeSelect(e.key)}
-              items={[
-                { key: "", label: "Tất cả" },
-                ...skinTypes.slice(0, visibleSkinTypes).map((skinType) => ({
-                  key: skinType.skinTypeId,
-                  label: skinType.skinName,
-                })),
-              ]}
-            />
-            {skinTypes.length > 5 && (
-              <Button
-                className="view-more-btn"
-                onClick={() => setVisibleSkinTypes(visibleSkinTypes === 5 ? skinTypes.length : 5)}
-              >
-                {visibleSkinTypes === 5 ? "Xem thêm..." : "Thu gọn"}
-              </Button>
-            )}
-
-            <Title level={5} className="filter-section-title">Thương hiệu</Title>
-            <Menu
-              className="product-menu"
-              mode="inline"
-              selectedKeys={[selectedBrand]}
-              onClick={(e) => handleBrandSelect(e.key)}
-              items={[
-                { key: "", label: "Tất cả" },
-                ...brands.slice(0, visibleBrands).map((brand) => ({
-                  key: brand.brandId,
-                  label: brand.brandName,
-                })),
-              ]}
-            />
-            {brands.length > 5 && (
-              <Button
-                className="view-more-btn"
-                onClick={() => setVisibleBrands(visibleBrands === 5 ? brands.length : 5)}
-              >
-                {visibleBrands === 5 ? "Xem thêm..." : "Thu gọn"}
-              </Button>
-            )}
-
-            <Title level={5} className="filter-section-title">Giảm giá</Title>
-            <Menu
-              className="product-menu"
-              mode="inline"
-              selectedKeys={[selectedDiscount]}
-              onClick={(e) => handleDiscountSelect(e.key)}
-              items={[
-                { key: "", label: "Tất cả" },
-                ...discountList.slice(0, visibleDiscounts).map((discount) => ({
-                  key: discount.discountId,
-                  label: `Giảm ${discount.discountPercent}%`,
-                })),
-              ]}
-            />
-            {discountList.length > 5 && (
-              <Button
-                className="view-more-btn"
-                onClick={() => setVisibleDiscounts(visibleDiscounts === 5 ? discountList.length : 5)}
-              >
-                {visibleDiscounts === 5 ? "Xem thêm..." : "Thu gọn"}
-              </Button>
-            )}
-          </Sider>
-
-          <Layout>
-            <Content className="product-content">
-              {isLoading ? (
-                <div className="loading-container">
-                  Đang tải sản phẩm...
-                </div>
-              ) : (
-                <>
-                  <div className="search-filter-container">
-                    <Input
-                      className="search-input"
-                      placeholder="Tìm sản phẩm..."
-                      value={searchTerm}
-                      onChange={handleSearch}
-                      prefix={<SearchOutlined />}
-                    />
-                    <Select
-                      className="filter-select"
-                      placeholder="Lọc sản phẩm theo..."
-                      onChange={handleSort}
-                      value={sortOption || undefined}
-                    >
-                      <Option value="a-z">A-Z</Option>
-                      <Option value="z-a">Z-A</Option>
-                      <Option value="low-high">Giá: Thấp - cao</Option>
-                      <Option value="high-low">Giá: Cao - thấp</Option>
-                    </Select>
-                  </div>
-
-                  <Row className="product-grid" gutter={[20, 20]}>
-                    {filteredProducts.slice(0, visibleProducts).map((product) => (
-                      <Col xs={24} sm={12} md={8} lg={6} key={product.productId}>
-                        <ProductCard
-                          product={product}
-                          discounts={discounts}
-                          brands={brands}
-                          onCompareClick={handleCompareClick}
-                          isComparing={compareProducts.some(p => p.productId === product.productId)}
-                        />
-                      </Col>
-                    ))}
-                  </Row>
-
-                  {filteredProducts.length > visibleProducts && (
-                    <div style={{ textAlign: "center", marginTop: "30px" }}>
-                      <Button 
-                        className="load-more-btn" 
-                        onClick={handleLoadMore}
-                      >
-                        Xem thêm sản phẩm
-                      </Button>
-                    </div>
-                  )}
-
-                  <Modal
-                    className="compare-modal"
-                    title={
-                      <div className="compare-modal-title">
-                        <i
-                          className="fa-solid fa-scale-balanced"
-                          style={{ marginRight: "10px" }}
-                        ></i>
-                        So sánh sản phẩm
-                      </div>
-                    }
-                    open={isCompareModalVisible}
-                    onCancel={handleCloseCompare}
-                    width={1000}
-                    footer={[
-                      <Button key="close" onClick={handleCloseCompare}>
-                        Đóng
-                      </Button>,
-                    ]}
-                  >
-                    <Table
-                      className="compare-table"
-                      columns={compareColumns}
-                      dataSource={getCompareData()}
-                      pagination={false}
-                      bordered
-                    />
-                  </Modal>
-                </>
+          <Layout className="product-layout">
+            <Sider className="product-sider" width={280}>
+              <Title level={4} className="filter-section-title">Danh mục</Title>
+              <Menu
+                className="product-menu"
+                mode="inline"
+                selectedKeys={[selectedCategory]}
+                onClick={(e) => handleCategorySelect(e.key)}
+                items={[
+                  { key: "", label: "Tất cả" },
+                  ...categories.slice(0, visibleCategories).map((category) => ({
+                    key: category.categoryId,
+                    label: category.categoryName,
+                  })),
+                ]}
+              />
+              {categories.length > 5 && (
+                <Button
+                  className="view-more-btn"
+                  onClick={() => setVisibleCategories(visibleCategories === 5 ? categories.length : 5)}
+                >
+                  {visibleCategories === 5 ? "Xem thêm..." : "Thu gọn"}
+                </Button>
               )}
-            </Content>
+
+              <Title level={4} className="filter-section-title">Loại da</Title>
+              <Menu
+                className="product-menu"
+                mode="inline"
+                selectedKeys={[selectedSkinType]}
+                onClick={(e) => handleSkinTypeSelect(e.key)}
+                items={[
+                  { key: "", label: "Tất cả" },
+                  ...skinTypes.slice(0, visibleSkinTypes).map((skinType) => ({
+                    key: skinType.skinTypeId,
+                    label: skinType.skinName,
+                  })),
+                ]}
+              />
+              {skinTypes.length > 5 && (
+                <Button
+                  className="view-more-btn"
+                  onClick={() => setVisibleSkinTypes(visibleSkinTypes === 5 ? skinTypes.length : 5)}
+                >
+                  {visibleSkinTypes === 5 ? "Xem thêm..." : "Thu gọn"}
+                </Button>
+              )}
+
+              <Title level={4} className="filter-section-title">Thương hiệu</Title>
+              <Menu
+                className="product-menu"
+                mode="inline"
+                selectedKeys={[selectedBrand]}
+                onClick={(e) => handleBrandSelect(e.key)}
+                items={[
+                  { key: "", label: "Tất cả" },
+                  ...brands.slice(0, visibleBrands).map((brand) => ({
+                    key: brand.brandId,
+                    label: brand.brandName,
+                  })),
+                ]}
+              />
+              {brands.length > 5 && (
+                <Button
+                  className="view-more-btn"
+                  onClick={() => setVisibleBrands(visibleBrands === 5 ? brands.length : 5)}
+                >
+                  {visibleBrands === 5 ? "Xem thêm..." : "Thu gọn"}
+                </Button>
+              )}
+
+              <Title level={4} className="filter-section-title">Giảm giá</Title>
+              <Menu
+                className="product-menu"
+                mode="inline"
+                selectedKeys={[selectedDiscount]}
+                onClick={(e) => handleDiscountSelect(e.key)}
+                items={[
+                  { key: "", label: "Tất cả" },
+                  ...discountList.slice(0, visibleDiscounts).map((discount) => ({
+                    key: discount.discountId,
+                    label: `Giảm ${discount.discountPercent}%`,
+                  })),
+                ]}
+              />
+              {discountList.length > 5 && (
+                <Button
+                  className="view-more-btn"
+                  onClick={() => setVisibleDiscounts(visibleDiscounts === 5 ? discountList.length : 5)}
+                >
+                  {visibleDiscounts === 5 ? "Xem thêm..." : "Thu gọn"}
+                </Button>
+              )}
+            </Sider>
+
+            <Layout>
+              <Content className="product-content">
+                {isLoading ? (
+                  <div className="loading-container">
+                    Đang tải sản phẩm...
+                  </div>
+                ) : (
+                  <>
+                    <div className="search-filter-container">
+                      <Input
+                        className="search-input"
+                        placeholder="Tìm sản phẩm..."
+                        value={searchTerm}
+                        onChange={handleSearch}
+                        prefix={<SearchOutlined />}
+                      />
+                      <Select
+                        className="filter-select"
+                        placeholder="Lọc sản phẩm theo..."
+                        onChange={handleSort}
+                        value={sortOption || undefined}
+                      >
+                        <Option value="a-z">A-Z</Option>
+                        <Option value="z-a">Z-A</Option>
+                        <Option value="low-high">Giá: Thấp - cao</Option>
+                        <Option value="high-low">Giá: Cao - thấp</Option>
+                      </Select>
+                    </div>
+
+                    <Row className="product-grid" gutter={[20, 20]}>
+                      {filteredProducts.slice(0, visibleProducts).map((product) => (
+                        <Col xs={24} sm={12} md={8} lg={6} key={product.productId}>
+                          <ProductCard
+                            product={product}
+                            discounts={discounts}
+                            brands={brands}
+                            onCompareClick={handleCompareClick}
+                            isComparing={compareProducts.some(p => p.productId === product.productId)}
+                          />
+                        </Col>
+                      ))}
+                    </Row>
+
+                    {filteredProducts.length > visibleProducts && (
+                      <div style={{ textAlign: "center", marginTop: "30px" }}>
+                        <Button
+                          className="load-more-btn"
+                          onClick={handleLoadMore}
+                        >
+                          Xem thêm sản phẩm
+                        </Button>
+                      </div>
+                    )}
+
+                    <Modal
+                      className="compare-modal"
+                      title={
+                        <div className="compare-modal-title">
+                          <i
+                            className="fa-solid fa-scale-balanced"
+                            style={{ marginRight: "10px" }}
+                          ></i>
+                          So sánh sản phẩm
+                        </div>
+                      }
+                      open={isCompareModalVisible}
+                      onCancel={handleCloseCompare}
+                      width={1000}
+                      footer={[
+                        <Button key="close" onClick={handleCloseCompare}>
+                          Đóng
+                        </Button>,
+                      ]}
+                    >
+                      <Table
+                        className="compare-table"
+                        columns={compareColumns}
+                        dataSource={getCompareData()}
+                        pagination={false}
+                        bordered
+                      />
+                    </Modal>
+                  </>
+                )}
+              </Content>
+            </Layout>
           </Layout>
         </Layout>
-      </Layout>
-    </div>
+      </div>
+    
   );
 }

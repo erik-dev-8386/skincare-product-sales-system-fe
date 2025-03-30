@@ -179,10 +179,6 @@ const BlogManage = () => {
         // Fetch blog hashtags
         const hashtagsResponse = await api.get("/blog-hashtag");
         setHashtags(hashtagsResponse.data);
-
-        // Fetch users
-        // const usersResponse = await api.get("/users");
-        // setUsers(usersResponse.data);
       } catch (error) {
         console.error("Error fetching options:", error);
         toast.info(
@@ -237,7 +233,6 @@ const BlogManage = () => {
     }
   };
 
-  // Thêm các hàm xử lý form và modal tương tự như các component khác
   const handleOpenModal = () => {
     form.resetFields();
     setUploadFileList([]);
@@ -292,65 +287,10 @@ const BlogManage = () => {
         return;
       }
 
-      const formData = new FormData();
+      // Lấy giá trị status từ form
+      const statusValue = form.getFieldValue("status");
+      console.log("Form status value:", statusValue);
 
-      // Tạo đối tượng blog để gửi lên server
-      const blogData = {
-        blogTitle: form.getFieldValue("blogTitle"),
-        blogContent: form.getFieldValue("blogContent"),
-        blogCategory: {
-          blogCategoryName: form.getFieldValue([
-            "blogCategory",
-            "blogCategoryName",
-          ]),
-        },
-        hashtags: form.getFieldValue("hashtags").map((tag) => ({
-          blogHashtagName: tag,
-        })),
-        status: form.getFieldValue("status") || 1, // Mặc định là hiển thị nếu không có giá trị
-        postedTime: new Date().toISOString(),
-      };
-
-      // Nếu đang chỉnh sửa, thêm blogId vào dữ liệu
-      if (editingBlog) {
-        blogData.blogId = editingBlog.blogId;
-         // Giữ nguyên ngày đăng cũ khi chỉnh sửa
-      blogData.postedTime = editingBlog.postedTime;
-      }
-
-      console.log("Blog data being sent:", blogData);
-
-      // Thêm dữ liệu blog vào FormData với tên là 'blogs' thay vì 'blog'
-      formData.append(
-        "blogs",
-        new Blob([JSON.stringify(blogData)], { type: "application/json" })
-      );
-
-      // Thêm email vào request
-      formData.append("email", email);
-
-      // Thêm các file ảnh vào FormData
-      if (imageFiles.length > 0) {
-        imageFiles.forEach((file) => {
-          formData.append("images", file); // Gửi file trực tiếp, không cần kiểm tra originFileObj
-        });
-      } else {
-        // Nếu không có ảnh, thêm một file rỗng để tránh lỗi "Required part 'images' is not present"
-        // Tạo một Blob rỗng và thêm vào FormData như một file
-        const emptyBlob = new Blob([""], { type: "application/octet-stream" });
-        formData.append("images", emptyBlob, "empty.txt");
-      }
-
-      // Log FormData để debug (không thể log trực tiếp)
-      for (let pair of formData.entries()) {
-        console.log(
-          pair[0] + ": " + (pair[1] instanceof Blob ? "Blob data" : pair[1])
-        );
-      }
-
-      let response;
-
-      // Sử dụng PUT cho cập nhật, POST cho tạo mới
       if (editingBlog) {
         // For update, we need to use JSON format instead of multipart/form-data
         // Extract the blog data without images
@@ -366,12 +306,15 @@ const BlogManage = () => {
           hashtags: form.getFieldValue("hashtags").map((tag) => ({
             blogHashtagName: tag,
           })),
-          status: form.getFieldValue("status") || 1,
+          status: statusValue, // Sử dụng giá trị status được lấy từ form
           blogId: editingBlog.blogId,
+          postedTime: editingBlog.postedTime, // Giữ ngày đăng cũ khi chỉnh sửa
         };
 
+        console.log("Update data being sent:", updateData);
+
         // Send JSON data for update
-        response = await api.put(
+        const response = await api.put(
           `/blogs/${editingBlog.blogTitle}`,
           updateData,
           {
@@ -381,9 +324,53 @@ const BlogManage = () => {
           }
         );
         message.success("Cập nhật blog thành công!");
+        
+        // Check the response to ensure success
+        console.log("Update response:", response.data);
       } else {
+        const formData = new FormData();
+
+        // Tạo đối tượng blog để gửi lên server
+        const blogData = {
+          blogTitle: form.getFieldValue("blogTitle"),
+          blogContent: form.getFieldValue("blogContent"),
+          blogCategory: {
+            blogCategoryName: form.getFieldValue([
+              "blogCategory",
+              "blogCategoryName",
+            ]),
+          },
+          hashtags: form.getFieldValue("hashtags").map((tag) => ({
+            blogHashtagName: tag,
+          })),
+          status: 1, // Mặc định là hiển thị khi tạo mới
+          postedTime: new Date().toISOString(),
+        };
+
+        console.log("Create blog data being sent:", blogData);
+
+        // Thêm dữ liệu blog vào FormData
+        formData.append(
+          "blogs",
+          new Blob([JSON.stringify(blogData)], { type: "application/json" })
+        );
+
+        // Thêm email vào request
+        formData.append("email", email);
+
+        // Thêm các file ảnh vào FormData
+        if (imageFiles.length > 0) {
+          imageFiles.forEach((file) => {
+            formData.append("images", file);
+          });
+        } else {
+          // Nếu không có ảnh, thêm một file rỗng
+          const emptyBlob = new Blob([""], { type: "application/octet-stream" });
+          formData.append("images", emptyBlob, "empty.txt");
+        }
+
         // For create, continue using multipart/form-data
-        response = await api.post("/blogs", formData, {
+        const response = await api.post("/blogs", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
@@ -391,17 +378,17 @@ const BlogManage = () => {
         message.success("Tạo blog thành công!");
       }
 
-      if (response.status === 200 || response.status === 201) {
-        setModalOpen(false);
-        fetchBlogs(); // Cập nhật lại danh sách blog
-        form.resetFields();
-        setUploadFileList([]);
-        setImageFiles([]);
-        setImagePreviews([]);
-        setEditingBlog(null);
-      }
+      // Cập nhật lại danh sách blog và reset form
+      setModalOpen(false);
+      fetchBlogs(); // Cập nhật lại danh sách blog sau khi thêm/sửa
+      form.resetFields();
+      setUploadFileList([]);
+      setImageFiles([]);
+      setImagePreviews([]);
+      setEditingBlog(null);
     } catch (error) {
       console.error("Lỗi khi xử lý blog:", error);
+      console.error("Error response:", error.response?.data);
       message.error(
         editingBlog
           ? "Có lỗi xảy ra khi cập nhật blog!"
@@ -430,8 +417,7 @@ const BlogManage = () => {
         blog.blogImages?.map((img) => img.imageURL) || [];
       setImagePreviews(currentImagePreviews);
 
-      // Không cần set imageFiles vì chúng ta chỉ hiển thị ảnh hiện có
-
+      // Set form values including status
       form.setFieldsValue({
         blogTitle: blog.blogTitle,
         blogContent: blog.blogContent,
@@ -439,8 +425,14 @@ const BlogManage = () => {
           blogCategoryName: blog.blogCategory.blogCategoryName,
         },
         hashtags: blog.hashtags.map((tag) => tag.blogHashtagName),
-        status: blog.status,
+        status: blog.status, // Make sure this is set correctly
         blogImages: existingImages,
+      });
+
+      // Log form values for debugging
+      console.log("Setting form values:", {
+        blogTitle: blog.blogTitle,
+        status: blog.status,
       });
     }, 100);
   };
@@ -451,6 +443,7 @@ const BlogManage = () => {
       toast.success("Đã xóa blog này thành công!");
       fetchBlogs();
     } catch (err) {
+      console.error("Error deleting blog:", err);
       toast.error("Xóa blog này không thành công!");
     }
   };
@@ -642,8 +635,8 @@ const BlogManage = () => {
               ]}
             >
               <Select>
-                <Option value={1}>HOẠT ĐỘNG</Option>
-                <Option value={0}>KHÔNG HOẠT ĐỘNG</Option>
+                <Option value={1}>HIỂN THỊ</Option>
+                <Option value={0}>ẨN</Option>
               </Select>
             </Form.Item>
           )}

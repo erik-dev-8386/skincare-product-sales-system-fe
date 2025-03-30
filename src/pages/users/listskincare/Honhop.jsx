@@ -771,7 +771,7 @@ export default function Honhop() {
           </div>
         </div>
 
-        <div className="row tips-section">
+        <div className="row tips-section" >
           <h2>Lời khuyên chăm sóc da</h2>
           <div className="tips-content">
             <ul>
@@ -783,7 +783,7 @@ export default function Honhop() {
           </div>
         </div>
 
-        <div className="row product-recommendations">
+        <div className="row product-recommendations" >
           <h2>Sản phẩm gợi ý cho da hỗn hợp</h2>
           <div
             className="row"

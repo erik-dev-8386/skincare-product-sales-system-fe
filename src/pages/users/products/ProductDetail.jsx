@@ -64,7 +64,7 @@ export default function ProductDetail() {
         setMainImage(response.data.productImages[0]?.imageURL);
 
         // Fetch tất cả sản phẩm
-        const allProductsResponse = await api.get("/products");
+        const allProductsResponse = await api.get("/products/list-name-products");
         const allProducts = allProductsResponse.data;
 
         // Lọc sản phẩm tương tự (cùng categoryId)
@@ -91,16 +91,16 @@ export default function ProductDetail() {
   useEffect(() => {
     const fetchOptions = async () => {
       try {
-        const brandsResponse = await api.get("/brands");
+        const brandsResponse = await api.get("/brands/list-name-brands");
         setBrands(brandsResponse.data);
 
-        const skinTypesResponse = await api.get("/skin-types");
+        const skinTypesResponse = await api.get("/skin-types/list-name-skin-types");
         setSkinTypes(skinTypesResponse.data);
 
-        const categoriesResponse = await api.get("/categories");
+        const categoriesResponse = await api.get("/categories/list-name-categories");
         setCategories(categoriesResponse.data);
 
-        const discountsResponse = await api.get("/discounts");
+        const discountsResponse = await api.get("/discounts/list-name-discounts");
         setDiscounts(discountsResponse.data);
       } catch (error) {
         console.error("Error fetching options:", error);
@@ -144,9 +144,9 @@ export default function ProductDetail() {
             'Authorization': `Bearer ${token}`
           }
         });
-        
+
         console.log("Fetched feedbacks response:", response);
-        
+
         if (response.data) {
           // Xử lý dữ liệu từ backend với first_name và last_name
           const enhancedReviews = response.data.map(review => ({
@@ -154,17 +154,17 @@ export default function ProductDetail() {
             // Tạo thông tin người dùng đầy đủ
             users: {
               email: review.userId || review.email,
-              fullName: review.user_first_name && review.user_last_name 
+              fullName: review.user_first_name && review.user_last_name
                 ? `${review.user_first_name} ${review.user_last_name}`
                 : (review.userId?.split('@')[0] || "Người dùng")
             }
           }));
-          
+
           // Sắp xếp theo thời gian mới nhất
-          const sortedReviews = enhancedReviews.sort((a, b) => 
+          const sortedReviews = enhancedReviews.sort((a, b) =>
             new Date(b.feedbackDate) - new Date(a.feedbackDate)
           );
-          
+
           setReviews(sortedReviews);
         } else {
           setReviews([]);
@@ -173,7 +173,7 @@ export default function ProductDetail() {
         console.error("Error fetching reviews:", error);
         console.log("Error response data:", error.response?.data);
         console.log("Error response status:", error.response?.status);
-        
+
         // Thử phương án thay thế nếu API chính gặp lỗi
         try {
           const token = localStorage.getItem("token");
@@ -182,27 +182,27 @@ export default function ProductDetail() {
               'Authorization': `Bearer ${token}`
             }
           });
-          
+
           if (response.data) {
             // Lọc các đánh giá của sản phẩm hiện tại
             const productFeedbacks = response.data.filter(
               feedback => feedback.productId === product.productId
             );
-            
+
             const enhancedReviews = productFeedbacks.map(review => ({
               ...review,
               users: {
                 email: review.userId || review.email,
-                fullName: review.user_first_name && review.user_last_name 
+                fullName: review.user_first_name && review.user_last_name
                   ? `${review.user_first_name} ${review.user_last_name}`
                   : (review.userId?.split('@')[0] || "Người dùng")
               }
             }));
-            
-            const sortedReviews = enhancedReviews.sort((a, b) => 
+
+            const sortedReviews = enhancedReviews.sort((a, b) =>
               new Date(b.feedbackDate) - new Date(a.feedbackDate)
             );
-            
+
             setReviews(sortedReviews);
             console.log("Successfully fetched reviews using fallback method");
           }
@@ -234,27 +234,27 @@ export default function ProductDetail() {
     const fetchRatingData = async () => {
       try {
         if (!product || !product.productId) return;
-        
+
         // Fetch average rating
         const avgResponse = await api.get(`/feedbacks/average-rating/${product.productName}`);
         console.log("Average rating response:", avgResponse.data);
-        
+
         // Handle NaN or invalid values
         const avgRating = !isNaN(avgResponse.data) ? avgResponse.data : 0;
         setAverageRating(avgRating);
-        
+
         // Fetch rating counts by star
         const countsResponse = await api.get(`/feedbacks/get-star/by-customer/${product.productName}`);
         console.log("Rating counts response:", countsResponse.data);
-        
+
         // Ensure all star values (1-5) exist in the ratings object
         const formattedCounts = {};
         for (let i = 1; i <= 5; i++) {
           formattedCounts[i] = countsResponse.data[i] || 0;
         }
-        
+
         setRatingCounts(formattedCounts);
-        
+
         console.log("Formatted ratings data:", {
           average: avgRating,
           counts: formattedCounts
@@ -263,10 +263,10 @@ export default function ProductDetail() {
         console.error("Error fetching rating data:", error);
         // Set default values in case of error
         setAverageRating(0);
-        setRatingCounts({1: 0, 2: 0, 3: 0, 4: 0, 5: 0});
+        setRatingCounts({ 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 });
       }
     };
-    
+
     if (product) {
       fetchRatingData();
     }
@@ -288,83 +288,44 @@ export default function ProductDetail() {
       : "Loading...";
   };
 
-  // const handleAddToCart = () => {
-  //   console.log("Đang thêm sản phẩm vào giỏ hàng:", product);
-
-  //   // Kiểm tra token trước khi thêm vào giỏ hàng
-  //   const token = localStorage.getItem("token");
-  //   if (!token) {
-  //     toast.error("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
-  //     return;
-  //   }
-
-  //   // Thêm sản phẩm vào giỏ hàng
-  //   addToCart({
-  //     ...product,
-  //     quantity,
-  //   });
-
-  //   // Lưu trực tiếp vào localStorage để đảm bảo dữ liệu được lưu
-  //   try {
-  //     const decoded = jwtDecode(token);
-  //     const email = decoded.sub;
-  //     if (email) {
-  //       const cartKey = `cart_${email}`;
-  //       const savedCart = localStorage.getItem(cartKey);
-  //       let updatedCart = [];
-
-  //       if (savedCart) {
-  //         const parsedCart = JSON.parse(savedCart);
-  //         const existingProduct = parsedCart.find(
-  //           (item) => item.productId === product.productId
-  //         );
-
-  //         if (existingProduct) {
-  //           updatedCart = parsedCart.map((item) =>
-  //             item.productId === product.productId
-  //               ? { ...item, quantity: item.quantity + quantity }
-  //               : item
-  //           );
-  //         } else {
-  //           updatedCart = [...parsedCart, { ...product, quantity }];
-  //         }
-  //       } else {
-  //         updatedCart = [{ ...product, quantity }];
-  //       }
-
-  //       localStorage.setItem(cartKey, JSON.stringify(updatedCart));
-  //       console.log("Đã lưu giỏ hàng trực tiếp vào localStorage:", updatedCart);
-  //     }
-  //   } catch (error) {
-  //     console.error("Lỗi khi lưu giỏ hàng vào localStorage:", error);
-  //   }
-
-  //   toast.success(`Đã thêm ${product.productName} vào giỏ hàng thành công!`);
-
-
-  // };
-
   const handleAddToCart = () => {
     console.log("Đang thêm sản phẩm vào giỏ hàng:", product);
-  
+
+    // Validate quantity is integer
+    if (quantity % 1 !== 0) {
+      toast.error("Số lượng phải là số nguyên (không chấp nhận số thập phân)");
+      return;
+    }
+
+    // Validate quantity range
+    if (quantity < 1) {
+      toast.error("Số lượng không được nhỏ hơn 1");
+      return;
+    }
+
+    if (quantity > product.quantity) {
+      toast.error(`Số lượng không được vượt quá ${product.quantity} (số lượng tồn kho)`);
+      return;
+    }
+
     // Thêm sản phẩm vào giỏ hàng
     addToCart({
       ...product,
       quantity,
     });
-  
+
     // Lưu vào localStorage cho guest (không cần token)
     try {
       const guestCartKey = `cart_guest`;
       const savedCart = localStorage.getItem(guestCartKey);
       let updatedCart = [];
-  
+
       if (savedCart) {
         const parsedCart = JSON.parse(savedCart);
         const existingProduct = parsedCart.find(
           (item) => item.productId === product.productId
         );
-  
+
         if (existingProduct) {
           updatedCart = parsedCart.map((item) =>
             item.productId === product.productId
@@ -377,89 +338,49 @@ export default function ProductDetail() {
       } else {
         updatedCart = [{ ...product, quantity }];
       }
-  
+
       localStorage.setItem(guestCartKey, JSON.stringify(updatedCart));
       console.log("Đã lưu giỏ hàng guest vào localStorage:", updatedCart);
     } catch (error) {
       console.error("Lỗi khi lưu giỏ hàng guest:", error);
     }
-  
+
     toast.success(`Đã thêm ${product.productName} vào giỏ hàng thành công!`);
   };
 
-  // const handleAddToCartAndNavigate = () => {
-  //   console.log("Đang thêm sản phẩm vào giỏ hàng và chuyển hướng:", product);
 
-  //   // Kiểm tra token trước khi thêm vào giỏ hàng
-  //   const token = localStorage.getItem("token");
-  //   if (!token) {
-  //     toast.error("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
-  //     // navigate("/login-and-signup")
-  //     setTimeout(() => {
-  //       navigate("/login-and-signup");
-  //     }, 3000);
-  //     return;
-  //   }
-
-  //   // Thêm sản phẩm vào giỏ hàng
-  //   addToCart({
-  //     ...product,
-  //     quantity,
-  //   });
-
-  //   // Lưu trực tiếp vào localStorage để đảm bảo dữ liệu được lưu
-  //   try {
-  //     const decoded = jwtDecode(token);
-  //     const email = decoded.sub;
-  //     if (email) {
-  //       const cartKey = `cart_${email}`;
-  //       const savedCart = localStorage.getItem(cartKey);
-  //       let updatedCart = [];
-
-  //       if (savedCart) {
-  //         const parsedCart = JSON.parse(savedCart);
-  //         const existingProduct = parsedCart.find(
-  //           (item) => item.productId === product.productId
-  //         );
-
-  //         if (existingProduct) {
-  //           updatedCart = parsedCart.map((item) =>
-  //             item.productId === product.productId
-  //               ? { ...item, quantity: item.quantity + quantity }
-  //               : item
-  //           );
-  //         } else {
-  //           updatedCart = [...parsedCart, { ...product, quantity }];
-  //         }
-  //       } else {
-  //         updatedCart = [{ ...product, quantity }];
-  //       }
-
-  //       localStorage.setItem(cartKey, JSON.stringify(updatedCart));
-  //       console.log("Đã lưu giỏ hàng trực tiếp vào localStorage:", updatedCart);
-  //     }
-  //   } catch (error) {
-  //     console.error("Lỗi khi lưu giỏ hàng vào localStorage:", error);
-  //   }
-
-  //   navigate("/shopping-cart");
-
-  // };
 
   const handleAddToCartAndNavigate = () => {
     console.log("Đang thêm sản phẩm vào giỏ hàng và chuyển hướng:", product);
-  
+
+    // Validate quantity is integer
+    if (quantity % 1 !== 0) {
+      toast.error("Số lượng phải là số nguyên (không chấp nhận số thập phân)");
+      return;
+    }
+
+    // Validate quantity range
+    if (quantity < 1) {
+      toast.error("Số lượng không được nhỏ hơn 1");
+      return;
+    }
+
+    if (quantity > product.quantity) {
+      toast.error(`Số lượng không được vượt quá ${product.quantity} (số lượng tồn kho)`);
+      return;
+    }
+
     // Thêm vào giỏ hàng trước
     addToCart({
       ...product,
       quantity,
     });
-  
+
     // Lưu vào localStorage
     try {
       const token = localStorage.getItem("token");
       let cartKey;
-      
+
       if (token) {
         // Nếu đã đăng nhập
         const decoded = jwtDecode(token);
@@ -469,16 +390,16 @@ export default function ProductDetail() {
         // Nếu là guest
         cartKey = `cart_guest`;
       }
-  
+
       const savedCart = localStorage.getItem(cartKey);
       let updatedCart = [];
-  
+
       if (savedCart) {
         const parsedCart = JSON.parse(savedCart);
         const existingProduct = parsedCart.find(
           (item) => item.productId === product.productId
         );
-  
+
         if (existingProduct) {
           updatedCart = parsedCart.map((item) =>
             item.productId === product.productId
@@ -491,13 +412,13 @@ export default function ProductDetail() {
       } else {
         updatedCart = [{ ...product, quantity }];
       }
-  
+
       localStorage.setItem(cartKey, JSON.stringify(updatedCart));
       console.log("Đã lưu giỏ hàng vào localStorage:", updatedCart);
     } catch (error) {
       console.error("Lỗi khi lưu giỏ hàng:", error);
     }
-  
+
     // Kiểm tra đăng nhập để chuyển hướng
     const token = localStorage.getItem("token");
     if (token) {
@@ -505,11 +426,11 @@ export default function ProductDetail() {
       navigate("/shopping-cart");
     } else {
       // Chưa đăng nhập -> chuyển đến trang đăng nhập
-      navigate("/login-and-signup", { 
-        state: { 
+      navigate("/login-and-signup", {
+        state: {
           fromCart: true,
-          message: "Vui lòng đăng nhập để hoàn tất đơn hàng" 
-        } 
+          message: "Vui lòng đăng nhập để hoàn tất đơn hàng"
+        }
       });
     }
   };
@@ -595,7 +516,7 @@ export default function ProductDetail() {
 
         // Xử lý dữ liệu nhận về từ response
         const returnedData = response.data;
-        
+
         // Tạo object feedback mới với đầy đủ thông tin
         const newFeedback = {
           ...returnedData,
@@ -610,7 +531,7 @@ export default function ProductDetail() {
           user_last_name: returnedData.user_last_name,
           users: {
             email: email,
-            fullName: returnedData.user_first_name && returnedData.user_last_name 
+            fullName: returnedData.user_first_name && returnedData.user_last_name
               ? `${returnedData.user_first_name} ${returnedData.user_last_name}`
               : email.split('@')[0]
           }
@@ -619,33 +540,33 @@ export default function ProductDetail() {
         // Thêm feedback mới vào đầu danh sách và sắp xếp lại
         setReviews(prev => {
           const updatedReviews = [newFeedback, ...prev];
-          return updatedReviews.sort((a, b) => 
+          return updatedReviews.sort((a, b) =>
             new Date(b.feedbackDate) - new Date(a.feedbackDate)
           );
         });
-        
+
         // LƯU CACHE TẠM THỜI ĐỂ TRÁNH MẤT DỮ LIỆU KHI RELOAD
         try {
           const cachedReviews = localStorage.getItem(`product_reviews_${product.productId}`);
           let updatedCache = [];
-          
+
           if (cachedReviews) {
             updatedCache = JSON.parse(cachedReviews);
             updatedCache.unshift(newFeedback);
           } else {
             updatedCache = [newFeedback];
           }
-          
+
           localStorage.setItem(`product_reviews_${product.productId}`, JSON.stringify(updatedCache));
         } catch (cacheError) {
           console.error("Error caching reviews:", cacheError);
         }
-        
+
         // Cập nhật lại average rating và rating counts
         try {
           const avgResponse = await api.get(`/feedbacks/average-rating/${product.productName}`);
           setAverageRating(avgResponse.data);
-          
+
           const countsResponse = await api.get(`/feedbacks/get-star/by-customer/${product.productName}`);
           setRatingCounts(countsResponse.data);
         } catch (error) {
@@ -656,7 +577,7 @@ export default function ProductDetail() {
       console.error("Error submitting feedback:", error);
       console.log("Error response:", error.response?.data);
       console.log("Error status:", error.response?.status);
-      
+
       if (error.response) {
         if (error.response.status === 500) {
           toast.error("Lỗi server: Không thể gửi đánh giá. Vui lòng thử lại sau!");
@@ -680,22 +601,7 @@ export default function ProductDetail() {
 
   if (loading || !product) return <p>Loading...</p>;
 
-  // Define breadcrumb items
-  const breadcrumbItems = [
-    {
-      title: "Trang chủ",
-      onClick: () => navigate("/"),
-      style: { cursor: "pointer" },
-    },
-    {
-      title: "Sản phẩm",
-      onClick: () => navigate("/products"),
-      style: { cursor: "pointer" },
-    },
-    {
-      title: product.productName,
-    },
-  ];
+  
 
   // Define tabs using the `items` prop
   const tabItems = [
@@ -761,13 +667,13 @@ export default function ProductDetail() {
                   <Rate disabled defaultValue={averageRating} allowHalf />
                 </div>
                 <span className="text-muted">
-                  {reviews.length > 0 
-                    ? `${reviews.length} đánh giá` 
+                  {reviews.length > 0
+                    ? `${reviews.length} đánh giá`
                     : "Chưa có đánh giá"}
                 </span>
               </div>
             </div>
-            
+
             {/* Hiển thị phân bố số sao chi tiết hơn */}
             {Object.keys(ratingCounts).length > 0 && (
               <div className="mb-4">
@@ -777,19 +683,19 @@ export default function ProductDetail() {
                   const count = ratingCounts[star] || 0;
                   const total = reviews.length;
                   const percentage = total > 0 ? (count / total) * 100 : 0;
-                  
+
                   return (
                     <div key={star} className="d-flex align-items-center mb-2">
                       <div style={{ width: '60px', textAlign: 'right' }}>
                         <strong>{star}</strong> <span className="text-warning">★</span>
                       </div>
                       <div className="progress flex-grow-1 mx-3" style={{ height: '12px' }}>
-                        <div 
-                          className="progress-bar bg-warning" 
-                          role="progressbar" 
-                          style={{width: `${percentage}%`}}
-                          aria-valuenow={count} 
-                          aria-valuemin="0" 
+                        <div
+                          className="progress-bar bg-warning"
+                          role="progressbar"
+                          style={{ width: `${percentage}%` }}
+                          aria-valuenow={count}
+                          aria-valuemin="0"
                           aria-valuemax={total}
                         ></div>
                       </div>
@@ -807,7 +713,7 @@ export default function ProductDetail() {
                 </div>
               </div>
             )}
-            
+
             {/* Form đánh giá với thêm Rating component */}
             <div className="mb-4 p-3 border rounded">
               <h4>Viết đánh giá của bạn</h4>
@@ -816,14 +722,14 @@ export default function ProductDetail() {
                   name="rating"
                   label="Đánh giá của bạn"
                   initialValue={0}
-                  rules={[{ 
-                    required: true, 
+                  rules={[{
+                    required: true,
                     type: 'number',
                     min: 1,
-                    message: 'Vui lòng chọn số sao đánh giá' 
+                    message: 'Vui lòng chọn số sao đánh giá'
                   }]}
                 >
-                  <Rate 
+                  <Rate
                     onChange={value => {
                       setUserRating(value);
                       // Cập nhật giá trị form field
@@ -838,8 +744,8 @@ export default function ProductDetail() {
                   rules={[{ required: true, message: 'Vui lòng nhập nội dung đánh giá' }]}
                 >
                   <MyEditor
-                    rows={4} 
-                    placeholder="Chia sẻ trải nghiệm của bạn về sản phẩm này" 
+                    rows={4}
+                    placeholder="Chia sẻ trải nghiệm của bạn về sản phẩm này"
                   />
                 </Form.Item>
                 <Form.Item>
@@ -849,12 +755,12 @@ export default function ProductDetail() {
                 </Form.Item>
               </Form>
             </div>
-            
+
             {reviews.length > 0 ? (
               <>
                 {reviews.length > displayCountReviews && (
-                  <Button 
-                    type="link" 
+                  <Button
+                    type="link"
                     onClick={() => setShowAllReviews(!showAllReviews)}
                     style={{ marginBottom: '10px' }}
                   >
@@ -866,10 +772,10 @@ export default function ProductDetail() {
                     <div className="d-flex align-items-center">
                       <UserOutlined className="me-2" />
                       <strong className="me-2">
-                        {review.users?.fullName || 
-                         (review.user_first_name && review.user_last_name 
-                           ? `${review.user_first_name} ${review.user_last_name}` 
-                           : review.userId?.split('@')[0] || "Người dùng")}
+                        {review.users?.fullName ||
+                          (review.user_first_name && review.user_last_name
+                            ? `${review.user_first_name} ${review.user_last_name}`
+                            : review.userId?.split('@')[0] || "Người dùng")}
                       </strong>
                       <span className="text-muted">
                         {new Date(review.feedbackDate).toLocaleDateString('vi-VN', {
@@ -909,16 +815,37 @@ export default function ProductDetail() {
     },
   ];
 
+  const handleQuantityChange = (value) => {
+    // Check if value is a decimal number
+    if (value % 1 !== 0) {
+      toast.error("Số lượng phải là số nguyên (không chấp nhận số thập phân)");
+      setQuantity(Math.floor(value)); // Round down to nearest integer
+      return;
+    }
+
+    if (value < 1) {
+      toast.error("Số lượng không được nhỏ hơn 1");
+      setQuantity(1);
+      return;
+    }
+
+    if (value > product.quantity) {
+      toast.error(`Số lượng không được vượt quá ${product.quantity}`);
+      setQuantity(product.quantity);
+      return;
+    }
+
+    setQuantity(value);
+  };
+
   return (
     <>
       <ToastContainer />
-      <div className="container">
+      
         <div style={{ maxWidth: "1200px", margin: "auto", padding: "20px" }}>
           {/* Breadcrumb with `items` prop */}
-          <Breadcrumb
-            style={{ marginBottom: "20px" }}
-            items={breadcrumbItems}
-          />
+         
+          <h1>Chi tiết sản phẩm</h1>
 
           <Row gutter={32}>
             {/* Product Image */}
@@ -1013,8 +940,12 @@ export default function ProductDetail() {
                     <label className="mb-2 d-block">Số lượng</label>
                     <InputNumber
                       defaultValue={1}
-                      onChange={(value) => setQuantity(value)}
+                      min={1}
+                      max={product.quantity}
+                      onChange={handleQuantityChange}
                       style={{ width: "100%" }}
+                      precision={0}
+                      title="Số lượng phải là số nguyên từ 1 đến số lượng tồn kho"
                     />
                   </div>
                 </div>
@@ -1038,14 +969,14 @@ export default function ProductDetail() {
 
                   Thêm vào giỏ hàng
                 </Button>
-                <Button
+                {/* <Button 
                   className="button-like"
                   style={{ padding: 5 }}
                   icon={<HeartOutlined />}
                 >
 
                   Yêu thích
-                </Button>
+                </Button>*/}
               </div>
             </Col>
           </Row>
@@ -1058,7 +989,7 @@ export default function ProductDetail() {
                   <div className="tabStyle">
                     <Tabs defaultActiveKey="1" items={tabItems} />
                   </div>
-                  
+
                 </div>
                 <div className="col-lg-4">
                   <div className="px-0 border rounded-2 shadow-0">
@@ -1156,7 +1087,7 @@ export default function ProductDetail() {
             </div>
           </section>
         </div>
-      </div>
+     
     </>
   );
 }

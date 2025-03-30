@@ -7,6 +7,7 @@ import {
   Popconfirm,
   Select,
   Tag,
+  Tooltip
 } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
@@ -76,14 +77,17 @@ const BrandManagement = () => {
       key: "actions",
       render: (text, record) => (
         <div className="button" style={{display: "flex", justifyContent: "center", flexDirection: "column", width: 100}}> 
+        <Tooltip title="Sửa">
           <Button
             color="orange"
             variant="filled"
             onClick={() => handleEditBrand(record)}
             style={{ margin: 3, border: "2px solid " }}
           >
-            <i className="fa-solid fa-pen-to-square"></i> Sửa
+            <i className="fa-solid fa-pen-to-square"></i>
           </Button>
+          </Tooltip>
+          <Tooltip title="CHi tiết">
           <Button
             color="primary"
             variant="filled"
@@ -91,8 +95,10 @@ const BrandManagement = () => {
             onClick={() => handleViewDetails(record)}
             style={{ margin: 3, border: "2px solid " }}
           >
-            <i className="fa-solid fa-eye"></i> Chi tiết
+            <i className="fa-solid fa-eye"></i> 
           </Button>
+          </Tooltip>
+          <Tooltip title="Xóa">
           <Popconfirm
             title="Bạn có muốn xóa thương hiệu này không?"
             onConfirm={() => handleDeleteBrand(record.brandId)}
@@ -104,9 +110,10 @@ const BrandManagement = () => {
               variant="filled"
               style={{ margin: 3, border: "2px solid " }}
             >
-              <i className="fa-solid fa-trash"></i> Xóa
+              <i className="fa-solid fa-trash"></i>
             </Button>
           </Popconfirm>
+          </Tooltip>
         </div>
       ),
     },

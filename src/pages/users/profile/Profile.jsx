@@ -550,7 +550,7 @@ export default function Profile() {
                     <Form.Item 
                       name="gender" 
                       label="Giới tính"
-                      rules={[{ required: true, message: 'Vui lòng chọn giới tính' }]}
+                      rules={[{ required: false, message: 'Vui lòng chọn giới tính' }]}
                     >
                       <Select disabled={!isEditing}>
                         <Option value="nam">Nam</Option>

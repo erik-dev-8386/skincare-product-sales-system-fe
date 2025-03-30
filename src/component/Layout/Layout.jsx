@@ -7,7 +7,7 @@ export default function Layout() {
     return (
         <>
             <Header />
-            <main>
+            <main style={{paddingTop: 150}}>
                 <Outlet />  {/* Đây là nơi hiển thị nội dung từng trang */}
             </main>
             <Footer />

@@ -7,9 +7,10 @@
     padding: 20px;
     background: #fff;
     border-radius: 12px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.348);
     font-family: Helvetica, Arial, sans-serif;
     color: black;
+    margin-bottom: 50px !important;
 }
 
 /* .cart-header {
