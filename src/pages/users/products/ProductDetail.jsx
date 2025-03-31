@@ -790,7 +790,7 @@ export default function ProductDetail() {
                     <div className="mt-1">
                       <Rate disabled value={review.rating || 5} />
                     </div>
-                    <p className="mt-2">{review.feedbackContent}</p>
+                    <div className="mt-2" dangerouslySetInnerHTML={{ __html: review.feedbackContent }} />
                     <p className="text-muted small">
                       Sản phẩm: {review.productName || product.productName}
                     </p>

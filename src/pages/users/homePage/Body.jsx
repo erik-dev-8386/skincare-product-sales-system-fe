@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import "./Bo.css";
 import hot from "../../../assets/home/30.jpg";
 import slider01 from "../../../assets/home/50.jpg";
-import slider02 from "../../../assets/home/80.jpg";
+import slider02 from "../../../assets/home/880.jpg";
 import Slider from "./Slider";
 import s1 from "../../../assets/home/s1.jpg";
 
