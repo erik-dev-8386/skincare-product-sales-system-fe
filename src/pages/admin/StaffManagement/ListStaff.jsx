@@ -198,12 +198,12 @@
 //       render: (_, record) => (
 //         <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", width: 100 }}>
 //           <Tooltip title="Sửa">
-//             <Button onClick={() => handleEditStaff(record)} style={{ margin: 3 }}>
+//             <Button onClick={() => handleEditStaff(record)} style={{ margin: 3, border: "2px solid", width: "20px" }}>
 //               <i className="fa-solid fa-pen-to-square"></i>
 //             </Button>
 //           </Tooltip>
 //           <Tooltip title="Chi tiết">
-//             <Button onClick={() => handleViewDetails(record)} style={{ margin: 3 }}>
+//             <Button onClick={() => handleViewDetails(record)} style={{ margin: 3, border: "2px solid", width: "20px" }}>
 //               <i className="fa-solid fa-eye"></i>
 //             </Button>
 //           </Tooltip>
@@ -214,7 +214,7 @@
 //               okText="Có"
 //               cancelText="Không"
 //             >
-//               <Button style={{ margin: 3 }}>
+//               <Button style={{ margin: 3, border: "2px solid", width: "20px" }}>
 //                 <i className="fa-solid fa-trash"></i>
 //               </Button>
 //             </Popconfirm>
@@ -597,17 +597,25 @@ const StaffManagement = () => {
       }
     },
     {
-      title: 'Thao tác',
+      title: 'Nút điều khiển',
       key: 'actions',
       render: (_, record) => (
-        <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", width: 100 }}>
+        <div className="button" style={{ display: "flex", justifyContent: "center", flexDirection: "column", width: "20px", alignItems: "center" }}>
           <Tooltip title="Sửa">
-            <Button onClick={() => handleEditStaff(record)} style={{ margin: 3 }}>
+            <Button
+              color="orange"
+            variant="filled"
+             onClick={() => handleEditStaff(record)} 
+             style={{ margin: 3, border: "2px solid", width: "20px" }}>
               <i className="fa-solid fa-pen-to-square"></i>
             </Button>
           </Tooltip>
           <Tooltip title="Chi tiết">
-            <Button onClick={() => handleViewDetails(record)} style={{ margin: 3 }}>
+            <Button
+             color="primary"
+            variant="filled"
+             onClick={() => handleViewDetails(record)}
+              style={{ margin: 3, border: "2px solid", width: "20px" }}>
               <i className="fa-solid fa-eye"></i>
             </Button>
           </Tooltip>
@@ -618,7 +626,10 @@ const StaffManagement = () => {
               okText="Có"
               cancelText="Không"
             >
-              <Button style={{ margin: 3 }}>
+              <Button 
+               color="red"
+              variant="filled"
+              style={{ margin: 3, border: "2px solid", width: "20px" }}>
                 <i className="fa-solid fa-trash"></i>
               </Button>
             </Popconfirm>
@@ -637,24 +648,7 @@ const StaffManagement = () => {
       <ToastContainer />
       <h1>Quản lý nhân viên</h1>
       <div style={{ marginBottom: 16 }}>
-        {/* <Input
-          placeholder="Nhập email hoặc tên nhân viên để tìm kiếm"
-          value={searchText}
-          onChange={(e) => setSearchText(e.target.value)}
-          style={{ width: 300, marginRight: 8 }}
-        />
-        <Button type="primary" onClick={handleSearch}>
-          Tìm kiếm
-        </Button> */}
-        {/* <Button
-          onClick={() => {
-            setSearchText("");
-            fetchStaff();
-          }}
-          style={{ margin: 8 }}
-        >
-          Reset
-        </Button> */}
+    
         <Button type="primary" onClick={handleOpenModal}>
           <i className="fa-solid fa-plus"></i> Thêm nhân viên mới
         </Button>

@@ -129,17 +129,25 @@ const CustomerManagement = () => {
       }
     },
     {
-      title: 'Thao tác',
+      title: 'Nút điều khiển',
       key: 'actions',
       render: (_, record) => (
-        <div style={{ display: "flex", justifyContent: "center", flexDirection: "column" }}>
+        <div className="button" style={{ display: "flex", justifyContent: "center", flexDirection: "column", width: "20px", alignItems: "center" }}>
           <Tooltip title="Sửa">
-            <Button onClick={() => handleEditCustomer(record)} style={{ margin: 3 }}>
+            <Button 
+            color="orange"
+            variant="filled"
+            onClick={() => handleEditCustomer(record)} 
+            style={{ margin: 3, border: "2px solid", width: "20px" }}>
               <i className="fa-solid fa-pen-to-square"></i>
             </Button>
           </Tooltip>
           <Tooltip title="Chi tiết">
-            <Button onClick={() => handleViewDetails(record)} style={{ margin: 3 }}>
+            <Button
+             color="primary"
+            variant="filled"
+            onClick={() => handleViewDetails(record)} 
+            style={{ margin: 3, border: "2px solid", width: "20px" }}>
               <i className="fa-solid fa-eye"></i>
             </Button>
           </Tooltip>
@@ -150,7 +158,10 @@ const CustomerManagement = () => {
               okText="Có"
               cancelText="Không"
             >
-              <Button style={{ margin: 3 }}>
+              <Button
+                color="red"
+              variant="filled"
+               style={{ margin: 3, border: "2px solid", width: "20px" }}>
                 <i className="fa-solid fa-trash"></i>
               </Button>
             </Popconfirm>

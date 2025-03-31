@@ -35,8 +35,8 @@ const ProductManagement = () => {
   const [skinTypes, setSkinTypes] = useState([]);
   const [categories, setCategories] = useState([]);
   const [discounts, setDiscounts] = useState([]);
-  const [imageFiles, setImageFiles] = useState([]); // State for image files
-  const [imagePreviews, setImagePreviews] = useState([]); // State for image previews
+  const [imageFiles, setImageFiles] = useState([]); 
+  const [imagePreviews, setImagePreviews] = useState([]); 
   const [searchText, setSearchText] = useState("");
 
   const statusMapping = {
@@ -147,13 +147,13 @@ const ProductManagement = () => {
       title: "Nút điều khiển",
       key: "actions",
       render: (text, record) => (
-        <div className="button" style={{ display: "flex", justifyContent: "center", flexDirection: "column", width: 100, alignItems: "center" }}>
+        <div className="button" style={{ display: "flex", justifyContent: "center", flexDirection: "column", width: "20px", alignItems: "center" }}>
            <Tooltip title="Sửa">
           <Button
             color="orange"
             variant="filled"
             onClick={() => handleEditProduct(record)}
-            style={{ margin: 3, border: "2px solid", width: 100 }}
+            style={{ margin: 3, border: "2px solid", width: "20px" }}
           >
             <i className="fa-solid fa-pen-to-square"></i>
           </Button>
@@ -164,7 +164,7 @@ const ProductManagement = () => {
             variant="filled"
             type="default"
             onClick={() => handleViewDetails(record)}
-            style={{ margin: 3, border: "2px solid", width: 100 }}
+            style={{ margin: 3, border: "2px solid", width: "20px" }}
           >
             <i className="fa-solid fa-eye"></i>
           </Button>
@@ -179,7 +179,7 @@ const ProductManagement = () => {
             <Button
               color="red"
               variant="filled"
-              style={{ margin: 3, border: "2px solid", width: 100 }}
+              style={{ margin: 3, border: "2px solid", width: "20px" }}
             >
               <i className="fa-solid fa-trash"></i>
             </Button>
@@ -194,16 +194,16 @@ const ProductManagement = () => {
     const fetchOptions = async () => {
       try {
         const brandsResponse = await api.get("/brands/list-name-brands");
-        // setBrands(brandsResponse.data.filter(item => item.status === 1));
+      
         setBrands(brandsResponse.data);
         const skinTypesResponse = await api.get("/skin-types/list-name-skin-types");
-        // setSkinTypes(skinTypesResponse.data.filter(item => item.status === 1));
+      
         setSkinTypes(skinTypesResponse.data);
         const categoriesResponse = await api.get("/categories/list-name-categories");
-        // setCategories(categoriesResponse.data.filter(item => item.status === 2));
+        
         setCategories(categoriesResponse.data);
         const discountsResponse = await api.get("/discounts/list-name-discounts");
-        // setDiscounts(discountsResponse.data.filter(item => item.status === 2));
+        
         setDiscounts(discountsResponse.data);
       } catch (error) {
         console.error("Error fetching options:", error);
@@ -245,8 +245,8 @@ const ProductManagement = () => {
     setModalOpen(false);
     form.resetFields();
     setEditingProduct(null);
-    setImageFiles([]); // Reset image files
-    setImagePreviews([]); // Reset image previews
+    setImageFiles([]); 
+    setImagePreviews([]); 
   };
 
   const handleViewDetails = (Product) => {
@@ -260,34 +260,34 @@ const ProductManagement = () => {
   };
 
   const handleSubmitForm = async (values) => {
-    // Check for duplicate product name
+  
     const isDuplicate = ProductList.some(
       (product) =>
         product.productName === values.productName &&
-        (!editingProduct || product.productId !== editingProduct.productId) // Allow editing the same product
+        (!editingProduct || product.productId !== editingProduct.productId) 
     );
 
     if (isDuplicate) {
       toast.error("Tên sản phẩm đã tồn tại! Vui lòng nhập tên khác.");
-      return; // Prevent form submission
+      return; 
     }
 
     const formData = new FormData();
 
-    // Append product data as JSON
+   
     formData.append(
       "products",
       new Blob([JSON.stringify(values)], { type: "application/json" })
     );
 
-    // Append image files
+  
     imageFiles.forEach((file) => {
       formData.append("images", file);
     });
 
     try {
       if (editingProduct) {
-        // Update existing product
+        
         await api.put(`/products/${editingProduct.productId}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -295,7 +295,7 @@ const ProductManagement = () => {
         });
         toast.success("Đã sửa sản phẩm thành công!");
       } else {
-        // Create new product
+      
         await api.post("/products", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -311,12 +311,12 @@ const ProductManagement = () => {
         error.response?.data?.message || error.message
       );
 
-      // Customized error messages
+      
       if (editingProduct) {
-        // Error while editing
+        
         toast.error("Sửa sản phẩm này không thành công!");
       } else {
-        // Error while adding
+        
         toast.error("Thêm sản phẩm này không thành công!");
       }
     }
@@ -331,7 +331,7 @@ const ProductManagement = () => {
       mfg: Product.mfg ? dayjs(Product.mfg) : null,
       exp: Product.exp ? dayjs(Product.exp) : null,
     });
-    setImagePreviews(Product.productImages.map((img) => img.imageURL)); // Set image previews
+    setImagePreviews(Product.productImages.map((img) => img.imageURL)); 
     handleOpenModal();
   };
 
@@ -756,7 +756,7 @@ const ProductManagement = () => {
                   key={index}
                   src={image.imageURL}
                   alt="Skin Type"
-                  style={{ width: 100, margin: "0 8px" }}
+                  style={{ width:  100, margin: "0 8px" }}
                 />
               ))}
             </p>
@@ -779,4 +779,3 @@ const ProductManagement = () => {
 
 export default ProductManagement;
 
-//=========================================================================================================
