@@ -35,6 +35,9 @@ const MyEditor = ({ value = "", onChange }) => {
         menubar: false,
         plugins: "lists link image charmap preview", // Removed "print"
         toolbar: "undo redo | bold italic | alignleft aligncenter alignright | code",
+        // Cấu hình để hỗ trợ UTF-8
+        entity_encoding: "raw", // Giữ nguyên ký tự gốc, không mã hóa thành HTML entities
+        encoding: "html", // Xử lý dữ liệu dưới dạng HTML nhưng giữ UTF-8
       }}
     />
   );

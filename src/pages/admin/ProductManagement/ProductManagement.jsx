@@ -439,6 +439,42 @@ const ProductManagement = () => {
               >
                 <Input type="number" />
               </Form.Item>
+              <Form.Item
+                label="Danh mục"
+                name="categoryId"
+                rules={[
+                  { required: true, message: "Danh mục không được để trống!" },
+                ]}
+              >
+                <Select>
+                  {categories.map((category) => (
+                    <Select.Option
+                      key={category.categoryId}
+                      value={category.categoryId}
+                    >
+                      {category.categoryName}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+              <Form.Item
+                label="Giảm giá"
+                name="discountId"
+                rules={[
+                  { required: false, message: "Giảm giá không được để trống!" },
+                ]}
+              >
+                <Select>
+                  {discounts.map((discount) => (
+                    <Select.Option
+                      key={discount.discountId}
+                      value={discount.discountId}
+                    >
+                      {discount.discountName}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
             </Col>
             {/* Cột 2 */}
             <Col span={12}>
@@ -562,42 +598,7 @@ const ProductManagement = () => {
                   ))}
                 </Select>
               </Form.Item>
-              <Form.Item
-                label="Danh mục"
-                name="categoryId"
-                rules={[
-                  { required: true, message: "Danh mục không được để trống!" },
-                ]}
-              >
-                <Select>
-                  {categories.map((category) => (
-                    <Select.Option
-                      key={category.categoryId}
-                      value={category.categoryId}
-                    >
-                      {category.categoryName}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>
-              <Form.Item
-                label="Giảm giá"
-                name="discountId"
-                rules={[
-                  { required: false, message: "Giảm giá không được để trống!" },
-                ]}
-              >
-                <Select>
-                  {discounts.map((discount) => (
-                    <Select.Option
-                      key={discount.discountId}
-                      value={discount.discountId}
-                    >
-                      {discount.discountName}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>
+             
             </Col>
           </Row>
           <Form.Item
