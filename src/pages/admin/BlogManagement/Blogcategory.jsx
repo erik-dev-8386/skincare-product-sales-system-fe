@@ -123,7 +123,7 @@ const BlogCategory = () => {
   const fetchCategories = async () => {
     try {
       const response = await api.get("/blogCategory");
-      console.log("Fetched categories after update:", response.data);
+      console.log("Fetched categories:", response.data);
       setCategoryList([...response.data]);
     } catch (error) {
       console.error("Error fetching categories:", error);
@@ -137,7 +137,8 @@ const BlogCategory = () => {
 
   const handleSearch = async () => {
     try {
-      const response = await api.get(`/blogCategory/name/${searchText}`);
+      const encodedSearchText = encodeURIComponent(searchText);
+      const response = await api.get(`/blogCategory/name/${encodedSearchText}`);
       if (response.data) {
         setCategoryList([response.data]);
       } else {
@@ -186,21 +187,14 @@ const BlogCategory = () => {
     if (editingCategory) {
       try {
         const encodedCategoryName = encodeURIComponent(editingCategory.blogCategoryName);
-        console.log("Updating category with values:", values);
         const response = await api.put(`/blogCategory/${encodedCategoryName}`, values);
-        console.log("API response after update:", response.data);
         toast.success("Đã sửa danh mục thành công!");
-
-        // Cập nhật thủ công categoryList
-        setCategoryList((prev) =>
-          prev.map((category) =>
-            category.blogCategoryId === editingCategory.blogCategoryId
-              ? { ...category, ...values }
-              : category
+        // Cập nhật danh sách ngay lập tức với dữ liệu từ response
+        setCategoryList((prevList) =>
+          prevList.map((item) =>
+            item.blogCategoryId === editingCategory.blogCategoryId ? response.data : item
           )
         );
-
-        await fetchCategories();
         handleCloseModal();
       } catch (error) {
         console.error("Lỗi khi cập nhật danh mục:", error);
@@ -212,9 +206,9 @@ const BlogCategory = () => {
           ...values,
           status: 1,
         };
-        await api.post("/blogCategory", newCategory);
+        const response = await api.post("/blogCategory", newCategory);
         toast.success("Đã thêm danh mục mới thành công!");
-        await fetchCategories();
+        setCategoryList((prevList) => [...prevList, response.data]);
         handleCloseModal();
       } catch (error) {
         console.error("Lỗi khi thêm danh mục mới:", error);
@@ -240,7 +234,11 @@ const BlogCategory = () => {
       const encodedCategoryName = encodeURIComponent(blogCategoryName);
       await api.delete(`/blogCategory/${encodedCategoryName}`);
       toast.success("Đã xóa danh mục này thành công!");
-      await fetchCategories();
+      setCategoryList((prevList) =>
+        prevList.map((item) =>
+          item.blogCategoryName === blogCategoryName ? { ...item, status: 0 } : item
+        )
+      );
     } catch (error) {
       console.error("Lỗi khi xóa danh mục:", error);
       toast.error("Xóa danh mục này không thành công!");

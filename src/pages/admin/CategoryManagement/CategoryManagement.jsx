@@ -155,6 +155,44 @@ const CategoryManagement = () => {
     }
   };
 
+  // const handleSubmitForm = async (values) => {
+  //   try {
+  //     const categoryData = {
+  //       categoryName: values.categoryName,
+  //       description: values.description || "",
+  //       usageInstruction: values.usageInstruction || "",
+  //     };
+  
+  //     let response;
+  //     if (editingCategory) {
+  //       response = await api.put(`/categories/${editingCategory.categoryId}`, categoryData);
+  //       toast.success("Đã sửa danh mục thành công!");
+  //       setCategoryList((prevList) =>
+  //         prevList.map((item) =>
+  //           item.categoryId === editingCategory.categoryId ? response.data : item
+  //         )
+  //       );
+  //     } else {
+  //       response = await api.post("/categories", categoryData);
+  //       toast.success("Đã thêm danh mục mới thành công!");
+  //       setCategoryList((prevList) => [...prevList, response.data]);
+  //     }
+  
+  //     fetchCategories();
+  //     handleCloseModal();
+  //   } catch (error) {
+  //     console.error("Error submitting form:", error);
+  //     if (error.response?.status === 400) {
+  //       toast.error(error.response.data.message || "Dữ liệu không hợp lệ!");
+  //     } else {
+  //       toast.error(
+  //         editingCategory
+  //           ? "Sửa danh mục không thành công!"
+  //           : "Thêm danh mục không thành công!"
+  //       );
+  //     }
+  //   }
+  // };
   const handleEditCategory = (category) => {
     setEditingCategory(category);
     form.setFieldsValue({

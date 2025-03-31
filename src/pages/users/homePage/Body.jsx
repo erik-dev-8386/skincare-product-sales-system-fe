@@ -234,11 +234,11 @@ export default function Body() {
         </div>
       </section>
 
-      {/* Best Sellers Section - 5 items */}
+     
       <section className="section best-sellers-section">
         <div className="section-header">
           <h2 className="section-title">TOP 5 SẢN PHẨM BÁN CHẠY</h2>
-          {/* <button className="view-all-btn" onClick={() => navigate("/products?sort=best-seller")}>XEM TẤT CẢ</button> */}
+          
         </div>
         <div className="best-seller-grid">
           {bestSellerProducts.slice(0, 5).map(product => (
@@ -249,14 +249,14 @@ export default function Body() {
               brands={brands}
               categories={categories}
               onCompareClick={handleCompareClick}
-              className="product-card" // Thêm class này
-              style={{ margin: '5px' }} // Hoặc thêm style trực tiếp
+              className="product-card" 
+              style={{ margin: '5px' }} 
             />
           ))}
         </div>
       </section>
 
-      {/* Blog Section */}
+  
       <section className="section blog-section">
         <div className="section-header">
           <h2 className="section-title">BLOG LÀM ĐẸP</h2>
@@ -285,7 +285,7 @@ export default function Body() {
         </div>
       </section>
 
-      {/* Comparison Modal */}
+     
       <Modal
         title={(
           <div className="compare-modal-title">

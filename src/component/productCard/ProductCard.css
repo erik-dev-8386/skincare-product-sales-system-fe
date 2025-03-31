@@ -1,7 +1,3 @@
-
-
-
-
 .button-compare {
     background-color: rgba(144, 0, 1, 0.1) !important;
     color: #900001 !important;
@@ -36,7 +32,6 @@
     color: white !important;
     border-color: #900001 !important;
     box-shadow: 0 2px 5px rgba(144, 0, 1, 0.2);
-    /* transform: translateY(-1px); */
 }
 
 .button-compare:active {
@@ -53,9 +48,30 @@
     border-radius: 16px;
     border: 1px solid rgba(144, 0, 1, 0.1);
     transition: all 0.3s ease;
+    overflow: hidden;
 }
 
 .product-card:hover {
     box-shadow: 0 4px 12px rgba(144, 0, 1, 0.08) !important;
-    /* transform: translateY(-2px); */
+}
+
+/* Giới hạn kích thước của Meta title */
+.product-card .ant-card-meta-title {
+    max-width: 230px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin: 0 auto;
+}
+
+/* Đảm bảo phần Meta description không làm tràn nội dung */
+.product-card .ant-card-meta-description {
+    max-width: 230px;
+    margin: 0 auto;
+}
+
+/* Điều chỉnh phần cover (hình ảnh) */
+.product-card .ant-card-cover {
+    width: 100%;
+    overflow: hidden;
 }

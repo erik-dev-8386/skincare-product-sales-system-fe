@@ -202,23 +202,30 @@ const BrandManagement = () => {
         brand.brandName.toLowerCase() === values.brandName.toLowerCase() &&
         (!editingBrand || brand.brandId !== editingBrand.brandId)
     );
-
+  
     if (isDuplicate) {
       toast.error("Tên thương hiệu đã tồn tại! Vui lòng nhập tên khác.");
       return;
     }
-
+  
+    // Validation phía frontend cho country
+    const countryPattern = /^[\p{L}\s]+$/u; // Regex hỗ trợ Unicode (dùng flag /u)
+    if (!countryPattern.test(values.country)) {
+      toast.error("Quốc gia chỉ được chứa chữ cái và khoảng trắng, không được chứa ký tự đặc biệt!");
+      return;
+    }
+  
     const brandData = {
       brandName: values.brandName,
       description: values.description,
-      country: values.country.trim().replace(/[^A-Za-z\s]/g, ""), // Loại bỏ ký tự không hợp lệ
+      country: values.country.trim(),
       ...(editingBrand && { status: values.status }),
     };
-
+  
     try {
       let response;
       if (editingBrand) {
-        response = await api.put(`/brands/${editingBrand.brandId}`, brandData); // Bỏ /haven-skin
+        response = await api.put(`/brands/${editingBrand.brandId}`, brandData);
         toast.success("Đã sửa thương hiệu thành công!");
         setBrandList((prevList) =>
           prevList.map((item) =>
@@ -226,11 +233,11 @@ const BrandManagement = () => {
           )
         );
       } else {
-        response = await api.post("/brands", brandData); // Bỏ /haven-skin
+        response = await api.post("/brands", brandData);
         toast.success("Đã thêm thương hiệu mới thành công!");
         setBrandList((prevList) => [...prevList, response.data]);
       }
-
+  
       fetchBrands();
       handleCloseModal();
     } catch (error) {
@@ -239,9 +246,7 @@ const BrandManagement = () => {
         error.response?.data?.message || error.message
       );
       if (error.response?.status === 400) {
-        toast.error(
-          error.response.data.message || "Dữ liệu không hợp lệ!"
-        );
+        toast.error(error.response.data.message || "Dữ liệu không hợp lệ!");
       } else if (error.response?.status === 500) {
         toast.error("Lỗi server, vui lòng thử lại sau!");
       } else {
@@ -332,15 +337,18 @@ const BrandManagement = () => {
             />
           </Form.Item>
           <Form.Item
-            label="Quốc gia"
-            name="country"
-            rules={[
-              { required: true, message: "Quốc gia không được để trống" },
-              
-            ]}
-          >
-            <Input />
-          </Form.Item>
+  label="Quốc gia"
+  name="country"
+  rules={[
+    { required: true, message: "Quốc gia không được để trống" },
+    {
+      pattern: /^[\p{L}\s]+$/u,
+      message: "Quốc gia chỉ được chứa chữ cái và khoảng trắng, không được chứa ký tự đặc biệt",
+    },
+  ]}
+>
+  <Input />
+</Form.Item>
           {editingBrand && (
             <Form.Item
               label="Trạng thái"

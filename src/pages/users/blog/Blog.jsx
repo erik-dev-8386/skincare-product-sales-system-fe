@@ -353,7 +353,7 @@ const Blog = () => {
                   <div className="blog-section">
                     <div className="blog-section-header">
                       <h2 className="blog-section-title">
-                        <i className="fa-solid fa-clock"></i> Bài Viết Mới Nhất
+                        <i className="fa-solid fa-clock"></i> Bài Viết Chia Sẻ
                       </h2>
                       <div className="blog-section-line"></div>
                     </div>

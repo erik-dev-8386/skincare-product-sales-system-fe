@@ -1,4 +1,3 @@
-
 import React from "react";
 import { Card, Button } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -38,7 +37,7 @@ const ProductCard = ({
 
   return (
     <Card
-      className="product-card" // Thêm class để áp dụng CSS
+      className="product-card"
       style={{
         width: "250px",
         display: "flex",
@@ -47,7 +46,7 @@ const ProductCard = ({
         alignItems: "center",
         textAlign: "center",
         border: "1px solid lightgray",
-        position: "relative", // Thêm position relative để badge có thể đè lên
+        position: "relative",
       }}
       hoverable
       cover={
@@ -61,12 +60,12 @@ const ProductCard = ({
                 position: "absolute",
                 top: 0,
                 right: 0,
-                zIndex: 1, // Đảm bảo badge nằm trên cùng
+                zIndex: 1,
                 padding: "2px 8px",
                 background:
                   "linear-gradient(90deg, rgba(255,226,0,1) 0%, rgba(255,149,0,1) 100%)",
                 color: "black",
-                borderRadius: "0 5px 0 5px", // Bo tròn góc dưới bên trái
+                borderRadius: "0 5px 0 5px",
                 fontSize: "14px",
                 fontWeight: "bold",
               }}
@@ -90,7 +89,18 @@ const ProductCard = ({
       onClick={() => navigate(`/products/${product.productId}`)}
     >
       <Meta
-        title={<p>{product.productName}</p>}
+        title={
+          <div
+            style={{
+              maxWidth: "230px",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {product.productName}
+          </div>
+        }
         description={
           <div style={{ height: 100 }}>
             <p>{findBrandNameById(product.brandId)}</p>
@@ -110,7 +120,7 @@ const ProductCard = ({
                 <span style={{ textDecoration: "underline" }}>đ</span>
               </p>
             ) : (
-              <p style={{ visibility: "hidden" }}>Placeholder</p> // Thêm placeholder để giữ nguyên chiều cao
+              <p style={{ visibility: "hidden" }}>Placeholder</p>
             )}
           </div>
         }
@@ -120,7 +130,7 @@ const ProductCard = ({
           className="button-compare"
           type="primary"
           onClick={(e) => {
-            e.stopPropagation(); // Ngăn chặn sự kiện click từ Card
+            e.stopPropagation();
             onCompareClick(product);
           }}
           style={{
