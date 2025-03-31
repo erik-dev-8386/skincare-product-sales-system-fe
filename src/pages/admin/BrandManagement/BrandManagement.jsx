@@ -250,6 +250,11 @@ const BrandManagement = () => {
       }
     }
   };
+  const decodeHtml = (html) => {
+    const txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
+  };
 
   const handleDeleteBrand = async (brandId) => {
     try {
@@ -376,8 +381,8 @@ const BrandManagement = () => {
               <strong>Mô tả: </strong>
             </p>
             <div
-              dangerouslySetInnerHTML={{ __html: selectedBrand.description }}
-            />
+        dangerouslySetInnerHTML={{ __html: decodeHtml(selectedBrand.description) }}
+      />
             <p>
               <strong>Quốc gia: </strong> {selectedBrand.country}
             </p>
