@@ -3,7 +3,7 @@ import { Table, Modal, Tag, Button, Descriptions, Select, Input, Tooltip } from 
 import axios from "axios";
 import api from "../../../config/api";
 import { ToastContainer, toast } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
+
 
 const OrderManagement = () => {
   const [orders, setOrders] = useState([]);
@@ -33,19 +33,14 @@ const OrderManagement = () => {
   }, []);
 
   const handleSearch = async () => {
-    // if (!searchText) {
-    //   toast.warn("Vui lòng nhập mã đơn hàng để tìm kiếm!");
-    //   return;
-    // }
-    // setLoading(true);
+    
     try {
       const response = await api.get(`/orders/search/${searchText}`);
       setOrders(response.data);
     } catch (error) {
       console.error("Error searching orders:", error);
       toast.error("Tìm kiếm đơn hàng không thành công!");
-    // } finally {
-    //   setLoading(false);
+   
     }
   };
 

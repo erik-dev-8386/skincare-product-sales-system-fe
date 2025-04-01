@@ -234,7 +234,7 @@ const CustomerManagement = () => {
           </Form.Item>
         </Form>
       </Modal>
-      {/* Modal Chi Tiết */}
+
       <Modal
         title={<h2>Chi tiết khách hàng</h2>}
         open={isDetailModalOpen}

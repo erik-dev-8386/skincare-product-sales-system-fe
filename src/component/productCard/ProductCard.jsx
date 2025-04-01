@@ -17,19 +17,18 @@ const ProductCard = ({
 }) => {
   const navigate = useNavigate();
 
-  // Kiểm tra xem product có tồn tại không
+
   if (!product) {
     return null;
   }
 
-  // Đảm bảo các giá trị cần thiết tồn tại
+
   const brand = brands?.find((b) => b.brandId === product.brandId);
   const discount = discounts?.[product.discountId];
 
-  // Kiểm tra và sử dụng giá trị mặc định nếu discountId không tồn tại
   const discountPercent = discount || 0;
 
-  // Hàm tìm brandName dựa trên brandId
+
   const findBrandNameById = (brandId) => {
     const brand = brands.find((brand) => brand.brandId === brandId);
     return brand ? brand.brandName : "Unknown Brand";

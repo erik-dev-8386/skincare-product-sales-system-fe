@@ -7,12 +7,7 @@ import "./CustomerDiscounts.css"
 
 const { Title, Text } = Typography;
 
-// const statusMapping = {
-//     0: { label: "EXPIRED", color: "red" },
-//     1: { label: "UPCOMING", color: "blue" },
-//     2: { label: "ACTIVE", color: "green" },
-//     3: { label: "DISABLED", color: "gray" },
-// };
+
 
 const CustomerDiscounts = () => {
     const [discounts, setDiscounts] = useState([]);
@@ -61,15 +56,7 @@ const CustomerDiscounts = () => {
             dataIndex: "actualEndTime",
             key: "actualEndTime",
         },
-        // {
-        //     title: "Status",
-        //     dataIndex: "status",
-        //     key: "status",
-        //     render: (status) => {
-        //         const { label, color } = statusMapping[status] || { label: "UNKNOWN", color: "default" };
-        //         return <Tag color={color}>{label}</Tag>;
-        //     },
-        // },
+     
     ];
 
     return (

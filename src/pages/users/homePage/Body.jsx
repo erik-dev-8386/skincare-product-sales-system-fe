@@ -34,7 +34,6 @@ export default function Body() {
   const [bestSellerProducts, setBestSellerProducts] = useState([]);
   const [blogs, setBlogs] = useState([]);
 
-  // Fetch all data
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -76,7 +75,7 @@ export default function Body() {
     fetchData();
   }, []);
 
-  // Navigation handlers
+
   const handleNext = () => {
     setCurrentSlide(prev => (prev + 4 < suitableProducts.length ? prev + 4 : 0));
   };
@@ -85,7 +84,7 @@ export default function Body() {
     setCurrentSlide(prev => (prev - 4 >= 0 ? prev - 4 : Math.max(0, suitableProducts.length - 4)));
   };
 
-  // Product comparison handlers
+
   const handleCompareClick = (product) => {
     if (compareProducts.length < 2) {
       if (!compareProducts.find(p => p.productId === product.productId)) {
@@ -102,7 +101,7 @@ export default function Body() {
     setCompareProducts([]);
   };
 
-  // Data calculations
+
   const visibleProducts = suitableProducts.slice(currentSlide, currentSlide + 4);
   const visibleBlogs = blogs.slice(0, 4);
 
@@ -205,7 +204,7 @@ export default function Body() {
     <Slider slides={hotDealSlides} className="hot-deal-slider" />
   </div>
 </section>
-      {/* Products Section - 4 items in a single row */}
+   
       <section className="section products-section">
         <div className="section-header">
           <h2 className="section-title">DÒNG SẢN PHẨM</h2>

@@ -1,182 +1,4 @@
-// import { Link, useLocation } from "react-router-dom"
-// import "./Breadcrumbs.css"
-// import { HomeOutlined, ShoppingOutlined, PercentageOutlined, QuestionCircleOutlined, ShoppingCartOutlined } from "@ant-design/icons"
 
-// export default function Breadcrumbs() {
-//     const location = useLocation()
-
-//     let currentLink = ''
-
-//     const crumbs = location.pathname.split('/')
-//         .filter(crumb => crumb !== '')
-//         .map(crumb => {
-//             currentLink += `/${crumb}`
-
-//             // Check if current crumb is 'products'
-//             if (crumb === 'products') {
-//                 return (
-//                     <div className="crumb" key={crumb}>
-//                         <Link to={currentLink}>
-//                             <ShoppingOutlined /> Sản phẩm
-//                         </Link>
-//                     </div>
-//                 )
-//             }
-
-//             // Check if current crumb is 'customer-discounts'
-//             if (crumb === 'customer-discounts') {
-//                 return (
-//                     <div className="crumb" key={crumb}>
-//                         <Link to={currentLink}>
-//                             <PercentageOutlined /> Giảm giá
-//                         </Link>
-//                     </div>
-//                 )
-//             }
-
-//             if (crumb === 'blog') {
-//                 return (
-//                     <div className="crumb" key={crumb}>
-//                         <Link to={currentLink}>
-//                             <i className="fa-solid fa-newspaper"></i> Blog
-//                         </Link>
-//                     </div>
-//                 )
-//             }
-
-//             if (crumb === 'question') {
-//                 return (
-//                     <div className="crumb" key={crumb}>
-//                         <Link to={currentLink}>
-//                             <QuestionCircleOutlined /> Bài kiểm tra
-//                         </Link>
-//                     </div>
-//                 )
-//             }
-
-//             if (crumb === 'about-me') {
-//                 return (
-//                     <div className="crumb" key={crumb}>
-//                         <Link to={currentLink}>
-//                             <i className="fa-regular fa-bell"></i> Về chúng tôi
-//                         </Link>
-//                     </div>
-//                 )
-//             }
-
-//             if (crumb === 'listskincare') {
-//                 return (
-//                     <div className="crumb" key={crumb}>
-//                         <Link to={currentLink}>
-//                             <i className="fa-solid fa-notes-medical"></i> Danh sách chăm sóc da
-//                         </Link>
-//                     </div>
-//                 )
-//             }
-
-//             if (crumb === 'Thuong') {
-//                 return (
-//                     <div className="crumb" key={crumb}>
-//                         <Link to={currentLink}>
-//                             Thường
-//                         </Link>
-//                     </div>
-//                 )
-//             }
-
-//             if (crumb === 'Nhaycam') {
-//                 return (
-//                     <div className="crumb" key={crumb}>
-//                         <Link to={currentLink}>
-//                             Nhạy cảm
-//                         </Link>
-//                     </div>
-//                 )
-//             }
-
-//             if (crumb === 'Honhop') {
-//                 return (
-//                     <div className="crumb" key={crumb}>
-//                         <Link to={currentLink}>
-//                             Hỗn hợp
-//                         </Link>
-//                     </div>
-//                 )
-//             }
-
-//             if (crumb === 'Kho') {
-//                 return (
-//                     <div className="crumb" key={crumb}>
-//                         <Link to={currentLink}>
-//                             Khô
-//                         </Link>
-//                     </div>
-//                 )
-//             }
-
-//             if (crumb === 'Dau') {
-//                 return (
-//                     <div className="crumb" key={crumb}>
-//                         <Link to={currentLink}>
-//                             Dầu
-//                         </Link>
-//                     </div>
-//                 )
-//             }
-
-//             if (crumb === 'shopping-cart') {
-//                 return (
-//                     <div className="crumb" key={crumb}>
-//                         <Link to={currentLink}>
-//                         <ShoppingCartOutlined />  Giỏ hàng
-//                         </Link>
-//                     </div>
-//                 )
-//             }
-
-//             if (crumb === 'cart') {
-//                 return (
-//                     <div className="crumb" key={crumb}>
-//                         <Link to={currentLink}>
-//                         <i className="fa-solid fa-money-bill-transfer"></i>  Thanh toán
-//                         </Link>
-//                     </div>
-//                 )
-//             }
-
-            
-
-//             if (crumb === 'success-payment') {
-//                 return (
-//                     <div className="crumb" key={crumb}>
-//                         <Link to={currentLink}>
-//                         <i className="fa-solid fa-circle-check"></i>  Trạng thái thanh toán
-//                         </Link>
-//                     </div>
-//                 )
-//             }
-
-
-
-//             return (
-//                 <div className="crumb" key={crumb}>
-//                     <Link to={currentLink}>{crumb}</Link>
-//                 </div>
-//             )
-//         })
-
-//     return (
-//         <div className="breadcrumbs">
-//             {/* Home link with icon */}
-//             <div className="crumb">
-//                 <Link to="/">
-//                     <HomeOutlined /> Trang chủ
-//                 </Link>
-//             </div>
-//             {crumbs}
-//         </div>
-//     )
-// }
 import { Link, useLocation } from "react-router-dom";
 import "./Breadcrumbs.css";
 import {
@@ -195,14 +17,14 @@ export default function Breadcrumbs() {
   const [isLoading, setIsLoading] = useState(false);
   const [blogs, setBlogs] = useState([]);
 
-  // Function to check if a string is a UUID
+
   const isUUID = (str) => {
     const uuidRegex =
       /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
     return uuidRegex.test(str);
   };
 
-  // Fetch all blogs data once when component mounts
+
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
@@ -219,7 +41,7 @@ export default function Breadcrumbs() {
     fetchBlogs();
   }, []);
 
-  // Function to fetch product title by ID
+
   const fetchProductTitle = async (id) => {
     try {
       setIsLoading(true);
@@ -233,7 +55,7 @@ export default function Breadcrumbs() {
     }
   };
 
-  // Function to get blog title from local blogs data
+
   const getBlogTitle = (id) => {
     const blog = blogs.find((b) => b.blogId === id);
     return blog ? blog.blogTitle : "Loading...";
@@ -277,7 +99,7 @@ export default function Breadcrumbs() {
     .map((crumb, index, array) => {
       currentLink += `/${crumb}`;
 
-      // Check if this is a UUID that follows 'blog' or 'products'
+
       if (index > 0 && isUUID(crumb)) {
         const parentPath = array[index - 1];
         const title =
@@ -301,7 +123,7 @@ export default function Breadcrumbs() {
         }
       }
 
-      // Existing checks for static paths
+
       if (crumb === "products") {
         return (
           <div className="crumb" key={crumb}>

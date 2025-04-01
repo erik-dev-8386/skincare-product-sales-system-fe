@@ -12,8 +12,8 @@ import "./ProductDetail.css";
 import { MapInteractionCSS } from "react-map-interaction";
 import { CartContext } from "../../../context/CartContext";
 import { toast, ToastContainer } from "react-toastify";
-import { Link } from "react-router-dom"; // Import Link
-import { jwtDecode } from "jwt-decode"; // Sửa cách import jwt-decode
+import { Link } from "react-router-dom";
+import { jwtDecode } from "jwt-decode"; 
 import MyEditor from "../../../component/TinyMCE/MyEditor";
 
 const { Title } = Typography;
@@ -31,7 +31,7 @@ export default function ProductDetail() {
   const [similarProducts, setSimilarProducts] = useState([]);
   const [sameSkinTypeProducts, setSameSkinTypeProducts] = useState([]);
   const [mainImage, setMainImage] = useState("");
-  const [value, setValue] = useState({ scale: 1, translation: { x: 0, y: 0 } }); // State for zoom and translation
+  const [value, setValue] = useState({ scale: 1, translation: { x: 0, y: 0 } }); 
   const { addToCart } = useContext(CartContext);
   const [showAllSimilar, setShowAllSimilar] = useState(false);
   const [showAllSkinType, setShowAllSkinType] = useState(false);
@@ -40,16 +40,16 @@ export default function ProductDetail() {
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [displayCountReviews, setDisplayCountReviews] = useState(4);
 
-  // Số lượng sản phẩm hiển thị ban đầu
 
-  const [displayCountSimilar, setDisplayCountSimilar] = useState(4); // Số lượng sản phẩm tương tự hiển thị ban đầu
-  const [displayCountSkinType, setDisplayCountSkinType] = useState(4); // Số lượng sản phẩm cùng loại da hiển thị ban đầu
+
+  const [displayCountSimilar, setDisplayCountSimilar] = useState(4); 
+  const [displayCountSkinType, setDisplayCountSkinType] = useState(4); 
 
   const [feedbackForm] = Form.useForm();
 
   const [averageRating, setAverageRating] = useState(0);
   const [ratingCounts, setRatingCounts] = useState({});
-  const [userRating, setUserRating] = useState(0); // Default to 0 stars (no rating)
+  const [userRating, setUserRating] = useState(0); 
 
   const formatPrice = (price) => {
     return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -58,22 +58,22 @@ export default function ProductDetail() {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        // Fetch chi tiết sản phẩm
+      
         const response = await api.get(`/products/${id}`);
         setProduct(response.data);
         setMainImage(response.data.productImages[0]?.imageURL);
 
-        // Fetch tất cả sản phẩm
+   
         const allProductsResponse = await api.get("/products/list-name-products");
         const allProducts = allProductsResponse.data;
 
-        // Lọc sản phẩm tương tự (cùng categoryId)
+        
         const similarProducts = allProducts.filter(
           (p) => p.categoryId === response.data.categoryId && p.productId !== id
         );
         setSimilarProducts(similarProducts);
 
-        // Lọc sản phẩm cùng loại da (cùng skinTypeId)
+ 
         const sameSkinTypeProducts = allProducts.filter(
           (p) => p.skinTypeId === response.data.skinTypeId && p.productId !== id
         );
@@ -134,11 +134,10 @@ export default function ProductDetail() {
           return;
         }
 
-        // Thêm log để debug
+     
         console.log("Fetching reviews for product:", product.productId);
         console.log("Full API URL:", `${api.defaults.baseURL}/feedbacks/product/${product.productId}`);
 
-        // Thêm tham số email vào URL để backend có thể lọc theo user
         const response = await api.get(`/feedbacks/product/${product.productId}?email=${email}`, {
           headers: {
             'Authorization': `Bearer ${token}`
@@ -148,10 +147,10 @@ export default function ProductDetail() {
         console.log("Fetched feedbacks response:", response);
 
         if (response.data) {
-          // Xử lý dữ liệu từ backend với first_name và last_name
+       
           const enhancedReviews = response.data.map(review => ({
             ...review,
-            // Tạo thông tin người dùng đầy đủ
+       
             users: {
               email: review.userId || review.email,
               fullName: review.user_first_name && review.user_last_name
@@ -160,7 +159,7 @@ export default function ProductDetail() {
             }
           }));
 
-          // Sắp xếp theo thời gian mới nhất
+      
           const sortedReviews = enhancedReviews.sort((a, b) =>
             new Date(b.feedbackDate) - new Date(a.feedbackDate)
           );
@@ -174,7 +173,7 @@ export default function ProductDetail() {
         console.log("Error response data:", error.response?.data);
         console.log("Error response status:", error.response?.status);
 
-        // Thử phương án thay thế nếu API chính gặp lỗi
+ 
         try {
           const token = localStorage.getItem("token");
           const response = await api.get('/feedbacks/all', {
@@ -184,7 +183,7 @@ export default function ProductDetail() {
           });
 
           if (response.data) {
-            // Lọc các đánh giá của sản phẩm hiện tại
+         
             const productFeedbacks = response.data.filter(
               feedback => feedback.productId === product.productId
             );
@@ -212,7 +211,6 @@ export default function ProductDetail() {
         }
       }
 
-      // Kiểm tra cache trước
       try {
         const cachedReviews = localStorage.getItem(`product_reviews_${product.productId}`);
         if (cachedReviews) {
@@ -235,19 +233,18 @@ export default function ProductDetail() {
       try {
         if (!product || !product.productId) return;
 
-        // Fetch average rating
+
         const avgResponse = await api.get(`/feedbacks/average-rating/${product.productName}`);
         console.log("Average rating response:", avgResponse.data);
 
-        // Handle NaN or invalid values
+
         const avgRating = !isNaN(avgResponse.data) ? avgResponse.data : 0;
         setAverageRating(avgRating);
 
-        // Fetch rating counts by star
+    
         const countsResponse = await api.get(`/feedbacks/get-star/by-customer/${product.productName}`);
         console.log("Rating counts response:", countsResponse.data);
 
-        // Ensure all star values (1-5) exist in the ratings object
         const formattedCounts = {};
         for (let i = 1; i <= 5; i++) {
           formattedCounts[i] = countsResponse.data[i] || 0;
@@ -261,7 +258,7 @@ export default function ProductDetail() {
         });
       } catch (error) {
         console.error("Error fetching rating data:", error);
-        // Set default values in case of error
+
         setAverageRating(0);
         setRatingCounts({ 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 });
       }
@@ -291,13 +288,11 @@ export default function ProductDetail() {
   const handleAddToCart = () => {
     console.log("Đang thêm sản phẩm vào giỏ hàng:", product);
 
-    // Validate quantity is integer
     if (quantity % 1 !== 0) {
       toast.error("Số lượng phải là số nguyên (không chấp nhận số thập phân)");
       return;
     }
 
-    // Validate quantity range
     if (quantity < 1) {
       toast.error("Số lượng không được nhỏ hơn 1");
       return;
@@ -308,13 +303,13 @@ export default function ProductDetail() {
       return;
     }
 
-    // Thêm sản phẩm vào giỏ hàng
+
     addToCart({
       ...product,
       quantity,
     });
 
-    // Lưu vào localStorage cho guest (không cần token)
+
     try {
       const guestCartKey = `cart_guest`;
       const savedCart = localStorage.getItem(guestCartKey);
@@ -353,13 +348,12 @@ export default function ProductDetail() {
   const handleAddToCartAndNavigate = () => {
     console.log("Đang thêm sản phẩm vào giỏ hàng và chuyển hướng:", product);
 
-    // Validate quantity is integer
     if (quantity % 1 !== 0) {
       toast.error("Số lượng phải là số nguyên (không chấp nhận số thập phân)");
       return;
     }
 
-    // Validate quantity range
+
     if (quantity < 1) {
       toast.error("Số lượng không được nhỏ hơn 1");
       return;
@@ -370,24 +364,24 @@ export default function ProductDetail() {
       return;
     }
 
-    // Thêm vào giỏ hàng trước
+
     addToCart({
       ...product,
       quantity,
     });
 
-    // Lưu vào localStorage
+
     try {
       const token = localStorage.getItem("token");
       let cartKey;
 
       if (token) {
-        // Nếu đã đăng nhập
+
         const decoded = jwtDecode(token);
         const email = decoded.sub;
         cartKey = `cart_${email}`;
       } else {
-        // Nếu là guest
+
         cartKey = `cart_guest`;
       }
 
@@ -419,13 +413,13 @@ export default function ProductDetail() {
       console.error("Lỗi khi lưu giỏ hàng:", error);
     }
 
-    // Kiểm tra đăng nhập để chuyển hướng
+  
     const token = localStorage.getItem("token");
     if (token) {
-      // Đã đăng nhập -> chuyển đến trang thanh toán
+   
       navigate("/shopping-cart");
     } else {
-      // Chưa đăng nhập -> chuyển đến trang đăng nhập
+      
       navigate("/login-and-signup", {
         state: {
           fromCart: true,
@@ -440,10 +434,10 @@ export default function ProductDetail() {
   };
 
   const resetZoom = () => {
-    setValue({ scale: 1, translation: { x: 0, y: 0 } }); // Reset zoom and translation
+    setValue({ scale: 1, translation: { x: 0, y: 0 } }); 
   };
 
-  // Thêm hàm để fetch feedback
+
   const fetchFeedbacks = async () => {
     try {
       const response = await api.get(`/feedbacks/product/${id}`);
@@ -453,10 +447,10 @@ export default function ProductDetail() {
     }
   };
 
-  // Thêm hàm xử lý gửi feedback
+
   const handleSubmitFeedback = async (values) => {
     try {
-      // Lấy token từ localStorage và giải mã để lấy email
+     
       const token = localStorage.getItem("token");
 
       if (!token) {
@@ -467,7 +461,7 @@ export default function ProductDetail() {
       let email;
       try {
         const decodedToken = jwtDecode(token);
-        email = decodedToken.sub; // sub chứa email trong JWT
+        email = decodedToken.sub; 
         console.log("Decoded token:", decodedToken);
         console.log("Email from token:", email);
       } catch (error) {
@@ -481,7 +475,7 @@ export default function ProductDetail() {
         return;
       }
 
-      // Tạo dữ liệu feedback với đầy đủ thông tin
+
       const feedbackData = {
         feedbackContent: values.content,
         feedbackDate: new Date().toISOString(),
@@ -489,14 +483,14 @@ export default function ProductDetail() {
         productName: product.productName,
         userId: email,
         status: 0,
-        rating: values.rating // Thêm rating từ form vào dữ liệu gửi đi
+        rating: values.rating 
       };
 
       console.log("Sending feedback data:", feedbackData);
       console.log("API base URL:", api.defaults.baseURL);
       console.log("Full API URL:", `${api.defaults.baseURL}/feedbacks/${email}/${product.productName}`);
 
-      // Gửi feedback với endpoint chính xác
+
       const response = await api.post(
         `/feedbacks/${email}/${product.productName}`,
         feedbackData,
@@ -514,10 +508,10 @@ export default function ProductDetail() {
         toast.success("Đánh giá sản phẩm thành công!");
         feedbackForm.resetFields();
 
-        // Xử lý dữ liệu nhận về từ response
+
         const returnedData = response.data;
 
-        // Tạo object feedback mới với đầy đủ thông tin
+   
         const newFeedback = {
           ...returnedData,
           feedbackId: returnedData.feedbackId || Date.now().toString(),
@@ -526,7 +520,7 @@ export default function ProductDetail() {
           productId: product.productId,
           productName: product.productName,
           userId: email,
-          rating: values.rating, // Thêm rating vào feedback mới
+          rating: values.rating, 
           user_first_name: returnedData.user_first_name,
           user_last_name: returnedData.user_last_name,
           users: {
@@ -537,7 +531,7 @@ export default function ProductDetail() {
           }
         };
 
-        // Thêm feedback mới vào đầu danh sách và sắp xếp lại
+  
         setReviews(prev => {
           const updatedReviews = [newFeedback, ...prev];
           return updatedReviews.sort((a, b) =>
@@ -545,7 +539,7 @@ export default function ProductDetail() {
           );
         });
 
-        // LƯU CACHE TẠM THỜI ĐỂ TRÁNH MẤT DỮ LIỆU KHI RELOAD
+      
         try {
           const cachedReviews = localStorage.getItem(`product_reviews_${product.productId}`);
           let updatedCache = [];
@@ -562,7 +556,7 @@ export default function ProductDetail() {
           console.error("Error caching reviews:", cacheError);
         }
 
-        // Cập nhật lại average rating và rating counts
+  
         try {
           const avgResponse = await api.get(`/feedbacks/average-rating/${product.productName}`);
           setAverageRating(avgResponse.data);
@@ -594,7 +588,7 @@ export default function ProductDetail() {
     }
   };
 
-  // Giữ lại handleCancel chỉ để reset form nếu cần
+
   const handleCancel = () => {
     feedbackForm.resetFields();
   };
@@ -603,7 +597,7 @@ export default function ProductDetail() {
 
   
 
-  // Define tabs using the `items` prop
+
   const tabItems = [
     {
       key: "1",
@@ -674,12 +668,12 @@ export default function ProductDetail() {
               </div>
             </div>
 
-            {/* Hiển thị phân bố số sao chi tiết hơn */}
+    
             {Object.keys(ratingCounts).length > 0 && (
               <div className="mb-4">
                 <h5 className="mb-3">Phân bố đánh giá</h5>
                 {[5, 4, 3, 2, 1].map(star => {
-                  // Calculate percentage for progress bar
+             
                   const count = ratingCounts[star] || 0;
                   const total = reviews.length;
                   const percentage = total > 0 ? (count / total) * 100 : 0;
@@ -714,7 +708,7 @@ export default function ProductDetail() {
               </div>
             )}
 
-            {/* Form đánh giá với thêm Rating component */}
+    
             <div className="mb-4 p-3 border rounded">
               <h4>Viết đánh giá của bạn</h4>
               <Form form={feedbackForm} onFinish={handleSubmitFeedback} layout="vertical">
@@ -732,7 +726,7 @@ export default function ProductDetail() {
                   <Rate
                     onChange={value => {
                       setUserRating(value);
-                      // Cập nhật giá trị form field
+             
                       feedbackForm.setFieldsValue({ rating: value });
                     }}
                     value={userRating}
@@ -816,10 +810,10 @@ export default function ProductDetail() {
   ];
 
   const handleQuantityChange = (value) => {
-    // Check if value is a decimal number
+
     if (value % 1 !== 0) {
       toast.error("Số lượng phải là số nguyên (không chấp nhận số thập phân)");
-      setQuantity(Math.floor(value)); // Round down to nearest integer
+      setQuantity(Math.floor(value)); 
       return;
     }
 
@@ -843,12 +837,12 @@ export default function ProductDetail() {
       <ToastContainer />
       
         <div style={{ maxWidth: "1200px", margin: "auto", padding: "20px" }}>
-          {/* Breadcrumb with `items` prop */}
+
          
           <h1>Chi tiết sản phẩm</h1>
 
           <Row gutter={32}>
-            {/* Product Image */}
+      
             <Col xs={24} md={12}>
               <div className="border rounded-4 mb-3 d-flex justify-content-center">
                 <MapInteractionCSS value={value} onChange={setValue}>
@@ -890,7 +884,7 @@ export default function ProductDetail() {
               </div>
             </Col>
 
-            {/* Product Details */}
+   
             <Col xs={24} md={12}>
               <div className="ps-lg-3" style={{ padding: 10 }}>
                 <Title level={2} className="title text-dark">
@@ -914,7 +908,7 @@ export default function ProductDetail() {
                   </span>
                   <span className="text-muted"> /mỗi hộp</span>
                 </div>
-                {product.discountId && ( // Chỉ hiển thị unitPrice khi có discount
+                {product.discountId && ( 
                   <p style={{ textDecoration: "line-through", color: "gray" }}>
                     {formatPrice(product.unitPrice)}
                     <span style={{ textDecoration: "underline" }}>đ</span>
@@ -969,19 +963,12 @@ export default function ProductDetail() {
 
                   Thêm vào giỏ hàng
                 </Button>
-                {/* <Button 
-                  className="button-like"
-                  style={{ padding: 5 }}
-                  icon={<HeartOutlined />}
-                >
-
-                  Yêu thích
-                </Button>*/}
+               
               </div>
             </Col>
           </Row>
 
-          {/* Additional Information */}
+  
           <section className="bg-light border-top py-4">
             <div className="container">
               <div className="row gx-4">

@@ -4,17 +4,16 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import "./index.css";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { CartProvider } from "./context/CartContext"; // Import CartProvider
-
+import { CartProvider } from "./context/CartContext"; 
 import dayjs from "dayjs";
-import "dayjs/locale/vi"; // Nếu bạn dùng tiếng Việt
+import "dayjs/locale/vi"; 
 import utc from "dayjs/plugin/utc";
 import timezone from "dayjs/plugin/timezone";
 
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
-dayjs.locale("vi"); // Đặt ngôn ngữ mặc định
+dayjs.locale("vi"); 
 
 const clientId =
   "525168437786-6gp97ecr9iuminm11fv9fkuteggdjcd8.apps.googleusercontent.com";

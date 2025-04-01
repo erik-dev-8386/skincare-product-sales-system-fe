@@ -121,7 +121,7 @@ const BrandManagement = () => {
   const fetchBrands = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await api.get("/brands"); // Bỏ /haven-skin
+      const response = await api.get("/brands"); 
       setBrandList(response.data);
     } catch (error) {
       console.error(
@@ -141,7 +141,7 @@ const BrandManagement = () => {
   const handleSearch = async () => {
     setLoading(true);
     try {
-      const response = await api.get(`/brands/search/${searchText}`); // Bỏ /haven-skin
+      const response = await api.get(`/brands/search/${searchText}`); 
       setBrandList(response.data);
     } catch (error) {
       console.error(
@@ -200,8 +200,8 @@ const BrandManagement = () => {
       return;
     }
   
-    // Validation phía frontend cho country
-    const countryPattern = /^[\p{L}\s]+$/u; // Regex hỗ trợ Unicode (dùng flag /u)
+
+    const countryPattern = /^[\p{L}\s]+$/u; 
     if (!countryPattern.test(values.country)) {
       toast.error("Quốc gia chỉ được chứa chữ cái và khoảng trắng, không được chứa ký tự đặc biệt!");
       return;
@@ -260,7 +260,7 @@ const BrandManagement = () => {
     try {
       await api.delete(`/brands/${brandId}`);
       toast.success("Đã xóa thương hiệu này thành công!");
-      fetchBrands(); // Refresh the brand list after deletion
+      fetchBrands(); 
     } catch (error) {
       console.error(
         "Error deleting brand:",

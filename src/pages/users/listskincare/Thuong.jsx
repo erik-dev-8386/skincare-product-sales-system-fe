@@ -631,7 +631,7 @@ export default function Thuong() {
 
   return (
     <>
-      {/* <Header /> */}
+   
       <div className="container">
         <div className="row">
           <div className="col-12">
@@ -887,9 +887,7 @@ export default function Thuong() {
           </div>
         )}
       </div>
-      {/* <Footer /> */}
 
-      {/* Modal so sánh sản phẩm */}
       <Modal
         title={
           <div className="compare-modal-title">

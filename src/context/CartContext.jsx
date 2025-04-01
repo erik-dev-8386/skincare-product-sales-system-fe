@@ -9,17 +9,17 @@ export const CartProvider = ({ children }) => {
   const [userEmail, setUserEmail] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token"));
 
-  // Theo dõi thay đổi token trong localStorage
+
   useEffect(() => {
     const handleStorageChange = () => {
       const newToken = localStorage.getItem("token");
       setToken(newToken);
     };
 
-    // Lắng nghe sự kiện storage change
+
     window.addEventListener("storage", handleStorageChange);
 
-    // Kiểm tra token mỗi 1 giây (để bắt các thay đổi trong cùng tab)
+
     const intervalId = setInterval(() => {
       const currentToken = localStorage.getItem("token");
       if (currentToken !== token) {
@@ -33,14 +33,14 @@ export const CartProvider = ({ children }) => {
     };
   }, [token]);
 
-  // Lấy email từ token JWT khi token thay đổi
+
   useEffect(() => {
     if (token) {
       try {
         const decoded = jwtDecode(token);
         console.log("Decoded token:", decoded);
         if (decoded.sub) {
-          setUserEmail(decoded.sub); // sub chứa email trong JWT
+          setUserEmail(decoded.sub); 
           console.log("User email set to:", decoded.sub);
         } else {
           console.error("Token không chứa email (sub)");
@@ -53,12 +53,12 @@ export const CartProvider = ({ children }) => {
     } else {
       console.log("Không tìm thấy token trong localStorage");
       setUserEmail(null);
-      // Khi không có token, chỉ xóa giỏ hàng trong state, không xóa trong localStorage
+      
       setCart([]);
     }
   }, [token]);
 
-  // Khởi tạo giỏ hàng từ localStorage khi userEmail thay đổi
+
   useEffect(() => {
     if (userEmail) {
       const cartKey = `cart_${userEmail}`;
@@ -82,7 +82,6 @@ export const CartProvider = ({ children }) => {
     }
   }, [userEmail]);
 
-  // Lưu giỏ hàng vào localStorage mỗi khi giỏ hàng thay đổi
   useEffect(() => {
     if (userEmail) {
       const cartKey = `cart_${userEmail}`;
@@ -97,7 +96,7 @@ export const CartProvider = ({ children }) => {
 
   const addToCart = (product) => {
     if (!userEmail) {
-      // Nếu chưa đăng nhập, thông báo cho người dùng
+   
       toast.error("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng");
       return;
     }
@@ -127,11 +126,11 @@ export const CartProvider = ({ children }) => {
     });
   };
 
-  // Thêm hàm xóa giỏ hàng khi đăng xuất - chỉ xóa khỏi state, không xóa khỏi localStorage
+
   const clearCart = () => {
     console.log("Xóa giỏ hàng khỏi state (không xóa khỏi localStorage)");
     setCart([]);
-    // Không xóa dữ liệu từ localStorage để khi đăng nhập lại, dữ liệu vẫn còn
+
   };
 
   return (
