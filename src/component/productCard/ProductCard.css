@@ -55,7 +55,7 @@
     box-shadow: 0 4px 12px rgba(144, 0, 1, 0.08) !important;
 }
 
-/* Giới hạn kích thước của Meta title */
+
 .product-card .ant-card-meta-title {
     max-width: 230px;
     overflow: hidden;
@@ -64,13 +64,13 @@
     margin: 0 auto;
 }
 
-/* Đảm bảo phần Meta description không làm tràn nội dung */
+
 .product-card .ant-card-meta-description {
     max-width: 230px;
     margin: 0 auto;
 }
 
-/* Điều chỉnh phần cover (hình ảnh) */
+
 .product-card .ant-card-cover {
     width: 100%;
     overflow: hidden;

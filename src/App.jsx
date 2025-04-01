@@ -3,7 +3,6 @@ import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import HomePage from "../src/pages/users/homePage/HomePage";
 
-// import Callback from '../src/pages/users/callBack/Callback';
 import PrivacyPolicy from "../src/pages/users/privacyPolicy/PrivacyPolicy";
 import TermsOfUse from "../src/pages/users/termsOfUse/TermsOfUse";
 import Blog from "../src/pages/users/blog/Blog.jsx";
@@ -78,11 +77,11 @@ function App() {
         <Route path="/shopping-cart/cart/success-payment" element={<SuccessPayment />} />
 
       </Route>
-      {/* login */}
+   
  
       <Route path="/login-and-signup" element={<LoginAndSignup />} />
 
-      {/* profile user */}
+ 
       <Route path="/user" element={<ProfileLayout />}>
         <Route index element={<Profile />} />
         <Route path="/user/history" element={<History />} />
@@ -92,7 +91,7 @@ function App() {
         
       </Route>
 
-      {/* admin */}
+
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<DashBoard />} />
         <Route
@@ -109,7 +108,7 @@ function App() {
           element={<SkinTypeManagement />}
         />
         <Route path="/admin/staff-management" element={<ListStaff />} />
-        {/* <Route path="/admin/create-staff" element={<CreateStaff />} /> */}
+
         <Route path="/admin/customer-management" element={<CustomerManagement />} />
 
         <Route
@@ -129,7 +128,7 @@ function App() {
         <Route path="/admin/blog-category" element={<BlogCategory />} />
       </Route>
 
-      {/* <Route path="/product-management" element={<ProductManagement />} /> */}
+
     </Routes>
     </>
   );

@@ -637,8 +637,8 @@ const ProductManagement = () => {
                 setImagePreviews((prev) => [
                   ...prev,
                   URL.createObjectURL(file),
-                ]); // Create temporary URL for preview
-                return false; // Prevent automatic upload
+                ]); 
+                return false; 
               }}
               showUploadList={false}
             >
@@ -656,7 +656,7 @@ const ProductManagement = () => {
           </Form.Item>
         </Form>
       </Modal>
-      {/* Modal Chi Tiết */}
+
       <Modal
         title={<h2>Chi tiết sản phẩm</h2>}
         open={isDetailModalOpen}

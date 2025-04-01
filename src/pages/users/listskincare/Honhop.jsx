@@ -9,14 +9,14 @@ import serum from "../../../assets/da/serum.jpg";
 import kem from "../../../assets/da/kem.jpg";
 import sun from "../../../assets/da/sun.jpg";
 import { useNavigate } from "react-router-dom";
-import ProductCard from "../../../component/productCard/ProductCard"; // Import ProductCard component
-import api from "../../../config/api"; // Import API config
+import ProductCard from "../../../component/productCard/ProductCard"; 
+import api from "../../../config/api"; 
 import { Modal, Table, Button } from "antd";
 
 export default function Honhop() {
   const [showModal, setShowModal] = useState(false);
   const [selectedStep, setSelectedStep] = useState(null);
-  const [filteredProducts, setFilteredProducts] = useState([]); // Thêm state mới
+  const [filteredProducts, setFilteredProducts] = useState([]); 
 
   const skinCareSteps = {
     cleanser: {
@@ -256,7 +256,7 @@ export default function Honhop() {
     setSelectedStep(step);
     setShowModal(true);
 
-    // Xác định category name dựa vào step
+
     let categoryName = "";
     switch (step) {
       case "cleanser":
@@ -295,10 +295,9 @@ export default function Honhop() {
     return skinCareSteps[selectedStep];
   };
 
-  // ===============================================================================================================================
-  const [discounts, setDiscounts] = useState({}); // State to store discounts
-  const [brands, setBrands] = useState([]); // Thêm state brands
-  const [currentSlide, setCurrentSlide] = useState(0); // State to track current slide index
+  const [discounts, setDiscounts] = useState({}); 
+  const [brands, setBrands] = useState([]); 
+  const [currentSlide, setCurrentSlide] = useState(0); 
   const navigate = useNavigate();
   const [combinationProducts, setCombinationProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -320,13 +319,13 @@ export default function Honhop() {
     );
   };
 
-  // Tính toán sản phẩm hiển thị cho top searched
+
   const visibleTopSearchProducts = combinationProducts.slice(
     combinationCurrentSlide,
     combinationCurrentSlide + 3
   );
 
-  // Fetch suitable products from API
+
   useEffect(() => {
     const fetchSuitableProducts = async () => {
       try {
@@ -366,13 +365,13 @@ export default function Honhop() {
     fetchCategories();
   }, []);
 
-  // Fetch discounts from API
+ 
   useEffect(() => {
     const fetchDiscounts = async () => {
       try {
         const response = await api.get("/discounts");
         const discountMap = response.data.reduce((acc, discount) => {
-          acc[discount.discountId] = discount.discountPercent; // Create map discountId -> discountPercent
+          acc[discount.discountId] = discount.discountPercent; 
           return acc;
         }, {});
         setDiscounts(discountMap);
@@ -396,7 +395,6 @@ export default function Honhop() {
     fetchSkintypes();
   }, []);
 
-  // Fetch các sản phẩm được tìm kiếm nhiều nhất từ API
   useEffect(() => {
     const fetchCombinationProducts = async () => {
       try {
@@ -405,7 +403,7 @@ export default function Honhop() {
         console.log("Combination Response:", response);
 
         if (response.data) {
-          // Thêm id cho mỗi sản phẩm
+         
           const productsWithIds = response.data.map((product) => ({
             ...product,
             id: `combination-${product.productId}`,
@@ -422,18 +420,18 @@ export default function Honhop() {
     fetchCombinationProducts();
   }, []);
 
-  // Thêm hàm fetch sản phẩm theo category và skintype
+
   const fetchFilteredProducts = async (categoryName) => {
     try {
       console.log("Fetching products for category:", categoryName);
 
-      // Lấy tất cả sản phẩm theo category
+ 
       const categoryResponse = await api.get(
         `/products/category/${categoryName}`
       );
       console.log("Category products:", categoryResponse.data);
 
-      // Lấy tất cả sản phẩm theo skin type
+
       const skinTypeResponse = await api.get(`/products/skin-name/Hỗn hợp`);
       console.log("Skin type products:", skinTypeResponse.data);
 
@@ -441,7 +439,6 @@ export default function Honhop() {
         return [];
       }
 
-      // Lọc ra các sản phẩm có cả trong danh sách category và skin type
       const filteredProducts = categoryResponse.data.filter((categoryProduct) =>
         skinTypeResponse.data.some(
           (skinProduct) => skinProduct.productId === categoryProduct.productId
@@ -450,7 +447,7 @@ export default function Honhop() {
 
       console.log("Filtered products:", filteredProducts);
 
-      // Thêm id cho mỗi sản phẩm
+ 
       const productsWithIds = filteredProducts.map((product) => ({
         ...product,
         id: `filtered-${product.productId}`,
@@ -463,11 +460,11 @@ export default function Honhop() {
     }
   };
 
-  // Thêm state để quản lý vị trí scroll
+
   const [currentRecommendationSlide, setCurrentRecommendationSlide] =
     useState(0);
 
-  // Thêm hàm xử lý scroll
+
   const handleRecommendationNext = () => {
     const slider = document.querySelector(".recommendations-slider");
     if (slider) {
@@ -482,11 +479,10 @@ export default function Honhop() {
     }
   };
 
-  // Thêm state để xử lý so sánh sản phẩm
   const [compareProducts, setCompareProducts] = useState([]);
   const [isCompareModalVisible, setIsCompareModalVisible] = useState(false);
 
-  // Thêm hàm xử lý so sánh sản phẩm
+
   const handleCompareClick = (product) => {
     if (compareProducts.length < 2) {
       if (!compareProducts.find((p) => p.productId === product.productId)) {
@@ -505,7 +501,7 @@ export default function Honhop() {
     setCompareProducts([]);
   };
 
-  // Cập nhật phần compareColumns
+
   const compareColumns = [
     {
       title: "Thông tin",
@@ -535,7 +531,6 @@ export default function Honhop() {
     },
   ];
 
-  // Cập nhật phần getCompareData
   const getCompareData = () => {
     const [p1, p2] = compareProducts;
     if (!p1 || !p2) return [];
@@ -793,7 +788,7 @@ export default function Honhop() {
               position: "relative",
             }}
           >
-            {/* Prev Button */}
+           
             <button
               onClick={handleTopSearchPrev}
               className="slider-control prev"
@@ -807,7 +802,7 @@ export default function Honhop() {
               &lt;
             </button>
 
-            {/* Top Searched Products */}
+          
             <div className="row">
               {combinationProducts && combinationProducts.length > 0 ? (
                 visibleTopSearchProducts.map((product) => (
@@ -926,7 +921,6 @@ export default function Honhop() {
         )}
       </div>
 
-      {/* Thêm Modal so sánh */}
       <Modal
         title={
           <div className="compare-modal-title">

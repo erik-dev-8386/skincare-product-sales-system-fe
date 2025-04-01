@@ -1,9 +1,7 @@
-/* Remove old styles that aren't needed */
 .img-blog, .card-blog {
   display: none;
 }
 
-/* Enhanced Blog Card Styling inspired by HappySkin */
 .blog-card {
   width: 100%;
   height: 100%;
@@ -39,13 +37,12 @@
   transform: scale(1.05);
 }
 
-/* Category label on top of image - HappySkin style */
 .blog-card-image-container::before {
   content: attr(data-category);
   position: absolute;
   top: 12px;
   left: 12px;
-  background-color: #8e1920; /* Haven Skin red color */
+  background-color: #8e1920;
   color: white;
   padding: 4px 10px;
   font-size: 12px;
@@ -56,7 +53,6 @@
   letter-spacing: 0.5px;
 }
 
-/* Card Content Styling */
 .blog-card .ant-card-body {
   padding: 16px 20px;
 }
@@ -83,7 +79,7 @@
 .blog-card-meta {
   color: #777;
   font-size: 13px;
-  padding-bottom: 30px; /* Space for the view count */
+  padding-bottom: 30px;
 }
 
 .blog-card-date,
@@ -100,7 +96,6 @@
   font-size: 14px;
 }
 
-/* View count - HappySkin style */
 .blog-card-views {
   position: absolute;
   bottom: 16px;
@@ -145,7 +140,6 @@
   margin-right: 4px;
 }
 
-/* HappySkin style grid layout */
 .blog-cards-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -153,7 +147,6 @@
   margin-bottom: 40px;
 }
 
-/* Featured blog post - larger size */
 .blog-card-featured {
   width: 100%;
 }
@@ -175,7 +168,6 @@
   font-size: 15px;
 }
 
-/* Blog post excerpt */
 .blog-card-excerpt {
   color: #666;
   font-size: 14px;
@@ -189,7 +181,6 @@
   height: 42px;
 }
 
-/* Read more link */
 .blog-card-read-more {
   display: inline-block;
   margin-top: 12px;
@@ -214,7 +205,6 @@
   transform: translateX(3px);
 }
 
-/* Category section headers - HappySkin style */
 .blog-section-header {
   margin: 40px 0 24px;
   position: relative;
@@ -243,7 +233,6 @@
   font-weight: 500;
 }
 
-/* Responsive adjustments */
 @media (max-width: 992px) {
   .blog-card-featured {
     grid-column: span 1;
@@ -282,7 +271,6 @@
   }
 }
 
-/* Animation for card appearance */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -298,7 +286,6 @@
   animation: fadeInUp 0.5s ease forwards;
 }
 
-/* Stagger the animation for multiple cards */
 .blog-card-col:nth-child(2n) .blog-card {
   animation-delay: 0.1s;
 }

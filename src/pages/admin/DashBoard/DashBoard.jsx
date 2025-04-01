@@ -419,10 +419,9 @@ export default function DashBoard() {
 
   return (
     <Layout className="dashboard-container">
-      {/* Các thẻ thống kê */}
+ 
       {renderStatisticCards()}
-      
-      {/* Biểu đồ doanh thu và bán hàng, mỗi biểu đồ trên một hàng */}
+
       <Row gutter={[16, 16]} className="chart-row">
         <Col span={24}>
           <MonthlyRevenueChart />

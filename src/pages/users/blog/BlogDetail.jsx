@@ -28,7 +28,7 @@ const BlogDetail = () => {
   const [relatedByAuthor, setRelatedByAuthor] = useState([]);
   const [processedContent, setProcessedContent] = useState('');
 
-  // Định nghĩa style chung cho tất cả hình ảnh
+
   const commonImageStyle = {
     width: '100%',
     height: '400px',
@@ -42,7 +42,7 @@ const BlogDetail = () => {
         setLoading(true);
         console.log(`Fetching blog with ID: ${id}`);
 
-        // Check if the ID is a UUID (contains hyphens)
+
         const isUUID = id.includes('-');
         
         let blogData;
@@ -94,7 +94,7 @@ const BlogDetail = () => {
 
   const fetchRelatedBlogs = async (blogData) => {
     try {
-      // 1. Fetch blogs related by category
+
       if (blogData.blogCategory) {
         const categoryId = blogData.blogCategory.blogCategoryId;
         try {
@@ -117,7 +117,7 @@ const BlogDetail = () => {
         }
       }
 
-      // 2. Fetch blogs related by hashtags
+ 
       if (blogData.hashtags && blogData.hashtags.length > 0) {
         try {
           const allBlogsResponse = await api.get("/blogs");
@@ -149,7 +149,7 @@ const BlogDetail = () => {
         }
       }
 
-      // 3. Fetch blogs from the same author
+
       if (blogData.user && blogData.user.userId) {
         try {
           const allBlogsResponse = await api.get("/blogs");

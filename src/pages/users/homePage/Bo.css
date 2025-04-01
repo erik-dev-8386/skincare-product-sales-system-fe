@@ -1,7 +1,5 @@
-/* Bo.css */
 @import url('https://fonts.googleapis.com/css2?family=Fira+Sans+Extra+Condensed:wght@300;400;500&display=swap');
 
-/* Base Styles */
 .home-container {
     font-family: 'Fira Sans Extra Condensed', sans-serif;
     color: #555;
@@ -11,25 +9,20 @@
     animation: fadeIn 0.8s ease-out;
 }
 
-/* Wrapper để kiểm soát kích thước và căn giữa */
 .slider-wrapper {
     width: 1360px;
     height: 520px;
     overflow: hidden;
-    /* Tránh tràn nội dung */
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-/* Kích thước cho Slider */
 .hot-deal-slider {
     width: 1360px !important;
-    /* Thêm !important để ghi đè nếu cần */
     height: 520px !important;
 }
 
-/* Đảm bảo các slide bên trong có kích thước đúng */
 .hot-deal-slider .slide-item {
     width: 1360px;
     height: 520px;
@@ -39,12 +32,9 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* Giữ tỷ lệ ảnh */
     display: block;
-    /* Loại bỏ khoảng trắng dưới ảnh */
 }
 
-/* Nếu dùng react-slick */
 .hot-deal-slider .slick-slide {
     width: 1360px !important;
     height: 520px !important;
@@ -56,7 +46,6 @@
     object-fit: cover;
 }
 
-/* Nếu dùng swiper */
 .hot-deal-slider .swiper-slide {
     width: 1360px !important;
     height: 520px !important;
@@ -73,14 +62,12 @@
         opacity: 0;
         transform: translateY(10px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
     }
 }
 
-/* Breadcrumb */
 .breadcrumb {
     padding: 20px 0;
     font-size: 14px;
@@ -98,9 +85,7 @@
     letter-spacing: 0.5px;
 }
 
-/* Section Styling */
 .section {
-
     padding: 30px 0;
     position: relative;
 }
@@ -141,17 +126,10 @@
     background: linear-gradient(90deg, rgba(212, 163, 115, 0.2), rgba(212, 163, 115, 0.7), rgba(212, 163, 115, 0.2));
 }
 
-/* Hot Deals Section */
-
-
-/* Tìm phần này trong file CSS */
 .hot-deals-section .section-title {
     font-size: 42px;
     font-weight: 300;
-
-    /* Giống với các title khác */
     letter-spacing: 3px;
-
 }
 
 .hot-deals-section .section-title::after {
@@ -159,7 +137,6 @@
     background: linear-gradient(90deg, transparent, rgba(212, 163, 115, 0.3), transparent);
 }
 
-/* Section Header */
 .section-header {
     display: flex;
     justify-content: space-between;
@@ -188,7 +165,6 @@
     box-shadow: 0 2px 5px rgba(144, 0, 1, 0.2);
 }
 
-/* Products Section */
 .products-section {
     background-color: #fafafa;
     padding: 40px;
@@ -247,8 +223,6 @@
     margin-top: 20px;
 }
 
-
-/* Blog Section */
 .blog-section {
     margin: 80px 0;
 }
@@ -309,7 +283,6 @@
     letter-spacing: 0.3px;
 }
 
-/* Comparison Modal */
 .compare-modal .ant-modal-content {
     border-radius: 5px;
     overflow: hidden;
@@ -361,12 +334,10 @@
     font-weight: 400;
 }
 
-/* Responsive Adjustments */
 @media (max-width: 1200px) {
     .section-title {
         font-size: 32px;
     }
-
     .hot-deals-section .section-title {
         font-size: 36px;
     }
@@ -377,15 +348,12 @@
         flex-wrap: wrap;
         justify-content: center;
     }
-
     .slider-nav-btn {
         display: none;
     }
-
     .section-title {
         font-size: 28px;
     }
-
     .hot-deals-section .section-title {
         font-size: 32px;
     }
@@ -395,17 +363,13 @@
     .home-container {
         padding: 0 15px;
     }
-
-
     .section-title {
         font-size: 24px;
         margin-bottom: 30px;
     }
-
     .hot-deals-section .section-title {
         font-size: 28px;
     }
-
     .blog-grid {
         grid-template-columns: 1fr;
     }
@@ -416,18 +380,15 @@
         font-size: 20px;
         letter-spacing: 1px;
     }
-
     .hot-deals-section .section-title {
         font-size: 24px;
         margin: 40px 0;
     }
-
     .section-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 15px;
     }
-
     .view-all-btn {
         align-self: flex-start;
     }

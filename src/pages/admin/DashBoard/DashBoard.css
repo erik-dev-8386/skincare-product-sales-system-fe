@@ -11,19 +11,19 @@
   margin-top: 1rem;
 }
 
-/* CSS dành riêng cho các hàng chứa biểu đồ */
+
 .chart-row {
   margin-top: 1rem;
-  /* Giữ khoảng cách trên cùng giống mt-4 */
+ 
 }
 
-/* Đảm bảo các biểu đồ chiếm toàn bộ chiều rộng */
+
 .chart-row .ant-col-24 {
   width: 100%;
 }
 
-/* Khoảng cách giữa hai biểu đồ */
+
 .chart-row+.chart-row {
   margin-top: 2rem;
-  /* Tăng khoảng cách giữa hai biểu đồ, có thể điều chỉnh */
+
 }

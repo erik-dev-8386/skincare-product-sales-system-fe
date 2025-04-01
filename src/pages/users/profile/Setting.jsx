@@ -34,7 +34,7 @@ export default function Setting() {
   const [userLoading, setUserLoading] = useState(true);
   const navigate = useNavigate();
 
-  // Lấy thông tin user từ token
+
   const token = localStorage.getItem('token');
   const decodedToken = jwtDecode(token);
   const userEmail = decodedToken.sub;
@@ -135,7 +135,7 @@ export default function Setting() {
             <Skeleton active />
           ) : (
             <Space direction="vertical" style={{ width: '100%' }}>
-              {/* <p>id: {userData?.userId || 'Chưa có thông tin'}</p> */}
+         
               <span> <strong>Email:</strong> {userData?.email || 'Chưa đăng nhập'}</span>
             </Space>
           )}

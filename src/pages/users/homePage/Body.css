@@ -20,48 +20,32 @@
   font-family: "Fira Sans Extra Condensed", serif;
   position: relative;
   z-index: 10;
-  /* Đảm bảo nằm trên các thành phần khác */
   font-size: 18px;
-  /* Tăng kích thước chữ nếu cần */
   text-align: left;
 }
-
-
 
 .home-page {
   text-align: center;
   margin-left: auto;
-  /* Canh giữa nội dung */
   margin-right: auto;
   font-family: "Fira Sans Extra Condensed", serif;
-  /* padding-bottom: 50px; 
-    position: relative;
-    top: 140px; */
 }
 
 .home-page {
   margin-top: 50px;
-  /* Tăng khoảng cách giữa phần home-page và header */
-
   padding-bottom: 50px;
 }
-
 
 .s1 {
   height: 200px;
   margin-left: 10px;
 }
 
-
-
-
 .ss {
   height: 350px;
   width: 400px;
 }
 
-
-/* ========================== */
 .slider-control {
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
@@ -148,7 +132,6 @@
 }
 
 .compare-image-container:hover {
-  /* transform: translateY(-5px); */
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
@@ -253,7 +236,6 @@
   border-radius: 3px;
 }
 
-/* Tùy chỉnh bảng */
 .compare-table {
   border-radius: 12px;
   overflow: hidden;
@@ -275,7 +257,6 @@
 
 .compare-table .ant-table-tbody>tr:hover>td {
   background-color: #f0f9ff;
-  /* transform: translateY(-2px); */
 }
 
 .compare-table .ant-table-tbody>tr:nth-child(even)>td {
@@ -286,7 +267,6 @@
   background-color: #ffffff;
 }
 
-/* Button styling */
 .compare-modal .ant-btn {
   border-radius: 8px;
   height: 40px;
@@ -299,12 +279,10 @@
 }
 
 .compare-modal .ant-btn:hover {
-  /* transform: translateY(-2px); */
   box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3);
   background: linear-gradient(135deg, #69c0ff, #40a9ff);
 }
 
-/* Thêm vào file CSS của bạn */
 .slider-container {
   display: flex;
   overflow: hidden;
@@ -319,9 +297,7 @@
 
 .slider-item {
   flex: 0 0 20%;
-  /* Mỗi sản phẩm chiếm 20% chiều rộng (5 sản phẩm trên một slide) */
   margin: 0 10px;
-  /* Khoảng cách giữa các sản phẩm */
   box-sizing: border-box;
 }
 
