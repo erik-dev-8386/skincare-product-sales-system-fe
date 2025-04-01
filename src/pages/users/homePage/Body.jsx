@@ -6,7 +6,6 @@ import slider01 from "../../../assets/home/50.jpg";
 import slider02 from "../../../assets/home/880.jpg";
 import Slider from "./Slider";
 import s1 from "../../../assets/home/s1.jpg";
-
 import { Breadcrumb, Layout } from "antd";
 import { useNavigate } from "react-router-dom";
 import ProductCard from "../../../component/productCard/ProductCard";
@@ -18,6 +17,9 @@ export default function Body() {
   const [suitableProducts, setSuitableProducts] = useState([]);
   const [discounts, setDiscounts] = useState({});
   const [brands, setBrands] = useState([]);
+  const [skinTypes, setSkinTypes] = useState([]);
+  const [bestSellerProducts, setBestSellerProducts] = useState([]);
+  const [blogs, setBlogs] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const navigate = useNavigate();
 
@@ -30,9 +32,8 @@ export default function Body() {
 
   const [compareProducts, setCompareProducts] = useState([]);
   const [isCompareModalVisible, setIsCompareModalVisible] = useState(false);
-  const [skinTypes, setSkinTypes] = useState([]);
-  const [bestSellerProducts, setBestSellerProducts] = useState([]);
-  const [blogs, setBlogs] = useState([]);
+
+  
 
   // Fetch all data
   useEffect(() => {
@@ -76,7 +77,7 @@ export default function Body() {
     fetchData();
   }, []);
 
-  // Navigation handlers
+  
   const handleNext = () => {
     setCurrentSlide(prev => (prev + 4 < suitableProducts.length ? prev + 4 : 0));
   };
@@ -85,7 +86,6 @@ export default function Body() {
     setCurrentSlide(prev => (prev - 4 >= 0 ? prev - 4 : Math.max(0, suitableProducts.length - 4)));
   };
 
-  // Product comparison handlers
   const handleCompareClick = (product) => {
     if (compareProducts.length < 2) {
       if (!compareProducts.find(p => p.productId === product.productId)) {
