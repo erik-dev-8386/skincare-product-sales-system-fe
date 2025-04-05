@@ -285,8 +285,72 @@ export default function ProductDetail() {
       : "Loading...";
   };
 
+  // const handleAddToCart = () => {
+  //   console.log("Đang thêm sản phẩm vào giỏ hàng:", product);
+
+  //   if (quantity % 1 !== 0) {
+  //     toast.error("Số lượng phải là số nguyên (không chấp nhận số thập phân)");
+  //     return;
+  //   }
+
+  //   if (quantity < 1) {
+  //     toast.error("Số lượng không được nhỏ hơn 1");
+  //     return;
+  //   }
+
+  //   if (quantity > product.quantity) {
+  //     toast.error(`Số lượng không được vượt quá ${product.quantity} (số lượng tồn kho)`);
+  //     return;
+  //   }
+
+
+  //   addToCart({
+  //     ...product,
+  //     quantity,
+  //   });
+
+
+  //   try {
+  //     const guestCartKey = `cart_guest`;
+  //     const savedCart = localStorage.getItem(guestCartKey);
+  //     let updatedCart = [];
+
+  //     if (savedCart) {
+  //       const parsedCart = JSON.parse(savedCart);
+  //       const existingProduct = parsedCart.find(
+  //         (item) => item.productId === product.productId
+  //       );
+
+  //       if (existingProduct) {
+  //         updatedCart = parsedCart.map((item) =>
+  //           item.productId === product.productId
+  //             ? { ...item, quantity: item.quantity + quantity }
+  //             : item
+  //         );
+  //       } else {
+  //         updatedCart = [...parsedCart, { ...product, quantity }];
+  //       }
+  //     } else {
+  //       updatedCart = [{ ...product, quantity }];
+  //     }
+
+  //     localStorage.setItem(guestCartKey, JSON.stringify(updatedCart));
+  //     console.log("Đã lưu giỏ hàng guest vào localStorage:", updatedCart);
+  //   } catch (error) {
+  //     console.error("Lỗi khi lưu giỏ hàng guest:", error);
+  //   }
+
+  //   toast.success(`Đã thêm ${product.productName} vào giỏ hàng thành công!`);
+  // };
+
   const handleAddToCart = () => {
     console.log("Đang thêm sản phẩm vào giỏ hàng:", product);
+
+    // Chỉ validate khi quantity là 0 hoặc không phải số nguyên
+    if (quantity === 0 || quantity === null || quantity === undefined) {
+      toast.error("Vui lòng nhập số lượng sản phẩm");
+      return;
+    }
 
     if (quantity % 1 !== 0) {
       toast.error("Số lượng phải là số nguyên (không chấp nhận số thập phân)");
@@ -303,12 +367,10 @@ export default function ProductDetail() {
       return;
     }
 
-
     addToCart({
       ...product,
       quantity,
     });
-
 
     try {
       const guestCartKey = `cart_guest`;
@@ -809,26 +871,31 @@ export default function ProductDetail() {
     },
   ];
 
+  // const handleQuantityChange = (value) => {
+
+  //   if (value % 1 !== 0) {
+  //     toast.error("Số lượng phải là số nguyên (không chấp nhận số thập phân)");
+  //     setQuantity(Math.floor(value)); 
+  //     return;
+  //   }
+
+  //   if (value < 1) {
+  //     toast.error("Số lượng không được nhỏ hơn 1");
+  //     setQuantity(1);
+  //     return;
+  //   }
+
+  //   if (value > product.quantity) {
+  //     toast.error(`Số lượng không được vượt quá ${product.quantity}`);
+  //     setQuantity(product.quantity);
+  //     return;
+  //   }
+
+  //   setQuantity(value);
+  // };
+
   const handleQuantityChange = (value) => {
-
-    if (value % 1 !== 0) {
-      toast.error("Số lượng phải là số nguyên (không chấp nhận số thập phân)");
-      setQuantity(Math.floor(value)); 
-      return;
-    }
-
-    if (value < 1) {
-      toast.error("Số lượng không được nhỏ hơn 1");
-      setQuantity(1);
-      return;
-    }
-
-    if (value > product.quantity) {
-      toast.error(`Số lượng không được vượt quá ${product.quantity}`);
-      setQuantity(product.quantity);
-      return;
-    }
-
+    // Chỉ cập nhật state mà không validate ở đây
     setQuantity(value);
   };
 
@@ -1015,7 +1082,7 @@ export default function ProductDetail() {
                         {similarProducts.length > displayCountSimilar && (
                           <Button
                             type="link"
-                            onClick={() => setDisplayCountSimilar(displayCountSimilar + 4)} // Tăng số lượng hiển thị lên 4
+                            onClick={() => setDisplayCountSimilar(displayCountSimilar + 4)} 
                             style={{ width: '100%', marginTop: '10px' }}
                           >
                             Xem thêm

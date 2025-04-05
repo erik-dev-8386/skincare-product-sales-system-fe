@@ -294,7 +294,7 @@ export default function Cart() {
             } else {
                 const response = await api.get(`/cart/pay/${orderId}`);
 
-                toast.success(`Thanh toán thành công! Tổng tiền: ${formatNumber(finalTotal)} đ`);
+                toast.success(`Đặt hàng thành công! Tổng tiền: ${formatNumber(finalTotal)} đ`);
                 setCart([]);
                 setCartItems([]);
 
