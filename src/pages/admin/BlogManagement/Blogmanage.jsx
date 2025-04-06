@@ -287,6 +287,11 @@ const BlogManage = () => {
     }
   };
 
+  // const stripHtml = (html) => {
+  //   const tempDiv = document.createElement("div");
+  //   tempDiv.innerHTML = html;
+  //   return tempDiv.textContent || tempDiv.innerText || "";
+  // };
   const handleSubmitForm = async () => {
     try {
       // Validate form fields first
@@ -300,6 +305,7 @@ const BlogManage = () => {
         message.error("Tiêu đề blog đã tồn tại! Vui lòng nhập tiêu đề khác.");
         return;
       }
+      
 
       const token = localStorage.getItem("token");
       if (!token) {
@@ -422,6 +428,8 @@ const BlogManage = () => {
       message.error(editingBlog ? "Có lỗi xảy ra khi cập nhật blog!" : "Có lỗi xảy ra khi tạo blog!");
     }
   };
+
+  
 
   const handleEditBlog = (blog) => {
     setEditingBlog(blog);
