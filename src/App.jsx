@@ -48,6 +48,9 @@ import Point from "./pages/users/profile/point.jsx";
 import SuccessPayment from "./pages/users/cart/PaymentStatus.jsx";
 import { ToastContainer } from "react-toastify";
 import Setting from "./pages/users/profile/Setting.jsx";
+
+import PlanSkincare from "./pages/admin/PlanSkincare/PlanSkincare.jsx";
+import Miniplanskincare from "./pages/admin/Miniplanskincare/Miniplanskincare.jsx";
 function App() {
   return (
     <>
@@ -126,6 +129,8 @@ function App() {
         <Route path="/admin/blog-management" element={<BlogManage />} />
         <Route path="/admin/blog-hastag" element={<BlogHashtag />} />
         <Route path="/admin/blog-category" element={<BlogCategory />} />
+        <Route path="/admin/planskincare" element={<PlanSkincare />} />
+        <Route path="/admin/miniplanskincare" element={<Miniplanskincare />} />
       </Route>
 
 
