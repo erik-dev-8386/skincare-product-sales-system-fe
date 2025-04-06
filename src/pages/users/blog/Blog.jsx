@@ -45,7 +45,7 @@ const Blog = () => {
       const response = await api.get("/blogs");
       console.log("Blog data:", response.data);
       
-      // Filter blogs to only show those with status=1 (visible)
+
       const visibleBlogs = response.data.filter(blog => blog.status === 1);
       
       setBlogs(visibleBlogs);
@@ -141,7 +141,7 @@ const Blog = () => {
     setFilteredBlogs(filtered);
   };
 
-  // Add a function to handle blog card clicks
+
   const handleBlogClick = (blogId) => {
     navigate(`/blog/${blogId}`);
   };
@@ -307,7 +307,7 @@ const Blog = () => {
 
               {filteredBlogs.length > 0 ? (
                 <div className="hasaki-style-blog-layout">
-                  {/* Featured section with one large post */}
+             
                   <div className="blog-section">
                     <div className="blog-section-header">
                       <h2 className="blog-section-title">
@@ -349,11 +349,11 @@ const Blog = () => {
                     )}
                   </div>
 
-                  {/* Recent posts section in a grid layout */}
+              
                   <div className="blog-section">
                     <div className="blog-section-header">
                       <h2 className="blog-section-title">
-                        <i className="fa-solid fa-clock"></i> Bài Viết Mới Nhất
+                        <i className="fa-solid fa-clock"></i> Bài Viết Chia Sẻ
                       </h2>
                       <div className="blog-section-line"></div>
                     </div>

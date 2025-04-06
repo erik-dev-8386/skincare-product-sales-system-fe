@@ -1,4 +1,4 @@
-// BlogCard.jsx
+
 import React from "react";
 import { Card, Tag } from "antd";
 import { useNavigate } from "react-router-dom";
@@ -14,18 +14,17 @@ const BlogCard = ({ blog, featured = false, onClick }) => {
     navigate(`/blog/${blog.blogId}`);
   };
 
-  // Kiểm tra xem blog có tồn tại không
+
   if (!blog) {
     return null;
   }
 
-  // Get category name for the data-category attribute
+
   const categoryName = blog.blogCategory?.blogCategoryName || "Chăm sóc da";
 
-  // Create a short excerpt from the blog content
   const createExcerpt = (content) => {
     if (!content) return "";
-    // Remove HTML tags and get plain text
+
     const plainText = content.replace(/<[^>]+>/g, "");
     return plainText.substring(0, 120) + (plainText.length > 120 ? "..." : "");
   };
@@ -84,7 +83,7 @@ const BlogCard = ({ blog, featured = false, onClick }) => {
   );
 };
 
-// Update PropTypes
+
 BlogCard.propTypes = {
   blog: PropTypes.shape({
     blogId: PropTypes.oneOfType([PropTypes.number, PropTypes.string])

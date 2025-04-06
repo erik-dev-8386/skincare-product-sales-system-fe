@@ -25,7 +25,7 @@ const Question = () => {
   const [answeredCount, setAnsweredCount] = useState(0);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
 
-  // Utility functions
+
   const removeHtmlTags = (html) => html?.replace(/<\/?[^>]+(>|$)/g, "") || '';
   const decodeHtmlEntities = (html) => {
     const textArea = document.createElement('textarea');
@@ -33,7 +33,7 @@ const Question = () => {
     return textArea.value;
   };
 
-  // Fetch questions
+
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
@@ -50,7 +50,7 @@ const Question = () => {
     fetchQuestions();
   }, []);
 
-  // Handle answer selection
+
   const handleAnswerSelect = (questionId, answerId, mark) => {
     const isNewAnswer = !answers[questionId];
     
@@ -61,7 +61,7 @@ const Question = () => {
 
     if (isNewAnswer) setAnsweredCount(prev => prev + 1);
 
-    // Auto-advance after short delay
+
     setTimeout(() => {
       if (currentQuestionIndex < questions.length - 1) {
         setCurrentQuestionIndex(prev => prev + 1);
@@ -69,7 +69,7 @@ const Question = () => {
     }, 300);
   };
 
-  // Submit test
+
   const handleSubmit = async () => {
     const token = localStorage.getItem('token');
     if (!token) return;
@@ -89,7 +89,7 @@ const Question = () => {
 
       if (response.data) {
         setTotalMark(response.data.totalMark);
-        setSkinTypeInfo(response.data); // Save the complete response data
+        setSkinTypeInfo(response.data); 
         setIsPopupOpen(true);
       }
     } catch (err) {
@@ -99,7 +99,7 @@ const Question = () => {
     }
   };
 
-  // Navigation
+
   const goToNextQuestion = () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(prev => prev + 1);
@@ -112,7 +112,6 @@ const Question = () => {
     }
   };
 
-  // Skin type assets
   const getSkinTypeAssets = (skinName) => {
     const assets = {
       'Khô': {
@@ -210,7 +209,7 @@ const Question = () => {
     
     const assets = getSkinTypeAssets(skinTypeInfo.skinType.skinName);
     const skinName = skinTypeInfo.skinType.skinName;
-    // Get image URL from API response or use default if not available
+
     const skinImage = skinTypeInfo.skinType.skinTypeImages?.[0]?.imageURL || 
       'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80';
 
@@ -226,7 +225,7 @@ const Question = () => {
         className="result-modal"
       >
         <div className="result-popup">
-          {/* Header */}
+    
           <div className="popup-header" style={{ background: assets.gradient }}>
             <button className="close-btn" onClick={() => setIsPopupOpen(false)}>
               <CloseOutlined />
@@ -239,7 +238,7 @@ const Question = () => {
             </div>
           </div>
 
-          {/* Body */}
+
           <div className="popup-body">
             <div className="result-summary">
               <div className="result-card">
@@ -295,7 +294,7 @@ const Question = () => {
             </div>
           </div>
 
-          {/* Footer */}
+ 
           <div className="popup-footer">
             <p>Hãy chăm sóc làn da của bạn mỗi ngày để luôn rạng rỡ!</p>
           </div>
@@ -375,6 +374,7 @@ const Question = () => {
   if (error) return renderError();
 
   return (
+  
     <div className="quiz-container">
       <div className="quiz-header">
         <h1 className="test-title">Bài kiểm tra loại da</h1>
@@ -395,6 +395,7 @@ const Question = () => {
       {questions.length > 0 && renderQuestion()}
       {renderResultPopup()}
     </div>
+    
   );
 };
 

@@ -45,11 +45,11 @@ const OrderHistory = () => {
       } else if (sortType === 'asc') {
         response = await api.get(`/orders/sort-asc/${email}`);
       } else {
-        // Default fetch without sorting
+     
         response = await api.get(`/cart/${email}`);
       }
 
-      // Format orders data consistently regardless of the endpoint
+     
       const formattedOrders = response.data.map(order => ({
         ...order,
         items: order.productName?.map(product => ({
@@ -57,7 +57,7 @@ const OrderHistory = () => {
           quantity: product.quantity,
           discountPrice: product.discountPrice,
           image: product.imageUrl,
-        })) || [], // Handle cases where productName might not exist
+        })) || [], 
       }));
 
       setAllOrders(formattedOrders);

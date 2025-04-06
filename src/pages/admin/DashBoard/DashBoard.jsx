@@ -13,7 +13,8 @@ import {
   FileTextOutlined,
 } from "@ant-design/icons";
 import ReactApexChart from "react-apexcharts";
-import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, Legend } from 'recharts';import api from "../../../config/api";
+import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer, Legend } from 'recharts';
+import api from "../../../config/api";
 import "./DashBoard.css";
 import { webSocketService, fetchMonthlySales } from "../../../config/websocket.service";
 
@@ -130,6 +131,7 @@ const MonthlyRevenueChart = () => {
     </Card>
   );
 };
+
 // Biểu đồ bán hàng
 const ProductSalesChart = () => {
   const [chartData, setChartData] = useState([]);
@@ -137,7 +139,6 @@ const ProductSalesChart = () => {
   const [error, setError] = useState(null);
 
   const processData = (salesRes) => {
-    // Nhóm dữ liệu theo tháng
     const monthlyData = {};
     
     salesRes.forEach(item => {
@@ -148,7 +149,6 @@ const ProductSalesChart = () => {
       monthlyData[monthKey][item.productName] = item.totalSales;
     });
 
-    // Chuyển đổi thành dạng phù hợp cho biểu đồ
     return Object.keys(monthlyData).map(month => ({
       name: month,
       ...monthlyData[month]
@@ -208,12 +208,10 @@ const ProductSalesChart = () => {
     );
   }
 
-  // Lấy danh sách sản phẩm để tạo các Bar
   const productNames = Array.from(new Set(
     chartData.flatMap(month => Object.keys(month).filter(key => key !== 'name'))
   ));
 
-  // Màu sắc cho từng sản phẩm
   const colors = ['#8884d8', '#82ca9d', '#ffc658', '#ff8042', '#0088FE', '#00C49F'];
 
   return (
@@ -262,6 +260,7 @@ const ProductSalesChart = () => {
     </Card>
   );
 };
+
 // Component Dashboard Chính
 export default function DashBoard() {
   const [dashboardData, setDashboardData] = useState({
@@ -420,15 +419,16 @@ export default function DashBoard() {
 
   return (
     <Layout className="dashboard-container">
-      {/* Các thẻ thống kê */}
+ 
       {renderStatisticCards()}
-      
-      {/* Biểu đồ doanh thu và bán hàng */}
-      <Row gutter={[16, 16]} className="mt-4">
-        <Col span={12}>
+
+      <Row gutter={[16, 16]} className="chart-row">
+        <Col span={24}>
           <MonthlyRevenueChart />
         </Col>
-        <Col span={12}>
+      </Row>
+      <Row gutter={[16, 16]} className="chart-row">
+        <Col span={24}>
           <ProductSalesChart />
         </Col>
       </Row>

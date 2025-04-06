@@ -69,21 +69,13 @@ const BlogHashtag = () => {
       title: "Nút điều khiển",
       key: "actions",
       render: (text, record) => (
-        <div
-          className="button"
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            flexDirection: "column",
-            width: 100,
-          }}
-        >
+        <div className="button" style={{ display: "flex", justifyContent: "center", flexDirection: "column", width: "20px", alignItems: "center" }}>
           <Tooltip title="Sửa">
             <Button
               color="orange"
               variant="filled"
               onClick={() => handleEditHashtag(record)}
-              style={{ margin: 3, border: "2px solid" }}
+              style={{ margin: 3, border: "2px solid", width: "20px" }}
             >
               <i className="fa-solid fa-pen-to-square"></i>
             </Button>
@@ -94,7 +86,7 @@ const BlogHashtag = () => {
               variant="filled"
               type="default"
               onClick={() => handleViewDetails(record)}
-              style={{ margin: 3, border: "2px solid" }}
+              style={{ margin: 3, border: "2px solid", width: "20px" }}
             >
               <i className="fa-solid fa-eye"></i>
             </Button>
@@ -109,7 +101,7 @@ const BlogHashtag = () => {
               <Button
                 color="red"
                 variant="filled"
-                style={{ margin: 3, border: "2px solid" }}
+                style={{ margin: 3, border: "2px solid", width: "20px" }}
               >
                 <i className="fa-solid fa-trash"></i>
               </Button>
@@ -123,8 +115,8 @@ const BlogHashtag = () => {
   const fetchHashtags = async () => {
     try {
       const response = await api.get("/blog-hashtag");
-      console.log("Fetched hashtags:", response.data); // Debug dữ liệu
-      setHashtagList([...response.data]); // Tạo mảng mới để đảm bảo re-render
+      console.log("Fetched hashtags:", response.data);
+      setHashtagList([...response.data]);
     } catch (error) {
       console.error("Error fetching hashtags:", error);
       toast.error("Không thể tải danh sách hashtag!");
@@ -186,9 +178,14 @@ const BlogHashtag = () => {
     if (editingHashtag) {
       try {
         const encodedHashtagName = encodeURIComponent(editingHashtag.blogHashtagName);
-        await api.put(`/blog-hashtag/${encodedHashtagName}`, values);
+        const response = await api.put(`/blog-hashtag/${encodedHashtagName}`, values);
         toast.success("Đã sửa hashtag thành công!");
-        await fetchHashtags(); // Đợi fetch hoàn tất
+        // Cập nhật danh sách ngay lập tức với dữ liệu từ response
+        setHashtagList((prevList) =>
+          prevList.map((item) =>
+            item.blogHashtagId === editingHashtag.blogHashtagId ? response.data : item
+          )
+        );
         handleCloseModal();
       } catch (error) {
         console.error("Lỗi khi cập nhật hashtag:", error);
@@ -200,9 +197,9 @@ const BlogHashtag = () => {
           ...values,
           status: 1,
         };
-        await api.post("/blog-hashtag", newHashtag);
+        const response = await api.post("/blog-hashtag", newHashtag);
         toast.success("Đã thêm hashtag mới thành công!");
-        await fetchHashtags(); // Đợi fetch hoàn tất
+        setHashtagList((prevList) => [...prevList, response.data]);
         handleCloseModal();
       } catch (error) {
         console.error("Lỗi khi thêm hashtag mới:", error);
@@ -228,7 +225,11 @@ const BlogHashtag = () => {
       const encodedHashtagName = encodeURIComponent(blogHashtagName);
       await api.delete(`/blog-hashtag/${encodedHashtagName}`);
       toast.success("Đã xóa hashtag này thành công!");
-      await fetchHashtags();
+      setHashtagList((prevList) =>
+        prevList.map((item) =>
+          item.blogHashtagName === blogHashtagName ? { ...item, status: 0 } : item
+        )
+      );
     } catch (error) {
       console.error("Lỗi khi xóa hashtag:", error);
       toast.error("Xóa hashtag này không thành công!");

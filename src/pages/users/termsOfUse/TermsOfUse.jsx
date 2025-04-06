@@ -1,4 +1,3 @@
-// src/pages/termsOfUse/TermsOfUse.jsx
 
 import React from 'react';
 

@@ -28,9 +28,10 @@ const AnswerManagement = () => {
   const [questionContents, setQuestionContents] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // Helper functions for status display
-  const getStatusText = (status) => status === 1 ? "ACTIVE" : "INACTIVE";
-  const getStatusColor = (status) => status === 1 ? "green" : "red";
+  const statusMapping = {
+    0: { text: "KHÔNG HOẠT ĐỘNG", color: "red" },
+    1: { text: "HOẠT ĐỘNG", color: "green" },
+  };
 
   const fetchAnswers = useCallback(async () => {
     setLoading(true);
@@ -80,7 +81,7 @@ const AnswerManagement = () => {
       answerContent: answer.answerContent,
       mark: answer.mark,
       questionContent: answer.questionContent,
-      status: answer.status // Make sure to set the current status
+      status: answer.status
     });
     setIsModalOpen(true);
   };
@@ -118,7 +119,7 @@ const AnswerManagement = () => {
           answerContent,
           mark,
           questionId: editingAnswer.questionId,
-          status: status // Use the status from form
+          status: status
         };
 
         const response = await api.put(`/answers/${editingAnswer.answerId}`, updatePayload);
@@ -131,7 +132,7 @@ const AnswerManagement = () => {
       } else {
         const response = await api.post(
           '/answers/add-by-question-content',
-          { answerContent, mark, status: status || 1 },
+          { answerContent, mark, status: 1 }, // Default status is 1 (active) for new answers
           { params: { questionContent } }
         );
 
@@ -171,7 +172,7 @@ const AnswerManagement = () => {
       });
       
       if (response.data) {
-        toast.success(`Đã chuyển trạng thái thành ${getStatusText(newStatus)}`);
+        toast.success(`Đã chuyển trạng thái thành ${statusMapping[newStatus].text}`);
         await fetchAnswers();
       }
     } catch (error) {
@@ -212,67 +213,83 @@ const AnswerManagement = () => {
       align: 'center',
       render: (status, record) => (
         <Tag 
-          color={getStatusColor(status)} 
+          color={statusMapping[status]?.color || 'default'}
           style={{ cursor: 'pointer', padding: '4px 8px' }}
           onClick={() => handleToggleStatus(record)}
         >
-          {getStatusText(status)}
+          {statusMapping[status]?.text || 'KHÔNG BIẾT'}
         </Tag>
       ),
     },
     {
-      title: "Hành động",
+      title: "Nút điều khiển",
       key: "actions",
       width: '10%',
       render: (_, record) => (
-        <Space size="small">
+        <div className="button" style={{ display: "flex", justifyContent: "center", flexDirection: "column", width: "20px", alignItems: "center" }}>
           <Tooltip title="Sửa">
-            <Button 
+            <Button
+              color="orange"
+              variant="filled"
               onClick={() => handleEditAnswer(record)}
-              icon={<i className="fa-solid fa-pen-to-square" />}
-            />
+              style={{ margin: 3, border: "2px solid", width: "20px" }}
+            >
+              <i className="fa-solid fa-pen-to-square"></i>
+            </Button>
           </Tooltip>
           <Tooltip title="Chi tiết">
-            <Button 
+            <Button
+              color="primary"
+              variant="filled"
+              type="default"
               onClick={() => handleViewDetails(record)}
-              icon={<i className="fa-solid fa-eye" />}
-            />
+              style={{ margin: 3, border: "2px solid", width: "20px" }}
+            >
+              <i className="fa-solid fa-eye"></i>
+            </Button>
           </Tooltip>
-          <Popconfirm
-            title="Bạn chắc chắn muốn xóa?"
-            onConfirm={() => handleDeleteAnswer(record.answerId)}
-          >
-            <Tooltip title="Xóa">
-              <Button danger icon={<i className="fa-solid fa-trash" />} />
-            </Tooltip>
-          </Popconfirm>
-        </Space>
+          <Tooltip title="Xóa">
+            <Popconfirm
+              title="Bạn có muốn xóa câu trả lời này không?"
+              onConfirm={() => handleDeleteAnswer(record.answerId)}
+              okText="Có"
+              cancelText="Không"
+            >
+              <Button
+                color="red"
+                variant="filled"
+                style={{ margin: 3, border: "2px solid", width: "20px" }}
+              >
+                <i className="fa-solid fa-trash"></i>
+              </Button>
+            </Popconfirm>
+          </Tooltip>
+        </div>
       ),
     },
   ];
 
   return (
-    <div style={{ padding: '20px' }}>
+    <div>
       <ToastContainer />
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
-        <h1>Quản lý câu trả lời</h1>
-        <Button type="primary" onClick={handleOpenModal} icon={<i className="fa-solid fa-plus" />}>
-          Thêm mới
-        </Button>
-      </div>
-
-      <div style={{ marginBottom: '16px', display: 'flex', gap: '8px' }}>
+      <h1>Quản lý câu trả lời</h1>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 16 }}>
         <Input
           placeholder="Tìm kiếm câu trả lời..."
           value={searchKeyword}
           onChange={(e) => setSearchKeyword(e.target.value)}
-          style={{ width: '300px' }}
+          style={{ width: 300 }}
           allowClear
           onPressEnter={handleSearch}
         />
-        <Button type="primary" onClick={handleSearch} loading={loading} icon={<i className="fa-solid fa-search" />}>
-          Tìm kiếm
-        </Button>
+        <Space>
+          <Button type="primary" onClick={handleSearch} loading={loading} icon={<i className="fa-solid fa-search" />}>
+            Tìm kiếm
+          </Button>
+          <Button type="primary" onClick={handleOpenModal} icon={<i className="fa-solid fa-plus" />}>
+            Thêm mới
+          </Button>
+        </Space>
       </div>
 
       <Table
@@ -283,6 +300,7 @@ const AnswerManagement = () => {
         pagination={{ pageSize: 10 }}
         bordered
         scroll={{ x: '100%' }}
+        style={{ marginTop: 16 }}
       />
 
       {/* Add/Edit Modal */}
@@ -321,7 +339,7 @@ const AnswerManagement = () => {
             <MyEditor />
           </Form.Item>
 
-          <div style={{ display: 'flex', gap: '16px' }}>
+          <div style={{ display: 'flex', gap: 16 }}>
             <Form.Item
               label="Điểm"
               name="mark"
@@ -331,21 +349,23 @@ const AnswerManagement = () => {
               <InputNumber min={0} max={100} style={{ width: '100%' }} />
             </Form.Item>
 
-            <Form.Item
-              label="Trạng thái"
-              name="status"
-              initialValue={1}
-              style={{ flex: 1 }}
-            >
-              <Select>
-                <Select.Option value={1}>ACTIVE</Select.Option>
-                <Select.Option value={0}>INACTIVE</Select.Option>
-              </Select>
-            </Form.Item>
+            {/* Only show status field when editing */}
+            {editingAnswer && (
+              <Form.Item
+                label="Trạng thái"
+                name="status"
+                style={{ flex: 1 }}
+              >
+                <Select>
+                  <Select.Option value={1}>Hoạt động</Select.Option>
+                  <Select.Option value={0}>Không hoạt động</Select.Option>
+                </Select>
+              </Form.Item>
+            )}
           </div>
 
           <Form.Item>
-            <Button type="primary" htmlType="submit" style={{ marginRight: '8px' }}>
+            <Button type="primary" htmlType="submit" style={{ marginRight: 8 }}>
               {editingAnswer ? "Cập nhật" : "Thêm mới"}
             </Button>
             <Button onClick={handleCloseModal}>Hủy</Button>
@@ -372,8 +392,8 @@ const AnswerManagement = () => {
             <p><strong>Câu hỏi:</strong> {selectedAnswer.questionContent}</p>
             <p>
               <strong>Trạng thái:</strong>{" "}
-              <Tag color={getStatusColor(selectedAnswer.status)}>
-                {getStatusText(selectedAnswer.status)}
+              <Tag color={statusMapping[selectedAnswer.status]?.color}>
+                {statusMapping[selectedAnswer.status]?.text}
               </Tag>
             </p>
           </div>

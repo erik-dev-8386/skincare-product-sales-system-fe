@@ -3,7 +3,7 @@ import { Table, Modal, Tag, Button, Descriptions, Select, Input, Tooltip } from 
 import axios from "axios";
 import api from "../../../config/api";
 import { ToastContainer, toast } from "react-toastify";
-// import "react-toastify/dist/ReactToastify.css";
+
 
 const OrderManagement = () => {
   const [orders, setOrders] = useState([]);
@@ -33,19 +33,14 @@ const OrderManagement = () => {
   }, []);
 
   const handleSearch = async () => {
-    // if (!searchText) {
-    //   toast.warn("Vui lòng nhập mã đơn hàng để tìm kiếm!");
-    //   return;
-    // }
-    // setLoading(true);
+    
     try {
       const response = await api.get(`/orders/search/${searchText}`);
       setOrders(response.data);
     } catch (error) {
       console.error("Error searching orders:", error);
       toast.error("Tìm kiếm đơn hàng không thành công!");
-    // } finally {
-    //   setLoading(false);
+   
     }
   };
 
@@ -115,17 +110,25 @@ const OrderManagement = () => {
       },
     },
     {
-      title: "Hành động",
+      title: "Nút điều khiển",
       key: "actions",
       render: (_, record) => (
-        <div>
+        <div className="button" style={{ display: "flex", justifyContent: "center", flexDirection: "column", width: "20px", alignItems: "center" }}>
           <Tooltip title="Chi tiết">
-          <Button type="primary" onClick={() => handleViewDetails(record)} style={{ marginRight: 8 }}>
+          <Button
+          color="primary"
+            variant="filled"
+            onClick={() => handleViewDetails(record)} 
+           style={{ margin: 3, border: "2px solid", width: "20px" }}>
             <i className="fa-solid fa-eye"></i> 
           </Button>
           </Tooltip>
           <Tooltip title="Sửa">
-          <Button type="default" onClick={() => handleEditOrder(record)}>
+          <Button
+          color="orange"
+            variant="filled"
+          type="default" onClick={() => handleEditOrder(record)}
+            style={{ margin: 3, border: "2px solid", width: "20px" }}>
             <i className="fa-solid fa-pen-to-square"></i> 
           </Button>
           </Tooltip>

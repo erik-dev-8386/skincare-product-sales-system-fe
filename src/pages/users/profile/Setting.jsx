@@ -1,111 +1,146 @@
-import React, { useState } from 'react';
-import { 
-  Card, 
-  Button, 
-  Form, 
-  Input, 
-  Modal, 
-  Space, 
+import React, { useEffect, useState } from 'react';
+import {
+  Card,
+  Button,
+  Form,
+  Input,
+  Modal,
+  Space,
   Typography,
   Divider,
-  Alert
+  Alert,
+  Skeleton
 } from 'antd';
-import { 
-  LogoutOutlined, 
-  DeleteOutlined, 
+import {
+  LogoutOutlined,
+  DeleteOutlined,
   LockOutlined,
-  LoginOutlined 
+  LoginOutlined
 } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast, ToastContainer } from 'react-toastify';
+import api from '../../../config/api';
 
 const { Title, Text } = Typography;
 
 export default function Setting() {
-    const [form] = Form.useForm();
-    const [loading, setLoading] = useState(false);
-    const [deleteModalVisible, setDeleteModalVisible] = useState(false);
-    const [confirmLoading, setConfirmLoading] = useState(false);
-    const navigate = useNavigate();
+  const [form] = Form.useForm();
+  const [loading, setLoading] = useState(false);
+  const [deleteModalVisible, setDeleteModalVisible] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [userData, setUserData] = useState({});
+  const [userLoading, setUserLoading] = useState(true);
+  const navigate = useNavigate();
+
+
+  const token = localStorage.getItem('token');
+  const decodedToken = jwtDecode(token);
+  const userEmail = decodedToken.sub;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (!token) {
+        toast.error("Vui lòng đăng nhập để xem thông tin");
+        setUserLoading(false);
+        return;
+      }
   
-    // Lấy thông tin user từ token
-    const token = localStorage.getItem('token');
-    const user = token ? jwtDecode(token) : null;
+      try {
+        const userResponse = await api.get(`/users/${userEmail}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        
+        setUserData(userResponse.data || {});
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        toast.error("Không thể tải thông tin người dùng");
+      } finally {
+        setUserLoading(false);
+      }
+    };
   
-    const handleLogout = () => {
+    fetchData();
+  }, [token, userEmail]);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    toast.success('Đăng xuất thành công');
+    navigate('/');
+  };
+
+  const handleLoginOther = () => {
+    localStorage.removeItem('token');
+    navigate('/login-and-signup');
+  };
+
+  const showDeleteModal = () => {
+    setDeleteModalVisible(true);
+  };
+
+  const handleDeleteCancel = () => {
+    setDeleteModalVisible(false);
+  };
+
+  const handleDeleteAccount = async () => {
+    setConfirmLoading(true);
+    try {
+      await api.delete(`/users/${userData?.userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      toast.success('Tài khoản đã được xóa thành công');
       localStorage.removeItem('token');
-      toast.success('Đăng xuất thành công');
-      navigate('/login');
-    };
-  
-    const handleLoginOther = () => {
-      localStorage.removeItem('token');
-      navigate('/login');
-    };
-  
-    const showDeleteModal = () => {
-      setDeleteModalVisible(true);
-    };
-  
-    const handleDeleteCancel = () => {
+      navigate('/');
+    } catch (error) {
+      toast.error('Xóa tài khoản thất bại: ' + error.message);
+    } finally {
+      setConfirmLoading(false);
       setDeleteModalVisible(false);
-    };
-  
-    const handleDeleteAccount = async () => {
-      setConfirmLoading(true);
-      try {
-        await axios.delete('/api/user/delete-account', {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        toast.success('Tài khoản đã được xóa thành công');
-        localStorage.removeItem('token');
-        navigate('/register');
-      } catch (error) {
-        toast.error('Xóa tài khoản thất bại: ' + error.message);
-      } finally {
-        setConfirmLoading(false);
-        setDeleteModalVisible(false);
-      }
-    };
-  
-    const onFinishChangePassword = async (values) => {
-      setLoading(true);
-      try {
-        await axios.post('/api/user/change-password', values, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        toast.success('Đổi mật khẩu thành công');
-        form.resetFields();
-      } catch (error) {
-        toast.error('Đổi mật khẩu thất bại: ' + error.response?.data?.message || error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-  
-    return (
+    }
+  };
+
+  const onFinishChangePassword = async (values) => {
+    setLoading(true);
+    try {
+      const { password, newPassword } = values;
+
+      await api.post(`users/change-password/${userData?.email}/${password}/${newPassword}`, null, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      toast.success('Đổi mật khẩu thành công');
+      form.resetFields();
+    } catch (error) {
+      toast.error('Đổi mật khẩu thất bại: ' + (error.response?.data?.message || error.message));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <ToastContainer />
       <div style={{ maxWidth: 1200, margin: '0 auto', padding: '20px' }}>
         <h1>Cài đặt tài khoản</h1>
         <Text type="secondary">Quản lý thông tin và bảo mật tài khoản</Text>
         <Divider />
-  
-        <Card title="Thông tin tài khoản" style={{ marginBottom: 20 }}>
-          <Space direction="vertical" style={{ width: '100%' }}>
-            <Text strong>Email:</Text>
-            <Text>{user?.email || 'Chưa đăng nhập'}</Text>
-            
-            <Text strong>Thời gian tạo tài khoản:</Text>
-            <Text>{user?.iat ? new Date(user.iat * 1000).toLocaleString() : 'Không xác định'}</Text>
-          </Space>
+
+        <Card title="Thông tin tài khoản" style={{ marginBottom: 20 }} loading={userLoading}>
+          {userLoading ? (
+            <Skeleton active />
+          ) : (
+            <Space direction="vertical" style={{ width: '100%' }}>
+         
+              <span> <strong>Email:</strong> {userData?.email || 'Chưa đăng nhập'}</span>
+            </Space>
+          )}
         </Card>
-  
+
         <Card title="Đổi mật khẩu" style={{ marginBottom: 20 }}>
           <Form
             form={form}
@@ -114,13 +149,13 @@ export default function Setting() {
             layout="vertical"
           >
             <Form.Item
-              name="currentPassword"
+              name="password"
               label="Mật khẩu hiện tại"
               rules={[{ required: true, message: 'Vui lòng nhập mật khẩu hiện tại' }]}
             >
               <Input.Password prefix={<LockOutlined />} />
             </Form.Item>
-  
+
             <Form.Item
               name="newPassword"
               label="Mật khẩu mới"
@@ -131,7 +166,7 @@ export default function Setting() {
             >
               <Input.Password prefix={<LockOutlined />} />
             </Form.Item>
-  
+
             <Form.Item
               name="confirmPassword"
               label="Xác nhận mật khẩu mới"
@@ -150,11 +185,11 @@ export default function Setting() {
             >
               <Input.Password prefix={<LockOutlined />} />
             </Form.Item>
-  
+
             <Form.Item>
-              <Button 
-                type="primary" 
-                htmlType="submit" 
+              <Button
+                type="primary"
+                htmlType="submit"
                 loading={loading}
                 icon={<LockOutlined />}
               >
@@ -163,40 +198,41 @@ export default function Setting() {
             </Form.Item>
           </Form>
         </Card>
-  
+
         <Card title="Hành động" style={{ marginBottom: 20 }}>
           <Space direction="vertical" style={{ width: '100%' }}>
-            <Button 
-              type="default" 
-              block 
-              icon={<LoginOutlined />} 
+            <Button
+              type="default"
+              block
+              icon={<LoginOutlined />}
               onClick={handleLoginOther}
             >
               Đăng nhập vào tài khoản khác
             </Button>
-            
-            <Button 
-              type="default" 
-              block 
-              danger 
-              icon={<LogoutOutlined />} 
+
+            <Button
+              type="default"
+              block
+              danger
+              icon={<LogoutOutlined />}
               onClick={handleLogout}
             >
               Đăng xuất
             </Button>
-            
-            <Button 
-              type="default" 
-              block 
-              danger 
-              icon={<DeleteOutlined />} 
+
+            <Button
+              type="default"
+              block
+              danger
+              icon={<DeleteOutlined />}
               onClick={showDeleteModal}
+              disabled={!userData?.userId}
             >
               Xóa tài khoản
             </Button>
           </Space>
         </Card>
-  
+
         <Modal
           title="Xác nhận xóa tài khoản"
           visible={deleteModalVisible}
@@ -222,6 +258,6 @@ export default function Setting() {
           </ul>
         </Modal>
       </div>
-    );
-  };
-
+    </>
+  );
+};

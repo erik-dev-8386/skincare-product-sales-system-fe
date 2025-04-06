@@ -75,21 +75,13 @@ const BrandManagement = () => {
       title: <p className="title-product-management">Nút điều khiển</p>,
       key: "actions",
       render: (text, record) => (
-        <div
-          className="button"
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            flexDirection: "column",
-            width: 100,
-          }}
-        >
+        <div className="button" style={{ display: "flex", justifyContent: "center",flexDirection: "column", width: "20px", alignItems: "center" }}>
           <Tooltip title="Sửa">
             <Button
               color="orange"
               variant="filled"
               onClick={() => handleEditBrand(record)}
-              style={{ margin: 3, border: "2px solid " }}
+              style={{ margin: 3, border: "2px solid", width: "20px" }}
             >
               <i className="fa-solid fa-pen-to-square"></i>
             </Button>
@@ -100,7 +92,7 @@ const BrandManagement = () => {
               variant="filled"
               type="default"
               onClick={() => handleViewDetails(record)}
-              style={{ margin: 3, border: "2px solid " }}
+              style={{ margin: 3, border: "2px solid", width: "20px" }}
             >
               <i className="fa-solid fa-eye"></i>
             </Button>
@@ -115,7 +107,7 @@ const BrandManagement = () => {
               <Button
                 color="red"
                 variant="filled"
-                style={{ margin: 3, border: "2px solid " }}
+                style={{ margin: 3, border: "2px solid", width: "20px" }}
               >
                 <i className="fa-solid fa-trash"></i>
               </Button>
@@ -129,7 +121,7 @@ const BrandManagement = () => {
   const fetchBrands = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await api.get("/brands"); // Bỏ /haven-skin
+      const response = await api.get("/brands"); 
       setBrandList(response.data);
     } catch (error) {
       console.error(
@@ -149,7 +141,7 @@ const BrandManagement = () => {
   const handleSearch = async () => {
     setLoading(true);
     try {
-      const response = await api.get(`/brands/search/${searchText}`); // Bỏ /haven-skin
+      const response = await api.get(`/brands/search/${searchText}`); 
       setBrandList(response.data);
     } catch (error) {
       console.error(
@@ -202,23 +194,30 @@ const BrandManagement = () => {
         brand.brandName.toLowerCase() === values.brandName.toLowerCase() &&
         (!editingBrand || brand.brandId !== editingBrand.brandId)
     );
-
+  
     if (isDuplicate) {
       toast.error("Tên thương hiệu đã tồn tại! Vui lòng nhập tên khác.");
       return;
     }
+  
 
+    const countryPattern = /^[\p{L}\s]+$/u; 
+    if (!countryPattern.test(values.country)) {
+      toast.error("Quốc gia chỉ được chứa chữ cái và khoảng trắng, không được chứa ký tự đặc biệt!");
+      return;
+    }
+  
     const brandData = {
       brandName: values.brandName,
       description: values.description,
-      country: values.country.trim().replace(/[^A-Za-z\s]/g, ""), // Loại bỏ ký tự không hợp lệ
+      country: values.country.trim(),
       ...(editingBrand && { status: values.status }),
     };
-
+  
     try {
       let response;
       if (editingBrand) {
-        response = await api.put(`/brands/${editingBrand.brandId}`, brandData); // Bỏ /haven-skin
+        response = await api.put(`/brands/${editingBrand.brandId}`, brandData);
         toast.success("Đã sửa thương hiệu thành công!");
         setBrandList((prevList) =>
           prevList.map((item) =>
@@ -226,11 +225,11 @@ const BrandManagement = () => {
           )
         );
       } else {
-        response = await api.post("/brands", brandData); // Bỏ /haven-skin
+        response = await api.post("/brands", brandData);
         toast.success("Đã thêm thương hiệu mới thành công!");
         setBrandList((prevList) => [...prevList, response.data]);
       }
-
+  
       fetchBrands();
       handleCloseModal();
     } catch (error) {
@@ -239,9 +238,7 @@ const BrandManagement = () => {
         error.response?.data?.message || error.message
       );
       if (error.response?.status === 400) {
-        toast.error(
-          error.response.data.message || "Dữ liệu không hợp lệ!"
-        );
+        toast.error(error.response.data.message || "Dữ liệu không hợp lệ!");
       } else if (error.response?.status === 500) {
         toast.error("Lỗi server, vui lòng thử lại sau!");
       } else {
@@ -253,12 +250,17 @@ const BrandManagement = () => {
       }
     }
   };
+  const decodeHtml = (html) => {
+    const txt = document.createElement("textarea");
+    txt.innerHTML = html;
+    return txt.value;
+  };
 
   const handleDeleteBrand = async (brandId) => {
     try {
       await api.delete(`/brands/${brandId}`);
       toast.success("Đã xóa thương hiệu này thành công!");
-      fetchBrands(); // Refresh the brand list after deletion
+      fetchBrands(); 
     } catch (error) {
       console.error(
         "Error deleting brand:",
@@ -332,15 +334,18 @@ const BrandManagement = () => {
             />
           </Form.Item>
           <Form.Item
-            label="Quốc gia"
-            name="country"
-            rules={[
-              { required: true, message: "Quốc gia không được để trống" },
-              
-            ]}
-          >
-            <Input />
-          </Form.Item>
+  label="Quốc gia"
+  name="country"
+  rules={[
+    { required: true, message: "Quốc gia không được để trống" },
+    {
+      pattern: /^[\p{L}\s]+$/u,
+      message: "Quốc gia chỉ được chứa chữ cái và khoảng trắng, không được chứa ký tự đặc biệt",
+    },
+  ]}
+>
+  <Input />
+</Form.Item>
           {editingBrand && (
             <Form.Item
               label="Trạng thái"
@@ -376,8 +381,8 @@ const BrandManagement = () => {
               <strong>Mô tả: </strong>
             </p>
             <div
-              dangerouslySetInnerHTML={{ __html: selectedBrand.description }}
-            />
+        dangerouslySetInnerHTML={{ __html: decodeHtml(selectedBrand.description) }}
+      />
             <p>
               <strong>Quốc gia: </strong> {selectedBrand.country}
             </p>

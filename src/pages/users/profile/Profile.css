@@ -1,64 +1,42 @@
-/* .ant-input[disabled] {
-    color: black !important; 
-    background-color: #f5f5f5 !important;
-}
-
-.ant-picker-input input[disabled] {
-    color: black !important;
-}
-
-.ant-select-disabled.ant-select:not(.ant-select-customize-input) .ant-select-selector {
-    color: black !important; 
-}
-
-.profile-container {
-   
-    overflow: hidden; 
-    height: 100vh;
-  }
-   */
-
-   /* Thêm vào file CSS của bạn (ví dụ: Profile.css) */
 .profile-container .ant-input[disabled] {
-    background-color: #f0f0f0; /* Màu nền sáng */
-    color: #000; /* Màu chữ đen */
-    cursor: not-allowed; /* Con trỏ chuột khi hover */
+  background-color: #f0f0f0;
+  color: #000;
+  cursor: not-allowed;
 }
 
 .profile-container .ant-picker-input input[disabled] {
-    background-color: #f0f0f0; /* Màu nền sáng */
-    color: #000; /* Màu chữ đen */
-    cursor: not-allowed; /* Con trỏ chuột khi hover */
+  background-color: #f0f0f0;
+  color: #000;
+  cursor: not-allowed;
 }
 
 .profile-container .ant-select-disabled .ant-select-selector {
-    background-color: #f0f0f0 !important; /* Màu nền sáng */
-    color: #000 !important; /* Màu chữ đen */
-    cursor: not-allowed; /* Con trỏ chuột khi hover */
+  background-color: #f0f0f0 !important;
+  color: #000 !important;
+  cursor: not-allowed;
 }
 
-/* Thêm CSS để điều chỉnh khoảng cách giữa các phần tử trong form */
 .profile-container .ant-form-item {
-    margin-bottom: 8px; /* Giảm khoảng cách giữa các Form.Item */
-  }
-  
-  .profile-container .ant-row {
-    margin-bottom: 8px; /* Giảm khoảng cách giữa các Row */
-  }
-  
-  .profile-container .ant-col {
-    padding: 0 4px; /* Giảm khoảng cách giữa các Col */
-  }
-  
-  .profile-container .ant-input,
-  .profile-container .ant-picker,
-  .profile-container .ant-select-selector {
-    height: 32px; /* Điều chỉnh chiều cao của các input */
-  }
-  
-  .profile-container .ant-upload {
-    margin-bottom: 8px; /* Giảm khoảng cách dưới của Upload */
-  }
+  margin-bottom: 8px;
+}
+
+.profile-container .ant-row {
+  margin-bottom: 8px;
+}
+
+.profile-container .ant-col {
+  padding: 0 4px;
+}
+
+.profile-container .ant-input,
+.profile-container .ant-picker,
+.profile-container .ant-select-selector {
+  height: 32px;
+}
+
+.profile-container .ant-upload {
+  margin-bottom: 8px;
+}
 
 .profile-container {
   min-height: auto;
@@ -96,7 +74,7 @@
   display: inline-block;
 }
 
-.profile-avatar-wrapper .ant-image-mask{
+.profile-avatar-wrapper .ant-image-mask {
   border-radius: 50%;
 }
 
@@ -202,7 +180,7 @@
 }
 
 .profile-actions {
-  margin: 1rem 0 0 0; /* Chỉ giữ margin-top */
+  margin: 1rem 0 0 0;
   padding: 1rem 0;
   border-top: 1px solid #f0f0f0;
   text-align: center;
@@ -261,7 +239,6 @@
   border-radius: 8px;
 }
 
-/* Thêm styles mới cho focus states */
 .ant-input:focus,
 .ant-select-focused .ant-select-selector,
 .ant-picker-focused {
@@ -269,24 +246,20 @@
   box-shadow: 0 0 0 2px rgba(144, 0, 1, 0.2) !important;
 }
 
-/* Thêm styles cho selected states trong Select */
 .ant-select-item-option-selected {
   background-color: #fff1f1 !important;
   color: #900001 !important;
 }
 
-/* Thêm styles cho DatePicker selected date */
 .ant-picker-cell-in-view.ant-picker-cell-selected .ant-picker-cell-inner {
   background: #900001 !important;
 }
 
-/* Thêm styles cho hover states trên buttons */
 .ant-btn-primary:hover {
   background: #aa0001 !important;
   border-color: #aa0001 !important;
 }
 
-/* Thêm styles cho active tab */
 .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
   color: #900001 !important;
 }
@@ -295,39 +268,37 @@
   background: #900001 !important;
 }
 
-/* Điều chỉnh responsive */
 @media (max-width: 768px) {
   .profile-cover {
-    height: 80px;
+      height: 80px;
   }
 
   .profile-avatar,
   .profile-avatar-placeholder {
-    width: 80px;
-    height: 80px;
+      width: 80px;
+      height: 80px;
   }
 
   .profile-avatar-wrapper {
-    margin-top: -40px;
+      margin-top: -40px;
   }
 
   .form-grid {
-    padding: 0;
-    gap: 0;
+      padding: 0;
+      gap: 0;
   }
 
   .form-section {
-    padding: 0.5rem;
+      padding: 0.5rem;
   }
 }
 
 @media (min-width: 1200px) {
   .profile-card {
-    max-width: 100%;
+      max-width: 100%;
   }
 }
 
-/* Thêm style mới để fix chiều cao của container */
 body, html {
   margin: 0;
   padding: 0;
@@ -340,7 +311,6 @@ body, html {
   flex-direction: column;
 }
 
-/* Wrap tất cả styles trong class user-profile-page để tránh ảnh hưởng các trang khác */
 .user-profile-page {
   width: 100%;
   background: white;
@@ -348,21 +318,21 @@ body, html {
 
 .user-profile-page .profile-container {
   min-height: auto;
-  padding: 0.5rem 1rem; /* Thêm padding cho container */
+  padding: 0.5rem 1rem;
   margin: 0 auto;
   width: 100%;
-  max-width: 1200px; /* Giới hạn chiều rộng tối đa */
+  max-width: 1200px;
   display: flex;
   flex-direction: column;
 }
 
 .user-profile-page .profile-card {
   max-width: 100%;
-  margin: 0.5rem 0; /* Thêm margin vertical */
+  margin: 0.5rem 0;
   padding: 0;
   background: white;
-  border-radius: 8px; /* Thêm border radius */
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* Thêm shadow nhẹ */
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .user-profile-page .profile-header {
@@ -372,15 +342,15 @@ body, html {
 }
 
 .user-profile-page .profile-cover {
-  height: 120px; /* Tăng chiều cao */
-  border-radius: 8px 8px 0 0; /* Bo góc trên */
+  height: 120px;
+  border-radius: 8px 8px 0 0;
   background: linear-gradient(135deg, #900001 0%, #c30001 100%);
 }
 
 .user-profile-page .profile-avatar-wrapper {
   position: relative;
   margin-top: -50px;
-  margin-bottom: 10px; /* Thêm margin dưới */
+  margin-bottom: 10px;
   display: inline-block;
 }
 
@@ -402,23 +372,23 @@ body, html {
 .user-profile-page .form-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 20px; /* Tăng khoảng cách giữa các cột */
-  padding: 0 1.5rem 1.5rem; /* Thêm padding */
+  gap: 20px;
+  padding: 0 1.5rem 1.5rem;
   margin: 0;
 }
 
 .user-profile-page .form-section {
-  padding: 1.2rem; /* Tăng padding */
+  padding: 1.2rem;
   background: #fafafa;
-  border-radius: 8px; /* Thêm border radius */
+  border-radius: 8px;
   margin: 0;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03); /* Shadow nhẹ */
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
 }
 
 .user-profile-page .section-title {
-  font-size: 18px; /* Tăng font size */
+  font-size: 18px;
   color: #900001;
-  margin-bottom: 1rem; /* Tăng margin bottom */
+  margin-bottom: 1rem;
   padding-bottom: 0.5rem;
   border-bottom: 2px solid #ffebeb;
 }
@@ -426,26 +396,26 @@ body, html {
 .user-profile-page .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 15px; /* Tăng gap */
-  margin-bottom: 0.8rem; /* Tăng margin bottom */
+  gap: 15px;
+  margin-bottom: 0.8rem;
 }
 
 .user-profile-page .ant-form-item {
-  margin-bottom: 1rem; /* Tăng margin bottom */
+  margin-bottom: 1rem;
 }
 
 .user-profile-page .ant-form-item-label > label {
   color: #555;
   font-weight: 500;
-  font-size: 14px; /* Tăng font size */
+  font-size: 14px;
 }
 
 .user-profile-page .ant-input,
 .user-profile-page .ant-select-selector,
 .user-profile-page .ant-picker {
-  border-radius: 6px !important; /* Tăng border radius */
-  height: 38px !important; /* Tăng chiều cao */
-  padding: 8px 12px !important; /* Tăng padding */
+  border-radius: 6px !important;
+  height: 38px !important;
+  padding: 8px 12px !important;
 }
 
 .user-profile-page .ant-input:hover,
@@ -462,35 +432,34 @@ body, html {
 }
 
 .user-profile-page .profile-actions {
-  margin: 1.5rem 0 1rem; /* Tăng margin */
+  margin: 1.5rem 0 1rem;
   padding: 1.5rem 0 1rem;
   text-align: center;
 }
 
 .user-profile-page .action-buttons {
   display: flex;
-  gap: 1.5rem; /* Tăng gap */
+  gap: 1.5rem;
   justify-content: center;
 }
 
 .user-profile-page .save-button,
 .user-profile-page .edit-button,
 .user-profile-page .cancel-button {
-  min-width: 140px; /* Tăng chiều rộng */
-  height: 40px; /* Tăng chiều cao */
-  font-size: 15px; /* Tăng font size */
-  border-radius: 6px; /* Tăng border radius */
+  min-width: 140px;
+  height: 40px;
+  font-size: 15px;
+  border-radius: 6px;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .user-profile-page .form-grid {
-    grid-template-columns: 1fr;
-    gap: 15px;
-    padding: 0 1rem 1rem;
+      grid-template-columns: 1fr;
+      gap: 15px;
+      padding: 0 1rem 1rem;
   }
-  
+
   .user-profile-page .form-section {
-    padding: 1rem;
+      padding: 1rem;
   }
 }

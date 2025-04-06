@@ -36,13 +36,11 @@ export default function LoginAndSignup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
-
     try {
 
       if (isRegister) {
 
-        // Kiểm tra trường bị trống
+   
         for (let key in formData) {
           if (formData[key].trim() === "") {
             toast.error(`Vui lòng nhập ${key === "firstName" ? "tên" : key === "lastName" ? "họ" : key}`);
@@ -51,7 +49,6 @@ export default function LoginAndSignup() {
           }
         }
 
-        // Kiểm tra định dạng email
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         if (!emailRegex.test(formData.email)) {
           toast.error("Email không hợp lệ!");
@@ -59,7 +56,7 @@ export default function LoginAndSignup() {
           return;
         }
 
-        // Kiểm tra số điện thoại (chỉ chứa số, độ dài từ 10-11 số)
+
         const phoneRegex = /^[0-9]{10,11}$/;
         if (!phoneRegex.test(formData.phone)) {
           toast.error("Số điện thoại không hợp lệ! Phải có 10-11 chữ số.");
@@ -67,14 +64,14 @@ export default function LoginAndSignup() {
           return;
         }
 
-        // Kiểm tra độ dài mật khẩu
+
         if (formData.password.length < 6) {
           toast.error("Mật khẩu phải có ít nhất 6 ký tự!");
           setLoading(false);
           return;
         }
 
-        // Kiểm tra mật khẩu khớp nhau
+
         if (formData.password !== formData.confirmPassword) {
           toast.error("Mật khẩu không khớp!");
           setLoading(false);
@@ -89,9 +86,6 @@ export default function LoginAndSignup() {
           password: formData.password
         });
         console.log("Sending login data:", formData);
-
-
-        // localStorage.setItem("role", response.data.role);
 
         const token = response.data.token;
         localStorage.setItem("token", token);
@@ -109,7 +103,7 @@ export default function LoginAndSignup() {
   };
 
   const handleSuccess = async (response) => {
-    console.log("Google Token:", response.credential); // Kiểm tra token nhận được
+    console.log("Google Token:", response.credential); 
     try {
       const res = await fetch("http://localhost:8080/haven-skin/users/login/google", {
         method: "POST",
@@ -121,53 +115,23 @@ export default function LoginAndSignup() {
       console.log("User data:", data);
 
       if (res.ok && data.token) {
-        //  Lưu token vào localStorage
+     
         console.log("token real:", data.token);
         localStorage.setItem("token", data.token);
 
-        //  Giải mã token lấy role
+     
         const decodedToken = jwtDecode(data.token);
         setRole(decodedToken.role);
 
       }
       toast.success("Đăng nhập thành công!");
-      setTimeout(() => navigate("/"), 1500); // Chuyển hướng về trang chủ
+      setTimeout(() => navigate("/"), 1500); 
     } catch (error) {
       console.error("Login failed:", error);
       toast.error("Đăng nhập thất bại!");
     }
   };
 
-  // const handleSuccess = async (response) => {
-  //   console.log("Google Token:", response.credential); // Kiểm tra token nhận được
-  //   try {
-  //     const res = await api.post("/users/login/google", {
-  //       token: response.credential, // Gửi token trực tiếp
-  //     });
-  
-  //     console.log("Response from server:", res); // Log response từ server
-  
-  //     const data = res.data; // Sử dụng res.data thay vì res.json()
-  //     console.log("User data:", data);
-  
-  //     if (res.status === 200 && data.token) {
-  //       // Lưu token vào localStorage
-  //       localStorage.setItem("token", data.token);
-  
-  //       // Giải mã token lấy role
-  //       const decodedToken = jwtDecode(data.token);
-  //       setRole(decodedToken.role);
-  
-  //       toast.success("Đăng nhập thành công!");
-  //       setTimeout(() => navigate("/"), 1500); // Chuyển hướng về trang chủ
-  //     } else {
-  //       toast.error("Đăng nhập thất bại!");
-  //     }
-  //   } catch (error) {
-  //     console.error("Login failed:", error);
-  //     toast.error("Đăng nhập thất bại!");
-  //   }
-  // };
 
   return (
     <div className="body">
@@ -178,19 +142,7 @@ export default function LoginAndSignup() {
             <form onSubmit={handleSubmit}>
               <h1>Đăng ký tài khoản</h1>
               <div className="icons">
-                {/* <Link to="#" className="icon">
-                  <i className="fa-brands fa-facebook"></i>
-                </Link>
-                <Link to="#" className="icon">
-                  <i className="fa-brands fa-google"></i>
-                  
-                </Link>
-                <Link to="#" className="icon">
-                  <i className="fa-brands fa-github"></i>
-                </Link>
-                <Link to="#" className="icon">
-                  <i className="fa-brands fa-linkedin"></i>
-                </Link> */}
+              
                 <GoogleLogin
                   className="google-login"
                   clientId={CLIENT_ID}
@@ -221,18 +173,7 @@ export default function LoginAndSignup() {
             <form onSubmit={handleSubmit}>
               <h1>Đăng nhập</h1>
               <div className="icons">
-                {/* <Link to="#" className="icon">
-                  <i className="fa-brands fa-facebook"></i>
-                </Link>
-                <Link to="#" className="icon">
-                  <i className="fa-brands fa-google"></i>
-                </Link>
-                <Link to="#" className="icon">
-                  <i className="fa-brands fa-github"></i>
-                </Link>
-                <Link to="#" className="icon">
-                  <i className="fa-brands fa-linkedin"></i>
-                </Link> */}
+               
                 <GoogleLogin
                   className="google-login"
                   clientId={CLIENT_ID}

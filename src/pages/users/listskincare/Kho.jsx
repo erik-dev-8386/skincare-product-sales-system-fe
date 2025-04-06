@@ -881,7 +881,7 @@ export default function Kho() {
         )}
       </div>
 
-      {/* Modal so sánh sản phẩm */}
+
       <Modal
         title={
           <div className="compare-modal-title">

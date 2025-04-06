@@ -51,20 +51,20 @@ const CategoryManagement = () => {
       title: "Nút điều khiển",
       key: "actions",
       render: (text, record) => (
-        <div className="button" style={{ display: "flex", justifyContent: "center", flexDirection: "column", width: 100 }}>
+        <div className="button" style={{ display: "flex", justifyContent: "center", flexDirection: "column", width: "20px", alignItems: "center" }}>
           <Tooltip title="Sửa">
-            <Button color="orange" variant="filled" onClick={() => handleEditCategory(record)} style={{ margin: 3, border: "2px solid " }}>
+            <Button color="orange" variant="filled" onClick={() => handleEditCategory(record)} style={{ margin: 3, border: "2px solid", width: "20px" }}>
               <i className="fa-solid fa-pen-to-square"></i>
             </Button>
           </Tooltip>
           <Tooltip title="Chi tiết">
-            <Button color="primary" variant="filled" type="default" onClick={() => handleViewDetails(record)} style={{ margin: 3, border: "2px solid " }}>
+            <Button color="primary" variant="filled" type="default" onClick={() => handleViewDetails(record)} style={{ margin: 3, border: "2px solid", width: "20px" }}>
               <i className="fa-solid fa-eye"></i>
             </Button>
           </Tooltip>
           <Tooltip title="Xóa">
             <Popconfirm title="Bạn có muốn xóa loại da này không?" onConfirm={() => handleDeleteCategory(record.categoryId)} okText="Có" cancelText="Không">
-              <Button color="red" variant="filled" style={{ margin: 3, border: "2px solid " }}>
+              <Button color="red" variant="filled" style={{ margin: 3, border: "2px solid", width: "20px" }}>
                 <i className="fa-solid fa-trash"></i>
               </Button>
             </Popconfirm>
@@ -119,7 +119,7 @@ const CategoryManagement = () => {
   };
 
   const handleSubmitForm = async (values) => {
-    // Check for duplicate category name
+   
     const isDuplicate = categoryList.some(
       (category) =>
         category.categoryName === values.categoryName &&
@@ -136,14 +136,14 @@ const CategoryManagement = () => {
         await api.put(`/categories/${editingCategory.categoryId}`, {
           categoryName: values.categoryName,
           description: values.description,
-          status: values.status || 2, // Mặc định là HOẠT ĐỘNG nếu không có
+          status: values.status || 2, 
         });
         toast.success("Đã sửa danh mục thành công!");
       } else {
         await api.post("/categories", {
           categoryName: values.categoryName,
           description: values.description,
-          status: 2, // Mặc định là HOẠT ĐỘNG khi tạo mới
+          status: 2, 
         });
         toast.success("Đã thêm danh mục mới thành công!");
       }
@@ -160,7 +160,7 @@ const CategoryManagement = () => {
     form.setFieldsValue({
       categoryName: category.categoryName,
       description: category.description,
-      status: category.status, // Đảm bảo gửi status nếu backend yêu cầu
+      status: category.status, 
     });
     handleOpenModal();
   };
@@ -248,7 +248,7 @@ const CategoryManagement = () => {
           )}
         </Form>
       </Modal>
-      {/* Modal Chi Tiết */}
+      
       <Modal
         title={<h2>Chi tiết danh mục</h2>}
         open={isDetailModalOpen}

@@ -16,7 +16,7 @@ const Point = () => {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem('token'); // Giả sử token được lưu trong localStorage
+    const token = localStorage.getItem('token'); 
     if (token) {
       const decoded = jwtDecode(token);
       const email = decoded.sub;

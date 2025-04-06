@@ -134,21 +134,13 @@ const BlogManage = () => {
       title: "Nút điều khiển",
       key: "actions",
       render: (text, record) => (
-        <div
-          className="button"
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            flexDirection: "column",
-            width: 100,
-          }}
-        >
+        <div className="button" style={{ display: "flex", justifyContent: "center", flexDirection: "column", width: "20px", alignItems: "center" }}>
           <Tooltip title="Sửa">
           <Button
             color="orange"
             variant="filled"
             onClick={() => handleEditBlog(record)}
-            style={{ margin: 3, border: "2px solid" }}
+            style={{ margin: 3, border: "2px solid", width: "20px" }}
           >
             <i className="fa-solid fa-pen-to-square"></i> 
           </Button>
@@ -159,7 +151,7 @@ const BlogManage = () => {
             variant="filled"
             type="default"
             onClick={() => handleViewDetails(record)}
-            style={{ margin: 3, border: "2px solid" }}
+            style={{ margin: 3, border: "2px solid", width: "20px" }}
           >
             <i className="fa-solid fa-eye"></i> 
           </Button>
@@ -174,7 +166,7 @@ const BlogManage = () => {
             <Button
               color="red"
               variant="filled"
-              style={{ margin: 3, border: "2px solid" }}
+              style={{ margin: 3, border: "2px solid", width: "20px" }}
             >
               <i className="fa-solid fa-trash"></i>
             </Button>

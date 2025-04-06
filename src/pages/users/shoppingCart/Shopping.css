@@ -1,4 +1,4 @@
-/* Shopping.css */
+
 
 .cart-container {
     width: 90%;
@@ -36,7 +36,7 @@
 
 .empty-cart-message .ant-btn:hover {
     background: #a80001;
-    /* transform: translateY(-2px); */
+   
 }
 
 .order-summary {
@@ -53,7 +53,7 @@
     color: #900001;
 }
 
-/* Button Container Styles */
+
 .button-container {
     display: flex;
     gap: 16px;
@@ -106,12 +106,7 @@
     box-shadow: 0 4px 12px rgba(144, 0, 1, 0.1);
 }
 
-/* .checkout-btn:active,
-.continue-shopping-btn:active {
-    transform: translateY(1px);
-} */
 
-/* Custom Table Styles */
 .table-cart .ant-table {
     border-radius: 12px;
     overflow: hidden;
@@ -130,22 +125,21 @@
     position: relative;
 }
 
-/* Remove borders between headers */
 .table-cart .ant-table-thead > tr > th:not(:last-child)::after {
     content: none !important;
 }
 
-/* Ensure background covers fully */
+
 .table-cart .ant-table-thead > tr > th {
     background-clip: padding-box;
 }
 
-/* Fix for Ant Design */
+
 .table-cart .ant-table-thead > tr > th::before {
     display: none !important;
 }
 
-/* Table body cells - centered content */
+
 .table-cart .ant-table-tbody > tr > td {
     border-bottom: 1px solid #f0f0f0;
     text-align: center !important;
@@ -154,7 +148,7 @@
     font-size: 15px;
 }
 
-/* Center product image */
+
 .table-cart .ant-table-tbody > tr > td:first-child {
     display: flex;
     justify-content: center;
@@ -170,7 +164,7 @@
     font-weight: 600;
 }
 
-/* Quantity controls - centered */
+
 .quantity-controls {
     display: flex;
     align-items: center;
@@ -208,7 +202,7 @@
     height: 32px;
 }
 
-/* Delete button - centered */
+
 .delete-btn {
     background: white;
     color: #ff4d4f;
@@ -226,20 +220,20 @@
     border-color: #ff4d4f !important;
 }
 
-/* Product image */
+
 .image-product {
     border-radius: 8px;
     object-fit: cover;
     border: 1px solid #f0f0f0;
 }
 
-/* Selection controls */
+
 .ant-checkbox-wrapper {
     display: flex;
     justify-content: center;
 }
 
-/* Delete selected button */
+
 .ant-btn-danger[disabled] {
     color: rgba(0, 0, 0, 0.25) !important;
     background: #f5f5f5 !important;
@@ -247,18 +241,18 @@
     cursor: not-allowed;
 }
 
-/* Table header checkbox */
+
 .table-cart .ant-table-thead .ant-checkbox-wrapper {
     margin-right: 0;
 }
 
-/* Table cell alignment for checkboxes */
+
 .table-cart .ant-table-cell:first-child {
     text-align: center !important;
     padding-right: 0 !important;
 }
 
-/* Responsive adjustments */
+
 @media (max-width: 768px) {
     .cart-container {
         width: 95%;

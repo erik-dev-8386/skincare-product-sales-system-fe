@@ -1,4 +1,3 @@
-/* Hide scrollbar in WebKit-based browsers */
 .sider-menu::-webkit-scrollbar,
 .content-container::-webkit-scrollbar {
     width: 5px;
@@ -17,67 +16,59 @@
 .avarta .img-avarta {
     border-radius: 50%;
     padding: 10px;
-    transition: all 0.2s ease; /* Hiệu ứng chuyển động mượt mà */
+    transition: all 0.2s ease; 
 }
 
-/* Khi Sider không thu nhỏ */
 .sider-admin:not(.ant-layout-sider-collapsed) .avarta .img-avarta {
-    width: 250px; /* Kích thước lớn hơn */
+    width: 250px; 
     height: 250px;
 }
 
-/* Khi Sider thu nhỏ */
 .sider-admin.ant-layout-sider-collapsed .avarta .img-avarta {
-    width: 80px; /* Kích thước nhỏ hơn */
+    width: 80px;
     height: 80px;
 }
 
-/* Thiết lập chiều cao và cuộn cho Sider */
 .sider-admin {
-    height: 100vh; /* Chiều cao bằng viewport */
-    overflow-y: auto; /* Cho phép cuộn dọc */
-    position: fixed; /* Cố định Sider */
+    height: 100vh;
+    overflow-y: auto; 
+    position: fixed; 
     left: 0;
     top: 0;
     bottom: 0;
-    z-index: 1; /* Đảm bảo Sider nằm trên cùng */
+    z-index: 1; 
 }
 
-/* Thiết lập chiều cao và cuộn cho Content */
 .admin-layout .content-container {
-    height: 100vh; /* Chiều cao bằng viewport */
-    overflow-y: auto; /* Cho phép cuộn dọc */
-    padding: 16px; /* Giảm padding xuống 16px */
+    height: 100vh;
+    overflow-y: auto;
+    padding: 16px;
     transition: margin-left 0.2s;
 }
 
-/* Đảm bảo Menu trong Sider không bị cuộn quá */
 .sider-menu {
-    height: calc(100vh - 150px); /* Chiều cao của Menu bằng chiều cao Sider trừ đi phần header */
-    overflow-y: auto; /* Cho phép cuộn dọc */
+    height: calc(100vh - 150px);
+    overflow-y: auto;
 }
 
 .admin-layout {
     position: relative;
 }
 
-/* Ẩn tất cả thanh cuộn trong content container */
 .content-container {
     background: #fff;
-    margin: 12px 24px; /* Giảm margin-top xuống 12px */
-    padding: 16px;     /* Giảm padding xuống 16px */
+    margin: 12px 24px;
+    padding: 16px;
     min-height: 280px;
     border-radius: 4px;
-    -ms-overflow-style: none;  /* Ẩn scrollbar cho IE và Edge */
-    scrollbar-width: none;     /* Ẩn scrollbar cho Firefox */
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
-/* Ẩn scrollbar cho Chrome, Safari và Opera */
 .content-container::-webkit-scrollbar {
     display: none;
 }
 
-/* Ẩn scrollbar cho các bảng bên trong content */
 .content-container .ant-table-body::-webkit-scrollbar,
 .content-container .ant-table-content::-webkit-scrollbar {
     display: none;
@@ -85,11 +76,10 @@
 
 .content-container .ant-table-body,
 .content-container .ant-table-content {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;     /* Firefox */
+    -ms-overflow-style: none;  
+    scrollbar-width: none;     
 }
 
-/* Giữ lại khả năng cuộn nhưng ẩn thanh cuộn */
 .ant-layout-content {
     overflow: auto;
     -ms-overflow-style: none;
@@ -100,15 +90,13 @@
     display: none;
 }
 
-/* Thêm responsive cho màn hình nhỏ */
 @media screen and (max-width: 768px) {
     .content-container {
-        margin: 8px;    /* Giảm margin trên màn hình nhỏ */
+        margin: 8px;
         padding: 12px;
     }
 }
 
-/* Style cho nút collapse của Sider */
 .ant-layout-sider-trigger {
     position: absolute !important;
     bottom: 0 !important;
@@ -116,14 +104,12 @@
     right: 0 !important;
 }
 
-/* Điều chỉnh chiều cao của menu */
 .sider-menu {
     flex: 1;
     overflow-y: auto;
     margin-bottom: 0 !important;
 }
 
-/* Ẩn scrollbar cho menu */
 .sider-menu::-webkit-scrollbar {
     display: none;
 }
@@ -133,7 +119,6 @@
     scrollbar-width: none;
 }
 
-/* Đảm bảo Sider có layout phù hợp */
 .sider-admin {
     display: flex !important;
     flex-direction: column !important;
@@ -143,23 +128,20 @@
     top: 0;
 }
 
-/* Style cho phần content của Sider */
 .sider-content {
     flex: 1;
     overflow-y: auto;
-    height: calc(100vh - 48px); /* Trừ đi chiều cao của trigger (48px) */
+    height: calc(100vh - 48px);
     display: flex;
     flex-direction: column;
 }
 
-/* Style cho phần logo và welcome */
 .logo {
     padding: 5px 0 !important;
     font-size: 18px;
     margin-bottom: 8px;
 }
 
-/* Style cho nút quay lại trang chủ */
 .back-to-home {
     padding: 8px;
     font-size: 14px;
@@ -170,7 +152,6 @@
     text-decoration: none;
 }
 
-/* Điều chỉnh lại khoảng cách cho menu */
 .sider-menu {
     margin-top: 0 !important;
 }

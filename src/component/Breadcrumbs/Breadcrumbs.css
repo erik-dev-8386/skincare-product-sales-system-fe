@@ -1,6 +1,6 @@
 .breadcrumbs {
     width: 120%;
-    background: white; /* hoặc none tùy bạn */
+    background: white; 
     padding: 10px 15px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
     display: flex;
@@ -26,10 +26,10 @@
 
 .breadcrumbs .crumb a {
     color: black;
-    text-decoration: none; /* Loại bỏ gạch chân */
+    text-decoration: none; 
 }
 
-/* Đảm bảo breadcrumbs nằm ngang */
+
 .breadcrumbs {
     display: flex;
     flex-wrap: wrap;

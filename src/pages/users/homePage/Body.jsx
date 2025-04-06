@@ -3,10 +3,9 @@ import React, { useEffect, useState } from "react";
 import "./Bo.css";
 import hot from "../../../assets/home/30.jpg";
 import slider01 from "../../../assets/home/50.jpg";
-import slider02 from "../../../assets/home/80.jpg";
+import slider02 from "../../../assets/home/880.jpg";
 import Slider from "./Slider";
 import s1 from "../../../assets/home/s1.jpg";
-
 import { Breadcrumb, Layout } from "antd";
 import { useNavigate } from "react-router-dom";
 import ProductCard from "../../../component/productCard/ProductCard";
@@ -18,6 +17,9 @@ export default function Body() {
   const [suitableProducts, setSuitableProducts] = useState([]);
   const [discounts, setDiscounts] = useState({});
   const [brands, setBrands] = useState([]);
+  const [skinTypes, setSkinTypes] = useState([]);
+  const [bestSellerProducts, setBestSellerProducts] = useState([]);
+  const [blogs, setBlogs] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const navigate = useNavigate();
 
@@ -30,11 +32,9 @@ export default function Body() {
 
   const [compareProducts, setCompareProducts] = useState([]);
   const [isCompareModalVisible, setIsCompareModalVisible] = useState(false);
-  const [skinTypes, setSkinTypes] = useState([]);
-  const [bestSellerProducts, setBestSellerProducts] = useState([]);
-  const [blogs, setBlogs] = useState([]);
 
-  // Fetch all data
+  
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -76,7 +76,6 @@ export default function Body() {
     fetchData();
   }, []);
 
-  // Navigation handlers
   const handleNext = () => {
     setCurrentSlide(prev => (prev + 4 < suitableProducts.length ? prev + 4 : 0));
   };
@@ -85,7 +84,7 @@ export default function Body() {
     setCurrentSlide(prev => (prev - 4 >= 0 ? prev - 4 : Math.max(0, suitableProducts.length - 4)));
   };
 
-  // Product comparison handlers
+ 
   const handleCompareClick = (product) => {
     if (compareProducts.length < 2) {
       if (!compareProducts.find(p => p.productId === product.productId)) {
@@ -102,7 +101,7 @@ export default function Body() {
     setCompareProducts([]);
   };
 
-  // Data calculations
+
   const visibleProducts = suitableProducts.slice(currentSlide, currentSlide + 4);
   const visibleBlogs = blogs.slice(0, 4);
 
@@ -205,7 +204,7 @@ export default function Body() {
     <Slider slides={hotDealSlides} className="hot-deal-slider" />
   </div>
 </section>
-      {/* Products Section - 4 items in a single row */}
+   
       <section className="section products-section">
         <div className="section-header">
           <h2 className="section-title">DÒNG SẢN PHẨM</h2>
@@ -234,11 +233,11 @@ export default function Body() {
         </div>
       </section>
 
-      {/* Best Sellers Section - 5 items */}
+     
       <section className="section best-sellers-section">
         <div className="section-header">
           <h2 className="section-title">TOP 5 SẢN PHẨM BÁN CHẠY</h2>
-          {/* <button className="view-all-btn" onClick={() => navigate("/products?sort=best-seller")}>XEM TẤT CẢ</button> */}
+          
         </div>
         <div className="best-seller-grid">
           {bestSellerProducts.slice(0, 5).map(product => (
@@ -249,14 +248,14 @@ export default function Body() {
               brands={brands}
               categories={categories}
               onCompareClick={handleCompareClick}
-              className="product-card" // Thêm class này
-              style={{ margin: '5px' }} // Hoặc thêm style trực tiếp
+              className="product-card" 
+              style={{ margin: '5px' }} 
             />
           ))}
         </div>
       </section>
 
-      {/* Blog Section */}
+  
       <section className="section blog-section">
         <div className="section-header">
           <h2 className="section-title">BLOG LÀM ĐẸP</h2>
@@ -285,7 +284,7 @@ export default function Body() {
         </div>
       </section>
 
-      {/* Comparison Modal */}
+     
       <Modal
         title={(
           <div className="compare-modal-title">

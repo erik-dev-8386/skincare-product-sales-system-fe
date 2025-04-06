@@ -1,43 +1,27 @@
-
 .footer {
   display: flex;
   padding: 20px;
   color: White;
   background-color: #900001;
-  /* background: linear-gradient(to right,#900001, #c0244e ); */
   margin: 0;
   min-height: auto;
-  /* height: min-content; */
   width: 100%;
   justify-content: center;
   font-family: "Fira Sans Extra Condensed", serif;
-  
 }
 
 .footer .address {
   padding-left: 50px;
-  /* display: block; */
-  /* flex-direction: column;
-  justify-content: start; */
-
 }
 
 .footer p {
- 
-  /* margin: 20px; */
-  /* width: 200px; */
   display: flex;
   align-items: center;
   gap: 10px;
-  /* Khoảng cách giữa icon và nội dung */
-  /* margin: 10px 0; */
-
-  justify-content:flex-start;
-
+  justify-content: flex-start;
 }
 
 .footer a {
-  
   text-decoration: none;
   color: white;
   font-size: 16px;
@@ -45,17 +29,12 @@
 
 .footer .address p i {
   font-size: 20px;
-
-  /* Kích thước của icon */
 }
 
 .footer-logo {
   display: flex;
   flex-direction: column;
   text-align: center;
-  /* margin-left: 80px; */
-  
-
 }
 
 .footer .logo {
@@ -70,13 +49,10 @@
   align-items: end;
   flex-direction: column;
   padding-right: 50px;
- 
-  /* padding-left: 200px; */
-
 }
 
-.footer .payment p{
-padding-right: 30px;
+.footer .payment p {
+  padding-right: 30px;
 }
 
 .footer .payment .icon {
@@ -85,24 +61,6 @@ padding-right: 30px;
   flex-direction: row;
   justify-content: center;
 }
-/* 
-.footer .payment .cod {
-  padding: 0 22px 0 22px;
-
-  padding-bottom: 80px;
-  background-color: white;
-  color: #900001;
-  border-radius: 20px;
-  margin: 0 20px;
-  height: 65px;
-} */
-
-/* .footer .payment .icon .vnpay {
-  width: 120px;
-  height: 100px;
-  border-radius: 20px;
- 
-} */
 
 .footer .payment .icon .momo {
   width: 100px;
@@ -110,8 +68,6 @@ padding-right: 30px;
   border-radius: 20px;
   background-color: white;
   padding: 10px;
- 
- 
 }
 
 .footer .payment .icon .cod {
