@@ -76,7 +76,6 @@ export default function Body() {
     fetchData();
   }, []);
 
-  // Navigation handlers
   const handleNext = () => {
     setCurrentSlide(prev => (prev + 4 < suitableProducts.length ? prev + 4 : 0));
   };
@@ -85,7 +84,7 @@ export default function Body() {
     setCurrentSlide(prev => (prev - 4 >= 0 ? prev - 4 : Math.max(0, suitableProducts.length - 4)));
   };
 
-  // Product comparison handlers
+ 
   const handleCompareClick = (product) => {
     if (compareProducts.length < 2) {
       if (!compareProducts.find(p => p.productId === product.productId)) {

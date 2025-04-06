@@ -374,6 +374,7 @@ const Question = () => {
   if (error) return renderError();
 
   return (
+  
     <div className="quiz-container">
       <div className="quiz-header">
         <h1 className="test-title">Bài kiểm tra loại da</h1>
@@ -394,6 +395,7 @@ const Question = () => {
       {questions.length > 0 && renderQuestion()}
       {renderResultPopup()}
     </div>
+    
   );
 };
 
