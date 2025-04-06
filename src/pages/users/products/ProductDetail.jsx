@@ -694,7 +694,7 @@ export default function ProductDetail() {
       label: "Thành phần",
       children: (
         <div className="tabContentStyle">
-          <p>{product.ingredients}</p>
+           <p dangerouslySetInnerHTML={{ __html: product.ingredients }} />
         </div>
       ),
     },
