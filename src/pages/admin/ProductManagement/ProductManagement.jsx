@@ -473,7 +473,7 @@ const ProductManagement = () => {
                   ))}
                 </Select>
               </Form.Item>
-              <Form.Item
+              {/* <Form.Item
                 label="Giảm giá"
                 name="discountId"
                 rules={[
@@ -490,7 +490,7 @@ const ProductManagement = () => {
                     </Select.Option>
                   ))}
                 </Select>
-              </Form.Item>
+              </Form.Item> */}
             </Col>
             {/* Cột 2 */}
             <Col span={12}>
@@ -548,7 +548,7 @@ const ProductManagement = () => {
                   </Form.Item>
                 </Col>
               </Row>
-              {editingProduct && (
+              {/* {editingProduct && (
                 <Form.Item
                   label="Trạng thái"
                   name="status"
@@ -565,7 +565,7 @@ const ProductManagement = () => {
                     <Option value={3}>NGỪNG</Option>
                   </Select>
                 </Form.Item>
-              )}
+              )} */}
               <Form.Item
                 label="Dung tích (ml)"
                 name="netWeight"
@@ -614,6 +614,42 @@ const ProductManagement = () => {
                   ))}
                 </Select>
               </Form.Item>
+              <Form.Item
+                label="Giảm giá"
+                name="discountId"
+                rules={[
+                  { required: false, message: "Giảm giá không được để trống!" },
+                ]}
+              >
+                <Select>
+                  {discounts.map((discount) => (
+                    <Select.Option
+                      key={discount.discountId}
+                      value={discount.discountId}
+                    >
+                      {discount.discountName}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+              {editingProduct && (
+                <Form.Item
+                  label="Trạng thái"
+                  name="status"
+                  rules={[
+                    {
+                      required: false,
+                      message: "Trạng thái không được để trống!",
+                    },
+                  ]}
+                >
+                  <Select>
+                    <Option value={1}>CÓ SẴN</Option>
+                    <Option value={2}>HẾT HÀNG</Option>
+                    <Option value={3}>NGỪNG</Option>
+                  </Select>
+                </Form.Item>
+              )}
 
             </Col>
           </Row>
