@@ -136,9 +136,15 @@ export default function ProductDetail() {
 
      
         console.log("Fetching reviews for product:", product.productId);
-        console.log("Full API URL:", `${api.defaults.baseURL}/feedbacks/product/${product.productId}`);
+        // console.log("Full API URL:", `${api.defaults.baseURL}/feedbacks/product/${product.productId}`);
 
-        const response = await api.get(`/feedbacks/product/${product.productId}?email=${email}`, {
+        // const response = await api.get(`/feedbacks/product/${product.productId}?email=${email}`, {
+        //   headers: {
+        //     'Authorization': `Bearer ${token}`
+        //   }
+        // });
+        console.log("Fetching reviews for product:", product.productName);
+        const response = await api.get(`/feedbacks/${email}/${product.productName}`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -176,7 +182,7 @@ export default function ProductDetail() {
  
         try {
           const token = localStorage.getItem("token");
-          const response = await api.get('/feedbacks/all', {
+          const response = await api.get('/feedbacks', {
             headers: {
               'Authorization': `Bearer ${token}`
             }
@@ -267,7 +273,7 @@ export default function ProductDetail() {
     if (product) {
       fetchRatingData();
     }
-  }, [product]);
+  },[product, reviews]);
 
   const findNameById = (id, data) => {
     const item = data.find(
@@ -508,13 +514,9 @@ export default function ProductDetail() {
       console.error("Error fetching feedbacks:", error);
     }
   };
-
-
   const handleSubmitFeedback = async (values) => {
     try {
-     
       const token = localStorage.getItem("token");
-
       if (!token) {
         toast.error("Bạn chưa đăng nhập! Vui lòng đăng nhập để tạo feedback.");
         return;
@@ -523,8 +525,7 @@ export default function ProductDetail() {
       let email;
       try {
         const decodedToken = jwtDecode(token);
-        email = decodedToken.sub; 
-        console.log("Decoded token:", decodedToken);
+        email = decodedToken.sub;
         console.log("Email from token:", email);
       } catch (error) {
         console.error("Lỗi khi giải mã token:", error);
@@ -537,7 +538,6 @@ export default function ProductDetail() {
         return;
       }
 
-
       const feedbackData = {
         feedbackContent: values.content,
         feedbackDate: new Date().toISOString(),
@@ -548,10 +548,7 @@ export default function ProductDetail() {
         rating: values.rating 
       };
 
-      console.log("Sending feedback data:", feedbackData);
-      console.log("API base URL:", api.defaults.baseURL);
-      console.log("Full API URL:", `${api.defaults.baseURL}/feedbacks/${email}/${product.productName}`);
-
+      console.log("Submitting feedback:", feedbackData);
 
       const response = await api.post(
         `/feedbacks/${email}/${product.productName}`,
@@ -564,16 +561,12 @@ export default function ProductDetail() {
         }
       );
 
-      console.log("Feedback submit response:", response);
-
       if (response.data) {
         toast.success("Đánh giá sản phẩm thành công!");
         feedbackForm.resetFields();
-
+        setUserRating(0); // Reset rating sau khi submit
 
         const returnedData = response.data;
-
-   
         const newFeedback = {
           ...returnedData,
           feedbackId: returnedData.feedbackId || Date.now().toString(),
@@ -582,7 +575,7 @@ export default function ProductDetail() {
           productId: product.productId,
           productName: product.productName,
           userId: email,
-          rating: values.rating, 
+          rating: values.rating,
           user_first_name: returnedData.user_first_name,
           user_last_name: returnedData.user_last_name,
           users: {
@@ -593,62 +586,216 @@ export default function ProductDetail() {
           }
         };
 
-  
-        setReviews(prev => {
-          const updatedReviews = [newFeedback, ...prev];
-          return updatedReviews.sort((a, b) =>
-            new Date(b.feedbackDate) - new Date(a.feedbackDate)
-          );
+        // Cập nhật UI ngay lập tức mà không cần chờ API
+        const newReviews = [newFeedback, ...reviews];
+        const sortedReviews = newReviews.sort((a, b) => 
+          new Date(b.feedbackDate) - new Date(a.feedbackDate)
+        );
+        setReviews(sortedReviews);
+
+        // Tính toán average rating mới ngay lập tức
+        const newTotalRating = sortedReviews.reduce((sum, review) => sum + review.rating, 0);
+        const newAverage = newTotalRating / sortedReviews.length;
+        setAverageRating(newAverage);
+
+        // Cập nhật rating counts ngay lập tức
+        const newRatingCounts = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0};
+        sortedReviews.forEach(review => {
+          newRatingCounts[review.rating]++;
         });
+        setRatingCounts(newRatingCounts);
 
-      
+        // Cập nhật cache local storage
         try {
-          const cachedReviews = localStorage.getItem(`product_reviews_${product.productId}`);
-          let updatedCache = [];
-
-          if (cachedReviews) {
-            updatedCache = JSON.parse(cachedReviews);
-            updatedCache.unshift(newFeedback);
-          } else {
-            updatedCache = [newFeedback];
-          }
-
-          localStorage.setItem(`product_reviews_${product.productId}`, JSON.stringify(updatedCache));
+          localStorage.setItem(
+            `product_reviews_${product.productId}`,
+            JSON.stringify(sortedReviews)
+          );
         } catch (cacheError) {
           console.error("Error caching reviews:", cacheError);
         }
 
-  
+        // Đồng bộ với server (chạy ngầm)
         try {
-          const avgResponse = await api.get(`/feedbacks/average-rating/${product.productName}`);
-          setAverageRating(avgResponse.data);
-
-          const countsResponse = await api.get(`/feedbacks/get-star/by-customer/${product.productName}`);
+          const [avgResponse, countsResponse] = await Promise.all([
+            api.get(`/feedbacks/average-rating/${product.productName}`),
+            api.get(`/feedbacks/get-star/by-customer/${product.productName}`)
+          ]);
+          
+          // Chỉ cập nhật nếu khác với giá trị đã tính
+          if (avgResponse.data !== newAverage) {
+            setAverageRating(avgResponse.data);
+          }
           setRatingCounts(countsResponse.data);
         } catch (error) {
-          console.error("Error updating rating data after submission:", error);
+          console.error("Error syncing with server:", error);
         }
       }
     } catch (error) {
       console.error("Error submitting feedback:", error);
-      console.log("Error response:", error.response?.data);
-      console.log("Error status:", error.response?.status);
-
+      
       if (error.response) {
-        if (error.response.status === 500) {
-          toast.error("Lỗi server: Không thể gửi đánh giá. Vui lòng thử lại sau!");
-        } else if (error.response.status === 404) {
-          toast.error("Endpoint không tồn tại. Vui lòng kiểm tra lại đường dẫn API!");
-        } else if (error.response.status === 400) {
-          toast.error("Dữ liệu không hợp lệ. Vui lòng kiểm tra lại!");
-        } else {
-          toast.error(error.response.data?.message || "Có lỗi xảy ra khi gửi đánh giá");
+        switch (error.response.status) {
+          case 500:
+            toast.error("Lỗi server: Không thể gửi đánh giá. Vui lòng thử lại sau!");
+            break;
+          case 404:
+            toast.error("Endpoint không tồn tại. Vui lòng kiểm tra lại đường dẫn API!");
+            break;
+          case 400:
+            toast.error("Dữ liệu không hợp lệ. Vui lòng kiểm tra lại!");
+            break;
+          case 401:
+            toast.error("Phiên đăng nhập hết hạn. Vui lòng đăng nhập lại!");
+            break;
+          default:
+            toast.error(error.response.data?.message || "Có lỗi xảy ra khi gửi đánh giá");
         }
       } else {
         toast.error("Không thể kết nối đến server. Vui lòng kiểm tra kết nối mạng!");
       }
     }
   };
+
+  // const handleSubmitFeedback = async (values) => {
+  //   try {
+     
+  //     const token = localStorage.getItem("token");
+
+  //     if (!token) {
+  //       toast.error("Bạn chưa đăng nhập! Vui lòng đăng nhập để tạo feedback.");
+  //       return;
+  //     }
+
+  //     let email;
+  //     try {
+  //       const decodedToken = jwtDecode(token);
+  //       email = decodedToken.sub; 
+  //       console.log("Decoded token:", decodedToken);
+  //       console.log("Email from token:", email);
+  //     } catch (error) {
+  //       console.error("Lỗi khi giải mã token:", error);
+  //       toast.error("Không thể xác thực thông tin người dùng. Vui lòng đăng nhập lại!");
+  //       return;
+  //     }
+
+  //     if (!email) {
+  //       toast.error("Không tìm thấy thông tin email người dùng!");
+  //       return;
+  //     }
+
+
+  //     const feedbackData = {
+  //       feedbackContent: values.content,
+  //       feedbackDate: new Date().toISOString(),
+  //       productId: product.productId,
+  //       productName: product.productName,
+  //       userId: email,
+  //       status: 0,
+  //       rating: values.rating 
+  //     };
+
+  //     console.log("Sending feedback data:", feedbackData);
+  //     console.log("API base URL:", api.defaults.baseURL);
+  //     console.log("Full API URL:", `${api.defaults.baseURL}/feedbacks/${email}/${product.productName}`);
+
+
+  //     const response = await api.post(
+  //       `/feedbacks/${email}/${product.productName}`,
+  //       feedbackData,
+  //       {
+  //         headers: {
+  //           'Authorization': `Bearer ${token}`,
+  //           'Content-Type': 'application/json'
+  //         }
+  //       }
+  //     );
+
+  //     console.log("Feedback submit response:", response);
+
+  //     if (response.data) {
+  //       toast.success("Đánh giá sản phẩm thành công!");
+  //       feedbackForm.resetFields();
+
+
+  //       const returnedData = response.data;
+
+   
+  //       const newFeedback = {
+  //         ...returnedData,
+  //         feedbackId: returnedData.feedbackId || Date.now().toString(),
+  //         feedbackContent: values.content,
+  //         feedbackDate: new Date().toISOString(),
+  //         productId: product.productId,
+  //         productName: product.productName,
+  //         userId: email,
+  //         rating: values.rating, 
+  //         user_first_name: returnedData.user_first_name,
+  //         user_last_name: returnedData.user_last_name,
+  //         users: {
+  //           email: email,
+  //           fullName: returnedData.user_first_name && returnedData.user_last_name
+  //             ? `${returnedData.user_first_name} ${returnedData.user_last_name}`
+  //             : email.split('@')[0]
+  //         }
+  //       };
+
+  
+  //       setReviews(prev => {
+  //         const updatedReviews = [newFeedback, ...prev];
+  //         return updatedReviews.sort((a, b) =>
+  //           new Date(b.feedbackDate) - new Date(a.feedbackDate)
+  //         );
+  //       });
+
+      
+  //       try {
+  //         const cachedReviews = localStorage.getItem(`product_reviews_${product.productId}`);
+  //         let updatedCache = [];
+
+  //         if (cachedReviews) {
+  //           updatedCache = JSON.parse(cachedReviews);
+  //           updatedCache.unshift(newFeedback);
+  //         } else {
+  //           updatedCache = [newFeedback];
+  //         }
+
+  //         localStorage.setItem(`product_reviews_${product.productId}`, JSON.stringify(updatedCache));
+  //       } catch (cacheError) {
+  //         console.error("Error caching reviews:", cacheError);
+  //       }
+
+  
+  //       try {
+  //         const avgResponse = await api.get(`/feedbacks/average-rating/${product.productName}`);
+  //         setAverageRating(avgResponse.data);
+
+  //         const countsResponse = await api.get(`/feedbacks/get-star/by-customer/${product.productName}`);
+  //         setRatingCounts(countsResponse.data);
+  //       } catch (error) {
+  //         console.error("Error updating rating data after submission:", error);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error("Error submitting feedback:", error);
+  //     console.log("Error response:", error.response?.data);
+  //     console.log("Error status:", error.response?.status);
+
+  //     if (error.response) {
+  //       if (error.response.status === 500) {
+  //         toast.error("Lỗi server: Không thể gửi đánh giá. Vui lòng thử lại sau!");
+  //       } else if (error.response.status === 404) {
+  //         toast.error("Endpoint không tồn tại. Vui lòng kiểm tra lại đường dẫn API!");
+  //       } else if (error.response.status === 400) {
+  //         toast.error("Dữ liệu không hợp lệ. Vui lòng kiểm tra lại!");
+  //       } else {
+  //         toast.error(error.response.data?.message || "Có lỗi xảy ra khi gửi đánh giá");
+  //       }
+  //     } else {
+  //       toast.error("Không thể kết nối đến server. Vui lòng kiểm tra kết nối mạng!");
+  //     }
+  //   }
+  // };
 
 
   const handleCancel = () => {
@@ -720,7 +867,13 @@ export default function ProductDetail() {
               </span>
               <div className="d-flex flex-column">
                 <div className="d-flex">
-                  <Rate disabled defaultValue={averageRating} allowHalf />
+                  {/* <Rate disabled defaultValue={averageRating} allowHalf /> */}
+                  <Rate 
+                disabled 
+                value={averageRating} 
+                allowHalf
+                key={`rating-${product?.productId || 'loading'}`}
+              />
                 </div>
                 <span className="text-muted">
                   {reviews.length > 0
