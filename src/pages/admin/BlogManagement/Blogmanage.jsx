@@ -289,7 +289,11 @@ const BlogManage = () => {
     setEditingBlog(blog);
     setModalOpen(true);
     setTimeout(() => {
-      const currentImages = blog.blogImages?.map((img) => img.imageURL) || [];
+      // Giữ nguyên thứ tự ảnh từ server
+      const currentImages = blog.blogImages
+        ?.sort((a, b) => a.imageId - b.imageId) // Sắp xếp theo imageId để giữ thứ tự
+        .map((img) => img.imageURL) || [];
+      
       setExistingImages([...currentImages]);
       setImagePreviews([...currentImages]);
 
@@ -335,8 +339,16 @@ const BlogManage = () => {
               height: "auto",
             }}
             onClick={() => {
-              setImagePreviews((prev) => prev.filter((_, i) => i !== index));
-              setImageFiles((prev) => prev.filter((_, i) => i !== index - existingImages.length));
+              const newPreviews = [...imagePreviews];
+              newPreviews.splice(index, 1);
+              setImagePreviews(newPreviews);
+              
+              const fileIndex = index - existingImages.length;
+              if (fileIndex >= 0) {
+                const newFiles = [...imageFiles];
+                newFiles.splice(fileIndex, 1);
+                setImageFiles(newFiles);
+              }
             }}
           />
         )}
@@ -415,11 +427,21 @@ const BlogManage = () => {
       formData.append("blogs", new Blob([JSON.stringify(blogData)], { type: "application/json" }));
       formData.append("email", email);
 
+      // Giữ nguyên thứ tự ảnh khi gửi lên server
+      // 1. Gửi ảnh cũ trước (nếu có)
+      if (editingBlog && existingImages.length > 0) {
+        // Trong trường hợp edit, server sẽ xử lý giữ nguyên ảnh cũ
+        // Chúng ta chỉ cần gửi ảnh mới thêm vào
+      }
+      
+      // 2. Gửi ảnh mới (nếu có)
       if (imageFiles.length > 0) {
+        // Giữ nguyên thứ tự upload bằng cách duyệt tuần tự mảng
         imageFiles.forEach((file) => {
           formData.append("images", file);
         });
       } else if (!editingBlog) {
+        // Nếu là tạo mới và không có ảnh, gửi một blob rỗng
         const emptyBlob = new Blob([""], { type: "application/octet-stream" });
         formData.append("images", emptyBlob, "empty.txt");
       }
@@ -442,7 +464,10 @@ const BlogManage = () => {
       }
 
       const updatedBlog = response.data;
-      const imageURLs = updatedBlog.blogImages?.map((img) => img.imageURL) || [];
+      // Sắp xếp ảnh theo thứ tự imageId để đảm bảo hiển thị đúng thứ tự
+      const imageURLs = updatedBlog.blogImages
+        ?.sort((a, b) => a.imageId - b.imageId)
+        .map((img) => img.imageURL) || [];
 
       let updatedContent = updatedBlog.blogContent;
       if (imageURLs.length > 0) {
@@ -617,6 +642,7 @@ const BlogManage = () => {
                   return Upload.LIST_IGNORE;
                 }
 
+                // Thêm ảnh mới vào cuối mảng
                 setImageFiles((prev) => [...prev, file]);
                 setImagePreviews((prev) => [...prev, URL.createObjectURL(file)]);
                 return false;
@@ -711,14 +737,16 @@ const BlogManage = () => {
             </p>
             <p style={{ display: "flex" }}>
               <strong>Ảnh: </strong>
-              {selectedBlog.blogImages?.map((image, index) => (
-                <Image
-                  key={index}
-                  src={image.imageURL}
-                  alt="Blog"
-                  style={{ width: 100, margin: "0 8px" }}
-                />
-              ))}
+              {selectedBlog.blogImages
+                ?.sort((a, b) => a.imageId - b.imageId) // Sắp xếp ảnh theo imageId
+                .map((image, index) => (
+                  <Image
+                    key={index}
+                    src={image.imageURL}
+                    alt="Blog"
+                    style={{ width: 100, margin: "0 8px" }}
+                  />
+                ))}
             </p>
           </div>
         )}
