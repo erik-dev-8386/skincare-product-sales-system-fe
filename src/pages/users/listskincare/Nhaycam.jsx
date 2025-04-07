@@ -281,9 +281,10 @@ export default function Nhaycam() {
       case "sunscreen":
         categoryName = "Kem chống nắng";
         break;
-      case "cleansingOil":
-        categoryName = "Nước tẩy trang";
-        break;
+        case "nightCleansing":
+          case "cleansingOil":
+            categoryName = "Nước tẩy trang";
+            break;
       default:
         categoryName = "";
     }

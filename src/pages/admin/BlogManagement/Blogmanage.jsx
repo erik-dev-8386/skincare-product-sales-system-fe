@@ -32,13 +32,15 @@ const BlogManage = () => {
   const [searchText, setSearchText] = useState("");
   const [categories, setCategories] = useState([]);
   const [hashtags, setHashtags] = useState([]);
-  const [uploadFileList, setUploadFileList] = useState([]);
   const [imageFiles, setImageFiles] = useState([]);
   const [imagePreviews, setImagePreviews] = useState([]);
+  const [existingImages, setExistingImages] = useState([]);
   const statusMapping = {
     1: { text: "HIỂN THỊ", color: "green" },
     0: { text: "ẨN", color: "red" },
   };
+
+  const MAX_IMAGES = 2;
 
   const columns = [
     {
@@ -136,41 +138,41 @@ const BlogManage = () => {
       render: (text, record) => (
         <div className="button" style={{ display: "flex", justifyContent: "center", flexDirection: "column", width: "20px", alignItems: "center" }}>
           <Tooltip title="Sửa">
-          <Button
-            color="orange"
-            variant="filled"
-            onClick={() => handleEditBlog(record)}
-            style={{ margin: 3, border: "2px solid", width: "20px" }}
-          >
-            <i className="fa-solid fa-pen-to-square"></i> 
-          </Button>
-          </Tooltip>
-          <Tooltip title="Chi tiết">
-          <Button
-            color="primary"
-            variant="filled"
-            type="default"
-            onClick={() => handleViewDetails(record)}
-            style={{ margin: 3, border: "2px solid", width: "20px" }}
-          >
-            <i className="fa-solid fa-eye"></i> 
-          </Button>
-          </Tooltip>
-          <Tooltip title="Xóa">
-          <Popconfirm
-            title="Bạn có muốn xóa blog này không?"
-            onConfirm={() => handleDeleteBlog(record.blogTitle)}
-            okText="Có"
-            cancelText="Không"
-          >
             <Button
-              color="red"
+              color="orange"
               variant="filled"
+              onClick={() => handleEditBlog(record)}
               style={{ margin: 3, border: "2px solid", width: "20px" }}
             >
-              <i className="fa-solid fa-trash"></i>
+              <i className="fa-solid fa-pen-to-square"></i> 
             </Button>
-          </Popconfirm>
+          </Tooltip>
+          <Tooltip title="Chi tiết">
+            <Button
+              color="primary"
+              variant="filled"
+              type="default"
+              onClick={() => handleViewDetails(record)}
+              style={{ margin: 3, border: "2px solid", width: "20px" }}
+            >
+              <i className="fa-solid fa-eye"></i> 
+            </Button>
+          </Tooltip>
+          <Tooltip title="Xóa">
+            <Popconfirm
+              title="Bạn có muốn xóa blog này không?"
+              onConfirm={() => handleDeleteBlog(record.blogTitle)}
+              okText="Có"
+              cancelText="Không"
+            >
+              <Button
+                color="red"
+                variant="filled"
+                style={{ margin: 3, border: "2px solid", width: "20px" }}
+              >
+                <i className="fa-solid fa-trash"></i>
+              </Button>
+            </Popconfirm>
           </Tooltip>
         </div>
       ),
@@ -181,14 +183,12 @@ const BlogManage = () => {
     const fetchData = async () => {
       try {
         const categoriesResponse = await api.get("/blogCategory");
-        // Lọc categories có status = 1
         const activeCategories = categoriesResponse.data.filter(
           (category) => category.status === 1
         );
         setCategories(activeCategories);
 
         const hashtagsResponse = await api.get("/blog-hashtag");
-        // Lọc hashtags có status = 1
         const activeHashtags = hashtagsResponse.data.filter(
           (tag) => tag.status === 1
         );
@@ -207,7 +207,6 @@ const BlogManage = () => {
   const fetchBlogs = async () => {
     try {
       const response = await api.get("/blogs");
-      console.log("Raw blog data:", response.data);
       const processedBlogs = response.data.map((blog) => ({
         ...blog,
         author: blog.user,
@@ -220,7 +219,6 @@ const BlogManage = () => {
           })),
       }));
 
-      console.log("Processed blog data:", processedBlogs);
       setBlogList(processedBlogs);
     } catch (error) {
       console.error("Error fetching blogs:", error);
@@ -248,9 +246,11 @@ const BlogManage = () => {
 
   const handleOpenModal = () => {
     form.resetFields();
-    setUploadFileList([]);
     setEditingBlog(null);
     setModalOpen(true);
+    setImageFiles([]);
+    setImagePreviews([]);
+    setExistingImages([]);
   };
 
   const handleCloseModal = () => {
@@ -259,6 +259,7 @@ const BlogManage = () => {
     form.resetFields();
     setImageFiles([]);
     setImagePreviews([]);
+    setExistingImages([]);
   };
 
   const handleViewDetails = (blog) => {
@@ -271,41 +272,89 @@ const BlogManage = () => {
     setSelectedBlog(null);
   };
 
-  // Function to check if blog title already exists
   const checkTitleExists = async (title) => {
-    // Skip validation if we're editing the same blog
     if (editingBlog && editingBlog.blogTitle === title) {
       return false;
     }
     
     try {
       const response = await api.get(`/blogs/title/${title}`);
-      return !!response.data; // Returns true if data exists
+      return !!response.data;
     } catch (error) {
-      // If 404 or other error, title doesn't exist
       return false;
     }
   };
 
-  // const stripHtml = (html) => {
-  //   const tempDiv = document.createElement("div");
-  //   tempDiv.innerHTML = html;
-  //   return tempDiv.textContent || tempDiv.innerText || "";
-  // };
+  const handleEditBlog = (blog) => {
+    setEditingBlog(blog);
+    setModalOpen(true);
+    setTimeout(() => {
+      const currentImages = blog.blogImages?.map((img) => img.imageURL) || [];
+      setExistingImages([...currentImages]);
+      setImagePreviews([...currentImages]);
+
+      form.setFieldsValue({
+        blogTitle: blog.blogTitle,
+        blogContent: blog.blogContent,
+        blogCategory: {
+          blogCategoryName: blog.blogCategory.blogCategoryName,
+        },
+        hashtags: blog.hashtags.map((tag) => tag.blogHashtagName),
+        status: blog.status,
+      });
+    }, 100);
+  };
+
+  const renderPreviewImage = (preview, index) => {
+    const isExistingImage = existingImages.includes(preview);
+    
+    return (
+      <div
+        key={index}
+        style={{ position: "relative", margin: "0 8px 8px 0" }}
+      >
+        <Image
+          src={preview}
+          alt="Preview"
+          width={100}
+          style={{ borderRadius: 4 }}
+        />
+        {!isExistingImage && (
+          <Button
+            type="text"
+            danger
+            icon={<i className="fa-solid fa-times"></i>}
+            style={{
+              position: "absolute",
+              top: 0,
+              right: 0,
+              background: "rgba(255, 255, 255, 0.8)",
+              borderRadius: "50%",
+              padding: 4,
+              minWidth: "auto",
+              height: "auto",
+            }}
+            onClick={() => {
+              setImagePreviews((prev) => prev.filter((_, i) => i !== index));
+              setImageFiles((prev) => prev.filter((_, i) => i !== index - existingImages.length));
+            }}
+          />
+        )}
+      </div>
+    );
+  };
+
   const handleSubmitForm = async () => {
     try {
-      // Validate form fields first
       await form.validateFields();
       
       const blogTitle = form.getFieldValue("blogTitle");
       
-      // Check if title already exists
       const titleExists = await checkTitleExists(blogTitle);
       if (titleExists) {
         message.error("Tiêu đề blog đã tồn tại! Vui lòng nhập tiêu đề khác.");
         return;
       }
-      
 
       const token = localStorage.getItem("token");
       if (!token) {
@@ -421,49 +470,13 @@ const BlogManage = () => {
       form.resetFields();
       setImageFiles([]);
       setImagePreviews([]);
+      setExistingImages([]);
       setEditingBlog(null);
     } catch (error) {
       console.error("Lỗi khi xử lý blog:", error);
       console.error("Error response:", error.response?.data);
       message.error(editingBlog ? "Có lỗi xảy ra khi cập nhật blog!" : "Có lỗi xảy ra khi tạo blog!");
     }
-  };
-
-  
-
-  const handleEditBlog = (blog) => {
-    setEditingBlog(blog);
-    setModalOpen(true);
-    setTimeout(() => {
-      const existingImages =
-        blog.blogImages?.map((img, index) => ({
-          uid: `-${index}`,
-          name: `image-${index}`,
-          status: "done",
-          url: img.imageURL,
-        })) || [];
-
-      setUploadFileList(existingImages);
-
-      const currentImagePreviews = blog.blogImages?.map((img) => img.imageURL) || [];
-      setImagePreviews(currentImagePreviews);
-
-      form.setFieldsValue({
-        blogTitle: blog.blogTitle,
-        blogContent: blog.blogContent,
-        blogCategory: {
-          blogCategoryName: blog.blogCategory.blogCategoryName,
-        },
-        hashtags: blog.hashtags.map((tag) => tag.blogHashtagName),
-        status: blog.status,
-        blogImages: existingImages,
-      });
-
-      console.log("Setting form values:", {
-        blogTitle: blog.blogTitle,
-        status: blog.status,
-      });
-    }, 100);
   };
 
   const handleDeleteBlog = async (blogTitle) => {
@@ -539,15 +552,15 @@ const BlogManage = () => {
           </Form.Item>
 
           <Form.Item
-  label="Nội dung"
-  name="blogContent"
-  rules={[{ required: true, message: "Nội dung không được để trống!" }]}
->
-  <MyEditor
-    value={form.getFieldValue("blogContent")}
-    onChange={(value) => form.setFieldsValue({ blogContent: value })}
-  />
-</Form.Item>
+            label="Nội dung"
+            name="blogContent"
+            rules={[{ required: true, message: "Nội dung không được để trống!" }]}
+          >
+            <MyEditor
+              value={form.getFieldValue("blogContent")}
+              onChange={(value) => form.setFieldsValue({ blogContent: value })}
+            />
+          </Form.Item>
 
           <Form.Item
             label="Danh mục"
@@ -582,10 +595,16 @@ const BlogManage = () => {
             </Select>
           </Form.Item>
 
-          <Form.Item label="Tải hình ảnh lên">
+          <Form.Item label="Tải hình ảnh lên (tối đa 2 ảnh)">
             <Upload
               multiple
               beforeUpload={(file) => {
+                const remainingSlots = MAX_IMAGES - imagePreviews.length;
+                if (remainingSlots <= 0) {
+                  message.error(`Bạn chỉ có thể tải lên tối đa ${MAX_IMAGES} ảnh!`);
+                  return Upload.LIST_IGNORE;
+                }
+
                 const isImage = file.type.startsWith("image/");
                 if (!isImage) {
                   message.error("Bạn chỉ có thể tải lên file hình ảnh!");
@@ -599,53 +618,26 @@ const BlogManage = () => {
                 }
 
                 setImageFiles((prev) => [...prev, file]);
-                setImagePreviews((prev) => [
-                  ...prev,
-                  URL.createObjectURL(file),
-                ]);
+                setImagePreviews((prev) => [...prev, URL.createObjectURL(file)]);
                 return false;
               }}
               showUploadList={false}
             >
               <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
             </Upload>
+            <div style={{ marginTop: 8 }}>
+              {imagePreviews.length < MAX_IMAGES ? (
+                <span style={{ color: '#888' }}>
+                  Bạn có thể tải lên thêm {MAX_IMAGES - imagePreviews.length} ảnh
+                </span>
+              ) : (
+                <span style={{ color: 'red' }}>
+                  Đã đạt tối đa {MAX_IMAGES} ảnh
+                </span>
+              )}
+            </div>
             <div style={{ display: "flex", flexWrap: "wrap", marginTop: 8 }}>
-              {imagePreviews.map((preview, index) => (
-                <div
-                  key={index}
-                  style={{ position: "relative", margin: "0 8px 8px 0" }}
-                >
-                  <Image
-                    src={preview}
-                    alt="Preview"
-                    width={100}
-                    style={{ borderRadius: 4 }}
-                  />
-                  <Button
-                    type="text"
-                    danger
-                    icon={<i className="fa-solid fa-times"></i>}
-                    style={{
-                      position: "absolute",
-                      top: 0,
-                      right: 0,
-                      background: "rgba(255, 255, 255, 0.8)",
-                      borderRadius: "50%",
-                      padding: 4,
-                      minWidth: "auto",
-                      height: "auto",
-                    }}
-                    onClick={() => {
-                      setImagePreviews((prev) =>
-                        prev.filter((_, i) => i !== index)
-                      );
-                      setImageFiles((prev) =>
-                        prev.filter((_, i) => i !== index)
-                      );
-                    }}
-                  />
-                </div>
-              ))}
+              {imagePreviews.map((preview, index) => renderPreviewImage(preview, index))}
             </div>
           </Form.Item>
 
