@@ -734,12 +734,12 @@ export default function Kho() {
                 >
                   Kem dưỡng ẩm
                 </li>
-                <li
+                {/* <li
                   onClick={() => handleStepClick("nightMask")}
                   className="clickable-step"
                 >
                   Mặt nạ dưỡng ẩm (2-3 lần/tuần)
-                </li>
+                </li> */}
               </ol>
             </div>
           </div>

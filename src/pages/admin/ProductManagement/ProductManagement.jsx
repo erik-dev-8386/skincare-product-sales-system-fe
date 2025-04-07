@@ -35,8 +35,8 @@ const ProductManagement = () => {
   const [skinTypes, setSkinTypes] = useState([]);
   const [categories, setCategories] = useState([]);
   const [discounts, setDiscounts] = useState([]);
-  const [imageFiles, setImageFiles] = useState([]); 
-  const [imagePreviews, setImagePreviews] = useState([]); 
+  const [imageFiles, setImageFiles] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
   const [searchText, setSearchText] = useState("");
 
   const statusMapping = {
@@ -148,42 +148,42 @@ const ProductManagement = () => {
       key: "actions",
       render: (text, record) => (
         <div className="button" style={{ display: "flex", justifyContent: "center", flexDirection: "column", width: "20px", alignItems: "center" }}>
-           <Tooltip title="Sửa">
-          <Button
-            color="orange"
-            variant="filled"
-            onClick={() => handleEditProduct(record)}
-            style={{ margin: 3, border: "2px solid", width: "20px" }}
-          >
-            <i className="fa-solid fa-pen-to-square"></i>
-          </Button>
-          </Tooltip>
-          <Tooltip title="Chi tiết">
-          <Button
-            color="primary"
-            variant="filled"
-            type="default"
-            onClick={() => handleViewDetails(record)}
-            style={{ margin: 3, border: "2px solid", width: "20px" }}
-          >
-            <i className="fa-solid fa-eye"></i>
-          </Button>
-          </Tooltip>
-           <Tooltip title="Xóa">
-          <Popconfirm
-            title="Bạn có muốn xóa sản phẩm này không?"
-            onConfirm={() => handleDeleteProduct(record.productId)}
-            okText="Có"
-            cancelText="Không"
-          >
+          <Tooltip title="Sửa">
             <Button
-              color="red"
+              color="orange"
               variant="filled"
+              onClick={() => handleEditProduct(record)}
               style={{ margin: 3, border: "2px solid", width: "20px" }}
             >
-              <i className="fa-solid fa-trash"></i>
+              <i className="fa-solid fa-pen-to-square"></i>
             </Button>
-          </Popconfirm>
+          </Tooltip>
+          <Tooltip title="Chi tiết">
+            <Button
+              color="primary"
+              variant="filled"
+              type="default"
+              onClick={() => handleViewDetails(record)}
+              style={{ margin: 3, border: "2px solid", width: "20px" }}
+            >
+              <i className="fa-solid fa-eye"></i>
+            </Button>
+          </Tooltip>
+          <Tooltip title="Xóa">
+            <Popconfirm
+              title="Bạn có muốn xóa sản phẩm này không?"
+              onConfirm={() => handleDeleteProduct(record.productId)}
+              okText="Có"
+              cancelText="Không"
+            >
+              <Button
+                color="red"
+                variant="filled"
+                style={{ margin: 3, border: "2px solid", width: "20px" }}
+              >
+                <i className="fa-solid fa-trash"></i>
+              </Button>
+            </Popconfirm>
           </Tooltip>
         </div>
       ),
@@ -194,16 +194,16 @@ const ProductManagement = () => {
     const fetchOptions = async () => {
       try {
         const brandsResponse = await api.get("/brands/list-name-brands");
-      
+
         setBrands(brandsResponse.data);
         const skinTypesResponse = await api.get("/skin-types/list-name-skin-types");
-      
+
         setSkinTypes(skinTypesResponse.data);
         const categoriesResponse = await api.get("/categories/list-name-categories");
-        
+
         setCategories(categoriesResponse.data);
         const discountsResponse = await api.get("/discounts/list-name-discounts");
-        
+
         setDiscounts(discountsResponse.data);
       } catch (error) {
         console.error("Error fetching options:", error);
@@ -245,8 +245,8 @@ const ProductManagement = () => {
     setModalOpen(false);
     form.resetFields();
     setEditingProduct(null);
-    setImageFiles([]); 
-    setImagePreviews([]); 
+    setImageFiles([]);
+    setImagePreviews([]);
   };
 
   const handleViewDetails = (Product) => {
@@ -258,42 +258,48 @@ const ProductManagement = () => {
     setDetailModalOpen(false);
     setSelectedProduct(null);
   };
-  const stripHtml = (html) => {
-    const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = html;
-    return tempDiv.textContent || tempDiv.innerText || "";
-  };
+
+
+  // const handleSubmitForm = async (values) => {
+
+
+  // const stripHtml = (html) => {
+  //   const tempDiv = document.createElement("div");
+  //   tempDiv.innerHTML = html;
+  //   return tempDiv.textContent || tempDiv.innerText || "";
+  // };
   
   const handleSubmitForm = async (values) => {
     // Xoá HTML khỏi phần mô tả
-    values.description = stripHtml(values.description);
+    // values.description = stripHtml(values.description);
+
     const isDuplicate = ProductList.some(
       (product) =>
         product.productName === values.productName &&
-        (!editingProduct || product.productId !== editingProduct.productId) 
+        (!editingProduct || product.productId !== editingProduct.productId)
     );
 
     if (isDuplicate) {
       toast.error("Tên sản phẩm đã tồn tại! Vui lòng nhập tên khác.");
-      return; 
+      return;
     }
 
     const formData = new FormData();
 
-   
+
     formData.append(
       "products",
       new Blob([JSON.stringify(values)], { type: "application/json" })
     );
 
-  
+
     imageFiles.forEach((file) => {
       formData.append("images", file);
     });
 
     try {
       if (editingProduct) {
-        
+
         await api.put(`/products/${editingProduct.productId}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -301,7 +307,7 @@ const ProductManagement = () => {
         });
         toast.success("Đã sửa sản phẩm thành công!");
       } else {
-      
+
         await api.post("/products", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -317,12 +323,12 @@ const ProductManagement = () => {
         error.response?.data?.message || error.message
       );
 
-      
+
       if (editingProduct) {
-        
+
         toast.error("Sửa sản phẩm này không thành công!");
       } else {
-        
+
         toast.error("Thêm sản phẩm này không thành công!");
       }
     }
@@ -337,7 +343,7 @@ const ProductManagement = () => {
       mfg: Product.mfg ? dayjs(Product.mfg) : null,
       exp: Product.exp ? dayjs(Product.exp) : null,
     });
-    setImagePreviews(Product.productImages.map((img) => img.imageURL)); 
+    setImagePreviews(Product.productImages.map((img) => img.imageURL));
     handleOpenModal();
   };
 
@@ -434,7 +440,11 @@ const ProductManagement = () => {
                   },
                 ]}
               >
-                <Input />
+                <MyEditor
+                  value={form.getFieldValue("ingredients") || ""}
+                  placeholder="Thành phần phải có ít nhất 10 ký tự"
+                  onChange={(value) => form.setFieldsValue({ ingredients: value })}
+                />
               </Form.Item>
               <Form.Item
                 label="Số lượng"
@@ -463,7 +473,7 @@ const ProductManagement = () => {
                   ))}
                 </Select>
               </Form.Item>
-              <Form.Item
+              {/* <Form.Item
                 label="Giảm giá"
                 name="discountId"
                 rules={[
@@ -480,7 +490,7 @@ const ProductManagement = () => {
                     </Select.Option>
                   ))}
                 </Select>
-              </Form.Item>
+              </Form.Item> */}
             </Col>
             {/* Cột 2 */}
             <Col span={12}>
@@ -538,7 +548,7 @@ const ProductManagement = () => {
                   </Form.Item>
                 </Col>
               </Row>
-              {editingProduct && (
+              {/* {editingProduct && (
                 <Form.Item
                   label="Trạng thái"
                   name="status"
@@ -555,7 +565,7 @@ const ProductManagement = () => {
                     <Option value={3}>NGỪNG</Option>
                   </Select>
                 </Form.Item>
-              )}
+              )} */}
               <Form.Item
                 label="Dung tích (ml)"
                 name="netWeight"
@@ -604,22 +614,61 @@ const ProductManagement = () => {
                   ))}
                 </Select>
               </Form.Item>
-             
+              <Form.Item
+                label="Giảm giá"
+                name="discountId"
+                rules={[
+                  { required: false, message: "Giảm giá không được để trống!" },
+                ]}
+              >
+                <Select>
+                  {discounts.map((discount) => (
+                    <Select.Option
+                      key={discount.discountId}
+                      value={discount.discountId}
+                    >
+                      {discount.discountName}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+              {editingProduct && (
+                <Form.Item
+                  label="Trạng thái"
+                  name="status"
+                  rules={[
+                    {
+                      required: false,
+                      message: "Trạng thái không được để trống!",
+                    },
+                  ]}
+                >
+                  <Select>
+                    <Option value={1}>CÓ SẴN</Option>
+                    <Option value={2}>HẾT HÀNG</Option>
+                    <Option value={3}>NGỪNG</Option>
+                  </Select>
+                </Form.Item>
+              )}
+
             </Col>
           </Row>
           <Form.Item
             label="Mô tả"
             name="description"
+
             rules={[{ required: true, message: "Mô tả không được để trống!" }]}
           >
             <MyEditor
               value={form.getFieldValue("description") || ""}
+              placeholder="Mô tả phải có ít nhất 20 ký tự"
               onChange={(value) => form.setFieldsValue({ description: value })}
             />
           </Form.Item>
 
           <Form.Item
             label="Hướng dẫn sử dụng"
+
             name="usageInstruction"
             rules={[
               {
@@ -630,6 +679,7 @@ const ProductManagement = () => {
           >
             <MyEditor
               value={form.getFieldValue("usageInstruction") || ""}
+              placeholder="Hướng dẫn sử dụng phải có ít nhất 20 ký tự"
               onChange={(value) =>
                 form.setFieldsValue({ usageInstruction: value })
               }
@@ -643,8 +693,8 @@ const ProductManagement = () => {
                 setImagePreviews((prev) => [
                   ...prev,
                   URL.createObjectURL(file),
-                ]); 
-                return false; 
+                ]);
+                return false;
               }}
               showUploadList={false}
             >
@@ -700,7 +750,12 @@ const ProductManagement = () => {
               }}
             />
             <p>
-              <strong>Thành phần: </strong> {selectedProduct.ingredients}
+              <strong>Thành phần: </strong> 
+              <div
+              dangerouslySetInnerHTML={{
+                __html: selectedProduct.ingredients,
+              }}
+            />
             </p>
             <p>
               <strong>Số lượng tồn kho: </strong> {selectedProduct.quantity}
@@ -729,7 +784,7 @@ const ProductManagement = () => {
             <p>
               <strong>Hạn sử dụng: </strong>{" "}
               {selectedProduct.exp
-                ? dayjs(selectedProduct.exp).format("YYYY-MM-DD") 
+                ? dayjs(selectedProduct.exp).format("YYYY-MM-DD")
                 : "N/A"}
             </p>
             <p>
@@ -763,7 +818,7 @@ const ProductManagement = () => {
                   key={index}
                   src={image.imageURL}
                   alt="Skin Type"
-                  style={{ width:  100, margin: "0 8px" }}
+                  style={{ width: 100, margin: "0 8px" }}
                 />
               ))}
             </p>
