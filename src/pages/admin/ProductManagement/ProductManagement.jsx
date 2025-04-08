@@ -320,6 +320,8 @@ const ProductManagement = () => {
   if (data.productName) errors.push(data.productName);
   if (data.description) errors.push(data.description);
   if (data.ingredients) errors.push(data.ingredients);
+  if (data.deletedTime) errors.push(data.deletedTime);
+  if (data.mfg) errors.push(data.mfg);
   if (data.message && errors.length === 0) errors.push(data.message); // chỉ thêm message nếu không có các lỗi chi tiết hơn
 
   // Hiển thị từng lỗi một
@@ -496,7 +498,7 @@ const ProductManagement = () => {
             <Col span={12}>
               <Row gutter={24}>
                 <Col span={12}>
-                  <Form.Item
+                  {/* <Form.Item
                     label="Ngày tạo"
                     name="createdTime"
                     rules={[
@@ -519,10 +521,8 @@ const ProductManagement = () => {
                     ]}
                   >
                     <DatePicker format="YYYY-MM-DD" />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
+                  </Form.Item> */}
+                   <Form.Item
                     label="Ngày sản xuất"
                     name="mfg"
                     rules={[
@@ -534,6 +534,20 @@ const ProductManagement = () => {
                   >
                     <DatePicker format="YYYY-MM-DD" />
                   </Form.Item>
+                </Col>
+                <Col span={12}>
+                  {/* <Form.Item
+                    label="Ngày sản xuất"
+                    name="mfg"
+                    rules={[
+                      {
+                        required: false,
+                        message: "Ngày sản xuất không được để trống!",
+                      },
+                    ]}
+                  >
+                    <DatePicker format="YYYY-MM-DD" />
+                  </Form.Item> */}
                   <Form.Item
                     label="Hạn sử dụng"
                     name="exp"
