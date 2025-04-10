@@ -1,24 +1,4 @@
-// import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-// import firebase from "firebase/compat/app";
-// import { storage } from "../config/firebase";
 
-
-// const uploadFile = async (file) => {
-//     try {
-//         if (!file) throw new Error("No file provided");
-
-//         const storageRef = firebase.storage().ref(`images/${file.name}`);
-//         const response = await uploadBytes(storageRef, file);
-//         const downloadURL = await getDownloadURL(response.ref);
-
-//         return downloadURL;
-//     } catch (error) {
-//         console.error("File upload failed:", error);
-//         throw error; // Có thể xử lý lỗi bên ngoài
-//     }
-// };
-
-// export default uploadFile;
 
 import { storage, ref, uploadBytesResumable, getDownloadURL } from "../config/firebase"; 
 

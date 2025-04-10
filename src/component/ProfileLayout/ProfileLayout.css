@@ -1,28 +1,26 @@
 .sider-user-profile {
-  background-color: #794842;
+  background-color: #900001;
 }
 
 .color-menu {
-  background-color: #794842 !important; /* Set the background color for the menu */
+  background-color: #900001 !important;
 }
 
 .color-menu .ant-menu-item {
-  color: white; /* Set text color for menu items */
+  color: white;
 }
 
 .color-menu .ant-menu-item-selected {
-  background-color: #3c1414 !important; /* Change selected item color */
+  background-color: #700001 !important;
 }
 
-/* Change the color of the sider trigger */
 .sider-user-profile .ant-layout-sider-trigger {
-  background-color: #93744D !important; /* Set the background color */
-  border: none; /* Remove any borders if necessary */
+  background-color: #800001 !important;
+  border: none;
 }
 
-/* Adjust the color of the trigger icon if needed */
 .sider-user-profile .ant-layout-sider-trigger:hover {
-  background-color: #3c1414 !important; /* Change color on hover */
+  background-color: #700001 !important;
 }
 
 .avarta-profile .ant-image-mask {
@@ -33,23 +31,33 @@
 .avarta-profile  .image-avarta{
   border-radius: 50%;
   padding: 10px;
+  transition: all 0.2s ease;
+}
+
+.sider-user-profile:not(.ant-layout-sider-collapsed) .avarta-profile .image-avarta {
+  width: 200px;
+  height: 200px;
+}
+
+.sider-user-profile.ant-layout-sider-collapsed .avarta-profile .image-avarta {
+  width: 80px;
+  height: 80px;
 }
 
 .sider-user-profile {
-  height: 100vh; /* Chiều cao toàn màn hình */
-  position: fixed; /* Giữ cố định */
+  height: 100vh;
+  position: fixed;
   left: 0;
   top: 0;
   bottom: 0;
-  overflow: hidden; /* Ngăn chặn cuộn */
+  overflow: hidden;
 }
 
 .user-profile-layout .content-container {
-  margin-left: 200px; /* Để không bị che bởi sider */
+  margin-left: 200px;
   padding: 20px;
-  height: 100vh; /* Chiều cao toàn màn hình */
-  overflow-y: auto; /* Cho phép cuộn nội dung */
+  height: 100vh;
+  overflow-y: auto;
   background: #f0f2f5;
-  transition: margin-left 0.2s; /* Smooth transition for margin */
+  transition: margin-left 0.2s;
 }
-

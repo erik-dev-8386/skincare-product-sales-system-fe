@@ -1,21 +1,3 @@
-/* .avarta{
-    display: flex;
-    background-color: aqua;
-    width: 150px;
-    height: 150px;
-    text-align: center;
-    border-radius: 50%;
-    justify-content: center;
-    align-items: center;
-    margin: 25px;
-} */
-
-
-
-
-
-
-/* Hide scrollbar in WebKit-based browsers */
 .sider-menu::-webkit-scrollbar,
 .content-container::-webkit-scrollbar {
     width: 5px;
@@ -29,40 +11,147 @@
 
 .avarta .ant-image-mask {
     border-radius: 50%;
-    
 }
 
-.avarta .img-avarta{
-   
+.avarta .img-avarta {
     border-radius: 50%;
     padding: 10px;
+    transition: all 0.2s ease; 
 }
 
-/* Thiết lập chiều cao và cuộn cho Sider */
+.sider-admin:not(.ant-layout-sider-collapsed) .avarta .img-avarta {
+    width: 250px; 
+    height: 250px;
+}
+
+.sider-admin.ant-layout-sider-collapsed .avarta .img-avarta {
+    width: 80px;
+    height: 80px;
+}
+
 .sider-admin {
-    height: 100vh; /* Chiều cao bằng viewport */
-    overflow-y: auto; /* Cho phép cuộn dọc */
-    position: fixed; /* Cố định Sider */
+    height: 100vh;
+    overflow-y: auto; 
+    position: fixed; 
     left: 0;
     top: 0;
     bottom: 0;
-    z-index: 1; /* Đảm bảo Sider nằm trên cùng */
-  }
-  
-  /* Thiết lập chiều cao và cuộn cho Content */
-  .admin-layout .content-container {
-    /* margin-left: 200px;  */
-    /* Đảm bảo Content không bị che bởi Sider */
-    height: 100vh; /* Chiều cao bằng viewport */
-    overflow-y: auto; /* Cho phép cuộn dọc */
-    padding: 24px; /* Thêm padding để nội dung không dính sát vào viền */
+    z-index: 1; 
+}
+
+.admin-layout .content-container {
+    height: 100vh;
+    overflow-y: auto;
+    padding: 16px;
     transition: margin-left 0.2s;
-  }
-  
-  /* Đảm bảo Menu trong Sider không bị cuộn quá */
-  .sider-menu {
-    height: calc(100vh - 150px); /* Chiều cao của Menu bằng chiều cao Sider trừ đi phần header */
-    overflow-y: auto; /* Cho phép cuộn dọc */
-  }
-  
- 
+}
+
+.sider-menu {
+    height: calc(100vh - 150px);
+    overflow-y: auto;
+}
+
+.admin-layout {
+    position: relative;
+}
+
+.content-container {
+    background: #fff;
+    margin: 12px 24px;
+    padding: 16px;
+    min-height: 280px;
+    border-radius: 4px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.content-container::-webkit-scrollbar {
+    display: none;
+}
+
+.content-container .ant-table-body::-webkit-scrollbar,
+.content-container .ant-table-content::-webkit-scrollbar {
+    display: none;
+}
+
+.content-container .ant-table-body,
+.content-container .ant-table-content {
+    -ms-overflow-style: none;  
+    scrollbar-width: none;     
+}
+
+.ant-layout-content {
+    overflow: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.ant-layout-content::-webkit-scrollbar {
+    display: none;
+}
+
+@media screen and (max-width: 768px) {
+    .content-container {
+        margin: 8px;
+        padding: 12px;
+    }
+}
+
+.ant-layout-sider-trigger {
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+}
+
+.sider-menu {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 0 !important;
+}
+
+.sider-menu::-webkit-scrollbar {
+    display: none;
+}
+
+.sider-menu {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.sider-admin {
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100vh !important;
+    position: fixed !important;
+    left: 0;
+    top: 0;
+}
+
+.sider-content {
+    flex: 1;
+    overflow-y: auto;
+    height: calc(100vh - 48px);
+    display: flex;
+    flex-direction: column;
+}
+
+.logo {
+    padding: 5px 0 !important;
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+.back-to-home {
+    padding: 8px;
+    font-size: 14px;
+}
+
+.back-to-home a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.sider-menu {
+    margin-top: 0 !important;
+}

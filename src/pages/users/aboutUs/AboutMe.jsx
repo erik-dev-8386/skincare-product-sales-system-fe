@@ -1,13 +1,12 @@
 import React from "react";
-import "./AboutMe.css"; // Import CSS để tạo hiệu ứng giống ảnh mẫu
-import Header from "../../../component/Header/Header";
-import Footer from "../../../component/Footer/Footer";
+import "./AboutMe.css"; 
+
 import { Link } from "react-router-dom";
 
 export default function AboutMe() {
     return (
         <>
-            {/* <Header /> */}
+           
             <section className="about-us-section">
                 <div className="overlay">
                     <div className="content">
@@ -72,7 +71,7 @@ export default function AboutMe() {
                     </div>
                 </div>
             </section>
-            {/* <Footer /> */}
+        
         </>
     );
 }

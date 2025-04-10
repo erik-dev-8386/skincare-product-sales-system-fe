@@ -1,5 +1,7 @@
 import logo from "../../assets/Logo_01.jpg"
 import vnpay from "../../assets/VNPAY.jpg"
+import momo from "../../assets/logo-momo.png"
+import cod from "../../assets/cod.webp"
 import "../Footer/Footer.css"
 import { Link } from 'react-router-dom';
 
@@ -36,8 +38,9 @@ function Footer() {
             <div className="payment col-4">
                 <p>Phương thức thanh toán:</p>
                 <div className="icon">
-                    {/* <div className="cod">COD</div> */}
-                    <img className="vnpay" src={vnpay} alt="" />
+              
+                    <img className="cod" src={cod} alt="" />
+                    <img className="momo" src={momo} alt="" />
                 </div>
 
 

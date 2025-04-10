@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal, Table, Popconfirm, Upload, Select, Col, Row, Tag, Image } from "antd";
+import { Button, Form, Input, Modal, Table, Popconfirm, Upload, Select, Col, Row, Tag, Image,Tooltip } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { UploadOutlined } from "@ant-design/icons";
 import { useEffect, useState, useCallback } from "react";
@@ -12,8 +12,8 @@ const SkinTypeManagement = () => {
   const [form] = useForm();
   const [editingSkinType, setEditingSkinType] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [imageFiles, setImageFiles] = useState([]); // Danh sách file ảnh
-  const [imagePreviews, setImagePreviews] = useState([]); // Danh sách URL ảnh tạm thời
+  const [imageFiles, setImageFiles] = useState([]); 
+  const [imagePreviews, setImagePreviews] = useState([]);
   const [isDetailModalOpen, setDetailModalOpen] = useState(false);
   const [selectedSkinType, setSelectedSkinType] = useState(null);
   const [searchText, setSearchText] = useState("");
@@ -70,7 +70,7 @@ const SkinTypeManagement = () => {
                 key={index}
                 src={image.imageURL}
                 alt="Skin Type"
-                style={{ width: 50, height: 50, marginRight: 8 }}
+                style={{ width: 50, height: 50, marginRight:  8 }}
               />
             ))}
         </div>
@@ -80,25 +80,30 @@ const SkinTypeManagement = () => {
       title: "Nút điều khiển",
       key: "actions",
       render: (text, record) => (
-        <div className="button">
+        <div className="button" style={{ display: "flex", justifyContent: "center", flexDirection: "column", width: "20px", alignItems: "center" }}>
+         <Tooltip title="Sửa">
           <Button
             color="orange"
             variant="filled"
             onClick={() => handleEditSkinType(record)}
-            style={{ marginRight: 8, border: "2px solid " }}
+            style={{ margin: 3, border: "2px solid", width: "20px" }}
           >
             <i className="fa-solid fa-pen-to-square"></i>
-            Sửa
+         
           </Button>
+          </Tooltip>
+          <Tooltip title="Chi tiết">
           <Button
             color="primary"
             variant="filled"
             onClick={() => handleViewDetails(record)}
-            style={{ marginRight: 8, border: "2px solid " }}
+            style={{ margin: 3, border: "2px solid", width: "20px" }}
           >
             <i className="fa-solid fa-eye"></i>
-            Chi tiết
+          
           </Button>
+          </Tooltip>
+          <Tooltip title="Xóa">
           <Popconfirm
             title="Bạn có muốn xóa loại da này không?"
             onConfirm={() => handleDeleteSkinType(record.skinTypeId)}
@@ -108,12 +113,13 @@ const SkinTypeManagement = () => {
             <Button
               color="red"
               variant="filled"
-              style={{ marginRight: 8, border: "2px solid " }}
+              style={{ margin: 3, border: "2px solid", width: "20px" }}
             >
               <i className="fa-solid fa-trash"></i>
-              Xóa
+              
             </Button>
           </Popconfirm>
+          </Tooltip>
         </div>
       ),
     },
@@ -149,27 +155,6 @@ const SkinTypeManagement = () => {
     }
   };
 
-  // const handleSearch = async () => {
-  //   if (!searchText.trim()) {
-  //     fetchSkinTypes(); // Nếu ô tìm kiếm trống, hiển thị toàn bộ danh sách
-  //     return;
-  //   }
-  
-  //   setLoading(true);
-  //   try {
-  //     const response = await api.get(`/skin-types/search/${searchText}`); // Gọi API với đúng đường dẫn
-  //     setSkinTypeList(response.data);
-  //   } catch (error) {
-  //     console.error(
-  //       "Error searching skin types:",
-  //       error.response?.data?.message || error.message
-  //     );
-  //     toast.error("Tìm kiếm loại da không thành công!");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // };
-
 
   const handleOpenModal = () => {
     setModalOpen(true);
@@ -193,17 +178,26 @@ const SkinTypeManagement = () => {
     setSelectedSkinType(null);
   };
 
+  const stripHtml = (html) => {
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = html;
+    return tempDiv.textContent || tempDiv.innerText || "";
+  };
+  
   const handleSubmitForm = async (values) => {
-    // Check for duplicate skin type name
+ 
+    // Xoá HTML khỏi phần mô tả
+  values.description = stripHtml(values.description);
+
     const isDuplicate = skinTypeList.some(
       (skinType) =>
         skinType.skinName === values.skinName &&
-        (!editingSkinType || skinType.skinTypeId !== editingSkinType.skinTypeId) // Allow editing the same skin type
+        (!editingSkinType || skinType.skinTypeId !== editingSkinType.skinTypeId) 
     );
 
     if (isDuplicate) {
       toast.error("Tên loại da đã tồn tại! Vui lòng nhập tên khác.");
-      return; // Prevent form submission
+      return; 
     }
 
     const formData = new FormData();
@@ -218,7 +212,7 @@ const SkinTypeManagement = () => {
     try {
       let response;
       if (editingSkinType) {
-        // Update existing skin type
+  
         response = await api.put(
           `/skin-types/${editingSkinType.skinTypeId}`,
           formData,
@@ -230,7 +224,7 @@ const SkinTypeManagement = () => {
         );
         toast.success("Đã sửa loại da thành công!");
       } else {
-        // Create new skin type
+   
         response = await api.post("/skin-types", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -239,7 +233,7 @@ const SkinTypeManagement = () => {
         toast.success("Đã thêm loại da mới thành công!");
       }
 
-      // Update skinTypeList state
+    
       setSkinTypeList((prevList) => {
         if (editingSkinType) {
           return prevList.map((item) =>
@@ -252,7 +246,7 @@ const SkinTypeManagement = () => {
         }
       });
 
-      fetchSkinTypes(); // Refresh skin type list
+      fetchSkinTypes(); 
       handleCloseModal();
     } catch (error) {
       console.error(
@@ -260,7 +254,7 @@ const SkinTypeManagement = () => {
         error.response?.data?.message || error.message
       );
 
-      // Customized error messages
+ 
       if (editingSkinType) {
         toast.error("Sửa loại da này không thành công!");
       } else {
@@ -299,7 +293,7 @@ const SkinTypeManagement = () => {
           placeholder="Nhập tên loại da để tìm kiếm"
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
-          style={{ width: 300, marginRight: 8 }}
+          style={{ width: 300, marginRight:  8 }}
         />
         <Button type="primary" onClick={handleSearch}>
           Tìm kiếm
@@ -372,8 +366,8 @@ const SkinTypeManagement = () => {
                     setImagePreviews((prev) => [
                       ...prev,
                       URL.createObjectURL(file),
-                    ]); // Tạo URL tạm thời để hiển thị ảnh
-                    return false; // Ngăn chặn việc tự động upload
+                    ]); 
+                    return false; 
                   }}
                   showUploadList={false}
                 >
@@ -385,7 +379,7 @@ const SkinTypeManagement = () => {
                     src={preview}
                     alt="Preview"
                     width={100}
-                    style={{ marginTop: 8, marginRight: 8 }}
+                    style={{ marginTop: 8, marginRight:  8 }}
                   />
                 ))}
               </Form.Item>
@@ -442,7 +436,7 @@ const SkinTypeManagement = () => {
                   key={index}
                   src={image.imageURL}
                   alt="Skin Type"
-                  style={{ width: 100, marginRight: 8 }}
+                  style={{ width: 100, marginRight:  8 }}
                 />
               ))}
             </p>

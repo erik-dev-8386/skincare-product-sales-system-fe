@@ -1,4 +1,4 @@
-import { Button, Form, Input, Modal, Table, Popconfirm, DatePicker, Col, Row, Tag, Select } from "antd";
+import { Button, Form, Input, Modal, Table, Popconfirm, DatePicker, Col, Row, Tag, Select, Tooltip } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify";
@@ -84,23 +84,29 @@ const DiscountManagement = () => {
       title: 'Nút điều khiển',
       key: 'actions',
       render: (text, record) => (
-        <div className="button">
-          <Button color="orange" variant="filled" onClick={() => handleEditDiscount(record)} style={{ marginRight: 8, border: "2px solid " }}>
-            <i className="fa-solid fa-pen-to-square"></i> Sửa
+        <div className="button" style={{ display: "flex", justifyContent: "center", flexDirection: "column", width: "20px", alignItems: "center" }}>
+          <Tooltip title="Sửa">
+          <Button color="orange" variant="filled" size="small" onClick={() => handleEditDiscount(record)} style={{ margin: 3, border: "2px solid", width: "30px", height:30 }}>
+            <i className="fa-solid fa-pen-to-square"></i>
           </Button>
-          <Button color="primary" variant="filled" onClick={() => handleViewDetails(record)} style={{ marginRight: 8, border: "2px solid " }}>
-            <i className="fa-solid fa-eye"></i> Chi tiết
+          </Tooltip>
+          <Tooltip title="Chi tiết">
+          <Button color="primary" variant="filled" size="small" onClick={() => handleViewDetails(record)} style={{ margin: 3, border: "2px solid", width: "30px", height:30 }}>
+            <i className="fa-solid fa-eye"></i> 
           </Button>
+          </Tooltip>
+          <Tooltip title="Xóa">
           <Popconfirm
             title="Bạn có muốn xóa giảm giá này không?"
             onConfirm={() => handleDeleteDiscount(record.discountId)}
             okText="Có"
             cancelText="Không"
           >
-            <Button color="red" variant="filled" style={{ marginRight: 8, border: "2px solid " }} >
-              <i className="fa-solid fa-trash"></i> Xóa
+            <Button color="red" variant="filled" size="small" style={{ margin: 3, border: "2px solid", width: "30px", height:30 }} >
+              <i className="fa-solid fa-trash"></i>
             </Button>
           </Popconfirm>
+          </Tooltip>
         </div>
       ),
     },
@@ -149,7 +155,17 @@ const DiscountManagement = () => {
     setSelectedDiscount(null);
   };
 
+  const stripHtml = (html) => {
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = html;
+    return tempDiv.textContent || tempDiv.innerText || "";
+  };
+  
+
   const handleSubmitForm = async (values) => {
+      // Xoá HTML khỏi phần mô tả
+  values.description = stripHtml(values.description);
+
     const isDuplicate = discountList.some(
       (discount) =>
         discount.discountName === values.discountName &&

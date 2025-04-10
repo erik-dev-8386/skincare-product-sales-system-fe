@@ -2,15 +2,12 @@ import "./App.css";
 
 import { Routes, Route } from "react-router-dom";
 import HomePage from "../src/pages/users/homePage/HomePage";
-import Login from "../src/pages/users/login/Login";
-// import Callback from '../src/pages/users/callBack/Callback';
+
 import PrivacyPolicy from "../src/pages/users/privacyPolicy/PrivacyPolicy";
 import TermsOfUse from "../src/pages/users/termsOfUse/TermsOfUse";
 import Blog from "../src/pages/users/blog/Blog.jsx";
-import Register from "../src/pages/users/register/Register.jsx";
-import Discount from "./pages/users/discount/Discount.jsx";
-import DiscountDetail from "./pages/users/discount/DiscountDetail.jsx";
-import AboutUs from "./pages/users/aboutUs/AboutUs.jsx";
+
+
 import BlogDetail from "./pages/users/blog/BlogDetail.jsx";
 import Shopping from "./pages/users/shoppingCart/Shopping.jsx";
 import Cart from "./pages/users/cart/Cart.jsx";
@@ -24,15 +21,14 @@ import CategoryManagement from "./pages/admin/CategoryManagement/CategoryManagem
 import BrandManagement from "./pages/admin/BrandManagement/BrandManagement.jsx";
 import SkinTypeManagement from "./pages/admin/SkinTypesManagement/SkinTypeManagement.jsx";
 import ListStaff from "./pages/admin/StaffManagement/ListStaff.jsx";
-import CreateStaff from "./pages/admin/StaffManagement/CreateStaff.jsx";
-import UserManagement from "./pages/admin/UserManagement/UserManagement.jsx";
+
 import LoginAndSignup from "./pages/users/login/loginAndSignup.jsx";
 import Question from "./pages/users/question/Question.jsx";
 import CustomerDiscounts from "./pages/users/discount/CustomerDiscounts.jsx";
 import NotFound from "./pages/users/NotFound/NotFound.jsx";
 import AboutMe from "./pages/users/aboutUs/AboutMe.jsx";
 import Layout from "./component/Layout/Layout.jsx";
-import ListProduct from "./pages/admin/ProductManagement/ListProduct.jsx";
+
 import DashBoard from "./pages/admin/DashBoard/DashBoard.jsx";
 import AdminLayout from "./component/AdminLayout/AdminLayout.jsx";
 import Products from "./pages/users/products/Products.jsx";
@@ -44,28 +40,35 @@ import Profile from "./pages/users/profile/Profile.jsx";
 import ProfileLayout from "../src/component/ProfileLayout/ProfileLayout.jsx";
 import History from "./pages/users/profile/History.jsx";
 import OrderManagement from "./pages/admin/OrderManagement/OrderManagement.jsx";
+import BlogManage from "./pages/admin/BlogManagement/Blogmanage.jsx";
+import BlogHashtag from "./pages/admin/BlogManagement/Bloghastag.jsx";
+import BlogCategory from "./pages/admin/BlogManagement/Blogcategory.jsx";
+import CustomerManagement from "./pages/admin/UserManagement/UserManagement.jsx";
+import Point from "./pages/users/profile/point.jsx";
+import SuccessPayment from "./pages/users/cart/PaymentStatus.jsx";
+import { ToastContainer } from "react-toastify";
+import Setting from "./pages/users/profile/Setting.jsx";
 
-
+import PlanSkincare from "./pages/admin/PlanSkincare/PlanSkincare.jsx";
+import Miniplanskincare from "./pages/admin/Miniplanskincare/Miniplanskincare.jsx";
 function App() {
   return (
+    <>
+    <ToastContainer />
     <Routes>
       {/* user */}
       <Route path="/" element={<Layout />}>
         <Route index element={<HomePage />} />
-        <Route path="/about-us" element={<AboutUs />} />
-        <Route path="/about-me" element={<AboutMe />} />
+   
+        <Route path="/about-us" element={<AboutMe />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms-of-use" element={<TermsOfUse />} />
         <Route path="/blog" element={<Blog />} />
         <Route path="/blog/:id" element={<BlogDetail />} />
-        <Route path="/discount" element={<Discount />} />
-        <Route
-          path="/discount/:discountPercentage"
-          element={<DiscountDetail />}
-        />
+        
         <Route path="/customer-discounts" element={<CustomerDiscounts />} />
         <Route path="/shopping-cart" element={<Shopping />} />
-        <Route path="/cart" element={<Cart />} />
+        <Route path="/shopping-cart/cart" element={<Cart />} />
         <Route path="/listskincare/Kho" element={<Kho />} />
         <Route path="/listskincare/Honhop" element={<Honhop />} />
         <Route path="/listskincare/Nhaycam" element={<Nhaycam />} />
@@ -74,21 +77,24 @@ function App() {
         <Route path="/question" element={<Question />} />
         <Route path="/products" element={<Products />} />
         <Route path="/products/:id" element={<ProductDetail />} />
+        <Route path="/shopping-cart/cart/success-payment" element={<SuccessPayment />} />
+
       </Route>
-      {/* login */}
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
+   
+ 
       <Route path="/login-and-signup" element={<LoginAndSignup />} />
 
-      {/* profile user */}
-      <Route path='/user' element={<ProfileLayout />}>
+ 
+      <Route path="/user" element={<ProfileLayout />}>
         <Route index element={<Profile />} />
-        <Route path='/user/history' element={<History />} />
+        <Route path="/user/history" element={<History />} />
+        <Route path="/user/point" element={<Point />} />
+        <Route path="/user/setting" element={<Setting />} />
 
-
+        
       </Route>
 
-      {/* admin */}
+
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<DashBoard />} />
         <Route
@@ -104,32 +110,32 @@ function App() {
           path="/admin/skin-type-management"
           element={<SkinTypeManagement />}
         />
-        <Route path="/admin/list-staff" element={<ListStaff />} />
-        <Route path="/admin/create-staff" element={<CreateStaff />} />
-        <Route path="/admin/list-user" element={<UserManagement />} />
+        <Route path="/admin/staff-management" element={<ListStaff />} />
+
+        <Route path="/admin/customer-management" element={<CustomerManagement />} />
 
         <Route
           path="/admin/product-management"
           element={<ProductManagement />}
         />
 
-        <Route
-          path="/admin/order-management"
-          element={<OrderManagement />}
-        />
+        <Route path="/admin/order-management" element={<OrderManagement />} />
 
         <Route
           path="/admin/question-management"
           element={<QuestionManagement />}
         />
         <Route path="/admin/answer-management" element={<AnswerManagement />} />
+        <Route path="/admin/blog-management" element={<BlogManage />} />
+        <Route path="/admin/blog-hastag" element={<BlogHashtag />} />
+        <Route path="/admin/blog-category" element={<BlogCategory />} />
+        <Route path="/admin/planskincare" element={<PlanSkincare />} />
+        <Route path="/admin/miniplanskincare" element={<Miniplanskincare />} />
       </Route>
 
-      
-      {/* <Route path="/product-management" element={<ProductManagement />} /> */}
-    </Routes>
 
-    
+    </Routes>
+    </>
   );
 }
 

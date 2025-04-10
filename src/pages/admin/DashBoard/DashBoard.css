@@ -1,5 +1,29 @@
+.dashboard-container {
+  padding: 20px;
+}
 
-.bieudo{
-    height: 500px;
-    width: 600px;
+.bieudo {
+  max-width: 100%;
+  height: auto;
+}
+
+.mt-4 {
+  margin-top: 1rem;
+}
+
+
+.chart-row {
+  margin-top: 1rem;
+ 
+}
+
+
+.chart-row .ant-col-24 {
+  width: 100%;
+}
+
+
+.chart-row+.chart-row {
+  margin-top: 2rem;
+
 }

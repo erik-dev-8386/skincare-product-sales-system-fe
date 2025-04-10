@@ -24,16 +24,9 @@
     position: relative;
     overflow: hidden;
     width: 800px;
-    /* max-width: 90%; */
     max-width: 100%;
     min-height: 590px;
     color: #333;
-
-    /* border: 2px solid rgba(255, 255, 255, 0.2); */
-    /* background: transparent;
-    backdrop-filter: blur(20px); */
-    /* box-shadow: 0 0 10px rgba(0, 0, 0, .2); */
-
 }
 
 .login-page p {
@@ -181,6 +174,8 @@
     transform: translateX(-100%);
     border-radius: 50px;
 }
+
+
 
 .toogle {
     background-color: #900001;
