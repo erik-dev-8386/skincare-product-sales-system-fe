@@ -260,18 +260,8 @@ const ProductManagement = () => {
   };
 
 
-  // const handleSubmitForm = async (values) => {
-
-
-  // const stripHtml = (html) => {
-  //   const tempDiv = document.createElement("div");
-  //   tempDiv.innerHTML = html;
-  //   return tempDiv.textContent || tempDiv.innerText || "";
-  // };
   
   const handleSubmitForm = async (values) => {
-    // Xoá HTML khỏi phần mô tả
-    // values.description = stripHtml(values.description);
 
     const isDuplicate = ProductList.some(
       (product) =>
@@ -318,20 +308,32 @@ const ProductManagement = () => {
       fetchProduct();
       handleCloseModal();
     } catch (error) {
-      console.error(
-        "Error submitting form:",
-        error.response?.data?.message || error.message
-      );
+  console.error(
+    "Error submitting form:",
+    error.response?.data?.message || error.message
+  );
 
+  const errors = [];
 
-      if (editingProduct) {
+  // Thu thập tất cả lỗi nếu có
+  const data = error.response?.data || {};
+  if (data.productName) errors.push(data.productName);
+  if (data.description) errors.push(data.description);
+  if (data.ingredients) errors.push(data.ingredients);
+  if (data.deletedTime) errors.push(data.deletedTime);
+  if (data.mfg) errors.push(data.mfg);
+  if (data.message && errors.length === 0) errors.push(data.message); // chỉ thêm message nếu không có các lỗi chi tiết hơn
 
-        toast.error("Sửa sản phẩm này không thành công!");
-      } else {
+  // Hiển thị từng lỗi một
+  errors.forEach((err) => toast.error(err));
 
-        toast.error("Thêm sản phẩm này không thành công!");
-      }
-    }
+  // Thêm thông báo tổng quan
+  if (editingProduct) {
+    toast.error("Sửa sản phẩm này không thành công!");
+  } else {
+    toast.error("Thêm sản phẩm này không thành công!");
+  }
+}
   };
 
   const handleEditProduct = (Product) => {
@@ -455,7 +457,7 @@ const ProductManagement = () => {
               >
                 <Input type="number" />
               </Form.Item>
-              <Form.Item
+              {/* <Form.Item
                 label="Danh mục"
                 name="categoryId"
                 rules={[
@@ -472,7 +474,7 @@ const ProductManagement = () => {
                     </Select.Option>
                   ))}
                 </Select>
-              </Form.Item>
+              </Form.Item> */}
               {/* <Form.Item
                 label="Giảm giá"
                 name="discountId"
@@ -496,7 +498,7 @@ const ProductManagement = () => {
             <Col span={12}>
               <Row gutter={24}>
                 <Col span={12}>
-                  <Form.Item
+                  {/* <Form.Item
                     label="Ngày tạo"
                     name="createdTime"
                     rules={[
@@ -519,10 +521,8 @@ const ProductManagement = () => {
                     ]}
                   >
                     <DatePicker format="YYYY-MM-DD" />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
+                  </Form.Item> */}
+                   <Form.Item
                     label="Ngày sản xuất"
                     name="mfg"
                     rules={[
@@ -534,6 +534,20 @@ const ProductManagement = () => {
                   >
                     <DatePicker format="YYYY-MM-DD" />
                   </Form.Item>
+                </Col>
+                <Col span={12}>
+                  {/* <Form.Item
+                    label="Ngày sản xuất"
+                    name="mfg"
+                    rules={[
+                      {
+                        required: false,
+                        message: "Ngày sản xuất không được để trống!",
+                      },
+                    ]}
+                  >
+                    <DatePicker format="YYYY-MM-DD" />
+                  </Form.Item> */}
                   <Form.Item
                     label="Hạn sử dụng"
                     name="exp"
@@ -628,6 +642,24 @@ const ProductManagement = () => {
                       value={discount.discountId}
                     >
                       {discount.discountName}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+              <Form.Item
+                label="Danh mục"
+                name="categoryId"
+                rules={[
+                  { required: true, message: "Danh mục không được để trống!" },
+                ]}
+              >
+                <Select>
+                  {categories.map((category) => (
+                    <Select.Option
+                      key={category.categoryId}
+                      value={category.categoryId}
+                    >
+                      {category.categoryName}
                     </Select.Option>
                   ))}
                 </Select>
