@@ -70,7 +70,7 @@ export default function ProfileLayout() {
             />
           )}
         </div>
-        <div className="logo text-center text-white py-3">Kính chào {user ? user.firstName : "quý khách"}!</div>
+        <div className="text-center text-white py-3" style={{fontSize: 16, padding: 3}}>Kính chào {user ? user.firstName : "quý khách"}!</div>
         <Menu
           className="sider-menu color-menu" 
           theme="dark"

@@ -457,7 +457,7 @@ const ProductManagement = () => {
               >
                 <Input type="number" />
               </Form.Item>
-              <Form.Item
+              {/* <Form.Item
                 label="Danh mục"
                 name="categoryId"
                 rules={[
@@ -474,7 +474,7 @@ const ProductManagement = () => {
                     </Select.Option>
                   ))}
                 </Select>
-              </Form.Item>
+              </Form.Item> */}
               {/* <Form.Item
                 label="Giảm giá"
                 name="discountId"
@@ -642,6 +642,24 @@ const ProductManagement = () => {
                       value={discount.discountId}
                     >
                       {discount.discountName}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+              <Form.Item
+                label="Danh mục"
+                name="categoryId"
+                rules={[
+                  { required: true, message: "Danh mục không được để trống!" },
+                ]}
+              >
+                <Select>
+                  {categories.map((category) => (
+                    <Select.Option
+                      key={category.categoryId}
+                      value={category.categoryId}
+                    >
+                      {category.categoryName}
                     </Select.Option>
                   ))}
                 </Select>

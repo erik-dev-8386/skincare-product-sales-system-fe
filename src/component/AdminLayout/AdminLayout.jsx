@@ -169,7 +169,7 @@ const AdminLayout = () => {
             )}
           </div>
 
-          <div className="logo text-center text-white py-3">
+          <div className="text-center text-white py-3" style={{ fontSize: 18, padding: 3 }}>
             Chào mừng {user ? user.firstName : "Admin"}!
           </div>
 
