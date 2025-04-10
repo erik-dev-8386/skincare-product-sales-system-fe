@@ -178,16 +178,16 @@ const SkinTypeManagement = () => {
     setSelectedSkinType(null);
   };
 
-  const stripHtml = (html) => {
-    const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = html;
-    return tempDiv.textContent || tempDiv.innerText || "";
-  };
+  // const stripHtml = (html) => {
+  //   const tempDiv = document.createElement("div");
+  //   tempDiv.innerHTML = html;
+  //   return tempDiv.textContent || tempDiv.innerText || "";
+  // };
   
   const handleSubmitForm = async (values) => {
  
     // Xoá HTML khỏi phần mô tả
-  values.description = stripHtml(values.description);
+  // values.description = stripHtml(values.description);
 
     const isDuplicate = skinTypeList.some(
       (skinType) =>
