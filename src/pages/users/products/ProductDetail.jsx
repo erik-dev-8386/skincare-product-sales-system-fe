@@ -235,45 +235,73 @@ export default function ProductDetail() {
   }, [product]);
 
   useEffect(() => {
-    const fetchRatingData = async () => {
-      try {
-        if (!product || !product.productId) return;
+  //   const fetchRatingData = async () => {
+  //     try {
+  //       if (!product || !product.productId) return;
 
 
-        const avgResponse = await api.get(`/feedbacks/average-rating/${product.productName}`);
-        console.log("Average rating response:", avgResponse.data);
+  //       const avgResponse = await api.get(`/feedbacks/average-rating/${product.productName}`);
+  //       console.log("Average rating response:", avgResponse.data);
 
 
-        const avgRating = !isNaN(avgResponse.data) ? avgResponse.data : 0;
-        setAverageRating(avgRating);
+  //       const avgRating = !isNaN(avgResponse.data) ? avgResponse.data : 0;
+  //       setAverageRating(avgRating);
 
     
-        const countsResponse = await api.get(`/feedbacks/get-star/by-customer/${product.productName}`);
-        console.log("Rating counts response:", countsResponse.data);
+  //       const countsResponse = await api.get(`/feedbacks/get-star/by-customer/${product.productName}`);
+  //       console.log("Rating counts response:", countsResponse.data);
 
-        const formattedCounts = {};
-        for (let i = 1; i <= 5; i++) {
-          formattedCounts[i] = countsResponse.data[i] || 0;
-        }
+  //       const formattedCounts = {};
+  //       for (let i = 1; i <= 5; i++) {
+  //         formattedCounts[i] = countsResponse.data[i] || 0;
+  //       }
 
-        setRatingCounts(formattedCounts);
+  //       setRatingCounts(formattedCounts);
 
-        console.log("Formatted ratings data:", {
-          average: avgRating,
-          counts: formattedCounts
-        });
-      } catch (error) {
-        console.error("Error fetching rating data:", error);
+  //       console.log("Formatted ratings data:", {
+  //         average: avgRating,
+  //         counts: formattedCounts
+  //       });
+  //     } catch (error) {
+  //       console.error("Error fetching rating data:", error);
 
-        setAverageRating(0);
-        setRatingCounts({ 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 });
+  //       setAverageRating(0);
+  //       setRatingCounts({ 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 });
+  //     }
+  //   };
+
+  //   if (product) {
+  //     fetchRatingData();
+  //   }
+  // },[product, reviews]);
+  const fetchRatingData = async () => {
+    try {
+      if (!product || !product.productName) return;
+
+      const [avgRes, countsRes] = await Promise.all([
+        api.get(`/feedbacks/average-rating/${product.productName}`),
+        api.get(`/feedbacks/get-star/by-customer/${product.productName}`)
+      ]);
+
+      setAverageRating(avgRes.data || 0);
+      
+      const formattedCounts = {};
+      for (let i = 1; i <= 5; i++) {
+        formattedCounts[i] = countsRes.data[i] || 0;
       }
-    };
+      setRatingCounts(formattedCounts);
 
-    if (product) {
-      fetchRatingData();
+    } catch (error) {
+      console.error("Error fetching rating data:", error);
+      setAverageRating(0);
+      setRatingCounts({ 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 });
     }
-  },[product, reviews]);
+  };
+
+  if (product) {
+    fetchRatingData();
+  }
+}, [product, reviews]);
 
   const findNameById = (id, data) => {
     const item = data.find(
