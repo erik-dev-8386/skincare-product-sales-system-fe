@@ -1,5 +1,4 @@
 
-
 import { Editor } from "@tinymce/tinymce-react";
 
 const MyEditor = ({ value = "", onChange, placeholder = "" }) => {

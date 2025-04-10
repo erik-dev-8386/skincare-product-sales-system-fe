@@ -42,18 +42,18 @@ const DiscountManagement = () => {
         <div dangerouslySetInnerHTML={{ __html: text && typeof text === "string" ? (text.length > 50 ? text.substring(0, 50) + "..." : text) : "" }} />
       ),
     },
-    {
-      title: 'Ngày tạo',
-      dataIndex: 'createdTime',
-      key: 'createdTime',
-      render: (date) => date ? dayjs(date).format("YYYY-MM-DD") : "",
-    },
-    {
-      title: 'Ngày xóa',
-      dataIndex: 'deletedTime',
-      key: 'deletedTime',
-      render: (date) => date ? dayjs(date).format("YYYY-MM-DD") : "",
-    },
+    // {
+    //   title: 'Ngày tạo',
+    //   dataIndex: 'createdTime',
+    //   key: 'createdTime',
+    //   render: (date) => date ? dayjs(date).format("YYYY-MM-DD") : "",
+    // },
+    // {
+    //   title: 'Ngày xóa',
+    //   dataIndex: 'deletedTime',
+    //   key: 'deletedTime',
+    //   render: (date) => date ? dayjs(date).format("YYYY-MM-DD") : "",
+    // },
     {
       title: 'Ngày áp dụng',
       dataIndex: 'actualStartTime',
@@ -292,7 +292,14 @@ const DiscountManagement = () => {
           </Form.Item>
           <Row gutter={16}>
             <Col span={12}>
-              <Form.Item
+            <Form.Item
+                label="Ngày áp dụng"
+                name="actualStartTime"
+                rules={[{ required: false, message: "Ngày áp dụng không được để trống!" }]}
+              >
+                <DatePicker format="YYYY-MM-DD" />
+              </Form.Item>
+              {/* <Form.Item
                 label="Ngày tạo"
                 name="createdTime"
                 rules={[{ required: false, message: "Ngày tạo không được để trống!" }]}
@@ -305,16 +312,16 @@ const DiscountManagement = () => {
                 rules={[{ required: false, message: "Ngày xóa không được để trống!" }]}
               >
                 <DatePicker format="YYYY-MM-DD" />
-              </Form.Item>
+              </Form.Item> */}
             </Col>
             <Col span={12}>
-              <Form.Item
+              {/* <Form.Item
                 label="Ngày áp dụng"
                 name="actualStartTime"
                 rules={[{ required: false, message: "Ngày áp dụng không được để trống!" }]}
               >
                 <DatePicker format="YYYY-MM-DD" />
-              </Form.Item>
+              </Form.Item> */}
               <Form.Item
                 label="Ngày hết hạn"
                 name="actualEndTime"
