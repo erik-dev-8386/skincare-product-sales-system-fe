@@ -170,8 +170,8 @@ const StaffManagement = () => {
       key: 'gender',
       render: (gender) => {
         switch (gender) {
-          case 'Male': return 'Nam';
-          case 'Female': return 'Nữ';
+          case 'nam': return 'Nam';
+          case 'nữ': return 'Nữ';
           default: return 'Khác';
         }
       }
@@ -290,9 +290,9 @@ const StaffManagement = () => {
               </Form.Item>
               <Form.Item label="Giới tính" name="gender" rules={[{ required: true, message: "Không được để trống!" }]}>
                 <Radio.Group>
-                  <Radio value="Male">Nam</Radio>
-                  <Radio value="Female">Nữ</Radio>
-                  <Radio value="Other">Khác</Radio>
+                  <Radio value="nam">Nam</Radio>
+                  <Radio value="nữ">Nữ</Radio>
+                  <Radio value="khác">Khác</Radio>
                 </Radio.Group>
               </Form.Item>
               <Form.Item label="Ngày sinh" name="birthDate" rules={[{ required: true, message: "Không được để trống!" }]}>
@@ -367,8 +367,8 @@ const StaffManagement = () => {
             <p><strong>Họ: </strong> {selectedStaff.firstName}</p>
             <p><strong>Tên: </strong> {selectedStaff.lastName}</p>
             <p><strong>Giới tính: </strong>
-              {selectedStaff.gender === 'Male' ? 'Nam' :
-                selectedStaff.gender === 'Female' ? 'Nữ' : 'Khác'}
+              {selectedStaff.gender === 'nam' ? 'Nam' :
+                selectedStaff.gender === 'nữ' ? 'Nữ' : 'Khác'}
             </p>
             <p><strong>Ngày sinh: </strong> {moment(selectedStaff.birthDate).format("DD/MM/YYYY")}</p>
             <p><strong>Email: </strong> {selectedStaff.email}</p>
