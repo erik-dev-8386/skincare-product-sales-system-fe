@@ -191,8 +191,8 @@ export default function Products() {
       {
         key: "9",
         info: "Thành phần",
-        product1: <div className="compare-ingredients">{p1.ingredients}</div>,
-        product2: <div className="compare-ingredients">{p2.ingredients}</div>,
+        product1: <div className="compare-ingredients" dangerouslySetInnerHTML={{ __html: p1.ingredients }}/>,
+        product2: <div className="compare-ingredients" dangerouslySetInnerHTML={{ __html: p2.ingredients }}/>,
       },
     ];
   };

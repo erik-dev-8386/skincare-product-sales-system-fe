@@ -524,7 +524,7 @@ const ProductManagement = () => {
                   >
                     <DatePicker format="YYYY-MM-DD" />
                   </Form.Item> */}
-                   <Form.Item
+                   {/* <Form.Item
                     label="Ngày sản xuất"
                     name="mfg"
                     rules={[
@@ -535,7 +535,7 @@ const ProductManagement = () => {
                     ]}
                   >
                     <DatePicker format="YYYY-MM-DD" />
-                  </Form.Item>
+                  </Form.Item> */}
                 </Col>
                 <Col span={12}>
                   {/* <Form.Item
@@ -550,7 +550,7 @@ const ProductManagement = () => {
                   >
                     <DatePicker format="YYYY-MM-DD" />
                   </Form.Item> */}
-                  <Form.Item
+                  {/* <Form.Item
                     label="Hạn sử dụng"
                     name="exp"
                     rules={[
@@ -561,7 +561,7 @@ const ProductManagement = () => {
                     ]}
                   >
                     <DatePicker format="YYYY-MM-DD" />
-                  </Form.Item>
+                  </Form.Item> */}
                 </Col>
               </Row>
               {/* {editingProduct && (
@@ -803,7 +803,7 @@ const ProductManagement = () => {
                 ? dayjs(selectedProduct.createdTime).format("YYYY-MM-DD")
                 : "N/A"}
             </p>
-            <p>
+            {/* <p>
               <strong>Ngày xóa: </strong>{" "}
               {selectedProduct.deletedTime
                 ? dayjs(selectedProduct.deletedTime).format("YYYY-MM-DD")
@@ -820,7 +820,7 @@ const ProductManagement = () => {
               {selectedProduct.exp
                 ? dayjs(selectedProduct.exp).format("YYYY-MM-DD")
                 : "N/A"}
-            </p>
+            </p> */}
             <p>
               <strong>Dung tích:</strong> {selectedProduct.netWeight} {"ml"}
             </p>
