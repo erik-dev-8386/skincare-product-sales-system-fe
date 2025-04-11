@@ -1,9 +1,36 @@
-import React from "react";
-import { Card, Button } from "antd";
+import React, { useEffect, useState } from "react";
+import { Card, Button, Rate } from "antd";
 import { useNavigate } from "react-router-dom";
 import "./ProductCard.css";
+import api from "../../config/api";
 
 const { Meta } = Card;
+// import PropTypes from "prop-types"; // Thêm dòng này ở đầu file
+
+// ProductCard.propTypes = {
+//   product: PropTypes.shape({
+//     productId: PropTypes.number.isRequired,
+//     productName: PropTypes.string.isRequired,
+//     productImages: PropTypes.arrayOf(
+//       PropTypes.shape({
+//         imageURL: PropTypes.string.isRequired,
+//       })
+//     ).isRequired,
+//     brandId: PropTypes.number.isRequired,
+//     unitPrice: PropTypes.number.isRequired,
+//     discountPrice: PropTypes.number.isRequired,
+//     discountId: PropTypes.number,
+//   }).isRequired,
+//   discounts: PropTypes.object,
+//   brands: PropTypes.arrayOf(
+//     PropTypes.shape({
+//       brandId: PropTypes.number.isRequired,
+//       brandName: PropTypes.string.isRequired,
+//     })
+//   ),
+//   onCompareClick: PropTypes.func,
+// };
+
 
 const formatPrice = (price) => {
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -16,18 +43,44 @@ const ProductCard = ({
   onCompareClick,
 }) => {
   const navigate = useNavigate();
+  const [ratingData, setRatingData] = useState({
+    averageRating: 0,
+    ratingCount: 0
+  });
 
+  useEffect(() => {
+    const fetchRatingData = async () => {
+      if (!product?.productName) return;
+      
+      try {
+        const [avgRes, countsRes] = await Promise.all([
+          api.get(`/feedbacks/average-rating/${product.productName}`),
+          api.get(`/feedbacks/get-star/by-customer/${product.productName}`)
+        ]);
+
+        setRatingData({
+          averageRating: avgRes.data || 0,
+          ratingCount: Object.values(countsRes.data || {}).reduce((sum, count) => sum + count, 0)
+        });
+      } catch (error) {
+        console.error("Error fetching rating data:", error);
+        setRatingData({
+          averageRating: 0,
+          ratingCount: 0
+        });
+      }
+    };
+
+    fetchRatingData();
+  }, [product]);
 
   if (!product) {
     return null;
   }
 
-
   const brand = brands?.find((b) => b.brandId === product.brandId);
   const discount = discounts?.[product.discountId];
-
   const discountPercent = discount || 0;
-
 
   const findBrandNameById = (brandId) => {
     const brand = brands.find((brand) => brand.brandId === brandId);
@@ -49,9 +102,7 @@ const ProductCard = ({
       }}
       hoverable
       cover={
-        <div
-          style={{ position: "relative", width: "100%", overflow: "hidden" }}
-        >
+        <div style={{ position: "relative", width: "100%", overflow: "hidden" }}>
           {discountPercent > 0 && (
             <div
               className="discount-badge"
@@ -95,36 +146,75 @@ const ProductCard = ({
               overflow: "hidden",
               textOverflow: "ellipsis",
               whiteSpace: "nowrap",
+              fontWeight: "bold",
+              fontSize: "16px",
+              marginBottom: "4px"
             }}
           >
             {product.productName}
           </div>
         }
         description={
-          <div style={{ height: 100 }}>
-            <p>{findBrandNameById(product.brandId)}</p>
-            <strong style={{ color: "green" }}>
+          <div style={{ height: 120 }}>
+            <p style={{ 
+              marginBottom: 8, 
+              color: "#666",
+              fontSize: "14px"
+            }}>
+              {findBrandNameById(product.brandId)}
+            </p>
+            
+            <strong style={{ 
+              color: "green",
+              fontSize: "18px",
+              display: "block",
+              marginBottom: "8px"
+            }}>
               {formatPrice(product.discountPrice)}
               <span style={{ textDecoration: "underline" }}>đ</span>
             </strong>
-            <br />
-            {discountPercent > 0 ? (
+
+            <div style={{ 
+              display: "flex", 
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: "8px"
+            }}>
+              <Rate 
+                disabled 
+                allowHalf 
+                value={ratingData.averageRating} 
+                style={{ 
+                  fontSize: 14,
+                  color: "#FFD700",
+                }} 
+              />
+              <span style={{ 
+                fontSize: 12,
+                color: "#666",
+                marginLeft: 4
+              }}>
+                ({ratingData.ratingCount})
+              </span>
+            </div>
+
+            {discountPercent > 0 && (
               <p
                 style={{
                   textDecoration: "line-through",
                   color: "red",
+                  fontSize: 14,
+                  margin: 0
                 }}
               >
                 {formatPrice(product.unitPrice)}
                 <span style={{ textDecoration: "underline" }}>đ</span>
               </p>
-            ) : (
-              <p style={{ visibility: "hidden" }}>Placeholder</p>
             )}
           </div>
         }
       />
-      <div>
+      <div style={{ marginLeft:55 ,marginTop: 8, width: "50%" }}>
         <Button
           className="button-compare"
           type="primary"
@@ -136,6 +226,7 @@ const ProductCard = ({
             backgroundColor: "#900001",
             color: "white",
             border: "2px solid #900001",
+            width: "100%"
           }}
         >
           So sánh
