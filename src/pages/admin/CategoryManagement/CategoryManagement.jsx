@@ -19,9 +19,9 @@ const CategoryManagement = () => {
 
   const statusMapping = {
     0: { text: "KHÔNG HOẠT ĐỘNG", color: "red" },
-    1: { text: "CHỜ", color: "orange" },
+    // 1: { text: "CHỜ", color: "orange" },
     2: { text: "HOẠT ĐỘNG", color: "green" },
-    3: { text: "ĐÃ XÓA", color: "gray" },
+    // 3: { text: "ĐÃ XÓA", color: "gray" },
   };
 
   const columns = [
@@ -249,9 +249,9 @@ const CategoryManagement = () => {
             >
               <Select>
                 <Option value={0}>KHÔNG HOẠT ĐỘNG</Option>
-                <Option value={1}>CHỜ</Option>
+                {/* <Option value={1}>CHỜ</Option> */}
                 <Option value={2}>HOẠT ĐỘNG</Option>
-                <Option value={3}>ĐÃ XÓA</Option>
+                {/* <Option value={3}>ĐÃ XÓA</Option> */}
               </Select>
             </Form.Item>
           )}

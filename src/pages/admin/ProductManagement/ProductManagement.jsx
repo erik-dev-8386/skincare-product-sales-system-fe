@@ -216,7 +216,9 @@ const ProductManagement = () => {
   const fetchProduct = async () => {
     try {
       const response = await api.get("/products");
-      setProductList(response.data);
+
+      const sortedProducts = response.data.sort((a, b) => new Date(b.createdTime) - new Date(a.createdTime));
+      setProductList(sortedProducts);
     } catch (error) {
       console.error("Error fetching Products:", error);
       toast.error("Không thể tải danh sách sản phẩm!");

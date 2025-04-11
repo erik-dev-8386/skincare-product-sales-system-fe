@@ -19,7 +19,10 @@ const OrderManagement = () => {
     setLoading(true);
     try {
       const response = await api.get("/orders");
-      setOrders(response.data);
+      const sortedOrders = response.data.sort((a, b) => new Date(b.orderTime) - new Date(a.orderTime));
+    
+      setOrders(sortedOrders);
+      
     } catch (error) {
       console.error("Error fetching orders:", error);
       toast.error("Không thể tải danh sách đơn hàng!");

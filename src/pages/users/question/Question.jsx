@@ -13,6 +13,7 @@ import {
   ShareAltOutlined,
   CheckOutlined
 } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 
 const Question = () => {
   const [questions, setQuestions] = useState([]);
@@ -182,7 +183,7 @@ const Question = () => {
       'Hỗn hợp': '/listskincare/Honhop',
       'Dầu': '/listskincare/Dau'
     };
-    return links[skinName] || '#';
+    return links[skinName] || '/';
   };
 
   // Render functions
@@ -238,7 +239,6 @@ const Question = () => {
             </div>
           </div>
 
-
           <div className="popup-body">
             <div className="result-summary">
               <div className="result-card">
@@ -276,8 +276,8 @@ const Question = () => {
             </div>
 
             <div className="action-buttons">
-              <a
-                href={getSkinCareLink(skinName)}
+              <Link
+                to={getSkinCareLink(skinName)}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -290,7 +290,7 @@ const Question = () => {
                 >
                   Xem lộ trình chăm sóc cho da {skinName}
                 </button>
-              </a>
+              </Link>
             </div>
           </div>
 
