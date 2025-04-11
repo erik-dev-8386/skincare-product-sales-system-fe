@@ -591,35 +591,7 @@ export default function Cart() {
                     </div>
 
                 </div>
-{/* 
-                <div className="total-payment">
-                    <p style={{ color: "black", fontSize: 20, fontWeight: "bold" }}>
-                        Tổng thanh toán:
-                    </p>
-                    {useRewardPoints && (
-                        <p style={{ textDecoration: 'line-through', color: 'gray' }}>
-                            {formatNumber(subtotal)} đ
-                        </p>
-                    )}
-                    <p style={{ color: "red" }}>{formatNumber(finalTotal)} đ</p>
-                </div>
 
-                <div className="buttons">
-                    <button
-                        onClick={handleCheckout}
-                        className="btn primary"
-                        disabled={isProcessing || !formData.paymentMethod}
-                    >
-                        {isProcessing ? 'Đang xử lý...' : 'Mua'}
-                    </button>
-                    <button
-                        onClick={handleCancel}
-                        className="btn secondary"
-                        disabled={isProcessing}
-                    >
-                        Hủy
-                    </button>
-                </div> */}
 
             </div>
 

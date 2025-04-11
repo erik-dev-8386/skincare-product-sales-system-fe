@@ -459,129 +459,12 @@ const ProductManagement = () => {
               >
                 <Input type="number" />
               </Form.Item>
-              {/* <Form.Item
-                label="Danh mục"
-                name="categoryId"
-                rules={[
-                  { required: true, message: "Danh mục không được để trống!" },
-                ]}
-              >
-                <Select>
-                  {categories.map((category) => (
-                    <Select.Option
-                      key={category.categoryId}
-                      value={category.categoryId}
-                    >
-                      {category.categoryName}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item> */}
-              {/* <Form.Item
-                label="Giảm giá"
-                name="discountId"
-                rules={[
-                  { required: false, message: "Giảm giá không được để trống!" },
-                ]}
-              >
-                <Select>
-                  {discounts.map((discount) => (
-                    <Select.Option
-                      key={discount.discountId}
-                      value={discount.discountId}
-                    >
-                      {discount.discountName}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item> */}
+              
             </Col>
             {/* Cột 2 */}
             <Col span={12}>
-              <Row gutter={24}>
-                <Col span={12}>
-                  {/* <Form.Item
-                    label="Ngày tạo"
-                    name="createdTime"
-                    rules={[
-                      {
-                        required: false,
-                        message: "Ngày tạo không được để trống!",
-                      },
-                    ]}
-                  >
-                    <DatePicker format="YYYY-MM-DD" />
-                  </Form.Item>
-                  <Form.Item
-                    label="Ngày xóa"
-                    name="deletedTime"
-                    rules={[
-                      {
-                        required: false,
-                        message: "Ngày xóa không được để trống!",
-                      },
-                    ]}
-                  >
-                    <DatePicker format="YYYY-MM-DD" />
-                  </Form.Item> */}
-                   {/* <Form.Item
-                    label="Ngày sản xuất"
-                    name="mfg"
-                    rules={[
-                      {
-                        required: false,
-                        message: "Ngày sản xuất không được để trống!",
-                      },
-                    ]}
-                  >
-                    <DatePicker format="YYYY-MM-DD" />
-                  </Form.Item> */}
-                </Col>
-                <Col span={12}>
-                  {/* <Form.Item
-                    label="Ngày sản xuất"
-                    name="mfg"
-                    rules={[
-                      {
-                        required: false,
-                        message: "Ngày sản xuất không được để trống!",
-                      },
-                    ]}
-                  >
-                    <DatePicker format="YYYY-MM-DD" />
-                  </Form.Item> */}
-                  {/* <Form.Item
-                    label="Hạn sử dụng"
-                    name="exp"
-                    rules={[
-                      {
-                        required: false,
-                        message: "Hạn sử dụng không được để trống!",
-                      },
-                    ]}
-                  >
-                    <DatePicker format="YYYY-MM-DD" />
-                  </Form.Item> */}
-                </Col>
-              </Row>
-              {/* {editingProduct && (
-                <Form.Item
-                  label="Trạng thái"
-                  name="status"
-                  rules={[
-                    {
-                      required: false,
-                      message: "Trạng thái không được để trống!",
-                    },
-                  ]}
-                >
-                  <Select>
-                    <Option value={1}>CÓ SẴN</Option>
-                    <Option value={2}>HẾT HÀNG</Option>
-                    <Option value={3}>NGỪNG</Option>
-                  </Select>
-                </Form.Item>
-              )} */}
+              
+            
               <Form.Item
                 label="Dung tích (ml)"
                 name="netWeight"
@@ -803,24 +686,7 @@ const ProductManagement = () => {
                 ? dayjs(selectedProduct.createdTime).format("YYYY-MM-DD")
                 : "N/A"}
             </p>
-            {/* <p>
-              <strong>Ngày xóa: </strong>{" "}
-              {selectedProduct.deletedTime
-                ? dayjs(selectedProduct.deletedTime).format("YYYY-MM-DD")
-                : "N/A"}
-            </p>
-            <p>
-              <strong>Ngày sản xuất: </strong>{" "}
-              {selectedProduct.mfg
-                ? dayjs(selectedProduct.mfg).format("YYYY-MM-DD")
-                : "N/A"}
-            </p>
-            <p>
-              <strong>Hạn sử dụng: </strong>{" "}
-              {selectedProduct.exp
-                ? dayjs(selectedProduct.exp).format("YYYY-MM-DD")
-                : "N/A"}
-            </p> */}
+          
             <p>
               <strong>Dung tích:</strong> {selectedProduct.netWeight} {"ml"}
             </p>

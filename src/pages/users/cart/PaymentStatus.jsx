@@ -127,10 +127,7 @@ const SuccessPayment = () => {
             }
           }
         }
-        //  else {
-        //   setPaymentStatus('success');
-        //   setCart([]);
-        // }
+     
 
       } catch (err) {
         console.error('Lỗi xử lý đơn hàng:', err);

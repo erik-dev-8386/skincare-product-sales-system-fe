@@ -5,32 +5,6 @@ import "./ProductCard.css";
 import api from "../../config/api";
 
 const { Meta } = Card;
-// import PropTypes from "prop-types"; // Thêm dòng này ở đầu file
-
-// ProductCard.propTypes = {
-//   product: PropTypes.shape({
-//     productId: PropTypes.number.isRequired,
-//     productName: PropTypes.string.isRequired,
-//     productImages: PropTypes.arrayOf(
-//       PropTypes.shape({
-//         imageURL: PropTypes.string.isRequired,
-//       })
-//     ).isRequired,
-//     brandId: PropTypes.number.isRequired,
-//     unitPrice: PropTypes.number.isRequired,
-//     discountPrice: PropTypes.number.isRequired,
-//     discountId: PropTypes.number,
-//   }).isRequired,
-//   discounts: PropTypes.object,
-//   brands: PropTypes.arrayOf(
-//     PropTypes.shape({
-//       brandId: PropTypes.number.isRequired,
-//       brandName: PropTypes.string.isRequired,
-//     })
-//   ),
-//   onCompareClick: PropTypes.func,
-// };
-
 
 const formatPrice = (price) => {
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");

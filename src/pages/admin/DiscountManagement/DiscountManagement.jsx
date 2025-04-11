@@ -42,30 +42,7 @@ const DiscountManagement = () => {
         <div dangerouslySetInnerHTML={{ __html: text && typeof text === "string" ? (text.length > 50 ? text.substring(0, 50) + "..." : text) : "" }} />
       ),
     },
-    // {
-    //   title: 'Ngày tạo',
-    //   dataIndex: 'createdTime',
-    //   key: 'createdTime',
-    //   render: (date) => date ? dayjs(date).format("YYYY-MM-DD") : "",
-    // },
-    // {
-    //   title: 'Ngày xóa',
-    //   dataIndex: 'deletedTime',
-    //   key: 'deletedTime',
-    //   render: (date) => date ? dayjs(date).format("YYYY-MM-DD") : "",
-    // },
-    // {
-    //   title: 'Ngày áp dụng',
-    //   dataIndex: 'actualStartTime',
-    //   key: 'actualStartTime',
-    //   render: (date) => date ? dayjs(date).format("YYYY-MM-DD") : "",
-    // },
-    // {
-    //   title: 'Ngày hết hạn',
-    //   dataIndex: 'actualEndTime',
-    //   key: 'actualEndTime',
-    //   render: (date) => date ? dayjs(date).format("YYYY-MM-DD") : "",
-    // },
+
     {
       title: 'Phần trăm giảm giá (%)',
       dataIndex: 'discountPercent',
@@ -155,16 +132,11 @@ const DiscountManagement = () => {
     setSelectedDiscount(null);
   };
 
-  // const stripHtml = (html) => {
-  //   const tempDiv = document.createElement("div");
-  //   tempDiv.innerHTML = html;
-  //   return tempDiv.textContent || tempDiv.innerText || "";
-  // };
+ 
   
 
   const handleSubmitForm = async (values) => {
-      // Xoá HTML khỏi phần mô tả
-  // values.description = stripHtml(values.description);
+ 
 
     const isDuplicate = discountList.some(
       (discount) =>
@@ -290,47 +262,7 @@ const DiscountManagement = () => {
           >
             <Input type="number" />
           </Form.Item>
-          <Row gutter={16}>
-            <Col span={12}>
-            {/* <Form.Item
-                label="Ngày áp dụng"
-                name="actualStartTime"
-                rules={[{ required: false, message: "Ngày áp dụng không được để trống!" }]}
-              >
-                <DatePicker format="YYYY-MM-DD" />
-              </Form.Item> */}
-              {/* <Form.Item
-                label="Ngày tạo"
-                name="createdTime"
-                rules={[{ required: false, message: "Ngày tạo không được để trống!" }]}
-              >
-                <DatePicker format="YYYY-MM-DD" />
-              </Form.Item>
-              <Form.Item
-                label="Ngày xóa"
-                name="deletedTime"
-                rules={[{ required: false, message: "Ngày xóa không được để trống!" }]}
-              >
-                <DatePicker format="YYYY-MM-DD" />
-              </Form.Item> */}
-            </Col>
-            <Col span={12}>
-              {/* <Form.Item
-                label="Ngày áp dụng"
-                name="actualStartTime"
-                rules={[{ required: false, message: "Ngày áp dụng không được để trống!" }]}
-              >
-                <DatePicker format="YYYY-MM-DD" />
-              </Form.Item> */}
-              {/* <Form.Item
-                label="Ngày hết hạn"
-                name="actualEndTime"
-                rules={[{ required: false, message: "Ngày hết hạn không được để trống!" }]}
-              >
-                <DatePicker format="YYYY-MM-DD" />
-              </Form.Item> */}
-            </Col>
-          </Row>
+         
           <Form.Item
             label="Mô tả"
             name="description"

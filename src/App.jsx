@@ -44,7 +44,7 @@ import BlogManage from "./pages/admin/BlogManagement/Blogmanage.jsx";
 import BlogHashtag from "./pages/admin/BlogManagement/Bloghastag.jsx";
 import BlogCategory from "./pages/admin/BlogManagement/Blogcategory.jsx";
 import CustomerManagement from "./pages/admin/UserManagement/UserManagement.jsx";
-import Point from "./pages/users/profile/point.jsx";
+
 import SuccessPayment from "./pages/users/cart/PaymentStatus.jsx";
 import { ToastContainer } from "react-toastify";
 import Setting from "./pages/users/profile/Setting.jsx";
@@ -88,13 +88,13 @@ function App() {
       <Route path="/user" element={<ProfileLayout />}>
         <Route index element={<Profile />} />
         <Route path="/user/history" element={<History />} />
-        <Route path="/user/point" element={<Point />} />
+      
         <Route path="/user/setting" element={<Setting />} />
 
         
       </Route>
 
-
+{/* admin */}
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<DashBoard />} />
         <Route

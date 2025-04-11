@@ -490,9 +490,7 @@ export default function Thuong() {
           <div className="col-12">
             <h1 className="page-title">Da thường là gì?</h1>
             <div className="definition-box">
-              {/* <p>
-                {normalSkinInfo?.description || "Da thường là loại da cân bằng, không quá khô hay quá nhờn. Da có độ ẩm vừa phải, ít gặp các vấn đề về mụn hay kích ứng."}
-              </p> */}
+             
 
               <div
                 dangerouslySetInnerHTML={{ __html: normalSkinInfo.description }}
