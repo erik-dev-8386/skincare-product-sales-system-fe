@@ -163,6 +163,30 @@ const ProductCard = ({
             }}>
               {findBrandNameById(product.brandId)}
             </p>
+
+            {/* <div style={{ 
+              display: "flex", 
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: "8px"
+            }}> */}
+              <Rate 
+                disabled 
+                allowHalf 
+                value={ratingData.averageRating} 
+                style={{ 
+                  fontSize: 20,
+                  color: "#FFD700",
+                }} 
+              />
+              <span style={{ 
+                fontSize: 16,
+                color: "#666",
+                marginLeft: 4
+              }}>
+                ({ratingData.ratingCount})
+              </span>
+            {/* </div> */}
             
             <strong style={{ 
               color: "green",
@@ -174,29 +198,7 @@ const ProductCard = ({
               <span style={{ textDecoration: "underline" }}>đ</span>
             </strong>
 
-            <div style={{ 
-              display: "flex", 
-              alignItems: "center",
-              justifyContent: "center",
-              marginBottom: "8px"
-            }}>
-              <Rate 
-                disabled 
-                allowHalf 
-                value={ratingData.averageRating} 
-                style={{ 
-                  fontSize: 14,
-                  color: "#FFD700",
-                }} 
-              />
-              <span style={{ 
-                fontSize: 12,
-                color: "#666",
-                marginLeft: 4
-              }}>
-                ({ratingData.ratingCount})
-              </span>
-            </div>
+           
 
             {discountPercent > 0 && (
               <p
