@@ -2250,7 +2250,7 @@ export default function Honhop() {
           <h2>Quy trình chăm sóc da hỗn hợp</h2>
           <div className="col-md-6">
             <div className="routine-card morning">
-              <h3>Ban ngày</h3>
+              <h3>☀️ Ban ngày</h3>
               {morningSteps && morningSteps.length > 0 ? (
                 <ol>
                   {morningSteps
@@ -2278,7 +2278,7 @@ export default function Honhop() {
 
           <div className="col-md-6">
             <div className="routine-card evening">
-              <h3>Ban đêm</h3>
+              <h3>🌙 Ban đêm</h3>
               {eveningSteps && eveningSteps.length > 0 ? (
                 <ol>
                   {eveningSteps
