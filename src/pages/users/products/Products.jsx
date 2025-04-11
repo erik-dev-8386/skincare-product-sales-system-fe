@@ -508,6 +508,7 @@ export default function Products() {
                         className="filter-select"
                         placeholder="Lọc sản phẩm theo..."
                         onChange={handleSort}
+                        prefix={<i className="fa-solid fa-filter"></i>}
                         value={sortOption || undefined}
                       >
                         <Option value="a-z">A-Z</Option>
