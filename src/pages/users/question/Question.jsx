@@ -168,8 +168,8 @@ const Question = () => {
     };
 
     return assets[skinName] || {
-      color: '#D3D3D3',
-      gradient: 'linear-gradient(135deg, #D3D3D3, #FFFFFF)',
+      color: '#900001',
+      gradient: 'linear-gradient(135deg, #900001,rgb(198, 30, 30)',
       icon: '💖',
       tips: []
     };
@@ -232,7 +232,7 @@ const Question = () => {
               <CloseOutlined />
             </button>
             <div className="header-content">
-              <div className="skin-icon" style={{ backgroundColor: assets.color }}>
+              <div className="skin-icon" style={{ backgroundColor: "white" }}>
                 {assets.icon}
               </div>
               <h2>Kết Quả Chẩn Đoán Da</h2>
@@ -246,11 +246,11 @@ const Question = () => {
                 <div className="card-decoration" style={{ backgroundColor: assets.color }} />
                 <div className="card-content">
                   <h3><SkinOutlined /> Loại da của bạn</h3>
-                  <div className="skin-type" style={{ color: assets.color }}>
+                  <div className="skin-type" >
                      {skinName}
                   </div>
                   <div className="skin-score">
-                    <StarFilled style={{ color: assets.color }} />
+                    <StarFilled style={{ color: 'yellow'}} />
                     <span>Điểm: {totalMark}/100</span>
                   </div>
                 </div>

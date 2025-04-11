@@ -39,7 +39,7 @@
 
 .progress-bar {
   height: 100%;
-  background: linear-gradient(90deg, #ff8a9d, #d23669);
+  background: linear-gradient(90deg, #86dd6bc8, #168709);
   transition: width 0.3s ease;
 }
 
@@ -56,7 +56,7 @@
 }
 
 .question-title {
-  color: #444;
+  color: black;
   font-size: 20px;
   margin-bottom: 25px;
   line-height: 1.5;
@@ -105,7 +105,7 @@
 
 .option-text {
   flex: 1;
-  color: #555;
+  color: black;
 }
 
 .option-point {
@@ -125,8 +125,8 @@
   padding: 10px 20px;
   border: none;
   border-radius: 30px;
-  background-color: #f0f0f0;
-  color: #555;
+  background-color: #7f2929;
+  color: white;
   cursor: pointer;
   font-weight: 500;
   display: flex;
@@ -135,7 +135,7 @@
 }
 
 .nav-btn:hover {
-  background-color: #e0e0e0;
+  background-color: #f75f5f;
 }
 
 .nav-btn:disabled {
@@ -246,7 +246,7 @@
 
 .result-popup {
   font-family: 'Fira Sans Extra Condensed', -apple-system, BlinkMacSystemFont, sans-serif;
-  color: #333;
+  color: #900001;
 }
 
 .popup-header {
@@ -295,6 +295,7 @@
 .close-btn svg {
   font-size: 16px;
   color: white;
+  
 }
 
 .skin-icon {
@@ -372,10 +373,11 @@
   height: 100%;
   border-radius: 6px 0 0 6px;
   transition: all 0.3s ease;
+  
 }
 
 .result-card h3 {
-  color: #666;
+  color: black;
   font-size: 16px;
   margin-bottom: 12px;
   font-weight: 500;
@@ -390,6 +392,7 @@
   margin: 15px 0;
   letter-spacing: 0.5px;
   transition: color 0.3s ease;
+  color: black;
 }
 
 .skin-score {
@@ -398,11 +401,11 @@
   gap: 8px;
   margin-top: 20px;
   font-size: 16px;
-  color: #666;
+  color: black;
 }
 
 .skin-score svg {
-  font-size: 18px;
+  font-size: 20px;
 }
 
 .skin-image-container {
@@ -447,7 +450,7 @@
 }
 
 .skin-details h3 {
-  color: #444;
+  color: black;
   font-size: 20px;
   display: flex;
   align-items: center;
@@ -462,7 +465,7 @@
 
 .skin-details p {
   line-height: 1.8;
-  color: #555;
+  color: black;
   font-size: 16px;
   margin-bottom: 0;
   font-weight: 300;
@@ -475,7 +478,7 @@
 }
 
 .beauty-tips h4 {
-  color: #444;
+  color: black;
   font-size: 18px;
   display: flex;
   align-items: center;
@@ -490,7 +493,7 @@
 
 .beauty-tips ul {
   padding-left: 5px;
-  color: #555;
+  color: #900001;
   line-height: 1.8;
   font-size: 15px;
   list-style: none;
@@ -564,7 +567,7 @@
   border: 1px solid rgba(0, 0, 0, 0.08);
   padding: 12px 24px;
   border-radius: 50px;
-  color: #666;
+  color: #900001;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -577,15 +580,15 @@
 
 .share-btn:hover {
   background: rgba(0, 0, 0, 0.02);
-  color: #333;
+  color: #900001;
   border-color: rgba(0, 0, 0, 0.12);
 }
 
 .popup-footer {
   text-align: center;
   padding: 20px;
-  background: linear-gradient(to right, rgba(250, 250, 250, 0.8), rgba(245, 245, 245, 0.8));
-  color: #777;
+  background: linear-gradient(to right, #900001, #e24141e4);
+  color: white;
   font-style: italic;
   font-size: 15px;
   position: relative;
