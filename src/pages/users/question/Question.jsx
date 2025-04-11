@@ -177,11 +177,11 @@ const Question = () => {
 
   const getSkinCareLink = (skinName) => {
     const links = {
-      'Khô': '/listskincare/Kho',
-      'Thường': '/listskincare/Thuong',
-      'Nhạy cảm': '/listskincare/Nhaycam',
-      'Hỗn hợp': '/listskincare/Honhop',
-      'Dầu': '/listskincare/Dau'
+      'Da khô': '/listskincare/Kho',
+      'Da thường': '/listskincare/Thuong',
+      'Da nhạy cảm': '/listskincare/Nhaycam',
+      'Da hỗn hợp': '/listskincare/Honhop',
+      'Da dầu': '/listskincare/Dau'
     };
     return links[skinName] || '/';
   };
@@ -239,6 +239,7 @@ const Question = () => {
             </div>
           </div>
 
+
           <div className="popup-body">
             <div className="result-summary">
               <div className="result-card">
@@ -246,7 +247,7 @@ const Question = () => {
                 <div className="card-content">
                   <h3><SkinOutlined /> Loại da của bạn</h3>
                   <div className="skin-type" style={{ color: assets.color }}>
-                    Da {skinName}
+                     {skinName}
                   </div>
                   <div className="skin-score">
                     <StarFilled style={{ color: assets.color }} />
@@ -256,13 +257,13 @@ const Question = () => {
               </div>
 
               <div className="skin-image-container">
-                <img src={skinImage} alt={`Da ${skinName}`} />
+                <img src={skinImage} alt={`${skinName}`} />
                 <div className="image-overlay" style={{ backgroundColor: `${assets.color}20` }} />
               </div>
             </div>
 
             <div className="skin-details">
-              <h3><SkinOutlined /> Đặc điểm da {skinName}</h3>
+              <h3><SkinOutlined /> Đặc điểm {skinName}</h3>
               <p>{decodeHtmlEntities(removeHtmlTags(skinTypeInfo.skinType.description))}</p>
 
               <div className="beauty-tips">
@@ -288,7 +289,7 @@ const Question = () => {
                     boxShadow: `0 4px 20px ${assets.color}60`
                   }}
                 >
-                  Xem lộ trình chăm sóc cho da {skinName}
+                  Xem lộ trình chăm sóc cho {skinName}
                 </button>
               </Link>
             </div>
