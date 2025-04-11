@@ -293,18 +293,30 @@ const OrderManagement = () => {
     }
   };
 
+  // const fetchProductsForOrder = async (orderDetails) => {
+  //   const productDetails = {};
+  //   for (const item of orderDetails) {
+  //     if (!products[item.productId]) {
+  //       const product = await fetchProductDetails(item.productId);
+  //       if (product) {
+  //         productDetails[item.productId] = product;
+  //       }
+  //     }
+  //   }
+  //   return productDetails;
+  // };
+
   const fetchProductsForOrder = async (orderDetails) => {
     const productDetails = {};
     for (const item of orderDetails) {
-      if (!products[item.productId]) {
-        const product = await fetchProductDetails(item.productId);
-        if (product) {
-          productDetails[item.productId] = product;
-        }
+      const product = await fetchProductDetails(item.productId);
+      if (product) {
+        productDetails[item.productId] = product;
       }
     }
     return productDetails;
   };
+  
 
   useEffect(() => {
     fetchOrders();
@@ -535,8 +547,10 @@ const OrderManagement = () => {
                             borderRadius: 4
                           }}>
                             No Image
-                          </div>
-                        )} <span>{product?.productName || 'Không có thông tin'}</span>
+                          </div> 
+                        )} 
+                       
+                        <span>{product?.productName || 'Không có thông tin'}</span>
                       </div>
                     )
                   },
