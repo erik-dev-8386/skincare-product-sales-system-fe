@@ -521,9 +521,10 @@ const OrderManagement = () => {
                 loading={orderDetailsLoading}
                 columns={[
                   {
-                    title: "Sản phẩm",
+                    title: "Ảnh",
                     dataIndex: "product",
                     key: "product",
+                    align: 'center',
                     render: (product) => (
                       <div style={{ display: 'flex', alignItems: 'center' }}>
                         {product?.productImages?.[0]?.imageURL ? (
@@ -550,9 +551,16 @@ const OrderManagement = () => {
                           </div> 
                         )} 
                        
-                        <span>{product?.productName || 'Không có thông tin'}</span>
+                        
                       </div>
                     )
+                  },
+                  {
+                    title: "Sản phẩm",
+                    dataIndex: "product",
+                    key: "product",
+                    align: 'center',
+                    render: (product) => product?.productName || 'Không có thông tin'
                   },
                   {
                     title: "Số lượng",
