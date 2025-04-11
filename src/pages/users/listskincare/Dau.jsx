@@ -705,7 +705,7 @@ export default function Dau() {
               <h3>Cách sử dụng:</h3>
               <p>{getStepInfo().usage}</p>
 
-              <h3>Sản phẩm gợi ý:</h3>
+              {/* <h3>Sản phẩm gợi ý:</h3>
               <div className="recommendations">
                 <button
                   className="slider-control prev"
@@ -761,7 +761,7 @@ export default function Dau() {
                 >
                   &gt;
                 </button>
-              </div>
+              </div> */}
             </div>
           </div>
         )}

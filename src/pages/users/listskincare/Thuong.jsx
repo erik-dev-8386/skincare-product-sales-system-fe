@@ -676,7 +676,7 @@ export default function Thuong() {
               <h3>Cách sử dụng:</h3>
               <p>{getStepInfo().usage}</p>
 
-              <h3>Sản phẩm gợi ý:</h3>
+              {/* <h3>Sản phẩm gợi ý:</h3>
               <div className="recommendations">
                 <div className="recommendations-slider">
                   <div className="recommendations-row">
@@ -718,7 +718,7 @@ export default function Thuong() {
                       ))}
                   </div>
                 </div>
-              </div>
+              </div> */}
             </div>
           </div>
         )}
