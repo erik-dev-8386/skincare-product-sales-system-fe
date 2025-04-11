@@ -2896,9 +2896,12 @@ export default function Dau() {
           <div className="col-12">
             <h1 className="page-title">Da dầu là gì?</h1>
             <div className="definition-box">
-              <p>
+              {/* <p>
                 {oilySkinInfo?.description || "Da dầu là loại da có đặc điểm tiết nhiều bã nhờn, dễ bị mụn và lỗ chân lông to. Loại da này cần được chăm sóc đặc biệt với các sản phẩm kiểm soát dầu và không gây bít tắc lỗ chân lông."}
-              </p>
+              </p> */}
+              <div
+                dangerouslySetInnerHTML={{ __html: oilySkinInfo.description }}
+              />
             </div>
           </div>
         </div>

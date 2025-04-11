@@ -2217,9 +2217,12 @@ export default function Honhop() {
           <div className="col-12">
             <h1 className="page-title">Da hỗn hợp là gì?</h1>
             <div className="definition-box">
-              <p>
+              {/* <p>
                 {combinationSkinInfo?.description || "Da hỗn hợp là loại da có sự kết hợp của nhiều vùng da khác nhau trên cùng một khuôn mặt: - Vùng chữ T (trán, mũi, cằm) thường tiết nhiều dầu - Vùng má thường khô hoặc bình thường"}
-              </p>
+              </p> */}
+              <div
+                dangerouslySetInnerHTML={{ __html: combinationSkinInfo.description }}
+              />
             </div>
           </div>
         </div>

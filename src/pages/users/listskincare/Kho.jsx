@@ -516,9 +516,12 @@ export default function Kho() {
           <div className="col-12">
             <h1 className="page-title">Da khô là gì?</h1>
             <div className="definition-box">
-              <p>
+              {/* <p>
                 {drySkinInfo?.description || "Da khô là loại da thiếu độ ẩm và dầu tự nhiên, thường có cảm giác căng, bong tróc và thiếu độ đàn hồi. Loại da này cần được chăm sóc đặc biệt với các sản phẩm dưỡng ẩm chuyên sâu."}
-              </p>
+              </p> */}
+              <div
+                dangerouslySetInnerHTML={{ __html: drySkinInfo.description }}
+              />
             </div>
           </div>
         </div>

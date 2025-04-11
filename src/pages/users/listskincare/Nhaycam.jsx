@@ -953,12 +953,12 @@
 //         // First fetch the skin type info
 //         const skinTypeRes = await api.get("/skin-types/info/Da Nhạy cảm");
 //         setSensitiveSkinInfo(skinTypeRes.data);
-        
+
 //         if (skinTypeRes.data && skinTypeRes.data.planSkinCare) {
 //           // Fetch morning routine (first item in planSkinCare array)
 //           const morningRes = await api.get(`/mini-skin-cares/${skinTypeRes.data.planSkinCare[0].description}`);
 //           setMorningSteps(morningRes.data);
-          
+
 //           // Fetch evening routine (second item in planSkinCare array)
 //           const eveningRes = await api.get(`/mini-skin-cares/${skinTypeRes.data.planSkinCare[1].description}`);
 //           setEveningSteps(eveningRes.data);
@@ -1034,7 +1034,7 @@
 //     if (selectedStep && stepDetails[selectedStep]) {
 //       return stepDetails[selectedStep];
 //     }
-    
+
 //     // Fallback data if API fails
 //     return {
 //       title: selectedStep ? selectedStep.replace(/([A-Z])/g, ' $1') : "Bước chăm sóc da",
@@ -1707,11 +1707,11 @@ export default function Nhaycam() {
         // First fetch the skin type info
         const skinTypeRes = await api.get("/skin-types/info/Da Nhạy cảm");
         setSensitiveSkinInfo(skinTypeRes.data);
-        
+
         if (skinTypeRes.data && skinTypeRes.data.planSkinCare && skinTypeRes.data.planSkinCare.length > 0) {
           let morningStepsData = [];
           let eveningStepsData = [];
-          
+
           // Try to fetch morning routine (with active status)
           if (skinTypeRes.data.planSkinCare[0]) {
             try {
@@ -1727,7 +1727,7 @@ export default function Nhaycam() {
               setMorningSteps([]);
             }
           }
-          
+
           // Try to fetch evening routine (with active status)
           if (skinTypeRes.data.planSkinCare[1]) {
             try {
@@ -1746,7 +1746,7 @@ export default function Nhaycam() {
           // Process step details only for successfully fetched steps with active status
           const steps = [...morningStepsData, ...eveningStepsData];
           const stepDetailsObj = {};
-          
+
           for (const step of steps) {
             // Only process steps with status = 1 (ACTIVE)
             if (step && step.status === 1) {
@@ -1775,7 +1775,7 @@ export default function Nhaycam() {
               }
             }
           }
-          
+
           setStepDetails(stepDetailsObj);
         }
       } catch (error) {
@@ -1841,7 +1841,7 @@ export default function Nhaycam() {
     if (selectedStep && stepDetails[selectedStep]) {
       return stepDetails[selectedStep];
     }
-    
+
     // Fallback data if API fails
     return {
       title: selectedStep ? selectedStep.replace(/([A-Z])/g, ' $1') : "Bước chăm sóc da",
@@ -2186,9 +2186,13 @@ export default function Nhaycam() {
           <div className="col-12">
             <h1 className="page-title">Da nhạy cảm là gì?</h1>
             <div className="definition-box">
-              <p>
+              {/* <p>
                 {sensitiveSkinInfo?.description || "Da nhạy cảm là loại da dễ bị kích ứng, đỏ và khó chịu khi tiếp xúc với các yếu tố môi trường hoặc mỹ phẩm. Loại da này cần được chăm sóc đặc biệt với các sản phẩm dịu nhẹ và phù hợp."}
-              </p>
+              </p> */}
+
+              <div
+                dangerouslySetInnerHTML={{ __html: sensitiveSkinInfo.description }}
+              />
             </div>
           </div>
         </div>
@@ -2231,10 +2235,10 @@ export default function Nhaycam() {
             </>
           )}
         </div>
-        
+
         <div className="row skincare-routine">
           <h2>Quy trình chăm sóc da nhạy cảm</h2>
-          
+
           <div className="col-md-6">
             <div className="routine-card morning">
               <h3>☀️ Ban ngày</h3>
