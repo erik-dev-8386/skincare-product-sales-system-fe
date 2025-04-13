@@ -17,10 +17,10 @@ const DiscountManagement = () => {
   const [searchText, setSearchText] = useState("");
 
   const statusMapping = {
-    0: { text: "HẾT HẠN", color: "red" },
-    1: { text: "SẮP TỚI", color: "orange" },
+    // 0: { text: "HẾT HẠN", color: "red" },
+    // 1: { text: "SẮP TỚI", color: "orange" },
     2: { text: "HOẠT ĐỘNG", color: "green" },
-    3: { text: "BỊ VÔ HIỆU HÓA", color: "gray" }
+    3: { text: "BỊ VÔ HIỆU HÓA", color: "red" }
   };
 
   const columns = [
@@ -42,30 +42,7 @@ const DiscountManagement = () => {
         <div dangerouslySetInnerHTML={{ __html: text && typeof text === "string" ? (text.length > 50 ? text.substring(0, 50) + "..." : text) : "" }} />
       ),
     },
-    {
-      title: 'Ngày tạo',
-      dataIndex: 'createdTime',
-      key: 'createdTime',
-      render: (date) => date ? dayjs(date).format("YYYY-MM-DD") : "",
-    },
-    {
-      title: 'Ngày xóa',
-      dataIndex: 'deletedTime',
-      key: 'deletedTime',
-      render: (date) => date ? dayjs(date).format("YYYY-MM-DD") : "",
-    },
-    {
-      title: 'Ngày áp dụng',
-      dataIndex: 'actualStartTime',
-      key: 'actualStartTime',
-      render: (date) => date ? dayjs(date).format("YYYY-MM-DD") : "",
-    },
-    {
-      title: 'Ngày hết hạn',
-      dataIndex: 'actualEndTime',
-      key: 'actualEndTime',
-      render: (date) => date ? dayjs(date).format("YYYY-MM-DD") : "",
-    },
+
     {
       title: 'Phần trăm giảm giá (%)',
       dataIndex: 'discountPercent',
@@ -155,7 +132,12 @@ const DiscountManagement = () => {
     setSelectedDiscount(null);
   };
 
+ 
+  
+
   const handleSubmitForm = async (values) => {
+ 
+
     const isDuplicate = discountList.some(
       (discount) =>
         discount.discountName === values.discountName &&
@@ -280,40 +262,7 @@ const DiscountManagement = () => {
           >
             <Input type="number" />
           </Form.Item>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item
-                label="Ngày tạo"
-                name="createdTime"
-                rules={[{ required: false, message: "Ngày tạo không được để trống!" }]}
-              >
-                <DatePicker format="YYYY-MM-DD" />
-              </Form.Item>
-              <Form.Item
-                label="Ngày xóa"
-                name="deletedTime"
-                rules={[{ required: false, message: "Ngày xóa không được để trống!" }]}
-              >
-                <DatePicker format="YYYY-MM-DD" />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item
-                label="Ngày áp dụng"
-                name="actualStartTime"
-                rules={[{ required: false, message: "Ngày áp dụng không được để trống!" }]}
-              >
-                <DatePicker format="YYYY-MM-DD" />
-              </Form.Item>
-              <Form.Item
-                label="Ngày hết hạn"
-                name="actualEndTime"
-                rules={[{ required: false, message: "Ngày hết hạn không được để trống!" }]}
-              >
-                <DatePicker format="YYYY-MM-DD" />
-              </Form.Item>
-            </Col>
-          </Row>
+         
           <Form.Item
             label="Mô tả"
             name="description"
@@ -331,8 +280,8 @@ const DiscountManagement = () => {
               rules={[{ required: false, message: "Trạng thái không được bỏ trống!" }]}
             >
               <Select>
-                <Option value={0}>HẾT HẠN</Option>
-                <Option value={1}>SẮP TỚI</Option>
+                {/* <Option value={0}>HẾT HẠN</Option>
+                <Option value={1}>SẮP TỚI</Option> */}
                 <Option value={2}>HOẠT ĐỘNG</Option>
                 <Option value={3}>BỊ VÔ HIỆU HÓA</Option>
               </Select>
@@ -354,9 +303,9 @@ const DiscountManagement = () => {
             <p><strong>Mã giảm giá: </strong> {selectedDiscount.discountCode}</p>
             <p><strong>Mô tả: </strong></p>
             <div dangerouslySetInnerHTML={{ __html: selectedDiscount.description }} />
-            <p><strong>Ngày tạo: </strong> {selectedDiscount.createdTime ? dayjs(selectedDiscount.createdTime).format("YYYY-MM-DD") : "N/A"}</p>
+            {/* <p><strong>Ngày tạo: </strong> {selectedDiscount.createdTime ? dayjs(selectedDiscount.createdTime).format("YYYY-MM-DD") : "N/A"}</p>
             <p><strong>Ngày áp dụng: </strong> {selectedDiscount.actualStartTime ? dayjs(selectedDiscount.actualStartTime).format("YYYY-MM-DD") : "N/A"}</p>
-            <p><strong>Ngày hết hạn: </strong> {selectedDiscount.actualEndTime ? dayjs(selectedDiscount.actualEndTime).format("YYYY-MM-DD") : "N/A"}</p>
+            <p><strong>Ngày hết hạn: </strong> {selectedDiscount.actualEndTime ? dayjs(selectedDiscount.actualEndTime).format("YYYY-MM-DD") : "N/A"}</p> */}
             <p><strong>Phần trăm giảm giá (%): </strong> {selectedDiscount.discountPercent}%</p>
             <p><strong>Trạng Thái:</strong>
               {selectedDiscount.status !== undefined ? (

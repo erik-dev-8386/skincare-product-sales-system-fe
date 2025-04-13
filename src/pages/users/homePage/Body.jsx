@@ -76,7 +76,6 @@ export default function Body() {
     fetchData();
   }, []);
 
-  // Navigation handlers
   const handleNext = () => {
     setCurrentSlide(prev => (prev + 4 < suitableProducts.length ? prev + 4 : 0));
   };
@@ -85,7 +84,7 @@ export default function Body() {
     setCurrentSlide(prev => (prev - 4 >= 0 ? prev - 4 : Math.max(0, suitableProducts.length - 4)));
   };
 
-  // Product comparison handlers
+ 
   const handleCompareClick = (product) => {
     if (compareProducts.length < 2) {
       if (!compareProducts.find(p => p.productId === product.productId)) {
@@ -187,8 +186,8 @@ export default function Body() {
       {
         key: "9",
         info: "Thành phần",
-        product1: <div className="compare-ingredients">{p1.ingredients}</div>,
-        product2: <div className="compare-ingredients">{p2.ingredients}</div>,
+        product1: <div className="compare-ingredients" dangerouslySetInnerHTML={{ __html: p1.ingredients }}/>,
+        product2: <div className="compare-ingredients" dangerouslySetInnerHTML={{ __html: p2.ingredients }}/>,
       },
     ];
   };

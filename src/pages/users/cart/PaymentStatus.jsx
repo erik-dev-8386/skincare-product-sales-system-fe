@@ -1,6 +1,6 @@
 
 
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import { Result, Button, Card, Row, Col, Typography, Divider, Steps, Spin, Image } from 'antd';
 import {
   CheckCircleOutlined,
@@ -29,6 +29,8 @@ const SuccessPayment = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [productsLoading, setProductsLoading] = useState(false);
+
+  const ipnCalled = useRef(false);
 
   useEffect(() => {
     const fetchProductDetails = async (productId) => {
@@ -104,14 +106,17 @@ const SuccessPayment = () => {
         setProductsLoading(false);
 
 
-        if (resultCode !== null) {
+        if (resultCode !== null && !ipnCalled.current) {
+          ipnCalled.current = true; 
           const payload = {
             orderId,
-            requestId: requestId || '',
+            requestId,
             resultCode: parseInt(resultCode),
-            amount: amount && !isNaN(amount) ? parseInt(amount) : undefined
+            amount: parseInt(amount)
           };
-
+        
+          console.log("Sending IPN payload:", payload);
+        
           const response = await api.post('/momo/ipn-handler-new', payload);
           if (response.status === 200) {
             const success = parseInt(resultCode) === 0;
@@ -121,10 +126,8 @@ const SuccessPayment = () => {
               setCart([]);
             }
           }
-        } else {
-          setPaymentStatus('success');
-          setCart([]);
         }
+     
 
       } catch (err) {
         console.error('Lỗi xử lý đơn hàng:', err);

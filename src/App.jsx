@@ -44,10 +44,13 @@ import BlogManage from "./pages/admin/BlogManagement/Blogmanage.jsx";
 import BlogHashtag from "./pages/admin/BlogManagement/Bloghastag.jsx";
 import BlogCategory from "./pages/admin/BlogManagement/Blogcategory.jsx";
 import CustomerManagement from "./pages/admin/UserManagement/UserManagement.jsx";
-import Point from "./pages/users/profile/point.jsx";
+
 import SuccessPayment from "./pages/users/cart/PaymentStatus.jsx";
 import { ToastContainer } from "react-toastify";
 import Setting from "./pages/users/profile/Setting.jsx";
+
+import PlanSkincare from "./pages/admin/PlanSkincare/PlanSkincare.jsx";
+import Miniplanskincare from "./pages/admin/Miniplanskincare/Miniplanskincare.jsx";
 function App() {
   return (
     <>
@@ -85,13 +88,13 @@ function App() {
       <Route path="/user" element={<ProfileLayout />}>
         <Route index element={<Profile />} />
         <Route path="/user/history" element={<History />} />
-        <Route path="/user/point" element={<Point />} />
+      
         <Route path="/user/setting" element={<Setting />} />
 
         
       </Route>
 
-
+{/* admin */}
       <Route path="/admin" element={<AdminLayout />}>
         <Route index element={<DashBoard />} />
         <Route
@@ -126,6 +129,8 @@ function App() {
         <Route path="/admin/blog-management" element={<BlogManage />} />
         <Route path="/admin/blog-hastag" element={<BlogHashtag />} />
         <Route path="/admin/blog-category" element={<BlogCategory />} />
+        <Route path="/admin/planskincare" element={<PlanSkincare />} />
+        <Route path="/admin/miniplanskincare" element={<Miniplanskincare />} />
       </Route>
 
 

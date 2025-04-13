@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, useCallback } from "react";
 import { Button, Form, Input, Modal, Table, Popconfirm, Tag, Select, Tooltip } from "antd";
 import api from "../../../config/api";
@@ -70,7 +69,14 @@ const QuestionManagement = () => {
     setNewQuestionContent(e.target.value);
   };
 
+  const stripHtml = (html) => {
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = html;
+    return tempDiv.textContent || tempDiv.innerText || "";
+  };
   const handleSubmitForm = async (values) => {
+      // Xoá HTML khỏi phần mô tả
+  values.description = stripHtml(values.description);
     try {
       const data = {
         ...values,
@@ -135,43 +141,42 @@ const QuestionManagement = () => {
       key: "actions",
       render: (_, record) => (
         <div className="button" style={{ display: "flex", justifyContent: "center", flexDirection: "column", width: "20px", alignItems: "center" }}>
-        
-            <Tooltip title="Sửa">
-          <Button
-            color="orange"
-            variant="filled"
-            onClick={() => handleEditQuestion(record)}
-            style={{ margin: 3, border: "2px solid", width: "20px" }}
-          >
-            <i className="fa-solid fa-pen-to-square"></i>
-          </Button>
-          </Tooltip>
-          <Tooltip title="Chi tiết">
-          <Button
-            color="primary"
-            variant="filled"
-            type="default"
-            onClick={() => handleViewDetails(record)}
-            style={{ margin: 3, border: "2px solid", width: "20px" }}
-          >
-            <i className="fa-solid fa-eye"></i>
-          </Button>
-          </Tooltip>
-           <Tooltip title="Xóa">
-          <Popconfirm
-            title="Bạn có muốn xóa sản phẩm này không?"
-            onConfirm={() => handleDeleteQuestion(record.questionId)}
-            okText="Có"
-            cancelText="Không"
-          >
+          <Tooltip title="Sửa">
             <Button
-              color="red"
+              color="orange"
               variant="filled"
+              onClick={() => handleEditQuestion(record)}
               style={{ margin: 3, border: "2px solid", width: "20px" }}
             >
-              <i className="fa-solid fa-trash"></i>
+              <i className="fa-solid fa-pen-to-square"></i>
             </Button>
-          </Popconfirm>
+          </Tooltip>
+          <Tooltip title="Chi tiết">
+            <Button
+              color="primary"
+              variant="filled"
+              type="default"
+              onClick={() => handleViewDetails(record)}
+              style={{ margin: 3, border: "2px solid", width: "20px" }}
+            >
+              <i className="fa-solid fa-eye"></i>
+            </Button>
+          </Tooltip>
+          <Tooltip title="Xóa">
+            <Popconfirm
+              title="Bạn có muốn xóa sản phẩm này không?"
+              onConfirm={() => handleDeleteQuestion(record.questionId)}
+              okText="Có"
+              cancelText="Không"
+            >
+              <Button
+                color="red"
+                variant="filled"
+                style={{ margin: 3, border: "2px solid", width: "20px" }}
+              >
+                <i className="fa-solid fa-trash"></i>
+              </Button>
+            </Popconfirm>
           </Tooltip>
         </div>
       ),
@@ -219,16 +224,18 @@ const QuestionManagement = () => {
             <Input type="number" />
           </Form.Item>
 
-          <Form.Item
-            label="Trạng thái"
-            name="status"
-            rules={[{ required: true, message: "Vui lòng chọn trạng thái!" }]}
-          >
-            <Select>
-              <Select.Option value={1}>Hoạt động</Select.Option>
-              <Select.Option value={0}>Không hoạt động</Select.Option>
-            </Select>
-          </Form.Item>
+          {editingQuestion && (
+            <Form.Item
+              label="Trạng thái"
+              name="status"
+              rules={[{ required: true, message: "Vui lòng chọn trạng thái!" }]}
+            >
+              <Select>
+                <Select.Option value={1}>Hoạt động</Select.Option>
+                <Select.Option value={0}>Không hoạt động</Select.Option>
+              </Select>
+            </Form.Item>
+          )}
 
           <Form.Item>
             <Button type="primary" htmlType="submit" style={{ marginRight: 8 }}>

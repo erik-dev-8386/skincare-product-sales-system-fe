@@ -107,7 +107,7 @@ const OrderCard = ({ order, onOrderCancelled, onOrderDelivered }) => {
   };
 
   const canBeCancelled = () => {
-    return order.status === 1 || order.status === 2;
+    return order.status === 1 ;
   };
 
   const canBeDelivered = () => {

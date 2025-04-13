@@ -22,7 +22,7 @@ const SkinTypeManagement = () => {
   const statusColors = {
     1: { text: "HOẠT ĐỘNG", color: "green" },
     2: { text: "KHÔNG HOẠT ĐỘNG", color: "red" },
-    3: { text: "ĐÃ XÓA", color: "gray" },
+    // 3: { text: "ĐÃ XÓA", color: "gray" },
   };
 
   const columns = [
@@ -178,8 +178,17 @@ const SkinTypeManagement = () => {
     setSelectedSkinType(null);
   };
 
+  // const stripHtml = (html) => {
+  //   const tempDiv = document.createElement("div");
+  //   tempDiv.innerHTML = html;
+  //   return tempDiv.textContent || tempDiv.innerText || "";
+  // };
+  
   const handleSubmitForm = async (values) => {
  
+    // Xoá HTML khỏi phần mô tả
+  // values.description = stripHtml(values.description);
+
     const isDuplicate = skinTypeList.some(
       (skinType) =>
         skinType.skinName === values.skinName &&
@@ -385,7 +394,7 @@ const SkinTypeManagement = () => {
                   <Select>
                     <Option value={1}>HOẠT ĐỘNG</Option>
                     <Option value={2}>KHÔNG HOẠT ĐỘNG</Option>
-                    <Option value={3}>ĐÃ XÓA</Option>
+                    {/* <Option value={3}>ĐÃ XÓA</Option> */}
                   </Select>
                 </Form.Item>
               )}

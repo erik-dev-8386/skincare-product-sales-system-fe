@@ -1,8 +1,7 @@
+
+
 import React, { useState, useEffect } from "react";
 import "./Skin.css";
-import danc1 from "../../../assets/da/danc1.jpg";
-import danc2 from "../../../assets/da/danc2.jpg";
-import danc3 from "../../../assets/da/danc3.jpg";
 import ruamat from "../../../assets/da/ruamat.jpg";
 import toner from "../../../assets/da/toner.jpg";
 import serum from "../../../assets/da/serum.jpg";
@@ -26,153 +25,141 @@ export default function Dau() {
   const [skintypes, setSkintypes] = useState([]);
   const [suitableProducts, setSuitableProducts] = useState([]);
   const [oilyCurrentSlide, setOilyCurrentSlide] = useState(0);
-  const [currentRecommendationSlide, setCurrentRecommendationSlide] =
-    useState(0);
+  const [currentRecommendationSlide, setCurrentRecommendationSlide] = useState(0);
   const [compareProducts, setCompareProducts] = useState([]);
   const [isCompareModalVisible, setIsCompareModalVisible] = useState(false);
+  const [oilySkinInfo, setOilySkinInfo] = useState(null);
+  const [loadingSkinInfo, setLoadingSkinInfo] = useState(true);
+  const [morningSteps, setMorningSteps] = useState([]);
+  const [eveningSteps, setEveningSteps] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [stepDetails, setStepDetails] = useState({});
 
-  const skinCareSteps = {
-    cleanser: {
-      title: "Sữa Rửa Mặt Cho Da Dầu",
-      description: "Làm sạch sâu và kiểm soát dầu hiệu quả",
-      keyPoints: [
-        "Chứa Salicylic Acid giúp làm sạch sâu",
-        "Kiểm soát bã nhờn",
-        "Không gây khô căng da",
-      ],
-      recommendations: [
-        {
-          name: "La Roche-Posay Effaclar Gel",
-          description: "Gel rửa mặt kiểm soát dầu",
-          image: ruamat,
-        },
-        {
-          name: "Cerave Foaming Facial Cleanser",
-          description: "Sữa rửa mặt tạo bọt cho da dầu",
-          image: ruamat,
-        },
-      ],
-      usage: "Massage nhẹ nhàng với nước ấm, tập trung vào vùng chữ T.",
-    },
-    toner: {
-      title: "Toner Cân Bằng Da Dầu",
-      description: "Cân bằng độ pH và kiểm soát dầu",
-      keyPoints: [
-        "Chứa BHA/AHA nhẹ nhàng",
-        "Làm sạch sâu lỗ chân lông",
-        "Kiểm soát dầu thừa",
-      ],
-      recommendations: [
-        {
-          name: "Paula's Choice 2% BHA",
-          description: "Toner loại bỏ tế bào chết",
-          image: toner,
-        },
-        {
-          name: "Some By Mi AHA-BHA-PHA Toner",
-          description: "Toner đa tác động",
-          image: toner,
-        },
-      ],
-      usage: "Thấm nhẹ lên da bằng bông cotton.",
-    },
-    serum: {
-      title: "Serum Điều Trị Cho Da Dầu",
-      description: "Cung cấp dưỡng chất và kiểm soát dầu",
-      keyPoints: [
-        "Chứa Niacinamide giúp kiểm soát dầu",
-        "Làm giảm mụn và thâm",
-        "Không gây bít tắc lỗ chân lông",
-      ],
-      recommendations: [
-        {
-          name: "The Ordinary Niacinamide 10% + Zinc 1%",
-          description: "Serum kiểm soát dầu và mụn",
-          image: serum,
-        },
-        {
-          name: "Paula's Choice 10% Niacinamide Booster",
-          description: "Serum làm giảm lỗ chân lông",
-          image: serum,
-        },
-      ],
-      usage: "Sử dụng 2-3 giọt, vỗ nhẹ lên da.",
-    },
-    moisturizer: {
-      title: "Kem Dưỡng Ẩm Cho Da Dầu",
-      description: "Cung cấp độ ẩm mà không gây bóng nhờn",
-      keyPoints: [
-        "Kết cấu nhẹ, không dầu",
-        "Kiểm soát bã nhờn",
-        "Cấp ẩm phù hợp",
-      ],
-      recommendations: [
-        {
-          name: "Neutrogena Hydro Boost Gel",
-          description: "Gel dưỡng ẩm không dầu",
-          image: kem,
-        },
-        {
-          name: "La Roche-Posay Effaclar Mat",
-          description: "Kem dưỡng kiểm soát dầu",
-          image: kem,
-        },
-      ],
-      usage: "Thoa một lớp mỏng lên da sau serum.",
-    },
-    sunscreen: {
-      title: "Kem Chống Nắng Cho Da Dầu",
-      description: "Bảo vệ da khỏi tác hại của tia UV",
-      keyPoints: [
-        "Kết cấu nhẹ, không gây bít tắc",
-        "Kiểm soát dầu suốt ngày",
-        "Bảo vệ toàn diện",
-      ],
-      recommendations: [
-        {
-          name: "La Roche-Posay Anthelios Anti-Shine",
-          description: "Kem chống nắng kiểm soát dầu",
-          image: sun,
-        },
-        {
-          name: "Bioré UV Perfect Milk",
-          description: "Sữa chống nắng cho da dầu",
-          image: sun,
-        },
-      ],
-      usage: "Thoa đều lên da 15-30 phút trước khi ra nắng.",
-    },
-    nightCleansing: {
-      title: "Tẩy Trang Cho Da Dầu",
-      description: "Làm sạch sâu lớp trang điểm và bã nhờn",
-      keyPoints: [
-        "Làm sạch sâu không gây kích ứng",
-        "Loại bỏ dầu thừa hiệu quả",
-        "Không để lại cảm giác nhờn rít",
-      ],
-      recommendations: [
-        {
-          name: "Bioderma Sébium H2O",
-          description: "Nước tẩy trang cho da dầu",
-          image: ruamat,
-        },
-        {
-          name: "La Roche-Posay Effaclar Micellar Water",
-          description: "Nước tẩy trang kiểm soát dầu",
-          image: ruamat,
-        },
-      ],
-      usage: "Thấm đều lên da bằng bông cotton, lau nhẹ nhàng.",
-    },
-  };
+  useEffect(() => {
+    const fetchOilySkinInfo = async () => {
+      try {
+        setLoadingSkinInfo(true);
+        const response = await api.get("/skin-types/info/Da Dầu");
+        setOilySkinInfo(response.data);
+      } catch (error) {
+        console.error("Error fetching oily skin info:", error);
+      } finally {
+        setLoadingSkinInfo(false);
+      }
+    };
 
-  const handleStepClick = async (step) => {
-    setSelectedStep(step);
+    const fetchSkincareSteps = async () => {
+      try {
+        setLoading(true);
+        // First fetch the skin type info
+        const skinTypeRes = await api.get("/skin-types/info/Da Dầu");
+        setOilySkinInfo(skinTypeRes.data);
+        
+        if (skinTypeRes.data && skinTypeRes.data.planSkinCare && skinTypeRes.data.planSkinCare.length > 0) {
+          let morningStepsData = [];
+          let eveningStepsData = [];
+          
+          // Try to fetch morning routine (with active status)
+          if (skinTypeRes.data.planSkinCare[0]) {
+            try {
+              // Using the endpoint from your controller that filters by status
+              const morningRes = await api.get(`/mini-skin-cares/${skinTypeRes.data.planSkinCare[0].description}`);
+              if (morningRes && morningRes.data) {
+                // This endpoint already returns only active plans (status = 1)
+                morningStepsData = morningRes.data;
+                setMorningSteps(morningStepsData);
+              }
+            } catch (morningError) {
+              console.error("Error fetching morning routine:", morningError);
+              setMorningSteps([]);
+            }
+          }
+          
+          // Try to fetch evening routine (with active status)
+          if (skinTypeRes.data.planSkinCare[1]) {
+            try {
+              const eveningRes = await api.get(`/mini-skin-cares/${skinTypeRes.data.planSkinCare[1].description}`);
+              if (eveningRes && eveningRes.data) {
+                // This endpoint already returns only active plans (status = 1)
+                eveningStepsData = eveningRes.data;
+                setEveningSteps(eveningStepsData);
+              }
+            } catch (eveningError) {
+              console.error("Error fetching evening routine:", eveningError);
+              setEveningSteps([]);
+            }
+          }
+
+          // Process step details only for successfully fetched steps with active status
+          const steps = [...morningStepsData, ...eveningStepsData];
+          const stepDetailsObj = {};
+          
+          for (const step of steps) {
+            // Only process steps with status = 1 (ACTIVE)
+            if (step && step.status === 1) {
+              const stepKey = step.action.toLowerCase().replace(/\s+/g, '');
+              try {
+                // You might need to adjust this endpoint based on your API
+                const detailRes = await api.get(`/mini-skin-cares/info/${step.action}`);
+                if (detailRes && detailRes.data && detailRes.data.length > 0) {
+                  // Taking the first item since your endpoint returns a list
+                  stepDetailsObj[stepKey] = {
+                    title: step.action,
+                    description: detailRes.data[0].description || "Bước quan trọng trong quy trình chăm sóc da dầu",
+                    keyPoints: [
+                      "Phù hợp với da dầu",
+                      "Giúp kiểm soát dầu thừa",
+                      "Ngăn ngừa mụn hiệu quả"
+                    ],
+                    usage: detailRes.data[0].usage || "Sử dụng theo hướng dẫn trên sản phẩm"
+                  };
+                } else {
+                  stepDetailsObj[stepKey] = createFallbackStepData(step.action);
+                }
+              } catch (error) {
+                console.error(`Error fetching details for step ${stepKey}:`, error);
+                stepDetailsObj[stepKey] = createFallbackStepData(step.action);
+              }
+            }
+          }
+          
+          setStepDetails(stepDetailsObj);
+        }
+      } catch (error) {
+        console.error("Error fetching skincare steps:", error);
+        setMorningSteps([]);
+        setEveningSteps([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    // Helper function to create fallback step data
+    const createFallbackStepData = (actionName) => {
+      return {
+        title: actionName,
+        description: "Thông tin chi tiết về bước chăm sóc da",
+        keyPoints: [
+          "Làm sạch da hiệu quả",
+          "Kiểm soát dầu thừa",
+          "Không gây kích ứng"
+        ],
+        usage: "Sử dụng theo hướng dẫn trên bao bì sản phẩm"
+      };
+    };
+
+    fetchOilySkinInfo();
+    fetchSkincareSteps();
+  }, []);
+
+  const handleStepClick = async (stepKey) => {
+    setSelectedStep(stepKey);
     setShowModal(true);
 
     let categoryName = "";
-    switch (step) {
-      case "cleanser":
+    switch (stepKey) {
+      case "sữarửamặt":
+      case "tẩytrang":
         categoryName = "Sữa rửa mặt";
         break;
       case "toner":
@@ -181,14 +168,11 @@ export default function Dau() {
       case "serum":
         categoryName = "Serums";
         break;
-      case "moisturizer":
+      case "kemdưỡngẩm":
         categoryName = "Kem dưỡng ẩm";
         break;
-      case "sunscreen":
+      case "kemchốngnắng":
         categoryName = "Kem chống nắng";
-        break;
-      case "nightCleansing":
-        categoryName = "Nước tẩy trang";
         break;
       default:
         categoryName = "";
@@ -201,7 +185,33 @@ export default function Dau() {
   };
 
   const getStepInfo = () => {
-    return skinCareSteps[selectedStep];
+    if (selectedStep && stepDetails[selectedStep]) {
+      return stepDetails[selectedStep];
+    }
+    
+    // Fallback data if API fails
+    return {
+      title: selectedStep ? selectedStep.replace(/([A-Z])/g, ' $1') : "Bước chăm sóc da",
+      description: "Thông tin chi tiết về bước chăm sóc da",
+      keyPoints: [
+        "Làm sạch da hiệu quả",
+        "Kiểm soát dầu thừa",
+        "Không gây kích ứng"
+      ],
+      usage: "Sử dụng theo hướng dẫn trên bao bì sản phẩm",
+      recommendations: [
+        {
+          name: "Sản phẩm gợi ý 1",
+          description: "Mô tả sản phẩm gợi ý",
+          image: ruamat
+        },
+        {
+          name: "Sản phẩm gợi ý 2",
+          description: "Mô tả sản phẩm gợi ý",
+          image: toner
+        }
+      ]
+    };
   };
 
   const handleTopSearchNext = () => {
@@ -302,7 +312,7 @@ export default function Dau() {
   useEffect(() => {
     const fetchOilyProducts = async () => {
       try {
-        const response = await api.get("/products/skin-name/Dầu");
+        const response = await api.get("/products/skin-name/Da Dầu");
         if (response.data) {
           const productsWithIds = response.data.map((product) => ({
             ...product,
@@ -324,7 +334,7 @@ export default function Dau() {
       const categoryResponse = await api.get(
         `/products/category/${categoryName}`
       );
-      const skinTypeResponse = await api.get(`/products/skin-name/Dầu`);
+      const skinTypeResponse = await api.get(`/products/skin-name/Da Dầu`);
 
       if (!categoryResponse.data || !skinTypeResponse.data) {
         return [];
@@ -512,6 +522,10 @@ export default function Dau() {
     ];
   };
 
+  if (loadingSkinInfo || loading) {
+    return <div className="text-center">Đang tải thông tin...</div>;
+  }
+
   return (
     <>
       <div className="container">
@@ -519,112 +533,92 @@ export default function Dau() {
           <div className="col-12">
             <h1 className="page-title">Da dầu là gì?</h1>
             <div className="definition-box">
-              <p>
-                Da dầu là loại da có đặc điểm tiết nhiều bã nhờn, dễ bị mụn và
-                lỗ chân lông to. Loại da này cần được chăm sóc đặc biệt với các
-                sản phẩm kiểm soát dầu và không gây bít tắc lỗ chân lông.
-              </p>
+              
+              <div
+                dangerouslySetInnerHTML={{ __html: oilySkinInfo.description }}
+              />
             </div>
           </div>
         </div>
 
         <div className="row characteristics-section">
           <h2>Đặc điểm nhận biết da dầu</h2>
-          <div className="col-md-4">
-            <div className="characteristic-card">
-              <img src={danc1} alt="Đặc điểm 1" />
-              <h3>Da bóng dầu</h3>
+          {oilySkinInfo && oilySkinInfo.skinTypeImages ? (
+            oilySkinInfo.skinTypeImages.slice(0, 3).map((image, index) => (
+              <div className="col-md-4" key={image.imageId}>
+                <div className="characteristic-card">
+                  <img src={image.imageURL} alt={`Đặc điểm ${index + 1}`} />
+                  <h3>
+                    {index === 0 && "Da bóng dầu"}
+                    {index === 1 && "Lỗ chân lông to"}
+                    {index === 2 && "Dễ nổi mụn"}
+                  </h3>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="col-12 text-center">
+              <p>Không có dữ liệu hình ảnh về da dầu</p>
             </div>
-          </div>
-          <div className="col-md-4">
-            <div className="characteristic-card">
-              <img src={danc2} alt="Đặc điểm 2" />
-              <h3>Lỗ chân lông to</h3>
-            </div>
-          </div>
-          <div className="col-md-4">
-            <div className="characteristic-card">
-              <img src={danc3} alt="Đặc điểm 3" />
-              <h3>Dễ nổi mụn</h3>
-            </div>
-          </div>
+          )}
         </div>
-
+        
         <div className="row skincare-routine">
           <h2>Quy trình chăm sóc da dầu</h2>
+          
           <div className="col-md-6">
             <div className="routine-card morning">
-              <h3>Ban ngày</h3>
-              <ol>
-                <li
-                  onClick={() => handleStepClick("cleanser")}
-                  className="clickable-step"
-                >
-                  Sữa rửa mặt kiểm soát dầu
-                </li>
-                <li
-                  onClick={() => handleStepClick("toner")}
-                  className="clickable-step"
-                >
-                  Toner cân bằng da
-                </li>
-                <li
-                  onClick={() => handleStepClick("serum")}
-                  className="clickable-step"
-                >
-                  Serum điều trị
-                </li>
-                <li
-                  onClick={() => handleStepClick("moisturizer")}
-                  className="clickable-step"
-                >
-                  Kem dưỡng ẩm nhẹ
-                </li>
-                <li
-                  onClick={() => handleStepClick("sunscreen")}
-                  className="clickable-step"
-                >
-                  Kem chống nắng kiểm soát dầu
-                </li>
-              </ol>
+              <h3>☀️ Ban ngày</h3>
+              {morningSteps && morningSteps.length > 0 ? (
+                <ol>
+                  {morningSteps
+                    .sort((a, b) => a.stepNumber - b.stepNumber)
+                    .map(step => {
+                      const stepKey = step.action.toLowerCase().replace(/\s+/g, '');
+                      return (
+                        <li
+                          key={step.miniSkinCarePlanId}
+                          onClick={() => handleStepClick(stepKey)}
+                          className="clickable-step"
+                        >
+                          {step.action}
+                        </li>
+                      );
+                    })}
+                </ol>
+              ) : (
+                <div className="no-routine-info">
+                  <p>Không có thông tin cho lộ trình này</p>
+                </div>
+              )}
             </div>
           </div>
 
           <div className="col-md-6">
             <div className="routine-card evening">
-              <h3>Ban đêm</h3>
-              <ol>
-                <li
-                  onClick={() => handleStepClick("nightCleansing")}
-                  className="clickable-step"
-                >
-                  Tẩy trang kỹ
-                </li>
-                <li
-                  onClick={() => handleStepClick("cleanser")}
-                  className="clickable-step"
-                >
-                  Sữa rửa mặt làm sạch sâu
-                </li>
-                <li
-                  onClick={() => handleStepClick("toner")}
-                  className="clickable-step"
-                >
-                  Toner cân bằng
-                </li>
-                <li
-                  onClick={() => handleStepClick("serum")}
-                  className="clickable-step"
-                >
-                  Serum trị mụn
-                </li>
-                <li
-                  onClick={() => handleStepClick("moisturizer")}
-                  className="clickable-step"
-                >
-                  Kem dưỡng ẩm nhẹ
-                </li>
-              </ol>
+              <h3>🌙 Ban đêm</h3>
+              {eveningSteps && eveningSteps.length > 0 ? (
+                <ol>
+                  {eveningSteps
+                    .sort((a, b) => a.stepNumber - b.stepNumber)
+                    .map(step => {
+                      const stepKey = step.action.toLowerCase().replace(/\s+/g, '');
+                      return (
+                        <li
+                          key={step.miniSkinCarePlanId}
+                          onClick={() => handleStepClick(stepKey)}
+                          className="clickable-step"
+                        >
+                          {step.action}
+                        </li>
+                      );
+                    })}
+                </ol>
+              ) : (
+                <div className="no-routine-info">
+                  <p>Không có thông tin cho lộ trình này</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -703,7 +697,7 @@ export default function Dau() {
 
               <h3>Đặc điểm chính:</h3>
               <ul>
-                {getStepInfo().keyPoints.map((point, index) => (
+                {getStepInfo().keyPoints?.map((point, index) => (
                   <li key={index}>{point}</li>
                 ))}
               </ul>
@@ -711,7 +705,7 @@ export default function Dau() {
               <h3>Cách sử dụng:</h3>
               <p>{getStepInfo().usage}</p>
 
-              <h3>Sản phẩm gợi ý:</h3>
+              {/* <h3>Sản phẩm gợi ý:</h3>
               <div className="recommendations">
                 <button
                   className="slider-control prev"
@@ -724,34 +718,40 @@ export default function Dau() {
                   <div className="recommendations-row">
                     {filteredProducts.length > 0
                       ? filteredProducts.map((product) => (
-                          <div
-                            key={`filtered-${product.productId}`}
-                            className="recommendation-item"
-                          >
-                            <ProductCard
-                              product={product}
-                              discounts={discounts}
-                              brands={brands}
-                              categories={categories}
-                              skintypes={skintypes}
-                              onCompareClick={handleCompareClick}
-                            />
-                          </div>
-                        ))
-                      : getStepInfo().recommendations.map((product, index) => (
-                          <div
-                            key={`default-${index}`}
-                            className="recommendation-item"
-                          >
-                            <div className="product-card">
-                              <img src={product.image} alt={product.name} />
-                              <h4>{product.name}</h4>
-                              <div className="description">
-                                {product.description}
-                              </div>
+                        <div
+                          key={`filtered-${product.productId}`}
+                          className="recommendation-item"
+                        >
+                          <ProductCard
+                            product={product}
+                            discounts={discounts}
+                            brands={brands}
+                            categories={categories}
+                            skintypes={skintypes}
+                            onCompareClick={handleCompareClick}
+                          />
+                        </div>
+                      ))
+                      : (getStepInfo().recommendations || [
+                        {
+                          name: "Không có sản phẩm gợi ý",
+                          description: "Vui lòng thử lại sau",
+                          image: ruamat
+                        }
+                      ]).map((product, index) => (
+                        <div
+                          key={`default-${index}`}
+                          className="recommendation-item"
+                        >
+                          <div className="product-card">
+                            <img src={product.image} alt={product.name} />
+                            <h4>{product.name}</h4>
+                            <div className="description">
+                              {product.description}
                             </div>
                           </div>
-                        ))}
+                        </div>
+                      ))}
                   </div>
                 </div>
 
@@ -761,7 +761,7 @@ export default function Dau() {
                 >
                   &gt;
                 </button>
-              </div>
+              </div> */}
             </div>
           </div>
         )}

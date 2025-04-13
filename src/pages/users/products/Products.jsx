@@ -191,8 +191,8 @@ export default function Products() {
       {
         key: "9",
         info: "Thành phần",
-        product1: <div className="compare-ingredients">{p1.ingredients}</div>,
-        product2: <div className="compare-ingredients">{p2.ingredients}</div>,
+        product1: <div className="compare-ingredients" dangerouslySetInnerHTML={{ __html: p1.ingredients }}/>,
+        product2: <div className="compare-ingredients" dangerouslySetInnerHTML={{ __html: p2.ingredients }}/>,
       },
     ];
   };
@@ -508,6 +508,7 @@ export default function Products() {
                         className="filter-select"
                         placeholder="Lọc sản phẩm theo..."
                         onChange={handleSort}
+                        prefix={<i className="fa-solid fa-filter"></i>}
                         value={sortOption || undefined}
                       >
                         <Option value="a-z">A-Z</Option>

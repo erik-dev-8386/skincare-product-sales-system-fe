@@ -1,4 +1,5 @@
 
+
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CartContext } from "../../../context/CartContext";
@@ -19,6 +20,72 @@ export default function CartPage() {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
 
+  const fetchUpdatedProducts = async () => {
+    if (cart.length === 0) return;
+
+    try {
+      const updatedProducts = await Promise.all(
+        cart.map(async (item) => {
+          try {
+            const response = await api.get(`/products/${item.productId}`);
+            const productData = response.data;
+            
+            return {
+              ...item,
+              productName: productData.productName,
+              discountPrice: productData.discountPrice,
+              productImages: productData.productImages,
+            };
+          } catch (error) {
+            console.error(`Error fetching product ${item.productId}:`, error);
+            return item;
+          }
+        })
+      );
+
+      const hasChanges = updatedProducts.some((newItem, index) => {
+        const oldItem = cart[index];
+        return newItem.discountPrice !== oldItem.discountPrice || 
+               newItem.productName !== oldItem.productName;
+      });
+
+      if (hasChanges) {
+        setCart(updatedProducts);
+        updateLocalStorageWithNewData(updatedProducts);
+        toast.info("Một số sản phẩm trong giỏ hàng đã được cập nhật");
+      }
+    } catch (error) {
+      console.error("Error fetching updated products:", error);
+    }
+  };
+
+  const updateLocalStorageWithNewData = (updatedCart) => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+
+    try {
+      const decodedToken = jwtDecode(token);
+      const email = decodedToken.sub;
+      if (!email) return;
+
+      const cartKey = `cart_${email}`;
+      localStorage.setItem(cartKey, JSON.stringify(updatedCart));
+    } catch (error) {
+      console.error("Lỗi khi cập nhật localStorage:", error);
+    }
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetchUpdatedProducts();
+    }, 3000); // Kiểm tra mỗi 3 giây
+
+    return () => clearInterval(interval);
+  }, [cart]);
+
+  useEffect(() => {
+    fetchUpdatedProducts();
+  }, []);
 
   const handleSelectAll = (e) => {
     const checked = e.target.checked;
@@ -77,7 +144,6 @@ export default function CartPage() {
     }
   }, [selectedRowKeys, cart]);
 
-
   useEffect(() => {
     const fetchProductStocks = async () => {
       if (cart.length === 0) {
@@ -103,48 +169,30 @@ export default function CartPage() {
 
   const validateQuantity = (id, newQuantity) => {
     const currentStock = productStocks[id] || 0;
-
+  
     if (newQuantity % 1 !== 0) {
-      toast.error("Số lượng phải là số nguyên");
-      return false;
+      return "Số lượng phải là số nguyên";
     }
-
+  
     if (newQuantity < 1) {
-      toast.error("Số lượng không được nhỏ hơn 1");
-      return false;
+      return "Số lượng không được nhỏ hơn 1";
     }
-
+  
     if (newQuantity > currentStock) {
-      toast.error(`Số lượng không được vượt quá ${currentStock} (số lượng tồn kho)`);
-      return false;
+      return `Số lượng không được vượt quá ${currentStock} (số lượng tồn kho)`;
     }
-
-    return true;
+  
+    return null;
   };
 
   const updateCartQuantity = async (id, newQuantity) => {
-    if (!validateQuantity(id, newQuantity)) return;
-
-    try {
-      const response = await api.get(`/products/${id}`);
-      const currentStock = response.data.quantity;
-
-      if (newQuantity > currentStock) {
-        toast.error(`Số lượng tồn kho hiện tại chỉ còn ${currentStock}`);
-        return;
-      }
-
-      setCart((prevCart) =>
-        prevCart.map((item) =>
-          item.productId === id ? { ...item, quantity: newQuantity } : item
-        )
-      );
-
-      updateLocalStorage(id, newQuantity);
-    } catch (error) {
-      console.error("Error verifying stock:", error);
-      toast.error("Không thể xác minh số lượng tồn kho");
-    }
+    setCart((prevCart) =>
+      prevCart.map((item) =>
+        item.productId === id ? { ...item, quantity: newQuantity } : item
+      )
+    );
+  
+    updateLocalStorage(id, newQuantity);
   };
 
   const updateLocalStorage = (id, newQuantity) => {
@@ -185,10 +233,9 @@ export default function CartPage() {
   const handleQuantityChange = async (id, e) => {
     const value = e.target.value;
     if (value === "" || isNaN(value)) {
-      toast.error("Vui lòng nhập số hợp lệ");
       return;
     }
-
+  
     const newQuantity = parseInt(value);
     await updateCartQuantity(id, newQuantity);
   };
@@ -225,7 +272,7 @@ export default function CartPage() {
 
   const handleCheckout = async () => {
     const token = localStorage.getItem("token");
-
+  
     if (!token) {
       toast.error("Bạn phải đăng nhập để thanh toán!");
       setTimeout(() => {
@@ -233,45 +280,49 @@ export default function CartPage() {
       }, 3000);
       return;
     }
-
-    setCheckoutLoading(true);
-
+  
     for (const item of cart) {
+      const error = validateQuantity(item.productId, item.quantity);
+      if (error) {
+        toast.error(`${item.productName}: ${error}`);
+        return;
+      }
+  
       try {
         const response = await api.get(`/products/${item.productId}`);
         const currentStock = response.data.quantity;
-
+  
         if (item.quantity > currentStock) {
           toast.error(`${item.productName} chỉ còn ${currentStock} sản phẩm trong kho`);
-          setCheckoutLoading(false);
           return;
         }
       } catch (error) {
         console.error(`Error checking stock for product ${item.productId}:`, error);
         toast.error(`Không thể kiểm tra số lượng tồn kho cho ${item.productName}`);
-        setCheckoutLoading(false);
         return;
       }
     }
-
+  
+    setCheckoutLoading(true);
+  
     try {
       const decodedToken = jwtDecode(token);
       const email = decodedToken.sub;
-
+  
       const checkoutItems = cart.map((item) => ({
         productName: item.productName,
         quantity: item.quantity,
         discountPrice: item.discountPrice,
       }));
-
+  
       const checkoutRequestDTO = {
         email: email,
         cartItemDTO: checkoutItems,
       };
-
+  
       const response = await api.post("/cart/checkout", checkoutRequestDTO);
       toast.success("Bạn đã đặt hàng thành công!");
-
+  
       setTimeout(() => {
         navigate("/shopping-cart/cart", {
           state: {
@@ -280,7 +331,7 @@ export default function CartPage() {
           }
         });
       }, 3000);
-
+  
     } catch (error) {
       console.error("Error during checkout:", error);
       toast.error("Đặt hàng không thành công! Hãy thử lại.");
@@ -292,13 +343,12 @@ export default function CartPage() {
     {
       title: (
         <Checkbox
-        title="Chọn tất cả sản phẩm"
+          title="Chọn tất cả sản phẩm"
           checked={selectAll}
           onChange={handleSelectAll}
           disabled={cart.length === 0}
         />
-        
-    ),
+      ),
       key: "selection",
       width: 50,
       render: (_, record) => (

@@ -13,6 +13,7 @@ import {
   ShareAltOutlined,
   CheckOutlined
 } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 
 const Question = () => {
   const [questions, setQuestions] = useState([]);
@@ -167,8 +168,8 @@ const Question = () => {
     };
 
     return assets[skinName] || {
-      color: '#D3D3D3',
-      gradient: 'linear-gradient(135deg, #D3D3D3, #FFFFFF)',
+      color: '#900001',
+      gradient: 'linear-gradient(135deg, #900001,rgb(198, 30, 30)',
       icon: '💖',
       tips: []
     };
@@ -176,13 +177,13 @@ const Question = () => {
 
   const getSkinCareLink = (skinName) => {
     const links = {
-      'Khô': '/listskincare/Kho',
-      'Thường': '/listskincare/Thuong',
-      'Nhạy cảm': '/listskincare/Nhaycam',
-      'Hỗn hợp': '/listskincare/Honhop',
-      'Dầu': '/listskincare/Dau'
+      'Da khô': '/listskincare/Kho',
+      'Da thường': '/listskincare/Thuong',
+      'Da nhạy cảm': '/listskincare/Nhaycam',
+      'Da hỗn hợp': '/listskincare/Honhop',
+      'Da dầu': '/listskincare/Dau'
     };
-    return links[skinName] || '#';
+    return links[skinName] || '/';
   };
 
   // Render functions
@@ -231,7 +232,7 @@ const Question = () => {
               <CloseOutlined />
             </button>
             <div className="header-content">
-              <div className="skin-icon" style={{ backgroundColor: assets.color }}>
+              <div className="skin-icon" style={{ backgroundColor: "white" }}>
                 {assets.icon}
               </div>
               <h2>Kết Quả Chẩn Đoán Da</h2>
@@ -245,24 +246,24 @@ const Question = () => {
                 <div className="card-decoration" style={{ backgroundColor: assets.color }} />
                 <div className="card-content">
                   <h3><SkinOutlined /> Loại da của bạn</h3>
-                  <div className="skin-type" style={{ color: assets.color }}>
-                    Da {skinName}
+                  <div className="skin-type" >
+                     {skinName}
                   </div>
                   <div className="skin-score">
-                    <StarFilled style={{ color: assets.color }} />
+                    <StarFilled style={{ color: 'yellow'}} />
                     <span>Điểm: {totalMark}/100</span>
                   </div>
                 </div>
               </div>
 
               <div className="skin-image-container">
-                <img src={skinImage} alt={`Da ${skinName}`} />
+                <img src={skinImage} alt={`${skinName}`} />
                 <div className="image-overlay" style={{ backgroundColor: `${assets.color}20` }} />
               </div>
             </div>
 
             <div className="skin-details">
-              <h3><SkinOutlined /> Đặc điểm da {skinName}</h3>
+              <h3><SkinOutlined /> Đặc điểm {skinName}</h3>
               <p>{decodeHtmlEntities(removeHtmlTags(skinTypeInfo.skinType.description))}</p>
 
               <div className="beauty-tips">
@@ -276,8 +277,8 @@ const Question = () => {
             </div>
 
             <div className="action-buttons">
-              <a
-                href={getSkinCareLink(skinName)}
+              <Link
+                to={getSkinCareLink(skinName)}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -288,9 +289,9 @@ const Question = () => {
                     boxShadow: `0 4px 20px ${assets.color}60`
                   }}
                 >
-                  Xem lộ trình chăm sóc cho da {skinName}
+                  Xem lộ trình chăm sóc cho {skinName}
                 </button>
-              </a>
+              </Link>
             </div>
           </div>
 
@@ -374,6 +375,7 @@ const Question = () => {
   if (error) return renderError();
 
   return (
+  
     <div className="quiz-container">
       <div className="quiz-header">
         <h1 className="test-title">Bài kiểm tra loại da</h1>
@@ -394,6 +396,7 @@ const Question = () => {
       {questions.length > 0 && renderQuestion()}
       {renderResultPopup()}
     </div>
+    
   );
 };
 

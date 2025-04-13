@@ -35,8 +35,8 @@ const ProductManagement = () => {
   const [skinTypes, setSkinTypes] = useState([]);
   const [categories, setCategories] = useState([]);
   const [discounts, setDiscounts] = useState([]);
-  const [imageFiles, setImageFiles] = useState([]); 
-  const [imagePreviews, setImagePreviews] = useState([]); 
+  const [imageFiles, setImageFiles] = useState([]);
+  const [imagePreviews, setImagePreviews] = useState([]);
   const [searchText, setSearchText] = useState("");
 
   const statusMapping = {
@@ -148,42 +148,42 @@ const ProductManagement = () => {
       key: "actions",
       render: (text, record) => (
         <div className="button" style={{ display: "flex", justifyContent: "center", flexDirection: "column", width: "20px", alignItems: "center" }}>
-           <Tooltip title="Sửa">
-          <Button
-            color="orange"
-            variant="filled"
-            onClick={() => handleEditProduct(record)}
-            style={{ margin: 3, border: "2px solid", width: "20px" }}
-          >
-            <i className="fa-solid fa-pen-to-square"></i>
-          </Button>
-          </Tooltip>
-          <Tooltip title="Chi tiết">
-          <Button
-            color="primary"
-            variant="filled"
-            type="default"
-            onClick={() => handleViewDetails(record)}
-            style={{ margin: 3, border: "2px solid", width: "20px" }}
-          >
-            <i className="fa-solid fa-eye"></i>
-          </Button>
-          </Tooltip>
-           <Tooltip title="Xóa">
-          <Popconfirm
-            title="Bạn có muốn xóa sản phẩm này không?"
-            onConfirm={() => handleDeleteProduct(record.productId)}
-            okText="Có"
-            cancelText="Không"
-          >
+          <Tooltip title="Sửa">
             <Button
-              color="red"
+              color="orange"
               variant="filled"
+              onClick={() => handleEditProduct(record)}
               style={{ margin: 3, border: "2px solid", width: "20px" }}
             >
-              <i className="fa-solid fa-trash"></i>
+              <i className="fa-solid fa-pen-to-square"></i>
             </Button>
-          </Popconfirm>
+          </Tooltip>
+          <Tooltip title="Chi tiết">
+            <Button
+              color="primary"
+              variant="filled"
+              type="default"
+              onClick={() => handleViewDetails(record)}
+              style={{ margin: 3, border: "2px solid", width: "20px" }}
+            >
+              <i className="fa-solid fa-eye"></i>
+            </Button>
+          </Tooltip>
+          <Tooltip title="Xóa">
+            <Popconfirm
+              title="Bạn có muốn xóa sản phẩm này không?"
+              onConfirm={() => handleDeleteProduct(record.productId)}
+              okText="Có"
+              cancelText="Không"
+            >
+              <Button
+                color="red"
+                variant="filled"
+                style={{ margin: 3, border: "2px solid", width: "20px" }}
+              >
+                <i className="fa-solid fa-trash"></i>
+              </Button>
+            </Popconfirm>
           </Tooltip>
         </div>
       ),
@@ -194,16 +194,16 @@ const ProductManagement = () => {
     const fetchOptions = async () => {
       try {
         const brandsResponse = await api.get("/brands/list-name-brands");
-      
+
         setBrands(brandsResponse.data);
         const skinTypesResponse = await api.get("/skin-types/list-name-skin-types");
-      
+
         setSkinTypes(skinTypesResponse.data);
         const categoriesResponse = await api.get("/categories/list-name-categories");
-        
+
         setCategories(categoriesResponse.data);
         const discountsResponse = await api.get("/discounts/list-name-discounts");
-        
+
         setDiscounts(discountsResponse.data);
       } catch (error) {
         console.error("Error fetching options:", error);
@@ -216,7 +216,9 @@ const ProductManagement = () => {
   const fetchProduct = async () => {
     try {
       const response = await api.get("/products");
-      setProductList(response.data);
+
+      const sortedProducts = response.data.sort((a, b) => new Date(b.createdTime) - new Date(a.createdTime));
+      setProductList(sortedProducts);
     } catch (error) {
       console.error("Error fetching Products:", error);
       toast.error("Không thể tải danh sách sản phẩm!");
@@ -245,8 +247,8 @@ const ProductManagement = () => {
     setModalOpen(false);
     form.resetFields();
     setEditingProduct(null);
-    setImageFiles([]); 
-    setImagePreviews([]); 
+    setImageFiles([]);
+    setImagePreviews([]);
   };
 
   const handleViewDetails = (Product) => {
@@ -259,35 +261,37 @@ const ProductManagement = () => {
     setSelectedProduct(null);
   };
 
-  const handleSubmitForm = async (values) => {
+
   
+  const handleSubmitForm = async (values) => {
+
     const isDuplicate = ProductList.some(
       (product) =>
         product.productName === values.productName &&
-        (!editingProduct || product.productId !== editingProduct.productId) 
+        (!editingProduct || product.productId !== editingProduct.productId)
     );
 
     if (isDuplicate) {
       toast.error("Tên sản phẩm đã tồn tại! Vui lòng nhập tên khác.");
-      return; 
+      return;
     }
 
     const formData = new FormData();
 
-   
+
     formData.append(
       "products",
       new Blob([JSON.stringify(values)], { type: "application/json" })
     );
 
-  
+
     imageFiles.forEach((file) => {
       formData.append("images", file);
     });
 
     try {
       if (editingProduct) {
-        
+
         await api.put(`/products/${editingProduct.productId}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -295,7 +299,7 @@ const ProductManagement = () => {
         });
         toast.success("Đã sửa sản phẩm thành công!");
       } else {
-      
+
         await api.post("/products", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -306,20 +310,32 @@ const ProductManagement = () => {
       fetchProduct();
       handleCloseModal();
     } catch (error) {
-      console.error(
-        "Error submitting form:",
-        error.response?.data?.message || error.message
-      );
+  console.error(
+    "Error submitting form:",
+    error.response?.data?.message || error.message
+  );
 
-      
-      if (editingProduct) {
-        
-        toast.error("Sửa sản phẩm này không thành công!");
-      } else {
-        
-        toast.error("Thêm sản phẩm này không thành công!");
-      }
-    }
+  const errors = [];
+
+  // Thu thập tất cả lỗi nếu có
+  const data = error.response?.data || {};
+  if (data.productName) errors.push(data.productName);
+  if (data.description) errors.push(data.description);
+  if (data.ingredients) errors.push(data.ingredients);
+  if (data.deletedTime) errors.push(data.deletedTime);
+  if (data.mfg) errors.push(data.mfg);
+  if (data.message && errors.length === 0) errors.push(data.message); // chỉ thêm message nếu không có các lỗi chi tiết hơn
+
+  // Hiển thị từng lỗi một
+  errors.forEach((err) => toast.error(err));
+
+  // Thêm thông báo tổng quan
+  if (editingProduct) {
+    toast.error("Sửa sản phẩm này không thành công!");
+  } else {
+    toast.error("Thêm sản phẩm này không thành công!");
+  }
+}
   };
 
   const handleEditProduct = (Product) => {
@@ -331,7 +347,7 @@ const ProductManagement = () => {
       mfg: Product.mfg ? dayjs(Product.mfg) : null,
       exp: Product.exp ? dayjs(Product.exp) : null,
     });
-    setImagePreviews(Product.productImages.map((img) => img.imageURL)); 
+    setImagePreviews(Product.productImages.map((img) => img.imageURL));
     handleOpenModal();
   };
 
@@ -428,7 +444,11 @@ const ProductManagement = () => {
                   },
                 ]}
               >
-                <Input />
+                <MyEditor
+                  value={form.getFieldValue("ingredients") || ""}
+                  placeholder="Thành phần phải có ít nhất 10 ký tự"
+                  onChange={(value) => form.setFieldsValue({ ingredients: value })}
+                />
               </Form.Item>
               <Form.Item
                 label="Số lượng"
@@ -439,117 +459,12 @@ const ProductManagement = () => {
               >
                 <Input type="number" />
               </Form.Item>
-              <Form.Item
-                label="Danh mục"
-                name="categoryId"
-                rules={[
-                  { required: true, message: "Danh mục không được để trống!" },
-                ]}
-              >
-                <Select>
-                  {categories.map((category) => (
-                    <Select.Option
-                      key={category.categoryId}
-                      value={category.categoryId}
-                    >
-                      {category.categoryName}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>
-              <Form.Item
-                label="Giảm giá"
-                name="discountId"
-                rules={[
-                  { required: false, message: "Giảm giá không được để trống!" },
-                ]}
-              >
-                <Select>
-                  {discounts.map((discount) => (
-                    <Select.Option
-                      key={discount.discountId}
-                      value={discount.discountId}
-                    >
-                      {discount.discountName}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>
+              
             </Col>
             {/* Cột 2 */}
             <Col span={12}>
-              <Row gutter={24}>
-                <Col span={12}>
-                  <Form.Item
-                    label="Ngày tạo"
-                    name="createdTime"
-                    rules={[
-                      {
-                        required: false,
-                        message: "Ngày tạo không được để trống!",
-                      },
-                    ]}
-                  >
-                    <DatePicker format="YYYY-MM-DD" />
-                  </Form.Item>
-                  <Form.Item
-                    label="Ngày xóa"
-                    name="deletedTime"
-                    rules={[
-                      {
-                        required: false,
-                        message: "Ngày xóa không được để trống!",
-                      },
-                    ]}
-                  >
-                    <DatePicker format="YYYY-MM-DD" />
-                  </Form.Item>
-                </Col>
-                <Col span={12}>
-                  <Form.Item
-                    label="Ngày sản xuất"
-                    name="mfg"
-                    rules={[
-                      {
-                        required: false,
-                        message: "Ngày sản xuất không được để trống!",
-                      },
-                    ]}
-                  >
-                    <DatePicker format="YYYY-MM-DD" />
-                  </Form.Item>
-                  <Form.Item
-                    label="Hạn sử dụng"
-                    name="exp"
-                    rules={[
-                      {
-                        required: false,
-                        message: "Hạn sử dụng không được để trống!",
-                      },
-                    ]}
-                  >
-                    <DatePicker format="YYYY-MM-DD" />
-                  </Form.Item>
-                </Col>
-              </Row>
-              {editingProduct && (
-                <Form.Item
-                  label="Trạng thái"
-                  name="status"
-                  rules={[
-                    {
-                      required: false,
-                      message: "Trạng thái không được để trống!",
-                    },
-                  ]}
-                >
-                  <Select>
-                    <Option value={1}>CÓ SẴN</Option>
-                    <Option value={2}>HẾT HÀNG</Option>
-                    <Option value={3}>NGỪNG</Option>
-                  </Select>
-                </Form.Item>
-              )}
+              
+            
               <Form.Item
                 label="Dung tích (ml)"
                 name="netWeight"
@@ -598,22 +513,79 @@ const ProductManagement = () => {
                   ))}
                 </Select>
               </Form.Item>
-             
+              <Form.Item
+                label="Giảm giá"
+                name="discountId"
+                rules={[
+                  { required: false, message: "Giảm giá không được để trống!" },
+                ]}
+              >
+                <Select>
+                  {discounts.map((discount) => (
+                    <Select.Option
+                      key={discount.discountId}
+                      value={discount.discountId}
+                    >
+                      {discount.discountName}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+              <Form.Item
+                label="Danh mục"
+                name="categoryId"
+                rules={[
+                  { required: true, message: "Danh mục không được để trống!" },
+                ]}
+              >
+                <Select>
+                  {categories.map((category) => (
+                    <Select.Option
+                      key={category.categoryId}
+                      value={category.categoryId}
+                    >
+                      {category.categoryName}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+              {editingProduct && (
+                <Form.Item
+                  label="Trạng thái"
+                  name="status"
+                  rules={[
+                    {
+                      required: false,
+                      message: "Trạng thái không được để trống!",
+                    },
+                  ]}
+                >
+                  <Select>
+                    <Option value={1}>CÓ SẴN</Option>
+                    <Option value={2}>HẾT HÀNG</Option>
+                    <Option value={3}>NGỪNG</Option>
+                  </Select>
+                </Form.Item>
+              )}
+
             </Col>
           </Row>
           <Form.Item
             label="Mô tả"
             name="description"
+
             rules={[{ required: true, message: "Mô tả không được để trống!" }]}
           >
             <MyEditor
               value={form.getFieldValue("description") || ""}
+              placeholder="Mô tả phải có ít nhất 20 ký tự"
               onChange={(value) => form.setFieldsValue({ description: value })}
             />
           </Form.Item>
 
           <Form.Item
             label="Hướng dẫn sử dụng"
+
             name="usageInstruction"
             rules={[
               {
@@ -624,6 +596,7 @@ const ProductManagement = () => {
           >
             <MyEditor
               value={form.getFieldValue("usageInstruction") || ""}
+              placeholder="Hướng dẫn sử dụng phải có ít nhất 20 ký tự"
               onChange={(value) =>
                 form.setFieldsValue({ usageInstruction: value })
               }
@@ -637,8 +610,8 @@ const ProductManagement = () => {
                 setImagePreviews((prev) => [
                   ...prev,
                   URL.createObjectURL(file),
-                ]); 
-                return false; 
+                ]);
+                return false;
               }}
               showUploadList={false}
             >
@@ -694,7 +667,12 @@ const ProductManagement = () => {
               }}
             />
             <p>
-              <strong>Thành phần: </strong> {selectedProduct.ingredients}
+              <strong>Thành phần: </strong> 
+              <div
+              dangerouslySetInnerHTML={{
+                __html: selectedProduct.ingredients,
+              }}
+            />
             </p>
             <p>
               <strong>Số lượng tồn kho: </strong> {selectedProduct.quantity}
@@ -708,24 +686,7 @@ const ProductManagement = () => {
                 ? dayjs(selectedProduct.createdTime).format("YYYY-MM-DD")
                 : "N/A"}
             </p>
-            <p>
-              <strong>Ngày xóa: </strong>{" "}
-              {selectedProduct.deletedTime
-                ? dayjs(selectedProduct.deletedTime).format("YYYY-MM-DD")
-                : "N/A"}
-            </p>
-            <p>
-              <strong>Ngày sản xuất: </strong>{" "}
-              {selectedProduct.mfg
-                ? dayjs(selectedProduct.mfg).format("YYYY-MM-DD")
-                : "N/A"}
-            </p>
-            <p>
-              <strong>Hạn sử dụng: </strong>{" "}
-              {selectedProduct.exp
-                ? dayjs(selectedProduct.exp).format("YYYY-MM-DD") 
-                : "N/A"}
-            </p>
+          
             <p>
               <strong>Dung tích:</strong> {selectedProduct.netWeight} {"ml"}
             </p>
@@ -757,7 +718,7 @@ const ProductManagement = () => {
                   key={index}
                   src={image.imageURL}
                   alt="Skin Type"
-                  style={{ width:  100, margin: "0 8px" }}
+                  style={{ width: 100, margin: "0 8px" }}
                 />
               ))}
             </p>

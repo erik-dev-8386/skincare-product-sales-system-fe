@@ -123,6 +123,23 @@ const AdminLayout = () => {
         },
       ],
     },
+    {
+      key: "skincareskincare-group",
+      icon: <i className="fa-solid fa-blog"></i>,
+      label: "Quản lý Skincare routine",
+      children: [
+        {
+          key: "/admin/planskincare",
+          icon: <i className="fa-solid fa-file-lines"></i>,
+          label: "Lộ trình",
+        },
+        {
+          key: "/admin/miniplanskincare",
+          icon: <i className="fa-solid fa-tags"></i>,
+          label: "Bước chăm sóc",
+        },
+      ],
+    },
   ];
 
   return (
@@ -152,7 +169,7 @@ const AdminLayout = () => {
             )}
           </div>
 
-          <div className="logo text-center text-white py-3">
+          <div className="text-center text-white py-3" style={{ fontSize: 18, padding: 3 }}>
             Chào mừng {user ? user.firstName : "Admin"}!
           </div>
 

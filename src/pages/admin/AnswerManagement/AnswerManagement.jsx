@@ -109,7 +109,15 @@ const AnswerManagement = () => {
     }
   };
 
+  const stripHtml = (html) => {
+    const tempDiv = document.createElement("div");
+    tempDiv.innerHTML = html;
+    return tempDiv.textContent || tempDiv.innerText || "";
+  };
+  
   const handleSubmitForm = async (values) => {
+     // Xoá HTML khỏi phần mô tả
+  values.description = stripHtml(values.description);
     try {
       const { answerContent, mark, questionContent, status } = values;
 
@@ -132,7 +140,7 @@ const AnswerManagement = () => {
       } else {
         const response = await api.post(
           '/answers/add-by-question-content',
-          { answerContent, mark, status: status || 1 },
+          { answerContent, mark, status: 1 }, // Default status is 1 (active) for new answers
           { params: { questionContent } }
         );
 
@@ -349,17 +357,19 @@ const AnswerManagement = () => {
               <InputNumber min={0} max={100} style={{ width: '100%' }} />
             </Form.Item>
 
-            <Form.Item
-              label="Trạng thái"
-              name="status"
-              initialValue={1}
-              style={{ flex: 1 }}
-            >
-              <Select>
-                <Select.Option value={1}>Hoạt động</Select.Option>
-                <Select.Option value={0}>Không hoạt động</Select.Option>
-              </Select>
-            </Form.Item>
+            {/* Only show status field when editing */}
+            {editingAnswer && (
+              <Form.Item
+                label="Trạng thái"
+                name="status"
+                style={{ flex: 1 }}
+              >
+                <Select>
+                  <Select.Option value={1}>Hoạt động</Select.Option>
+                  <Select.Option value={0}>Không hoạt động</Select.Option>
+                </Select>
+              </Form.Item>
+            )}
           </div>
 
           <Form.Item>

@@ -36,8 +36,6 @@ export default function LoginAndSignup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-
-
     try {
 
       if (isRegister) {
@@ -190,7 +188,7 @@ export default function LoginAndSignup() {
 
               <input type="password" name="password" id="password" placeholder="Mật khẩu" onChange={handleChange} />
 
-              <Link to="#" className="forgot">Quên mật khẩu</Link>
+              {/* <Link to="#" className="forgot">Quên mật khẩu</Link> */}
               <button type="submit" disabled={loading}>{loading ? "Đang xử lý..." : "Đăng nhập"}</button>
             </form>
             {role !== null && <p>Vai trò của bạn: {role === 1 ? "ADMIN" : role === 2 ? "STAFF" : "CUSTOMER"}</p>}

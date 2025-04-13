@@ -40,8 +40,8 @@
 }
 
 .sider-user-profile.ant-layout-sider-collapsed .avarta-profile .image-avarta {
-  width: 90px;
-  height: 90px;
+  width: 80px;
+  height: 80px;
 }
 
 .sider-user-profile {
@@ -61,4 +61,3 @@
   background: #f0f2f5;
   transition: margin-left 0.2s;
 }
-

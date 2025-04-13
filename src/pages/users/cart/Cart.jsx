@@ -294,7 +294,7 @@ export default function Cart() {
             } else {
                 const response = await api.get(`/cart/pay/${orderId}`);
 
-                toast.success(`Thanh toán thành công! Tổng tiền: ${formatNumber(finalTotal)} đ`);
+                toast.success(`Đặt hàng thành công! Tổng tiền: ${formatNumber(finalTotal)} đ`);
                 setCart([]);
                 setCartItems([]);
 
@@ -557,12 +557,11 @@ export default function Cart() {
                                 Thanh toán khi nhận hàng
                             </label>
                         </div>
-                    </div>
 
-                </div>
+                    {/* Dòng mua sản phẩm */}
 
-                <div className="total-payment">
-                    <p style={{ color: "black", fontSize: 20, fontWeight: "bold" }}>
+                    <div className="total-payment" style={{ marginTop: 20}}>
+                    <p style={{ color: "black", fontSize: 20, fontWeight: "bold"}}>
                         Tổng thanh toán:
                     </p>
                     {useRewardPoints && (
@@ -573,7 +572,7 @@ export default function Cart() {
                     <p style={{ color: "red" }}>{formatNumber(finalTotal)} đ</p>
                 </div>
 
-                <div className="buttons">
+                <div className="buttons" style={{ display: "flex", gap: "10px", justifyContent: "center" }}>
                     <button
                         onClick={handleCheckout}
                         className="btn primary"
@@ -589,6 +588,10 @@ export default function Cart() {
                         Hủy
                     </button>
                 </div>
+                    </div>
+
+                </div>
+
 
             </div>
 

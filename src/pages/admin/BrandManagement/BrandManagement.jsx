@@ -188,7 +188,11 @@ const BrandManagement = () => {
     setModalOpen(true);
   };
 
+
+
   const handleSubmitForm = async (values) => {
+    
+
     const isDuplicate = brandList.some(
       (brand) =>
         brand.brandName.toLowerCase() === values.brandName.toLowerCase() &&
