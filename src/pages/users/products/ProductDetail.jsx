@@ -33,14 +33,10 @@ export default function ProductDetail() {
   const [mainImage, setMainImage] = useState("");
   const [value, setValue] = useState({ scale: 1, translation: { x: 0, y: 0 } }); 
   const { addToCart } = useContext(CartContext);
-  const [showAllSimilar, setShowAllSimilar] = useState(false);
-  const [showAllSkinType, setShowAllSkinType] = useState(false);
 
   const [reviews, setReviews] = useState([]);
   const [showAllReviews, setShowAllReviews] = useState(false);
   const [displayCountReviews, setDisplayCountReviews] = useState(4);
-
-
 
   const [displayCountSimilar, setDisplayCountSimilar] = useState(4); 
   const [displayCountSkinType, setDisplayCountSkinType] = useState(4); 
@@ -136,13 +132,7 @@ export default function ProductDetail() {
 
      
         console.log("Fetching reviews for product:", product.productId);
-        // console.log("Full API URL:", `${api.defaults.baseURL}/feedbacks/product/${product.productId}`);
-
-        // const response = await api.get(`/feedbacks/product/${product.productId}?email=${email}`, {
-        //   headers: {
-        //     'Authorization': `Bearer ${token}`
-        //   }
-        // });
+      
         console.log("Fetching reviews for product:", product.productName);
         const response = await api.get(`/feedbacks/${email}/${product.productName}`, {
           headers: {
@@ -482,17 +472,7 @@ export default function ProductDetail() {
 
       console.log("Submitting feedback:", feedbackData);
 
-      // const response = await api.post(
-      //   `/feedbacks/${email}/${product.productName}`,
-      //   feedbackData,
-      //   {
-      //     headers: {
-      //       'Authorization': `Bearer ${token}`,
-      //       'Content-Type': 'application/json'
-      //     }
-      //   }
-      // );
-          // Sử dụng endpoint chính xác từ BE
+  
     const response = await api.post(
       `/feedbacks/${email}/${product.productName}`,
       feedbackData,
@@ -507,7 +487,7 @@ export default function ProductDetail() {
       if (response.data) {
         toast.success("Đánh giá sản phẩm thành công!");
         feedbackForm.resetFields();
-        setUserRating(0); // Reset rating sau khi submit
+        setUserRating(0); 
 
         const returnedData = response.data;
         const newFeedback = {
@@ -672,7 +652,7 @@ export default function ProductDetail() {
               </span>
               <div className="d-flex flex-column">
                 <div className="d-flex">
-                  {/* <Rate disabled defaultValue={averageRating} allowHalf /> */}
+                
                   <Rate 
                 disabled 
                 value={averageRating} 

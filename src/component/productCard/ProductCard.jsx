@@ -10,7 +10,7 @@ const formatPrice = (price) => {
   return price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
 };
 
-const ProductCard = ({
+const ProductCard = ({ 
   product,
   discounts = {},
   brands = [],
@@ -138,12 +138,6 @@ const ProductCard = ({
               {findBrandNameById(product.brandId)}
             </p>
 
-            {/* <div style={{ 
-              display: "flex", 
-              alignItems: "center",
-              justifyContent: "center",
-              marginBottom: "8px"
-            }}> */}
               <Rate 
                 disabled 
                 allowHalf 
@@ -160,7 +154,7 @@ const ProductCard = ({
               }}>
                 ({ratingData.ratingCount})
               </span>
-            {/* </div> */}
+       
             
             <strong style={{ 
               color: "green",
