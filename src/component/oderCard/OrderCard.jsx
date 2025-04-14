@@ -50,7 +50,7 @@ const OrderCard = ({ order, onOrderCancelled, onOrderDelivered }) => {
   const [productIds, setProductIds] = useState({});
   const [cancelling, setCancelling] = useState(false);
   const [delivering, setDelivering] = useState(false);
-  const [userInfo, setUserInfo] = useState(null); 
+
   const [orderDetails, setOrderDetails] = useState(null); 
 
   const fetchProducts = async (productName) => {
@@ -72,10 +72,6 @@ const OrderCard = ({ order, onOrderCancelled, onOrderDelivered }) => {
       return null;
     }
   };
-
-  const navigate = useNavigate();
-
- 
 
   useEffect(() => {
     const fetchProductIds = async () => {
