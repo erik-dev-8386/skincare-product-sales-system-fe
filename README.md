@@ -6,7 +6,7 @@
 - Đoàn Trung Thành - SE185105 (Leader)
 - Hoàng Nguyễn Minh Hiếu - SE182738
 - Nguyễn Ngọc Minh - SE182009
-- Nguyễn Bùi Hoàng Phúc - SE182009
+- Nguyễn Bùi Hoàng Phúc - SE184767
 - Châu Thị Ngọc Tuyền - SE182129
 
 ## 📝 Project Overview:
