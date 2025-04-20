@@ -1,0 +1,63 @@
+.status-tabs .ant-tabs-tab {
+  background-color: #900001 !important;
+  margin-right: 3px !important;
+  color: white !important;
+  transition: all 0.3s ease;
+}
+
+/* Active tab styles */
+.status-tabs .ant-tabs-tab-active {
+  background-color: white !important;
+  color: #900001 !important;
+  border: 1px solid #900001 !important;
+  /* font-weight: 500; */
+}
+
+/* Badge color in active tab */
+.status-tabs .ant-tabs-tab-active .ant-badge {
+  color: #900001 !important;
+}
+
+/* Hover styles */
+.status-tabs .ant-tabs-tab:hover {
+  background-color: white !important;
+  border: 1px solid #900001 !important;
+}
+
+.status-tabs .ant-tabs-tab:hover .ant-badge {
+  color: #900001 !important;
+}
+
+/* Badge styles */
+.status-tabs .ant-badge {
+  color: white;
+}
+
+.status-tabs .ant-scroll-number {
+  background-color: #4CAF50 !important;
+  color: white !important;
+  font-weight: 500;
+  font-size: 12px;
+  min-width: 20px;
+  height: 20px;
+  line-height: 20px !important;
+  border-radius: 10px !important;
+  box-shadow: 0 0 0 1px white;
+  transform: translate(50%, -40%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  position: 'absolute'
+}
+
+/* Tab ink bar color */
+.status-tabs .ant-tabs-ink-bar {
+  background-color: #900001 !important;
+  height: 3px !important;
+}
+
+/* Tab content area */
+.status-tabs .ant-tabs-content {
+  padding-top: 20px;
+}

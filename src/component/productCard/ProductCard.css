@@ -1,0 +1,77 @@
+.button-compare {
+    background-color: rgba(144, 0, 1, 0.1) !important;
+    color: #900001 !important;
+    border: 2px solid rgba(144, 0, 1, 0.3) !important;
+    transition: all 0.3s ease;
+    font-weight: 500;
+    border-radius: 24px;
+    padding: 6px 18px;
+    text-transform: none;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.button-compare::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(144, 0, 1, 0.1), transparent);
+    transition: all 0.5s ease;
+}
+
+.button-compare:hover::before {
+    left: 100%;
+}
+
+.button-compare:hover {
+    background-color: #900001 !important;
+    color: white !important;
+    border-color: #900001 !important;
+    box-shadow: 0 2px 5px rgba(144, 0, 1, 0.2);
+}
+
+.button-compare:active {
+    transform: scale(0.98);
+    box-shadow: 0 1px 3px rgba(144, 0, 1, 0.05);
+}
+
+.product-card {
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 0 !important;
+    border-radius: 16px;
+    border: 1px solid rgba(144, 0, 1, 0.1);
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.product-card:hover {
+    box-shadow: 0 4px 12px rgba(144, 0, 1, 0.08) !important;
+}
+
+
+.product-card .ant-card-meta-title {
+    max-width: 230px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin: 0 auto;
+}
+
+
+.product-card .ant-card-meta-description {
+    max-width: 230px;
+    margin: 0 auto;
+}
+
+
+.product-card .ant-card-cover {
+    width: 100%;
+    overflow: hidden;
+}
