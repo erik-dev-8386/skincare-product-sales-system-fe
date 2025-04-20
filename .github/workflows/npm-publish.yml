@@ -1,0 +1,42 @@
+name: FE CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Run Linter
+      run: npm run lint
+      
+    - name: Run Tests
+      run: npm run test
+      
+    - name: Build Project
+      run: npm run build
+      
+    - name: Notify on failure
+      if: failure()
+      uses: dawidd6/action-send-mail@v3
+      with:
+        server_address: smtp.gmail.com
+        server_port: 465
+        username: ${{secrets.MAIL_USERNAME}}
+        password: ${{secrets.MAIL_PASSWORD}}
+        subject: "🚨 CODE CỦA BẠN CÓ LỖI KHI PUSH LÊN MAIN"
+        to: ${{github.actor}}@your-company.com  # Hoặc sử dụng ${{github.actor}}@users.noreply.github.com
+        from: CI System
+        body: "Xin chào,\n\nCode của bạn vừa bị từ chối khi push lên nhánh main do có lỗi kiểm tra CI/CD.\n\nVui lòng kiểm tra và sửa lỗi.\n\nThông điệp tự động từ hệ thống CI"
