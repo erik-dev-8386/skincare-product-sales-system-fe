@@ -2,7 +2,7 @@ name: FE CI/CD
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "Demo" ]
 
 jobs:
   build:
